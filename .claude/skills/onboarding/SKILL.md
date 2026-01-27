@@ -1,0 +1,332 @@
+---
+name: onboarding
+description: This skill should be used when the user asks to "setup", "get started", "initialize", "onboarding", "how do I start", "new here", "first time", "show me around", or is new to ALIVE and needs the first-time setup wizard.
+---
+
+# alive:onboarding
+
+First-time setup wizard. Guide new users through ALIVE configuration.
+
+## When to Use
+
+Invoke when:
+- User is new to ALIVE
+- User asks how to get started
+- `onboarding_complete: false` in alive.local.yaml
+- User explicitly requests setup
+
+## Onboarding Principles
+
+1. **Show, don't just tell** — Create real structure as you explain
+2. **User describes their world** — ALIVE scaffolds around them
+3. **Quick wins** — Get to "aha" moment fast
+4. **Minimal viable setup** — Don't over-scaffold
+
+## Flow
+
+```
+1. Welcome + explain what ALIVE is
+2. Ask about user's context (ventures, experiments, life)
+3. Create initial structure
+4. Configure statusline (optional)
+5. Quick tour of key concepts
+6. First capture exercise
+7. Aha moment: context survives restart
+8. Mark onboarding complete
+```
+
+## Step-by-Step
+
+### Step 1: Welcome
+
+```
+╭────────────────────────────────────────────────────────────────────────╮
+│                                                                        │
+│      ▄▀█ █░░ █ █░█ █▀▀                                                 │
+│      █▀█ █▄▄ █ ▀▄▀ ██▄         The operating system for your context.  │
+│                                                                        │
+╰────────────────────────────────────────────────────────────────────────╯
+
+Welcome to ALIVE.
+
+I'm Claude with persistent memory. What you tell me today, I'll
+remember tomorrow. Decisions, tasks, insights — they survive session
+resets.
+
+Let's set up your system. This takes about 5 minutes.
+
+Ready?
+[1] Yes, let's go
+[2] Show me around first
+[3] I've used ALIVE before (skip setup)
+```
+
+### Step 2: Understand Their World
+
+```
+ABOUT YOU
+─────────────────────────────────────────────────────────────────────────
+
+First, tell me about your work.
+
+Do you have any active businesses or projects?
+[1] Yes, I have ventures (businesses with revenue/intent)
+[2] Yes, I have experiments (testing ideas, no model yet)
+[3] Both
+[4] Neither — I'm exploring ALIVE first
+```
+
+If yes to ventures:
+```
+What are your ventures? (I'll create structure for each)
+
+Enter names, separated by commas:
+> acme agency, saas product
+```
+
+If yes to experiments:
+```
+Any experiments you're running?
+
+Enter names, or skip:
+> new-app-idea
+```
+
+### Step 3: Create Structure
+
+**Implementation:**
+1. Create domain folders (archive/, life/, inbox/, ventures/, experiments/)
+2. Create each venture/experiment subdomain with _brain/, _working/, .claude/CLAUDE.md
+3. Copy `.claude/templates/` from plugin to project (so skills can find templates at runtime)
+4. Create `alive.local.yaml` with defaults
+
+Use template files from `.claude/templates/brain/` when creating _brain/ files (status.md, tasks.md, etc.)
+
+```
+▸ creating your ALIVE structure...
+
+DOMAINS
+├── archive/           Rest — completed items
+├── life/              First — personal (always prioritized)
+│   └── people/        Your contacts (source of truth)
+├── inbox/             Triage — incoming context
+├── ventures/          Work — your businesses
+│   ├── acme-agency/
+│   └── saas-product/
+└── experiments/       Test — your experiments
+    └── new-app-idea/
+
+✓ Structure created
+
+Each venture/experiment has:
+- _brain/ (status, tasks, insights, changelog)
+- _working/ (drafts)
+- .claude/CLAUDE.md (identity)
+```
+
+### Step 4: Configure Statusline (Optional)
+
+```
+STATUSLINE
+─────────────────────────────────────────────────────────────────────────
+
+ALIVE can customize your Claude Code statusline to show:
+- Session ID (for recall)
+- Context usage
+- Cost
+- Urgent tasks (when any)
+- Inbox count (when any)
+
+Example: session:abc123 | Opus 4.5 | ctx:32% | $1.24 | 🔥 2 | 📥 5
+
+Set up statusline?
+[1] Yes, configure it
+[2] Skip for now
+```
+
+If yes:
+```
+▸ configuring statusline...
+
+Copying statusline-command.sh to ~/.claude/
+Updating ~/.claude/settings.json
+
+✓ Statusline configured
+
+You'll see ALIVE status in your prompt on next session.
+```
+
+**Implementation:**
+1. Copy `.claude/templates/config/statusline-command.sh` to `~/.claude/statusline-command.sh`
+2. Add to `~/.claude/settings.json`:
+   ```json
+   {
+     "statusline": {
+       "command": "~/.claude/statusline-command.sh"
+     }
+   }
+   ```
+
+### Step 5: Quick Tour
+
+```
+KEY CONCEPTS
+─────────────────────────────────────────────────────────────────────────
+
+[_brain/] — The memory of each project
+  status.md    Where you are now
+  tasks.md     What needs doing
+  insights.md  What you've learned
+  changelog.md What happened (including decisions)
+
+[_working/] — Drafts and works-in-progress
+
+[life/people/] — Everyone you know, linked across projects
+
+[inbox/] — Dump anything here, sort later
+
+─────────────────────────────────────────────────────────────────────────
+[1] Continue
+[2] Tell me more about _brain/
+```
+
+### Step 6: First Capture
+
+```
+FIRST CAPTURE
+─────────────────────────────────────────────────────────────────────────
+
+Let's try capturing something.
+
+What's the most important thing you're working on right now?
+Just describe it briefly:
+
+> Working on launching the new pricing page for acme
+```
+
+Process capture:
+```
+▸ capturing to ventures/acme-agency/
+
+Adding to _brain/status.md:
+  Phase: Building
+  Focus: Launching new pricing page
+
+Adding to _brain/tasks.md:
+  - [ ] Launch new pricing page @active
+
+✓ Captured
+
+This context is now saved. I'll remember it next session.
+```
+
+### Step 7: Aha Moment
+
+```
+THE MAGIC
+─────────────────────────────────────────────────────────────────────────
+
+Here's the real power:
+
+Start a new conversation tomorrow. Ask me:
+  "What am I working on?"
+
+I'll check your _brain/ files and tell you:
+  "You're working on launching the pricing page for acme-agency."
+
+No re-explaining. No lost context. AI that remembers.
+
+─────────────────────────────────────────────────────────────────────────
+[1] Got it — finish setup
+[2] Show me more examples
+```
+
+### Step 8: Complete Setup
+
+```
+SETUP COMPLETE
+─────────────────────────────────────────────────────────────────────────
+
+Your ALIVE system is ready.
+
+QUICK COMMANDS:
+  /alive:do [project]  — Start working
+  /alive:save          — End session, save progress
+  /alive:capture       — Quick context grab
+  /alive:help          — This reference
+
+START NOW:
+  "work on acme-agency" — Load context and begin
+  "what's in my inbox"  — See what needs processing
+
+─────────────────────────────────────────────────────────────────────────
+
+Free: Join the ALIVE community on Skool → skool.com/aliveoperators
+(Templates, guides, Q&A with other operators)
+
+✓ Onboarding complete
+```
+
+Update alive.local.yaml:
+```yaml
+onboarding_complete: true
+```
+
+## Returning Users
+
+If `onboarding_complete: true`:
+
+```
+User: "/alive:onboard"
+
+You've already completed onboarding.
+
+[1] Show quick reference (/alive:help)
+[2] Re-run setup (reset onboarding)
+[3] Join the community (skool.com/aliveoperators)
+```
+
+## Skip Options
+
+At any point:
+```
+[s] Skip to end — I know what I'm doing
+```
+
+## Edge Cases
+
+**No ventures or experiments:**
+```
+That's fine — ALIVE works for any context.
+
+Want me to create:
+[1] A "personal" venture (for side projects)
+[2] An experiment space (for exploring ideas)
+[3] Just the core structure (life/, inbox/)
+```
+
+**Existing content:**
+```
+[!] Found existing structure in this folder.
+
+[1] Continue — add ALIVE on top
+[2] Fresh start — archive existing, start clean
+[3] Cancel — exit setup
+```
+
+## Post-Onboarding
+
+After setup, suggest first action:
+```
+What's first?
+
+[1] Work on [venture name] — load context
+[2] Capture some context — log something you know
+[3] Explore — look around the structure
+```
+
+## Related Skills
+
+- `/alive:help` — Quick reference (post-onboarding)
+- `/alive:do` — Start working (most common next step)
+- `/alive:capture` — First real use

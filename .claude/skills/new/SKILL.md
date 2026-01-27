@@ -1,0 +1,502 @@
+---
+name: new
+description: This skill should be used when the user asks to "create X", "new venture", "new experiment", "new project", "add a project", "set up X", "spin up X", "start something new", or wants to scaffold a new subdomain (venture, experiment, life area) or organizational area within an existing subdomain.
+---
+
+# alive:new
+
+Create a new subdomain or area. Scaffold the structure with proper templates.
+
+## When to Use
+
+Invoke when the user wants to:
+- Create a new venture, experiment, or life area (subdomain)
+- Create an organizational folder within a subdomain (area)
+- Set up project structure from scratch
+
+## Subdomain vs Area
+
+| Type | Has _brain/ | Has .claude/ | Has _working/ | Identity |
+|------|-------------|--------------|---------------|----------|
+| **Subdomain** | Yes | Yes | Yes | `.claude/CLAUDE.md` |
+| **Area** | No | No | No | `README.md` |
+
+**Subdomains** are projects with their own state.
+**Areas** are organizational folders within subdomains.
+
+## Flow
+
+```
+1. Ask: Subdomain or Area?
+2. If Subdomain: Ask for type (venture/experiment/life) and name
+3. If Area: Ask which subdomain and area name
+4. If Subdomain: Offer ICP template (if applicable)
+5. Create structure
+6. Initialize files
+7. Confirm creation
+```
+
+## Creating a Subdomain
+
+### Step 1: Gather Information
+
+```
+Creating a new subdomain.
+
+What type?
+[1] Venture (business with revenue intent)
+[2] Experiment (testing grounds, no model yet)
+[3] Life area (personal responsibility)
+```
+
+Then:
+```
+Name? (lowercase, no spaces)
+> acme-corp
+```
+
+### Step 2: Offer ICP Template (Ventures)
+
+For ventures, offer relevant templates:
+
+```
+What type of venture?
+[1] Agency — Client work, deliverables
+[2] E-commerce — Products, inventory
+[3] Creator — Content, courses, community
+[4] Job — Employment, bringing work into ALIVE
+[5] Custom — Start with generic template
+```
+
+### Step 3: Create Structure
+
+**Subdomain structure:**
+```
+ventures/acme-corp/
+├── .claude/
+│   └── CLAUDE.md          # Identity
+├── _brain/
+│   ├── status.md          # Current phase
+│   ├── tasks.md           # Work queue
+│   ├── insights.md        # Learnings
+│   ├── changelog.md       # History
+│   └── manifest.json      # Structure map
+└── _working/              # Drafts
+```
+
+### Step 4: Initialize Files
+
+Use templates from `.claude/templates/brain/` as the starting point for _brain/ files. Fill in the placeholders with user-provided information.
+
+**CLAUDE.md:**
+```markdown
+# [Name]
+
+**Type:** [Agency | E-com | Creator | Job | Custom]
+**Created:** [DATE]
+
+---
+
+## What This Is
+
+[One paragraph: What is this venture? What does it do?]
+
+---
+
+## Stakeholders
+
+[Key people - founders, partners, team]
+
+---
+
+## State
+
+Everything current lives in `_brain/`:
+- `status.md` — Phase and focus
+- `tasks.md` — Work queue
+- `insights.md` — Learnings
+- `changelog.md` — History
+- `manifest.json` — Structure map
+
+Drafts live in `_working/`.
+```
+
+**status.md:**
+```markdown
+# Status
+
+**Phase:** Starting
+**Updated:** [DATE]
+
+## Current Focus
+[To be defined]
+
+## Blockers
+None yet.
+
+## Next Milestone
+[First milestone to achieve]
+```
+
+**tasks.md:**
+```markdown
+# Tasks
+
+## Urgent
+(none yet)
+
+## To Do
+- [ ] Define initial scope
+- [ ] Set first milestone
+- [ ] Identify key stakeholders
+
+## Done (Recent)
+- [x] Created subdomain ([DATE])
+```
+
+**manifest.json:**
+```json
+{
+  "name": "[Name]",
+  "description": "[One sentence]",
+  "updated": "[DATE]",
+  "session_id": "[current-session]",
+  "folders": ["_brain", "_working"],
+  "areas": [],
+  "files": [],
+  "working_files": []
+}
+```
+
+### Step 5: Confirm Creation
+
+```
+✓ Created ventures/acme-corp/
+
+Structure:
+├── .claude/CLAUDE.md
+├── _brain/
+│   ├── status.md
+│   ├── tasks.md
+│   ├── insights.md
+│   ├── changelog.md
+│   └── manifest.json
+└── _working/
+
+Next: /alive:do acme-corp to start working.
+```
+
+## Creating an Area
+
+### Step 1: Identify Subdomain
+
+```
+Creating an area (organizational folder).
+
+Which subdomain?
+[1] ventures/acme-corp
+[2] ventures/beta
+[3] Other (specify)
+```
+
+### Step 2: Get Area Details
+
+```
+Area name? (lowercase)
+> clients
+
+Purpose?
+> Active client projects
+```
+
+### Step 3: Create Area
+
+**Area structure:**
+```
+ventures/acme-corp/clients/
+└── README.md
+```
+
+**README.md:**
+```markdown
+# Clients
+
+Active client projects.
+
+---
+
+## Contents
+
+Each client gets a subfolder with their project files.
+
+---
+
+## Notes
+
+- Completed clients move to archive/
+- Key contacts should exist in life/people/
+```
+
+### Step 4: Update Parent Manifest
+
+Add to `ventures/acme-corp/_brain/manifest.json`:
+```json
+{
+  "areas": [
+    {
+      "path": "clients/",
+      "description": "Active client projects",
+      "has_subdomains": false
+    }
+  ]
+}
+```
+
+### Step 5: Confirm
+
+```
+✓ Created ventures/acme-corp/clients/
+
+Added to manifest.json as area.
+```
+
+## ICP Templates
+
+When creating ventures, offer relevant templates:
+
+### Agency Template
+```
+ventures/[name]/
+├── clients/           # Client projects
+├── templates/         # Reusable deliverables
+├── operations/        # SOPs, processes
+└── pipeline/          # Leads, proposals
+```
+
+### Creator Template
+```
+ventures/[name]/
+├── content/           # By platform
+├── products/          # Courses, digital
+├── community/         # Resources
+└── funnel/            # Sales assets
+```
+
+### E-commerce Template
+```
+ventures/[name]/
+├── products/          # Inventory
+├── suppliers/         # Vendor info
+├── marketing/         # Campaigns
+└── operations/        # Fulfillment
+```
+
+### Job Template
+```
+ventures/[name]/
+├── projects/          # Work projects
+├── docs/              # Documentation
+├── meetings/          # Notes
+└── growth/            # Career development
+```
+
+## Edge Cases
+
+**Name already exists:**
+```
+✗ ventures/acme already exists
+
+[1] Open existing subdomain
+[2] Choose different name
+```
+
+**Invalid name:**
+```
+✗ Invalid name: "Acme Corp!"
+
+Names must be:
+- Lowercase
+- No spaces (use hyphens)
+- Alphanumeric + hyphens only
+
+Try again:
+```
+
+## Creating a Sub-Project
+
+Sub-projects are containers WITHIN a subdomain that have their own lifecycle (and therefore their own `_brain/`).
+
+### When to Create a Sub-Project
+
+| Parent Type | Sub-Project Examples |
+|-------------|---------------------|
+| Agency venture | Clients, retainers |
+| E-commerce venture | Campaigns, product lines |
+| Creator venture | Courses, launches |
+| Experiment | Iterations, sprints |
+
+**Rule:** If it can be started, paused, or completed independently — it gets `_brain/`.
+
+### Step 1: Identify Context
+
+```
+Creating a sub-project.
+
+You're working in: ventures/acme-agency/
+
+What are you creating?
+[1] Client (for agency ventures)
+[2] Campaign (for ecommerce/marketing)
+[3] Project (generic sub-project)
+[4] Custom
+```
+
+### Step 2: Get Details
+
+```
+Name? (lowercase, hyphens)
+> bigco
+
+One-line description?
+> Enterprise client, $10k/mo retainer
+```
+
+### Step 3: Create Structure
+
+**Sub-project structure:**
+```
+ventures/acme-agency/clients/bigco/
+├── _brain/
+│   ├── status.md
+│   ├── tasks.md
+│   ├── insights.md
+│   ├── changelog.md
+│   └── manifest.json
+├── _working/
+└── README.md
+```
+
+### Step 4: Initialize Files
+
+**status.md:**
+```markdown
+# Status
+
+**Phase:** Starting
+**Goal:** [To be defined]
+**Updated:** [DATE]
+
+## Current Focus
+[Initial setup]
+
+## Blockers
+None yet.
+```
+
+**tasks.md:**
+```markdown
+# Tasks
+
+## Urgent
+(none yet)
+
+## To Do
+- [ ] Define scope and deliverables
+- [ ] Set up communication cadence
+- [ ] Identify key contacts
+
+## Done (Recent)
+- [x] Created sub-project ([DATE])
+```
+
+**changelog.md:**
+```markdown
+# Changelog
+
+## [DATE] — Created
+
+Sub-project created within ventures/acme-agency/clients/.
+
+**Type:** Client
+**Description:** Enterprise client, $10k/mo retainer
+
+---
+```
+
+**manifest.json:**
+```json
+{
+  "name": "bigco",
+  "type": "client",
+  "parent": "ventures/acme-agency",
+  "description": "Enterprise client, $10k/mo retainer",
+  "created": "[DATE]",
+  "updated": "[DATE]",
+  "session_id": "[current-session]",
+  "folders": ["_brain", "_working"],
+  "files": []
+}
+```
+
+### Step 5: Update Parent
+
+Add to `ventures/acme-agency/_brain/manifest.json`:
+```json
+{
+  "areas": [
+    {
+      "path": "clients/",
+      "has_subdomains": true,
+      "subdomains": ["bigco"]
+    }
+  ]
+}
+```
+
+Add to `ventures/acme-agency/_brain/changelog.md`:
+```markdown
+## [DATE] — Created client: bigco
+
+Added new client sub-project: bigco (Enterprise client, $10k/mo retainer)
+```
+
+### Step 6: Confirm
+
+```
+✓ Created ventures/acme-agency/clients/bigco/
+
+Structure:
+├── _brain/
+│   ├── status.md
+│   ├── tasks.md
+│   ├── insights.md
+│   ├── changelog.md
+│   └── manifest.json
+├── _working/
+└── README.md
+
+Parent changelog updated.
+Parent manifest updated.
+
+Next: /alive:do bigco to start working.
+```
+
+## Sub-Project vs Area
+
+| Question | Sub-Project | Area |
+|----------|-------------|------|
+| Has its own lifecycle? | Yes | No |
+| Can be "done"? | Yes | No |
+| Needs status tracking? | Yes | No |
+| Gets `_brain/`? | Yes | No |
+
+**Examples:**
+- `clients/bigco/` → Sub-project (has lifecycle)
+- `templates/` → Area (organizational only)
+- `campaigns/summer-sale/` → Sub-project (has lifecycle)
+- `brand/` → Area (organizational only)
+
+## Related Skills
+
+- `/alive:do` — Start working on the new subdomain
+- `/alive:migrate` — Import existing content

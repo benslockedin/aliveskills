@@ -1,0 +1,177 @@
+# Experiments Domain Template
+
+**Domain:** experiments/
+**Purpose:** Testing grounds, no revenue model yet
+
+---
+
+## Structure
+
+```
+experiments/
+└── [name]/           # Each experiment is a subdomain
+    ├── .claude/
+    │   └── CLAUDE.md # Identity
+    ├── _brain/
+    │   ├── status.md
+    │   ├── tasks.md
+    │   ├── insights.md
+    │   ├── changelog.md
+    │   └── manifest.json
+    ├── _working/     # Drafts
+    └── [areas]/      # Optional organizational folders
+```
+
+---
+
+## What Makes an Experiment
+
+Experiments are:
+- Ideas being tested
+- Projects without a clear revenue model
+- Explorations that might become ventures
+- Learning exercises
+
+**Experiments graduate to ventures** when they have:
+- Validated demand
+- Clear revenue model
+- Commitment to build
+
+---
+
+## CLAUDE.md Template
+
+```markdown
+# [Experiment Name]
+
+**Type:** Experiment
+**Phase:** [Exploring | Validating | Pivoting | Graduating | Abandoned]
+**Created:** [DATE]
+
+---
+
+## Hypothesis
+
+[What are we testing? What do we believe is true?]
+
+---
+
+## Success Criteria
+
+[How do we know if this experiment succeeded?]
+- [ ] Criterion 1
+- [ ] Criterion 2
+- [ ] Criterion 3
+
+---
+
+## Constraints
+
+- **Time:** [Deadline or timeframe]
+- **Budget:** [What can we spend?]
+- **Scope:** [What's in/out?]
+
+---
+
+## State
+
+Everything current lives in `_brain/`:
+- `status.md` — Current phase
+- `tasks.md` — What to do next
+- `insights.md` — What we're learning
+- `changelog.md` — History
+```
+
+---
+
+## status.md Template
+
+```markdown
+# Status
+
+**Phase:** Exploring
+**Updated:** [DATE]
+
+## Hypothesis
+[What are we testing?]
+
+## Current Focus
+[What experiment are we running right now?]
+
+## Evidence Gathered
+- [What have we learned so far?]
+
+## Next Step
+[What's the next test?]
+
+## Decision Point
+[When do we decide to continue/pivot/stop?]
+```
+
+---
+
+## Experiment Phases
+
+| Phase | Meaning |
+|-------|---------|
+| **Exploring** | Initial research, ideation |
+| **Validating** | Testing hypothesis with real data |
+| **Pivoting** | Changing direction based on learnings |
+| **Graduating** | Success! Moving to ventures/ |
+| **Abandoned** | Didn't work, archive learnings |
+
+---
+
+## Graduating to Venture
+
+When an experiment succeeds:
+
+1. Extract insights to preserve
+2. Create new venture with `/alive:new`
+3. Migrate relevant content with `/alive:migrate`
+4. Archive experiment with `/alive:archive`
+5. Reference experiment in venture's changelog
+
+```markdown
+# In ventures/new-venture/_brain/changelog.md
+
+## [DATE] — Created from Experiment
+
+Graduated from experiments/[name]/.
+Original hypothesis: [what we tested]
+Key learnings: [what we learned]
+```
+
+---
+
+## Archiving Failed Experiments
+
+When an experiment doesn't work:
+
+1. Document why in status.md (final update)
+2. Log key insights to insights.md
+3. Consider: Are insights valuable elsewhere?
+4. Archive with `/alive:archive`
+
+**Insights are gold.** A failed experiment that generates valuable insights is still successful.
+
+---
+
+## Example Areas
+
+```
+experiments/[name]/
+├── research/         # Market research, competitor analysis
+├── prototypes/       # Quick builds, MVPs
+├── interviews/       # User research
+└── metrics/          # Data, analytics
+```
+
+---
+
+## Notes
+
+- Keep experiments lightweight
+- Time-box experiments (set deadlines)
+- Document learnings religiously
+- Failed experiments are valuable (if you capture insights)

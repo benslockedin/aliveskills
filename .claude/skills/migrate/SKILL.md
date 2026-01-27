@@ -1,0 +1,275 @@
+---
+name: migrate
+description: This skill should be used when the user asks to "migrate X", "import X", "bring in X", "load from X", "bulk add", "import this content", "bring in my stuff", or wants to bulk import existing content, transcripts, or documents into ALIVE structure.
+---
+
+# alive:migrate
+
+Bulk import content into ALIVE. Extract and route existing files, transcripts, or documents.
+
+## When to Use
+
+Invoke when the user:
+- Has existing content to import into ALIVE
+- Wants to bring in transcripts, notes, or documents
+- Is migrating from another system
+- Has a folder of files to process
+
+## Flow
+
+```
+1. Identify source (file, folder, URL)
+2. Create or select destination subdomain
+3. Analyze content
+4. Extract structured data
+5. Route to appropriate locations
+6. Update manifest
+7. Confirm migration
+```
+
+## Step-by-Step
+
+### Step 1: Identify Source
+
+```
+What are you migrating?
+
+[1] A file (transcript, document, notes)
+[2] A folder of files
+[3] Paste content directly
+```
+
+### Step 2: Create or Select Destination
+
+If subdomain doesn't exist:
+```
+This content needs a home.
+
+[1] Create new subdomain (ventures/experiments/life)
+[2] Import to existing subdomain
+```
+
+If creating, invoke `/alive:new` first to scaffold properly.
+
+### Step 3: Analyze Content
+
+Read the source and identify:
+- **Type:** Transcript, notes, documents, mixed
+- **Contains:** People, decisions, tasks, insights, references
+- **Structure:** How organized is it?
+
+```
+▸ analyzing source...
+
+Source: call-transcript-2026-01-20.md
+Type: Call transcript (~45 minutes)
+Contains:
+  - 3 people mentioned
+  - 2 decisions discussed
+  - 5 action items
+  - Multiple topics
+```
+
+### Step 4: Extract Content
+
+For transcripts, extract:
+
+**People:**
+```
+Found 3 people:
+- John Smith (client) — not in life/people/
+- Sarah Chen (internal) — exists
+- Mike Wilson (vendor) — not in life/people/
+
+Create missing person files?
+[1] Yes, create all
+[2] Select which to create
+[3] Skip person extraction
+```
+
+**Decisions:**
+```
+Found 2 decisions:
+1. "Go with AWS over GCP for infrastructure"
+2. "Launch date set for March 15"
+
+Add to changelog?
+[1] Yes
+[2] Review first
+```
+
+**Tasks:**
+```
+Found 5 action items:
+- [ ] Send proposal to John by Friday
+- [ ] Schedule follow-up call
+- [ ] Review AWS pricing
+- [ ] Update timeline document
+- [ ] Share access credentials
+
+Add to tasks.md?
+[1] Yes, add all
+[2] Select which to add
+```
+
+**Insights:**
+```
+Found insights:
+- "Client prefers weekly updates over daily"
+- "Budget is flexible if we can deliver faster"
+
+Add to insights.md?
+```
+
+### Step 5: Route Content
+
+```
+▸ routing extracted content...
+
+People:
+  → life/people/john-smith.md (created)
+  → life/people/mike-wilson.md (created)
+
+Decisions:
+  → ventures/acme/_brain/changelog.md (2 entries)
+
+Tasks:
+  → ventures/acme/_brain/tasks.md (5 items)
+
+Insights:
+  → ventures/acme/_brain/insights.md (2 entries)
+
+Source file:
+  → ventures/acme/meetings/call-2026-01-20.md
+```
+
+### Step 6: Update Manifest
+
+Add imported files and summaries:
+
+```json
+{
+  "files": [
+    {
+      "path": "meetings/call-2026-01-20.md",
+      "summary": "Call with John Smith about AWS migration, launch timeline",
+      "sessions": ["migrate-abc123"],
+      "modified": "2026-01-23"
+    }
+  ]
+}
+```
+
+### Step 7: Confirm
+
+```
+✓ Migration complete
+
+Imported:
+- 2 person files created
+- 2 decisions logged
+- 5 tasks added
+- 2 insights captured
+- Source filed to meetings/
+
+Manifest updated.
+```
+
+## Migration Types
+
+### Transcript Migration
+
+For call/meeting transcripts:
+1. Identify speakers
+2. Extract action items
+3. Extract decisions
+4. Extract insights
+5. Update person files with "last contact"
+6. File source in appropriate area
+
+### Document Migration
+
+For documents/PDFs:
+1. Summarize content
+2. Identify key information
+3. Route to appropriate area
+4. Add to manifest with summary
+
+### Folder Migration
+
+For folders of files:
+1. Scan all files
+2. Categorize by type
+3. Process each file
+4. Create area structure if needed
+5. Bulk update manifest
+
+### Notes Migration
+
+For loose notes:
+1. Parse structure
+2. Extract actionable items
+3. Route to state files
+4. Archive or file source
+
+## Using ICP Templates
+
+When migrating to a new venture, offer templates:
+
+```
+Migrating to new venture: acme-corp
+
+This looks like agency work (client, deliverables).
+
+Use Agency template?
+[1] Yes — creates clients/, templates/, operations/
+[2] No — generic structure
+```
+
+## Edge Cases
+
+**Large file:**
+```
+This transcript is 45,000 words.
+
+Processing approach:
+[1] Full extraction (may take time)
+[2] Summary only
+[3] Section by section
+```
+
+**Ambiguous content:**
+```
+This decision mentions multiple ventures:
+- Pricing relates to acme
+- Timeline relates to beta
+
+Route to:
+[1] Both subdomains
+[2] Just acme
+[3] Just beta
+[4] Let me specify
+```
+
+**Duplicate detection:**
+```
+[!] This looks similar to existing content:
+    ventures/acme/meetings/call-2026-01-15.md
+
+[1] Import anyway (may duplicate)
+[2] Skip (already imported)
+[3] Show comparison
+```
+
+## After Migration
+
+Once content is imported:
+- Use `/alive:do` to work on the subdomain
+- Use `/alive:digest` if items went to inbox
+- Use `/alive:sweep` to check for cleanup needs
+
+## Related Skills
+
+- `/alive:new` — Create subdomain first if needed
+- `/alive:digest` — Process inbox items
+- `/alive:capture` — Single item capture (not bulk)

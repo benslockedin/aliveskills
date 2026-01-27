@@ -1,0 +1,14 @@
+{
+  "name": "[SUBDOMAIN_NAME]",
+  "type": "subdomain",
+  "description": "[One sentence description]",
+  "goal": "[Single sentence goal]",
+  "created": "[DATE]",
+  "updated": "[DATE]",
+  "session_id": "[current-session]",
+  "folders": ["_brain", "_working"],
+  "areas": [],
+  "files": [],
+  "working_files": [],
+  "sessions": []
+}
