@@ -1,0 +1,41 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "aliveskills",
+  "version": "1.0.0",
+  "description": "The ALIVE context infrastructure plugin for Claude Code",
+  "owner": {
+    "name": "Ben Flint",
+    "email": "ben@supernormalsystems.com"
+  },
+  "plugins": [
+    {
+      "name": "alive",
+      "description": "Persistent memory for Claude Code. Your decisions, tasks, and insights survive every session.",
+      "version": "2.0.0",
+      "author": {
+        "name": "Ben Flint",
+        "email": "ben@supernormalsystems.com"
+      },
+      "source": "./",
+      "category": "productivity",
+      "tags": [
+        "context",
+        "memory",
+        "productivity",
+        "state-management",
+        "workflow"
+      ],
+      "keywords": [
+        "context",
+        "memory",
+        "productivity",
+        "persistent-context",
+        "second-brain-ai",
+        "claude-plugin"
+      ],
+      "homepage": "https://aliveskills.com",
+      "repository": "https://github.com/benslockedin/aliveskills",
+      "license": "MIT"
+    }
+  ]
+}

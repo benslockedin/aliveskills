@@ -1,0 +1,23 @@
+{
+  "name": "alive",
+  "version": "2.0.0",
+  "description": "Persistent memory for Claude Code. Your decisions, tasks, and insights survive every session.",
+  "author": {
+    "name": "Ben Flint",
+    "email": "ben@supernormalsystems.com",
+    "url": "https://aliveskills.com"
+  },
+  "homepage": "https://aliveskills.com",
+  "repository": "https://github.com/benslockedin/aliveskills",
+  "license": "MIT",
+  "keywords": [
+    "context",
+    "memory",
+    "productivity",
+    "state-management",
+    "workflow",
+    "persistent-context",
+    "second-brain-ai",
+    "claude-plugin"
+  ]
+}
