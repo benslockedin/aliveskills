@@ -1,5 +1,6 @@
 ---
 name: sweep
+user_invocable: true
 description: This skill should be used when the user asks to "sweep", "clean up", "audit", "check for stale", "maintenance", "anything stale", "what needs cleanup", "spring cleaning", "tidy up", or wants to audit the system for stale content and cleanup opportunities.
 ---
 

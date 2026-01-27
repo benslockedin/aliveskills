@@ -1,5 +1,6 @@
 ---
 name: digest
+user_invocable: true
 description: This skill should be used when the user asks to "process inbox", "digest", "triage", "handle inbox", "sort these", "what's in inbox", "anything to process", or wants to process inbox items, extracting and routing content to appropriate locations.
 ---
 

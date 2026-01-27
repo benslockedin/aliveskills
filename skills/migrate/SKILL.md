@@ -1,5 +1,6 @@
 ---
 name: migrate
+user_invocable: true
 description: This skill should be used when the user asks to "migrate X", "import X", "bring in X", "load from X", "bulk add", "import this content", "bring in my stuff", or wants to bulk import existing content, transcripts, or documents into ALIVE structure.
 ---
 

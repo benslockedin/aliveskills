@@ -1,6 +1,6 @@
 {
   "name": "alive",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Persistent memory for Claude Code. Your decisions, tasks, and insights survive every session.",
   "author": {
     "name": "Ben Flint",

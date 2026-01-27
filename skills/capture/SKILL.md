@@ -1,5 +1,6 @@
 ---
 name: capture
+user_invocable: true
 description: This skill should be used when the user asks to "capture this", "grab that", "note this", "remember this", "save this context", "FYI", "for context", "I learned", "had a call with", "just decided", "quick note", "btw", or wants to capture context from conversation without ending the full session.
 ---
 

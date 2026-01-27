@@ -1,5 +1,6 @@
 ---
 name: do
+user_invocable: true
 description: This skill should be used when the user asks to "work on X", "open X", "load X", "start X", "focus on X", "what's happening with X", "where are we with X", "status of X", "continue", "resume", "whatsup", "what's up", or wants to begin a work session on a subdomain. Loads context and shows current state.
 ---
 

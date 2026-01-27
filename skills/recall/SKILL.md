@@ -1,5 +1,6 @@
 ---
 name: recall
+user_invocable: true
 description: This skill should be used when the user asks to "find X", "search for X", "look up X", "recall X", "when did we X", "what did we decide about X", "where's that thing about X", "remember when we X", or wants to search past context, decisions, sessions, or files across the ALIVE system.
 ---
 

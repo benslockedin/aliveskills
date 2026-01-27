@@ -1,5 +1,6 @@
 ---
 name: onboarding
+user_invocable: true
 description: This skill should be used when the user asks to "setup", "get started", "initialize", "onboarding", "how do I start", "new here", "first time", "show me around", or is new to ALIVE and needs the first-time setup wizard.
 ---
 

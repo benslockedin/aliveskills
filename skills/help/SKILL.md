@@ -1,5 +1,6 @@
 ---
 name: help
+user_invocable: true
 description: This skill should be used when the user asks for "help", "show commands", "what can you do", "list skills", "how does X work", "what's the command for X", "how do I X", "I'm confused", "explain", or needs quick reference for ALIVE system capabilities.
 ---
 
