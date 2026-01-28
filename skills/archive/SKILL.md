@@ -1,7 +1,7 @@
 ---
 name: archive
-user_invocable: true
-description: This skill should be used when the user asks to "archive X", "move X to archive", "shelve X", "close X", "deactivate X", "done with X", "X is complete", "finished with X", or wants to move completed or inactive items to the archive.
+user-invocable: true
+description: Move completed or inactive items to the archive. Use when the user says "archive X", "shelve X", "close X", "deactivate X", "done with X", "X is complete", or "finished with X".
 ---
 
 # alive:archive

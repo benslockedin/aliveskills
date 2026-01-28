@@ -1,7 +1,7 @@
 ---
 name: new
-user_invocable: true
-description: This skill should be used when the user asks to "create X", "new venture", "new experiment", "new project", "add a project", "set up X", "spin up X", "start something new", or wants to scaffold a new subdomain (venture, experiment, life area) or organizational area within an existing subdomain.
+user-invocable: true
+description: Scaffold a new venture, experiment, or project with full structure. Use when the user says "create X", "new venture", "new experiment", "new project", "set up X", or "start something new".
 ---
 
 # alive:new

@@ -1,7 +1,7 @@
 ---
 name: do
-user_invocable: true
-description: This skill should be used when the user asks to "work on X", "open X", "load X", "start X", "focus on X", "what's happening with X", "where are we with X", "status of X", "continue", "resume", "whatsup", "what's up", or wants to begin a work session on a subdomain. Loads context and shows current state.
+user-invocable: true
+description: Start a work session on a project, loading its context and state. Use when the user says "work on X", "open X", "focus on X", "status of X", "continue", "resume", "whatsup", or "what's up".
 ---
 
 # alive:do

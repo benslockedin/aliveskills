@@ -1,7 +1,7 @@
 ---
 name: save
-user_invocable: true
-description: This skill should be used when the user asks to "save", "wrap up", "end session", "log this", "commit", "done for now", "I'm done", "that's it for today", "brb", "stepping away", "taking a break", or wants to end a work session and log progress to the changelog.
+user-invocable: true
+description: End the session and log progress to the changelog. Use when the user says "save", "wrap up", "end session", "done for now", "I'm done", "brb", or "stepping away".
 ---
 
 # alive:save
