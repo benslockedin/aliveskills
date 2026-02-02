@@ -1,5 +1,4 @@
 ---
-name: sweep
 user-invocable: true
 description: Audit the system for stale content and cleanup opportunities. Use when the user says "sweep", "clean up", "audit", "check for stale", "maintenance", or "spring cleaning".
 ---

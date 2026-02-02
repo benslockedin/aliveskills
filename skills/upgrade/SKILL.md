@@ -1,5 +1,4 @@
 ---
-name: upgrade
 user-invocable: true
 description: This skill should be used when the user says "upgrade", "migrate to v2", "convert to v2", or when `/alive:daily` or `/alive:do` detect v1 structure (`_state/` instead of `_brain/`, `inbox/` instead of `inputs/`).
 ---

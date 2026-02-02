@@ -1,5 +1,4 @@
 ---
-name: capture
 user-invocable: true
 description: Capture context quickly without ending the session. Use when the user says "capture this", "note this", "remember this", "FYI", "quick note", "btw", "I learned", "I decided", or shares context worth preserving.
 ---

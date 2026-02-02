@@ -1,5 +1,4 @@
 ---
-name: archive
 user-invocable: true
 description: Move completed or inactive items to the archive. Use when the user says "archive X", "shelve X", "close X", "deactivate X", "done with X", "X is complete", or "finished with X".
 ---

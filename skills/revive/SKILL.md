@@ -1,5 +1,4 @@
 ---
-name: revive
 user-invocable: true
 description: This skill should be used when the user says "revive", "pick up where I left off", "get me back", "resume session", "what was I working on", or when `/alive:daily` shows ongoing threads and user picks one to resume.
 ---

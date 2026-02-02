@@ -1,5 +1,4 @@
 ---
-name: new
 user-invocable: true
 description: This skill should be used when the user says "create X", "new venture", "new experiment", "new project", "set up X", "start something new", or wants to scaffold a new entity with full structure.
 ---

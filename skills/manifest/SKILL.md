@@ -1,5 +1,4 @@
 ---
-name: manifest
 user-invocable: false
 description: Internal skill for maintaining entity manifests. Called by save, new, archive, and digest to ensure manifest consistency. Not user-invocable.
 ---

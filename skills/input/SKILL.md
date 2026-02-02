@@ -1,5 +1,4 @@
 ---
-name: input
 user-invocable: true
 description: Use when user pastes external content (email thread, meeting transcript, article, document, Slack messages), says "here's some context", "digest this", "process this", "I got this email", "from my call", or brings in content from outside the current session that needs extraction and routing.
 ---

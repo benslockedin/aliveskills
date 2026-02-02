@@ -1,5 +1,4 @@
 ---
-name: help
 user-invocable: true
 description: Quick reference for ALIVE commands and capabilities. Use when the user says "help", "show commands", "what can you do", "how does X work", "how do I X", or "I'm confused".
 ---

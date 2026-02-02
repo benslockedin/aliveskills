@@ -1,5 +1,4 @@
 ---
-name: onboarding
 user-invocable: true
 description: This skill should be used when the user says "set up ALIVE", "get started", "initialize", "new here", "how do I start", or when `/alive:daily` detects no ALIVE structure exists. Fresh v2 setup for new users.
 ---
