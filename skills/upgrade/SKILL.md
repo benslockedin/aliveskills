@@ -14,7 +14,7 @@ Migrate an ALIVE system from v1 to v2 structure.
 | `inbox/` | `inputs/` |
 | `_state/` | `_brain/` |
 | No session-index | `.claude/state/session-index.jsonl` |
-| No verbatim | `.claude/state/verbatim/` |
+| No memories folder | `{entity}/_brain/memories/` (created on breakthrough saves) |
 
 ## Flow
 
@@ -56,7 +56,15 @@ SKIP — ARCHIVE:
 
 V2 FILES STATUS:
   └─ .claude/state/session-index.jsonl [missing/exists]
-  └─ .claude/state/verbatim/ [missing/exists]
+
+RULES STATUS:
+  └─ .claude/rules/ [missing/exists]
+  └─ If exists: [X files, Y outdated, Z missing]
+
+ENTITY MEMORIES FOLDERS:
+  └─ ventures/acme/_brain/memories/ [missing/exists]
+  └─ ventures/beta/_brain/memories/ [missing/exists]
+  (memories/ created automatically on breakthrough saves, missing is OK)
 ```
 
 ## Step 2: Confirm Scope
@@ -105,20 +113,16 @@ Show progress:
   ✓ done
 ```
 
-## Step 4: Create v2 Files (If Missing)
+## Step 4: Create/Update v2 Files
 
-Check first, only create if missing:
+### 4a: System Files (If Missing)
 
 ```
-▸ checking v2 files...
+▸ checking v2 system files...
 
 .claude/state/session-index.jsonl
   └─ [exists] skipping
   └─ OR [missing] creating empty file
-
-.claude/state/verbatim/
-  └─ [exists] skipping
-  └─ OR [missing] creating directory
 ```
 
 **session-index.jsonl format** (if creating):
@@ -126,19 +130,156 @@ Check first, only create if missing:
 {"created":"2026-01-30","note":"Migrated from v1"}
 ```
 
-**verbatim/** is just an empty directory for future breakthrough saves.
+### 4b: Sync Rules (CRITICAL)
+
+**Compare user's rules to plugin's rules and sync if different:**
+
+```
+▸ checking rules...
+
+Plugin rules: ~/.claude/plugins/cache/aliveskills/alive/{version}/rules/
+User rules:   {alive-root}/.claude/rules/
+```
+
+**If user has no rules directory:**
+```
+[!] No rules installed
+
+ALIVE rules enforce system behaviour. Without them, Claude won't follow
+ALIVE conventions.
+
+Install rules now?
+[1] Yes, install rules (recommended)
+[2] Skip (system will be unreliable)
+```
+
+**If rules exist but are outdated:**
+```
+▸ comparing rules...
+
+OUTDATED:
+  └─ behaviors.md (plugin: 2026-02-01, yours: 2026-01-15)
+  └─ conventions.md (plugin: 2026-02-01, yours: 2026-01-15)
+
+MISSING:
+  └─ working-folder-evolution.md (new in this version)
+
+UP TO DATE:
+  └─ intent.md
+  └─ voice.md
+
+Sync rules to latest?
+[1] Yes, update all (recommended)
+[2] Update only outdated
+[3] Skip
+```
+
+**Implementation:**
+```bash
+# Compare checksums
+for file in ~/.claude/plugins/cache/aliveskills/alive/*/rules/*.md; do
+  filename=$(basename "$file")
+  user_file="{alive-root}/.claude/rules/$filename"
+  if [ ! -f "$user_file" ]; then
+    echo "MISSING: $filename"
+  elif ! diff -q "$file" "$user_file" > /dev/null 2>&1; then
+    echo "OUTDATED: $filename"
+  fi
+done
+```
+
+**After sync:**
+```
+▸ syncing rules...
+  └─ behaviors.md ✓
+  └─ conventions.md ✓
+  └─ working-folder-evolution.md ✓ (new)
+
+✓ Rules synced (3 files updated)
+```
+
+### 4c: Sync Statusline (If Configured)
+
+**Check if user has statusline configured, and if so, update it:**
+
+```
+▸ checking statusline...
+
+~/.claude/statusline-command.sh
+  └─ [not found] skipping (user hasn't configured statusline)
+  └─ OR [outdated] plugin version is newer
+  └─ OR [up to date] no action needed
+```
+
+**If statusline exists but is outdated:**
+```
+[!] Statusline script outdated
+
+Your statusline was installed on 2026-01-28.
+Plugin has newer version with fixes for:
+  • inputs/ path detection (was inbox/)
+  • ALIVE root indicator
+  • Smart path detection
+
+Update statusline?
+[1] Yes, update (recommended)
+[2] No, keep current
+```
+
+**Implementation:**
+```bash
+# Compare statusline if it exists
+user_statusline="$HOME/.claude/statusline-command.sh"
+plugin_statusline="$HOME/.claude/plugins/cache/aliveskills/alive/*/templates/config/statusline-command.sh"
+
+if [ -f "$user_statusline" ]; then
+  if ! diff -q $plugin_statusline "$user_statusline" > /dev/null 2>&1; then
+    echo "OUTDATED: statusline-command.sh"
+  fi
+fi
+```
+
+**After sync:**
+```
+▸ updating statusline...
+  └─ ~/.claude/statusline-command.sh ✓
+
+✓ Statusline updated
+```
+
+**Note on memories/:** The `_brain/memories/` folder is created automatically by `/alive:save` when a session is marked as a breakthrough. Don't create it during upgrade — it appears organically when needed.
 
 ## Step 5: Verify
 
 ```
 ▸ verifying migration...
 
-✓ No inbox/ found (now inputs/)
-✓ No _state/ found in upgraded entities
-✓ session-index.jsonl exists
-✓ verbatim/ directory exists
+STRUCTURE
+  ✓ No inbox/ found (now inputs/)
+  ✓ No _state/ found in upgraded entities
+  ✓ session-index.jsonl exists
+  ✓ All _brain/ folders have required files
+
+RULES
+  ✓ .claude/rules/ exists
+  ✓ All 7 rule files present and up to date
+
+STATUSLINE (if configured)
+  ✓ ~/.claude/statusline-command.sh up to date
+  └─ OR [skipped] not configured
 
 Migration complete.
+```
+
+**If verification fails, do NOT mark complete:**
+```
+✗ VERIFICATION FAILED
+
+Missing:
+  ✗ .claude/rules/ — rules not synced
+
+[1] Fix now
+[2] Cancel upgrade
 ```
 
 ## Edge Cases

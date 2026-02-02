@@ -3,7 +3,7 @@
 # ALIVE v2 Status Line
 # Minimal by default, information appears when relevant
 #
-# Shows: session:ID | Model | ctx% | $cost | [subdomain] | [🔥urgent] | [📥inbox]
+# Shows: session:ID | Model | ctx% | $cost | [ALIVE/subdomain] | [🔥urgent] | [📥inputs]
 # Brackets = only shows when relevant
 
 input=$(cat)
@@ -70,19 +70,41 @@ fi
 
 # --- CONDITIONAL COMPONENTS (only when relevant) ---
 
-# ALIVE root - configurable, defaults to iCloud
-ALIVE_ROOT="${ALIVE_ROOT:-$HOME/Library/Mobile Documents/com~apple~CloudDocs/alive}"
-
-# 5. Subdomain (only if detected from path)
-subdomain=""
-if [[ "$dir" == *"/alive/ventures/"* ]]; then
-  subdomain=$(echo "$dir" | sed 's|.*/ventures/||' | cut -d'/' -f1)
-elif [[ "$dir" == *"/alive/experiments/"* ]]; then
-  subdomain=$(echo "$dir" | sed 's|.*/experiments/||' | cut -d'/' -f1)
+# ALIVE root - check common locations, or use ALIVE_ROOT env var
+# Priority: env var > Desktop > iCloud
+if [ -n "$ALIVE_ROOT" ]; then
+  : # use env var
+elif [ -d "$HOME/Desktop/alive" ]; then
+  ALIVE_ROOT="$HOME/Desktop/alive"
+elif [ -d "$HOME/Library/Mobile Documents/com~apple~CloudDocs/alive" ]; then
+  ALIVE_ROOT="$HOME/Library/Mobile Documents/com~apple~CloudDocs/alive"
+else
+  ALIVE_ROOT="$HOME/alive"
 fi
 
-if [ -n "$subdomain" ]; then
-  components+=("📂 ${CYAN}${subdomain}${RESET}")
+# 5. ALIVE location indicator (root or subdomain)
+alive_indicator=""
+
+# Check if we're anywhere in ALIVE
+if [[ "$dir" == *"/alive/"* ]] || [[ "$dir" == */alive ]]; then
+  # Check for subdomain first (more specific)
+  if [[ "$dir" == *"/alive/ventures/"* ]]; then
+    subdomain=$(echo "$dir" | sed 's|.*/ventures/||' | cut -d'/' -f1)
+    alive_indicator="📂 ${CYAN}${subdomain}${RESET}"
+  elif [[ "$dir" == *"/alive/experiments/"* ]]; then
+    subdomain=$(echo "$dir" | sed 's|.*/experiments/||' | cut -d'/' -f1)
+    alive_indicator="📂 ${CYAN}${subdomain}${RESET}"
+  elif [[ "$dir" == *"/alive/life/"* ]]; then
+    area=$(echo "$dir" | sed 's|.*/life/||' | cut -d'/' -f1)
+    alive_indicator="🏠 ${GREEN}${area}${RESET}"
+  else
+    # At ALIVE root or other location
+    alive_indicator="🧠 ${BOLD}ALIVE${RESET}"
+  fi
+fi
+
+if [ -n "$alive_indicator" ]; then
+  components+=("$alive_indicator")
 fi
 
 # 6. Urgent tasks (only if >0)
@@ -99,14 +121,17 @@ if [ "$urgent_count" -gt 0 ]; then
   components+=("🔥 ${RED}${urgent_count}${RESET}")
 fi
 
-# 7. Inbox (only if >0)
-inbox_count=0
-if [ -d "$ALIVE_ROOT/inbox" ]; then
-  inbox_count=$(find "$ALIVE_ROOT/inbox" -type f -not -name ".*" 2>/dev/null | wc -l | tr -d ' ')
+# 7. Inputs (only if >0) — v2 uses "inputs/", v1 used "inbox/"
+inputs_count=0
+if [ -d "$ALIVE_ROOT/inputs" ]; then
+  inputs_count=$(find "$ALIVE_ROOT/inputs" -type f -not -name ".*" 2>/dev/null | wc -l | tr -d ' ')
+elif [ -d "$ALIVE_ROOT/inbox" ]; then
+  # Fallback for v1 structure
+  inputs_count=$(find "$ALIVE_ROOT/inbox" -type f -not -name ".*" 2>/dev/null | wc -l | tr -d ' ')
 fi
 
-if [ "$inbox_count" -gt 0 ]; then
-  components+=("📥 ${YELLOW}${inbox_count}${RESET}")
+if [ "$inputs_count" -gt 0 ]; then
+  components+=("📥 ${YELLOW}${inputs_count}${RESET}")
 fi
 
 # Join with " | "

@@ -22,8 +22,9 @@ digraph do_flow {
     "Offer recent entity" -> "Check structure";
     "Ask which entity" -> "Check structure";
     "Check structure" -> "Offer upgrade" [label="_state/ found"];
-    "Check structure" -> "Load _brain/" [label="_brain/ OK"];
-    "Offer upgrade" -> "Load _brain/" [label="after upgrade"];
+    "Check structure" -> "cd into entity" [label="_brain/ OK"];
+    "Offer upgrade" -> "cd into entity" [label="after upgrade"];
+    "cd into entity" -> "Load _brain/";
     "Load _brain/" -> "Check freshness";
     "Check freshness" -> "Flag stale" [label="> 2 weeks"];
     "Check freshness" -> "Show summary" [label="fresh"];
@@ -92,6 +93,31 @@ Upgrade to v2?
 If yes → invoke `/alive:upgrade` with this entity, then continue.
 If no → use `_state/` paths for this session.
 
+## Step 2.5: Change to Entity Directory (MANDATORY)
+
+**Before loading context, `cd` into the entity directory:**
+
+```bash
+cd {alive-root}/{entity}/
+```
+
+For example:
+```bash
+cd ~/Desktop/alive/ventures/supernormal/alive/
+```
+
+**Why this matters:**
+- Claude's system context automatically reads `.claude/CLAUDE.md` from the working directory
+- Local `CLAUDE.md` files get picked up
+- All relative paths in the session work correctly
+- The entity becomes the "home base" for the session
+
+**Show the change:**
+```
+▸ cd ventures/supernormal/alive/
+  └─ Working directory set
+```
+
 ## Step 3: Load Context
 
 Read in order:
@@ -107,6 +133,69 @@ Show retrieval paths:
 ▸ reading ventures/acme/_brain/tasks.md
   └─ 7 tasks, 2 @urgent
 ```
+
+## Step 3.5: Check for Pending Handoffs
+
+**After loading manifest, check for pending handoffs:**
+
+```
+▸ checking for pending handoffs...
+```
+
+Look in `manifest.json` for:
+```json
+{
+  "handoffs": [
+    {
+      "path": "_working/sessions/description-sessionid-timestamp.md",
+      "status": "pending",
+      "created": "2026-02-02T15:30:00",
+      "description": "Brief description"
+    }
+  ]
+}
+```
+
+**If pending handoffs found:**
+
+```
+╭─ UNFINISHED SESSION ──────────────────────────────────────────────────╮
+│                                                                        │
+│  Found handoff from previous session:                                  │
+│                                                                        │
+│  📄 alive-plugin-feedback-abc12345-2026-02-02-1530.md                  │
+│     Created: 2026-02-02 15:30                                          │
+│     Reason: Context compaction                                         │
+│                                                                        │
+╰────────────────────────────────────────────────────────────────────────╯
+
+Resume this session?
+[1] Yes — load handoff and continue where we left off
+[2] No — start fresh (handoff stays for later)
+[3] Archive — I finished this elsewhere, archive the handoff
+```
+
+**If [1] Yes:**
+1. Read the handoff document
+2. Present the context, current state, and next steps to user
+3. Skip to "After Loading" section — user is now briefed
+
+**If [2] No:**
+- Continue with normal do flow
+- Handoff remains in manifest for later
+
+**If [3] Archive:**
+- Move handoff to `archive/{entity-path}/sessions/` (mirrored structure)
+- Remove from `manifest.handoffs`
+- Continue with normal do flow
+
+**If no pending handoffs:**
+```
+▸ checking for pending handoffs...
+  └─ None found
+```
+
+Continue to Step 4.
 
 ## Step 4: Check Freshness
 
@@ -192,3 +281,4 @@ Initialize _brain/ now?
 - `/alive:save` — End session
 - `/alive:new` — Create entity
 - `/alive:upgrade` — Migrate v1 → v2
+- `/alive:handoff` — Session continuity (creates handoff docs for resumption)

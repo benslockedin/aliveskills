@@ -102,8 +102,30 @@ Enter names, or skip:
 3. Create v2 system files:
    - `.claude/state/session-index.jsonl` (empty)
 4. Create `alive.local.yaml` with v2 defaults
+5. **Install ALIVE rules (CRITICAL):**
+   - Create `.claude/rules/` directory
+   - Copy ALL files from plugin's `rules/` folder to `.claude/rules/`
+   - Plugin rules location: `~/.claude/plugins/cache/aliveskills/alive/{version}/rules/`
 
 Note: Entity-level memories go in `{entity}/_brain/memories/` (created on breakthrough saves).
+
+**Rules installation:**
+```bash
+# Copy from plugin to ALIVE root
+cp -r ~/.claude/plugins/cache/aliveskills/alive/*/rules/* {alive-root}/.claude/rules/
+```
+
+```
+▸ installing ALIVE rules...
+  └─ behaviors.md
+  └─ conventions.md
+  └─ intent.md
+  └─ learning-loop.md
+  └─ ui-standards.md
+  └─ voice.md
+  └─ working-folder-evolution.md
+✓ 7 rules installed to .claude/rules/
+```
 
 ```
 ▸ creating your ALIVE structure...
@@ -243,6 +265,51 @@ No re-explaining. No lost context. AI that remembers.
 [1] Got it — finish setup
 [2] Show me more examples
 ```
+
+### Step 7.5: Verify Installation (MANDATORY)
+
+**Before marking complete, verify the system is correctly configured:**
+
+```
+▸ verifying installation...
+
+STRUCTURE
+  ✓ archive/ exists
+  ✓ life/ exists
+  ✓ inputs/ exists
+  ✓ ventures/ exists
+  ✓ experiments/ exists
+
+SYSTEM FILES
+  ✓ .claude/CLAUDE.md exists
+  ✓ .claude/rules/ exists (7 files)
+  ✓ .claude/state/ exists
+  ✓ alive.local.yaml exists
+
+RULES CHECK
+  ✓ behaviors.md
+  ✓ conventions.md
+  ✓ intent.md
+  ✓ learning-loop.md
+  ✓ ui-standards.md
+  ✓ voice.md
+  ✓ working-folder-evolution.md
+
+All checks passed.
+```
+
+**If any check fails:**
+```
+✗ VERIFICATION FAILED
+
+Missing:
+  ✗ .claude/rules/ — rules not installed
+
+[1] Fix now (install missing components)
+[2] Cancel onboarding
+```
+
+**Do NOT proceed to Step 8 until all checks pass.**
 
 ### Step 8: Complete Setup
 

@@ -54,6 +54,34 @@ What's next for this thread?
 [3] Closed — work is done
 ```
 
+### Handoff Check (After Steps 1-2)
+
+**If user selected:**
+- WHY = "Pre-compact" (context limit), OR
+- WHAT'S NEXT = "Ongoing" (coming back)
+
+**Then invoke handoff before continuing:**
+
+```
+▸ This session needs a handoff for continuity.
+
+Creating handoff document so the next session can pick up exactly where we left off...
+```
+
+→ **Invoke `/alive:handoff`**
+
+Handoff will:
+1. Create comprehensive handoff document in `_working/sessions/`
+2. Update manifest with pending handoff
+3. Return control here to continue with Step 3
+
+```
+✓ Handoff created: alive-plugin-feedback-abc12345-2026-02-02-1530.md
+  └─ Next session will be prompted to resume
+
+Continuing with save...
+```
+
 ### Step 3: HOW (Quality)
 
 ```
@@ -113,7 +141,7 @@ Does parent (agency) need to know?
 | Quality | Actions |
 |---------|---------|
 | **Routine** | Changelog, tasks, status, manifest, session-index |
-| **Productive** | + Check `_working/` files, promote if ready |
+| **Productive** | + Check `_working/` files, + Check session-modified files |
 | **Important** | + Extract insights → `insights.md` |
 | **Breakthrough** | + Create capture in `_brain/memories/`, can update `CLAUDE.md` |
 
@@ -193,44 +221,143 @@ Ask: "Any insights from this session?"
 
 ## Working File Handling (Productive+ Only)
 
-Check `_working/` for files that need decisions.
+Check `_working/` for files that need decisions. Use a systematic checklist approach.
 
 **Versioning:**
 - `v0.x` = Work in progress → lives in `_working/`
 - `v1-draft` = Complete draft → lives in destination area
 - `v1` = Final, approved → lives in destination area
 
-```
-Working files found:
-
-_working/proposal-v0.3.md
-  Last modified: this session
-
-Is this file finished?
-[1] Yes — promote to permanent location
-[2] No — keep in _working/ (still WIP)
-[3] Delete (no longer needed)
-```
-
-**If promoting:**
-
-1. Rename: `v0.x` → `v1-draft` (or `v1` if approved)
-2. Ask for destination:
+### Step 1: List All Working Files
 
 ```
-Where should this file live permanently?
+▸ checking _working/ folder...
 
-[1] docs/           → documentation
-[2] clients/        → client-specific
-[3] assets/         → images, media
-[4] templates/      → reusable templates
-[5] Other (specify)
+WORKING FILES REVIEW
+────────────────────────────────────────────────────────────────────────
+
+[1] _working/v2-feedback-session-2026-02-02.md
+    └─ Last modified: this session
+    └─ Status: ?
+
+[2] _working/proposal-v0.3.md
+    └─ Last modified: 2 days ago
+    └─ Status: ?
+
+[3] _working/old-notes.md
+    └─ Last modified: 3 weeks ago
+    └─ Status: ?
+
+────────────────────────────────────────────────────────────────────────
+For each file, choose: [K]eep  [P]romote  [D]elete
 ```
 
-3. Move file from `_working/` to destination
-4. Update manifest (remove from `working_files`, add to area)
+### Step 2: Process Each File (Chinese Menu Style)
+
+Go through each file systematically:
+
+```
+[1] _working/v2-feedback-session-2026-02-02.md
+
+What should happen to this file?
+[K] Keep in _working/ — still in progress
+[P] Promote — move to permanent location
+[D] Delete — no longer needed
+```
+
+**Collect all decisions first, then execute.**
+
+### Step 3: Handle Promotions
+
+For each file marked [P]romote:
+
+```
+PROMOTING: v2-feedback-session-2026-02-02.md
+
+1. New name (or keep current):
+   > v2-feedback-session-2026-02-02.md
+
+2. Destination:
+   [1] docs/           → documentation
+   [2] decisions/      → decision records
+   [3] marketing/      → marketing assets
+   [4] Keep in root    → key file
+   [5] Other (specify)
+
+3. Description for manifest:
+   > "Feedback session tracking for v2 plugin development"
+```
+
+### Step 4: Execute All Moves
+
+```
+▸ processing working files...
+
+KEEPING:
+  └─ _working/proposal-v0.3.md (still WIP)
+
+PROMOTING:
+  └─ _working/v2-feedback-session.md → docs/v2-feedback-session.md
+     └─ Added to manifest: docs/files[]
+
+DELETING:
+  └─ _working/old-notes.md (removed)
+
+✓ Working folder cleaned
+```
+
+### Step 5: Update Manifest
+
+For each promoted file:
+1. Remove from `working_files`
+2. Add to appropriate area's `files[]` array with description
+3. Include `session_id` for traceability
 
 **Key principle:** `_working/` is temporary. Finished files MUST move.
+
+---
+
+## Session-Modified Files (Productive+ Only)
+
+**After handling `_working/` files, check for OTHER files modified this session.**
+
+Files in `_brain/` are automatically tracked. But you may have modified:
+- Key files (feedback docs, tracking files)
+- Files in areas (docs/, decisions/, etc.)
+- New files created outside `_working/`
+
+```
+▸ checking for session-modified files...
+
+Files modified this session (outside _brain/):
+  └─ _working/v2-feedback-session-2026-02-02.md (already in working_files)
+  └─ docs/new-guide.md (NOT in manifest)
+  └─ testing-feedback-all.md (in key_files, may need update)
+```
+
+**For each file not in manifest:**
+```
+Found file not in manifest:
+  └─ docs/new-guide.md
+
+Add to manifest?
+[1] Yes — add to appropriate area
+[2] No — temporary file, don't track
+```
+
+**For key_files modified this session:**
+```
+Key file updated this session:
+  └─ testing-feedback-all.md
+
+Update description in manifest?
+[1] Yes — update description
+[2] No — description still accurate
+```
+
+**Implementation hint:** Compare files touched in conversation against manifest entries. Flag any gaps.
+
+**Key principle:** If you created or significantly modified a file, it should be in the manifest.
 
 ---
 
@@ -346,6 +473,11 @@ Manifest:
 - [ ] working_files accurate
 - [ ] Saving to CLOSEST subdomain
 
+Session Files (Productive+):
+- [ ] Checked _working/ for files to promote
+- [ ] Checked for session-modified files outside _brain/
+- [ ] All modified files in manifest or explicitly skipped
+
 Fix any failures before proceeding.
 ```
 
@@ -431,3 +563,4 @@ Write to `.claude/state/changelog.md` for system-level changes.
 - `/alive:daily` — Morning dashboard
 - `/alive:revive` — Resume past session
 - `/alive:capture` — Quick mid-session note
+- `/alive:handoff` — Session continuity (called automatically when pre-compact or ongoing)
