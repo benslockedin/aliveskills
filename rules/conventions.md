@@ -15,41 +15,41 @@ project/
 │   ├── hooks/            # Hook scripts
 │   └── templates/        # Scaffolding templates
 ├── archive/              # Inactive (mirrors structure)
-├── inbox/                # Incoming context, triage
+├── inputs/               # Incoming context, triage
 ├── life/                 # Personal — always has people/
 │   └── people/           # All people (source of truth)
 ├── ventures/             # Revenue-generating
-│   └── [name]/           # Subdomain
+│   └── [name]/           # Entity
 └── experiments/          # Testing grounds
-    └── [name]/           # Subdomain
+    └── [name]/           # Entity
 ```
 
 ---
 
-## Subdomains vs Areas
+## Entities vs Areas
 
-| | Subdomain | Area |
-|---|-----------|------|
+| | Entity | Area |
+|---|--------|------|
 | Has `.claude/` | Yes | No |
 | Has `_brain/` | Yes | No |
 | Has `_working/` | Yes | No |
 | Identity file | `.claude/CLAUDE.md` | `README.md` |
 | Example | `ventures/acme/` | `ventures/acme/clients/` |
 
-**Subdomains** are projects with their own state.
-**Areas** are organizational folders within subdomains.
+**Entities** are projects with their own state.
+**Areas** are organizational folders within entities.
 
 ---
 
 ## Nested _brain/ (Sub-Projects)
 
-Sub-projects are containers WITHIN a subdomain that have their own lifecycle. They get their own `_brain/`.
+Sub-projects are containers WITHIN an entity that have their own lifecycle. They get their own `_brain/`.
 
 **The rule:** If it can be started, paused, or completed independently — it gets `_brain/`.
 
 | Container | Gets _brain/? | Why |
 |-----------|---------------|-----|
-| `ventures/agency/` | Yes | Subdomain |
+| `ventures/agency/` | Yes | Entity |
 | `ventures/agency/clients/bigco/` | Yes | Independent lifecycle (can be "done") |
 | `ventures/agency/clients/` | No | Organizational folder (area) |
 | `ventures/agency/brand/` | No | Organizational folder (area) |
@@ -68,7 +68,7 @@ Use `/alive:new` to create sub-projects properly.
 
 ## _brain/ Files
 
-Every subdomain has `_brain/` with these files:
+Every entity has `_brain/` with these files:
 
 | File | Purpose | Update frequency |
 |------|---------|------------------|
@@ -164,7 +164,7 @@ Every subdomain has `_brain/` with these files:
 ```json
 {
   "name": "Project Name",
-  "type": "subdomain",
+  "type": "entity",
   "description": "One sentence description",
   "goal": "Single sentence goal",
   "created": "2026-01-20",
@@ -212,9 +212,9 @@ Every subdomain has `_brain/` with these files:
 ```
 
 **Key fields:**
-- `type` — Always "subdomain" for subdomains
+- `type` — Always "entity" for entities
 - `goal` — Single-sentence goal for filtering decisions
-- `sessions` — Array of all session IDs that touched this subdomain
+- `sessions` — Array of all session IDs that touched this entity
 - `summary` (on files) — AI-generated one-liner
 - `sessions` (on files) — Session IDs that touched this file
 - `key: true` (on files) — Mark important files
@@ -225,7 +225,7 @@ Every subdomain has `_brain/` with these files:
 
 ### _working/ Files
 
-Pattern: `[subdomain]_[context]_[name].ext`
+Pattern: `[entity]_[context]_[name].ext`
 
 ```
 ventures/acme/_working/
@@ -279,7 +279,7 @@ Archive mirrors the working structure.
 
 Source of truth for people is `life/people/`.
 
-Other subdomains reference, don't duplicate:
+Other entities reference, don't duplicate:
 
 ```markdown
 # In ventures/acme/clients/globex/README.md

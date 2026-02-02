@@ -1,6 +1,6 @@
 #!/bin/bash
 # ALIVE v2 - Session Start Hook
-# Logs session start, enumerates subdomains, provides context
+# Logs session start, enumerates entities, provides context
 
 set -euo pipefail
 
@@ -34,25 +34,25 @@ if [ -n "${CLAUDE_ENV_FILE:-}" ]; then
   echo "export ALIVE_ROOT=\"$ALIVE_ROOT\"" >> "$CLAUDE_ENV_FILE"
 fi
 
-# Function to find subdomains (folders with _brain/)
-find_subdomains() {
+# Function to find entities (folders with _brain/)
+find_entities() {
   local domain="$1"
   local domain_path="$ALIVE_ROOT/$domain"
 
   if [ -d "$domain_path" ]; then
     # Find directories that contain _brain/
     find "$domain_path" -maxdepth 2 -type d -name "_brain" 2>/dev/null | while read -r brain_dir; do
-      subdomain_dir=$(dirname "$brain_dir")
-      subdomain_name=$(basename "$subdomain_dir")
+      entity_dir=$(dirname "$brain_dir")
+      entity_name=$(basename "$entity_dir")
 
       # Check for status.md to get current state
       status_file="$brain_dir/status.md"
       if [ -f "$status_file" ]; then
         # Extract phase from status.md (look for **Phase:** line)
         phase=$(grep -m1 "^\*\*Phase:\*\*" "$status_file" 2>/dev/null | sed 's/\*\*Phase:\*\* *//' || echo "Unknown")
-        echo "- $subdomain_name ($phase)"
+        echo "- $entity_name ($phase)"
       else
-        echo "- $subdomain_name (no status)"
+        echo "- $entity_name (no status)"
       fi
     done
   fi
@@ -62,31 +62,31 @@ find_subdomains() {
 output="ALIVE session initialized. Session ID: ${SESSION_ID:0:8}\n\n"
 
 # Enumerate ventures
-ventures=$(find_subdomains "ventures")
+ventures=$(find_entities "ventures")
 if [ -n "$ventures" ]; then
   output+="## Ventures\n$ventures\n\n"
 fi
 
 # Enumerate experiments
-experiments=$(find_subdomains "experiments")
+experiments=$(find_entities "experiments")
 if [ -n "$experiments" ]; then
   output+="## Experiments\n$experiments\n\n"
 fi
 
 # Enumerate life areas
-life_areas=$(find_subdomains "life")
+life_areas=$(find_entities "life")
 if [ -n "$life_areas" ]; then
   output+="## Life\n$life_areas\n\n"
 fi
 
-# Check inbox
-inbox_count=0
-if [ -d "$ALIVE_ROOT/inbox" ]; then
-  inbox_count=$(find "$ALIVE_ROOT/inbox" -maxdepth 1 -type f 2>/dev/null | wc -l | tr -d ' ')
+# Check inputs
+inputs_count=0
+if [ -d "$ALIVE_ROOT/inputs" ]; then
+  inputs_count=$(find "$ALIVE_ROOT/inputs" -maxdepth 1 -type f 2>/dev/null | wc -l | tr -d ' ')
 fi
 
-if [ "$inbox_count" -gt 0 ]; then
-  output+="## Inbox\n$inbox_count item(s) pending triage\n"
+if [ "$inputs_count" -gt 0 ]; then
+  output+="## Inputs\n$inputs_count item(s) pending triage\n"
 fi
 
 # Output to stdout (shown to Claude)

@@ -1,12 +1,14 @@
 ---
 name: onboarding
 user-invocable: true
-description: First-time setup wizard for new ALIVE users. Use when the user says "setup", "get started", "initialize", "onboarding", "how do I start", "new here", or "show me around".
+description: This skill should be used when the user says "set up ALIVE", "get started", "initialize", "new here", "how do I start", or when `/alive:daily` detects no ALIVE structure exists. Fresh v2 setup for new users.
 ---
 
 # alive:onboarding
 
-First-time setup wizard. Guide new users through ALIVE configuration.
+First-time setup wizard for ALIVE v2. Guide new users through configuration.
+
+**Different from `/alive:upgrade`:** Onboarding is fresh setup. Upgrade migrates v1 → v2.
 
 ## When to Use
 
@@ -96,12 +98,13 @@ Enter names, or skip:
 ### Step 3: Create Structure
 
 **Implementation:**
-1. Create domain folders (archive/, life/, inbox/, ventures/, experiments/)
-2. Create each venture/experiment subdomain with _brain/, _working/, .claude/CLAUDE.md
-3. Copy `.claude/templates/` from plugin to project (so skills can find templates at runtime)
-4. Create `alive.local.yaml` with defaults
+1. Create domain folders (archive/, life/, inputs/, ventures/, experiments/)
+2. Create each venture/experiment entity with _brain/, _working/, CLAUDE.md
+3. Create v2 system files:
+   - `.claude/state/session-index.jsonl` (empty)
+4. Create `alive.local.yaml` with v2 defaults
 
-Use template files from `.claude/templates/brain/` when creating _brain/ files (status.md, tasks.md, etc.)
+Note: Entity-level memories go in `{entity}/_brain/memories/` (created on breakthrough saves).
 
 ```
 ▸ creating your ALIVE structure...
@@ -110,7 +113,7 @@ DOMAINS
 ├── archive/           Rest — completed items
 ├── life/              First — personal (always prioritized)
 │   └── people/        Your contacts (source of truth)
-├── inbox/             Triage — incoming context
+├── inputs/             Triage — incoming context
 ├── ventures/          Work — your businesses
 │   ├── acme-agency/
 │   └── saas-product/
@@ -184,7 +187,7 @@ KEY CONCEPTS
 
 [life/people/] — Everyone you know, linked across projects
 
-[inbox/] — Dump anything here, sort later
+[inputs/] — Dump anything here, sort later
 
 ─────────────────────────────────────────────────────────────────────────
 [1] Continue
@@ -250,15 +253,15 @@ SETUP COMPLETE
 
 Your ALIVE system is ready.
 
-QUICK COMMANDS:
-  /alive:do [project]  — Start working
-  /alive:save          — End session, save progress
-  /alive:capture       — Quick context grab
-  /alive:help          — This reference
+THE LEARNING LOOP:
+  /alive:daily   — Start your day, see everything
+  /alive:do      — Focus on one entity
+  /alive:save    — End session, preserve context
+  /alive:input   — Add external content
 
 START NOW:
   "work on acme-agency" — Load context and begin
-  "what's in my inbox"  — See what needs processing
+  "what's in my inputs" — See what needs processing
 
 ─────────────────────────────────────────────────────────────────────────
 
@@ -303,7 +306,7 @@ That's fine — ALIVE works for any context.
 Want me to create:
 [1] A "personal" venture (for side projects)
 [2] An experiment space (for exploring ideas)
-[3] Just the core structure (life/, inbox/)
+[3] Just the core structure (life/, inputs/)
 ```
 
 **Existing content:**
@@ -328,6 +331,7 @@ What's first?
 
 ## Related Skills
 
-- `/alive:help` — Quick reference (post-onboarding)
-- `/alive:do` — Start working (most common next step)
-- `/alive:capture` — First real use
+- `/alive:daily` — Morning entry point (most common next step)
+- `/alive:do` — Focus on one entity
+- `/alive:help` — Quick reference
+- `/alive:upgrade` — For v1 → v2 migration (not fresh setup)

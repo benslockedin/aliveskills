@@ -1,17 +1,17 @@
 ---
 name: digest
 user-invocable: true
-description: Process and triage inbox items, routing content to the right places. Use when the user says "process inbox", "digest", "triage", "handle inbox", "sort these", "what's in inbox", or "anything to process".
+description: This skill should be used when the user says "process inputs", "digest", "triage", "handle inbox", "sort these", "what's in my inbox", "what's in inputs", or "anything to process". Processes the inputs/ buffer.
 ---
 
 # alive:digest
 
-Process inbox. Survey items, triage with user, extract content, route to destinations.
+Process the inputs/ buffer. Survey items, triage with user, extract content, route to entities.
 
 ## When to Use
 
 Invoke when the user:
-- Has items in `inbox/` to process
+- Has items in `inputs/` to process
 - Wants to triage incoming content
 - Needs to route captured content
 - Says "process", "digest", "triage"
@@ -26,24 +26,24 @@ Invoke when the user:
 ## Flow (4 Steps)
 
 ```
-STEP 1: Survey Inbox    → See what's there, prioritize
+STEP 1: Survey Inputs   → See what's there, prioritize
 STEP 2: User Selection  → Pick what to digest now
 STEP 3: Per-Item Triage → Decide how to handle each
 STEP 4: Execute         → Route and extract
 ```
 
-## Step 1: Survey Inbox
+## Step 1: Survey Inputs
 
-Scan `inbox/` and present prioritized list:
+Scan `inputs/` and present prioritized list:
 
 ```
 ╭─ ALIVE ────────────────────────────────────────────────────────────────╮
 │  digest                                                                │
 ╰────────────────────────────────────────────────────────────────────────╯
 
-▸ scanning inbox/
+▸ scanning inputs/
 
-INBOX (5 items)
+INPUTS (5 items)
 ─────────────────────────────────────────────────────────────────────────
 [1] client-email-acme.md       Email       Today         🔥 urgent
 [2] call-transcript-01-22.md   Transcript  2 days ago    ~45 min
@@ -138,7 +138,7 @@ Adding task to ventures/acme/_brain/tasks.md:
 
 Filing email to ventures/acme/clients/emails/
 
-Moving source to: archive/inbox/client-email-acme.md
+Moving source to: archive/inputs/client-email-acme.md
 
 ✓ Done
 ```
@@ -182,7 +182,7 @@ Insights (1):
 
 ### Check Manifest First
 
-Before routing, check if subdomain has an area for the content:
+Before routing, check if entity has an area for the content:
 
 ```
 ▸ checking ventures/acme/_brain/manifest.json
@@ -209,8 +209,8 @@ Route transcript to: ventures/acme/meetings/call-2026-01-22.md
 ### Source File Routing
 
 After extraction, move source file:
-- To subdomain area if relevant (`ventures/acme/meetings/`)
-- To `archive/inbox/` if ephemeral
+- To entity area if relevant (`ventures/acme/meetings/`)
+- To `archive/inputs/` if ephemeral
 
 ## Multimodal Support
 
@@ -267,11 +267,11 @@ Extracts:
 
 ## Edge Cases
 
-**Empty inbox:**
+**Empty inputs:**
 ```
-▸ scanning inbox/
+▸ scanning inputs/
 
-Inbox is empty. Nothing to process.
+Inputs is empty. Nothing to process.
 
 [c] Capture something new
 [b] Back
@@ -282,7 +282,7 @@ Inbox is empty. Nothing to process.
 This transcript mentions both acme and beta projects.
 
 Route extractions to:
-[1] Both subdomains
+[1] Both entitys
 [2] Just acme
 [3] Just beta
 [4] Let me specify for each item
@@ -290,7 +290,7 @@ Route extractions to:
 
 **Large batch:**
 ```
-Inbox has 23 items.
+Inputs has 23 items.
 
 Process:
 [1] All items (may take time)
@@ -310,11 +310,11 @@ Added: 6 tasks
 Logged: 2 decisions
 Filed: 2 source files
 
-Inbox remaining: 3 items
+Inputs remaining: 3 items
 ```
 
 ## Related Skills
 
-- `/alive:capture` — Single item capture
-- `/alive:migrate` — Bulk import from external source
-- `/alive:do` — Work on subdomain after digest
+- `/alive:input` — Single item capture and immediate routing
+- `/alive:do` — Work on entity after digest
+- `/alive:daily` — Shows inputs count, links here

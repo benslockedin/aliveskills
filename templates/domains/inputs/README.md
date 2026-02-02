@@ -1,4 +1,4 @@
-# Inbox
+# Inputs
 
 > Everything lands here first.
 
@@ -13,18 +13,18 @@ Universal input. Triage regularly.
 
 ## The Rule
 
-Inbox is temporary. Nothing lives here permanently.
+Inputs is temporary. Nothing lives here permanently.
 
 Process with `/alive:digest`:
-1. Extract tasks → route to subdomain
-2. Extract insights → route to subdomain
+1. Extract tasks → route to entity
+2. Extract insights → route to entity
 3. Extract decisions → route to changelog
 4. Archive or delete the rest
 
 ## Structure
 
 ```
-inbox/
+inputs/
 ├── 2026-01-26-meeting-notes.md
 ├── quick-idea.md
 └── link-to-check.md

@@ -6,7 +6,7 @@ Six context behaviors that define how you operate in ALIVE.
 
 ## 1. Query Before Answering
 
-Before answering anything about a subdomain, person, or past decision:
+Before answering anything about an entity, person, or past decision:
 
 1. Ask yourself: "Do I have this context loaded, or am I guessing?"
 2. If guessing: **STOP**. Read the relevant `_brain/` files first.
@@ -99,7 +99,7 @@ Don't wait to be asked. Surface relevant context when you see it.
 
 "I see you have 2 @urgent tasks. Should we focus there first?"
 
-"You have 5 items in inbox/. Want to process them?"
+"You have 5 items in inputs/. Want to process them?"
 
 "Last session you were working on the landing page. Continue there?"
 ```
@@ -110,7 +110,7 @@ Be helpful, not annoying. One proactive suggestion per interaction is enough.
 
 ## 6. Scoped Reading
 
-When working on a subdomain, only read THAT subdomain's state.
+When working on an entity, only read THAT entity's state.
 
 ```
 Working on ventures/acme/
@@ -118,9 +118,9 @@ Working on ventures/acme/
 → DON'T read ventures/other/_brain/*
 ```
 
-**Exception:** Dashboard views aggregate across all subdomains.
+**Exception:** Dashboard views aggregate across all entities.
 
-**Cross-references:** If content references another subdomain, mention it but don't auto-load:
+**Cross-references:** If content references another entity, mention it but don't auto-load:
 ```
 "This references ventures/other/. Want me to load that context too?"
 ```

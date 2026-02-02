@@ -1,216 +1,434 @@
 ---
 name: save
 user-invocable: true
-description: End the session and log progress to the changelog. Use when the user says "save", "wrap up", "end session", "done for now", "I'm done", "brb", or "stepping away".
+description: Use when ending a work session, wrapping up, stepping away, or preserving session context. Triggers on "save", "wrap up", "end session", "done for now", "I'm done", "brb", "stepping away", "checkpoint", "commit progress".
 ---
 
 # alive:save
 
-End a work session. Log changes, decisions, and next steps to the subdomain's changelog.
+End session. Preserve context. Complete the loop by updating ALL state files.
 
-## When to Use
+## Critical Principle
 
-Invoke when the user wants to:
-- Wrap up a work session
-- Save progress before stepping away
-- Log what was accomplished
-- Create a resume point for next session
+**VERIFY BEFORE CONFIRMING. Save is the chance to complete the loop.**
 
-## Flow
+Save touches ALL state files, not just changelog:
+1. Update what happened (changelog)
+2. Update where we are (status)
+3. Update what's done/next (tasks)
+4. Capture any insights
+5. Handle working files (promote or keep)
+6. Document new files with descriptions
+7. Update structure map (manifest)
+8. Log to session-index
+9. VERIFY with checklist before confirming
+
+---
+
+## The 3-2-1 Flow
+
+Three questions first. Then complete the loop.
 
 ```
-1. Identify what was done this session
-2. Identify any decisions made
-3. Identify next steps
-4. Write to _brain/changelog.md
-5. Update _brain/status.md if needed
-6. Update _brain/manifest.json
-7. Confirm save
+WHY ──► WHAT'S NEXT ──► HOW ──► [Complete the Loop]
 ```
 
-## Step-by-Step
+Use `AskUserQuestion` for each step — clickable choices, not typed responses.
 
-### Step 1: Gather Session Summary
+### Step 1: WHY
 
-Review the session to identify:
+```
+Why are you saving?
 
-**Changes:** What was done
-- Files created/edited
-- Tasks completed
-- Progress made
+[1] Ending session — done for now
+[2] Pre-compact — about to hit context limit
+[3] Checkpoint — mid-session save, continuing after
+```
 
-**Decisions:** Choices that were made
-- What was decided
-- Why (rationale)
-- What was rejected
+### Step 2: WHAT'S NEXT
 
-**Next:** What's coming
-- Immediate next steps
-- Blockers identified
-- Follow-ups needed
+```
+What's next for this thread?
 
-### Step 2: Draft Changelog Entry
+[1] Ongoing — I'll be back
+[2] Paused — parking it, low priority
+[3] Closed — work is done
+```
 
-Create a changelog entry following the format:
+### Step 3: HOW (Quality)
+
+```
+How was this session?
+
+[1] Routine — just working
+[2] Productive — got stuff done
+[3] Important — worth remembering
+[4] Breakthrough — this changes things
+```
+
+Quality drives escalating behavior (see Escalating Actions).
+
+---
+
+## The Closest Subdomain Rule
+
+**Always save to the CLOSEST subdomain to where work happened.**
+
+```
+ventures/agency/                    ← Parent subdomain
+├── _brain/                         ← Save here for agency-level work
+├── clients/                        ← Area (no _brain/)
+│   └── acme/                       ← Nested subdomain
+│       └── _brain/                 ← Save HERE for acme-specific work
+```
+
+**How to identify:**
+1. Look at which files were edited
+2. Find the nearest parent folder with `_brain/`
+3. That's where you save
+
+**Examples:**
+- Edited `ventures/agency/clients/acme/proposal.md` → Save to `acme/_brain/`
+- Edited `ventures/agency/templates/invoice.md` → Save to `agency/_brain/`
+- Edited files in both → Save to BOTH (see Multi-Domain Sessions)
+
+## Cascade Logic
+
+After saving to closest subdomain, check if parent needs update:
+
+```
+Changes to nested subdomain (acme)?
+    ↓
+Save to acme/_brain/
+    ↓
+Does parent (agency) need to know?
+    ├── New structure created? → Update parent manifest
+    ├── Phase change? → Update parent status
+    └── No impact on parent? → Done
+```
+
+---
+
+## Escalating Actions
+
+| Quality | Actions |
+|---------|---------|
+| **Routine** | Changelog, tasks, status, manifest, session-index |
+| **Productive** | + Check `_working/` files, promote if ready |
+| **Important** | + Extract insights → `insights.md` |
+| **Breakthrough** | + Create capture in `_brain/memories/`, can update `CLAUDE.md` |
+
+---
+
+## Changelog Entry Format
+
+Prepend to `_brain/changelog.md` (most recent first):
 
 ```markdown
-## 2026-01-23 — Session Summary
+## 2026-01-30 — Session Summary
 **Session:** [session-id]
+**Quality:** [routine/productive/important/breakthrough]
+**Status:** [ongoing/paused/closed]
 
 ### Changes
-- Completed landing page design
-- Fixed payment webhook bug
-- Updated documentation
+- What was done (specific, not vague)
 
 ### Decisions
-- **Pricing model:** Chose $97/mo. Rejected $47 (too cheap, wrong positioning) and $197 (barrier too high).
+- **Decision name:** What was chosen. Rationale: why.
 
 ### Next
-- Launch by Friday
-- Follow up with beta users
-- Create demo video
+- Immediate next steps (if ongoing)
+- Or: "Thread closed" (if closed)
 
 ---
 ```
 
-### Step 3: Confirm with User
+## Status Update
 
-Show the draft and confirm:
+Review each field in `_brain/status.md`, update if changed:
+
+- **Goal** — the subdomain's overarching objective
+- **Phase** — current stage (planning, building, launching, etc.)
+- **Updated** — today's date
+- **Current Focus** — what we're working on right now
+- **Blockers** — anything preventing progress
+- **Next Milestone** — the next concrete target
+
+## Tasks Update
+
+In `_brain/tasks.md`:
+
+- Mark completed tasks `[x]` with date
+- Add new tasks to appropriate section
+- Mark in-progress tasks `[~]`
+
+```markdown
+## Urgent
+- [ ] Task @urgent
+
+## Active
+- [~] In-progress task
+
+## Done (Recent)
+- [x] Completed task (2026-01-30)
+```
+
+## Insights Entry (Important+ Only)
+
+For Important or Breakthrough saves, append to `_brain/insights.md`:
+
+```markdown
+## 2026-01-30 — [Insight Title]
+
+**Category:** [market / product / process / technical / people]
+**Learning:** The insight itself
+**Evidence:** How we know this
+**Applies to:** Where this matters going forward
+
+---
+```
+
+Ask: "Any insights from this session?"
+
+---
+
+## Working File Handling (Productive+ Only)
+
+Check `_working/` for files that need decisions.
+
+**Versioning:**
+- `v0.x` = Work in progress → lives in `_working/`
+- `v1-draft` = Complete draft → lives in destination area
+- `v1` = Final, approved → lives in destination area
 
 ```
-▸ saving to ventures/acme/_brain/changelog.md
+Working files found:
 
-## 2026-01-23 — Session Summary
+_working/proposal-v0.3.md
+  Last modified: this session
 
-### Changes
-- Completed landing page design
-- Fixed payment webhook bug
-
-### Decisions
-- **Pricing model:** Chose $97/mo based on competitor analysis.
-
-### Next
-- Launch by Friday
-
-─────────────────────────────────────────────────────────────────────────
-[1] Save as-is
-[2] Edit before saving
-[3] Cancel
-
-Confirm?
+Is this file finished?
+[1] Yes — promote to permanent location
+[2] No — keep in _working/ (still WIP)
+[3] Delete (no longer needed)
 ```
 
-### Step 4: Write to Files
+**If promoting:**
 
-After confirmation:
-
-1. **Append to changelog.md:**
-   - Prepend new entry (most recent first)
-   - Include session ID
-
-2. **Update status.md if phase changed:**
-   - Only if explicitly discussed
-   - Don't change phase without reason
-
-3. **Update manifest.json:**
-   - Update `session_id`
-   - Update `modified` dates
-   - Add/update file summaries
-
-4. **Log to commit-log.jsonl:**
-   ```json
-   {
-     "ts": "2026-01-23T15:30:00Z",
-     "type": "CHANGELOG",
-     "content": "Session wrap-up: landing page, webhook fix",
-     "domain": "ventures/acme",
-     "file": "_brain/changelog.md",
-     "session_id": "abc123"
-   }
-   ```
-
-### Step 5: Confirm Success
+1. Rename: `v0.x` → `v1-draft` (or `v1` if approved)
+2. Ask for destination:
 
 ```
-✓ Saved to ventures/acme/_brain/changelog.md
-✓ Updated manifest.json
-✓ Logged to commit-log.jsonl
+Where should this file live permanently?
 
-Session complete. Pick up anytime with /alive:do.
+[1] docs/           → documentation
+[2] clients/        → client-specific
+[3] assets/         → images, media
+[4] templates/      → reusable templates
+[5] Other (specify)
 ```
+
+3. Move file from `_working/` to destination
+4. Update manifest (remove from `working_files`, add to area)
+
+**Key principle:** `_working/` is temporary. Finished files MUST move.
+
+---
+
+## The Manifest Rule
+
+**Every file needs a manifest entry with description. No exceptions.**
+
+In `_brain/manifest.json`:
+
+```json
+{
+  "name": "ProjectName",
+  "description": "One sentence purpose",
+  "updated": "2026-01-30",
+  "session_id": "abc123",
+  "folders": ["_brain", "_working", "docs"],
+  "areas": [
+    {
+      "path": "docs/",
+      "description": "Reference documentation",
+      "files": [
+        {"path": "README.md", "description": "Index of documentation"},
+        {"path": "architecture.md", "description": "System architecture"}
+      ]
+    }
+  ],
+  "working_files": [
+    {"path": "_working/draft-v0.md", "description": "Landing page draft"}
+  ],
+  "key_files": [
+    {"path": "CLAUDE.md", "description": "Entity identity"}
+  ]
+}
+```
+
+**For each new file this session:**
+1. Identify which area it belongs to
+2. Add to that area's `files` array with description
+3. If promoted from `_working/`, remove from `working_files`
+
+---
+
+## Memories (Breakthrough Only)
+
+Create `_brain/memories/` folder if needed, then `[date]-[session-id].md`:
+
+```markdown
+# Session Memory — 2026-01-30
+
+**Session:** abc123
+**Quality:** Breakthrough
+**Entity:** ventures/alive-llc
+
+## Key Quotes
+> "Verbatim quote worth preserving"
+
+## Decisions
+- **Decision:** What. Rationale: Why.
+
+## Insights
+- What was learned
+```
+
+Ask: "Any changes to this entity's identity or purpose?"
+If yes, offer to update entity `CLAUDE.md`.
+
+---
+
+## Session Index Entry
+
+Write to `.claude/state/session-index.jsonl`:
+
+```json
+{
+  "ts": "2026-01-30T14:30:00Z",
+  "session_id": "abc123",
+  "entity": "ventures/alive-llc",
+  "save_type": "end_session",
+  "status": "ongoing",
+  "quality": "productive",
+  "summary": "Brief description of session"
+}
+```
+
+---
+
+## VERIFY Before Writing (Mandatory)
+
+**Run through checklist before writing any files.**
+
+```
+▸ verifying save completeness...
+
+Changelog:
+- [ ] Includes session ID
+- [ ] Lists specific changes (not vague)
+- [ ] Decisions include rationale
+- [ ] Next steps are actionable
+- [ ] Passes zero-context test
+
+Status:
+- [ ] Current Focus reflects NOW
+- [ ] Phase is accurate
+- [ ] Blockers updated
+
+Tasks:
+- [ ] Completed tasks marked [x]
+- [ ] New tasks added
+
+Manifest:
+- [ ] session_id updated
+- [ ] New files added with descriptions
+- [ ] working_files accurate
+- [ ] Saving to CLOSEST subdomain
+
+Fix any failures before proceeding.
+```
+
+## Post-Write Verification (Mandatory)
+
+**After writing, verify each file was updated.**
+
+```
+▸ verifying writes...
+
+- [ ] changelog.md — new entry exists
+- [ ] status.md — fields updated
+- [ ] tasks.md — changes reflected
+- [ ] manifest.json — session_id current
+
+If ANY file wasn't updated, fix now.
+```
+
+---
 
 ## Zero-Context Standard
 
-Before saving, verify the entry passes the zero-context test:
+Before saving, verify:
 
-> "If I came to this project with no memory, would this changelog entry tell me what happened and why?"
+> "If I came to this project with no memory, would this entry tell me what happened and why?"
 
 **Check:**
-- Decisions include rationale (not just "decided X")
-- Changes are specific (not just "worked on stuff")
-- Next steps are actionable (not just "continue")
+- Decisions include rationale
+- Changes are specific
+- Next steps are actionable
 
-If the entry is too vague, prompt for more detail.
+---
 
-## Multi-Domain Sessions
+## Multi-Entity Sessions
 
-If a session touched multiple subdomains:
-
-1. Identify which changes belong to which subdomain
-2. Write separate changelog entries for each
-3. Cross-reference if needed
+If session touched multiple subdomains:
 
 ```
 This session touched:
-[1] ventures/acme — landing page work
-[2] ventures/beta — quick bug fix
+[1] ventures/alive-llc — Plugin rebuild
+[2] ventures/supernormal — Client note
 
 Save to both?
 ```
 
-## Edge Cases
+Write separate entries. Cross-reference if related.
 
-**No subdomain loaded:**
-```
-[?] No active subdomain context.
-
-What did you work on?
-[1] ventures/acme
-[2] ventures/beta
-[3] Other (specify)
-```
-
-**Nothing to save:**
-```
-No changes detected this session.
-
-Still want to log a checkpoint?
-[1] Yes, log anyway
-[2] No, cancel
-```
-
-**Session includes infrastructure work:**
-Write to `.claude/state/changelog.md` for system-level changes:
-- Hook updates
-- Rule changes
-- Plugin modifications
+---
 
 ## BRB Mode
 
-For quick save when stepping away:
+For quick save ("brb", "stepping away"):
+
+Auto-select: Why = Checkpoint, Status = Ongoing, Quality = Routine
 
 ```
-User: "brb"
+▸ quick checkpoint
 
-▸ quick save
+✓ Saved to [entity]/_brain/changelog.md
+  └─ "Work in progress: [summary]"
 
-✓ Checkpoint saved to ventures/acme/_brain/changelog.md
-  └─ "Work in progress: landing page, webhook"
-
-Resume anytime with /alive:do.
+Resume with /alive:do
 ```
+
+---
+
+## Edge Cases
+
+**No active entity:**
+Ask which subdomain work happened in.
+
+**Nothing to save:**
+Offer to log checkpoint anyway.
+
+**Infrastructure work:**
+Write to `.claude/state/changelog.md` for system-level changes.
+
+---
 
 ## Related Skills
 
-- `/alive:do` — Start a work session
-- `/alive:capture` — Quick context grab (not full session save)
+- `/alive:do` — Load entity to work
+- `/alive:daily` — Morning dashboard
+- `/alive:revive` — Resume past session
+- `/alive:capture` — Quick mid-session note

@@ -1,58 +1,104 @@
 ---
 name: do
 user-invocable: true
-description: Start a work session on a project, loading its context and state. Use when the user says "work on X", "open X", "focus on X", "status of X", "continue", "resume", "whatsup", or "what's up".
+description: This skill should be used when the user says "work on X", "focus on X", "open X", "status of X", "let's do X", "continue", "resume", "keep going", or "pick up where I left off". Focuses on one specific venture, experiment, or life area.
 ---
 
 # alive:do
 
-Start a work session. Load context from a subdomain's `_brain/` folder and show current state.
+Focus on ONE entity. Load context from its `_brain/` folder and show current state.
 
-## When to Use
-
-Invoke when the user wants to:
-- Begin working on a specific venture, experiment, or life area
-- Check the status of a project
-- Resume where they left off
-- Get oriented ("whatsup", "what's happening")
+**Different from `/alive:daily`:** Do focuses on ONE entity. Daily shows EVERYTHING.
 
 ## Flow
 
+```dot
+digraph do_flow {
+    "Start" -> "User specified entity?";
+    "User specified entity?" -> "Find entity" [label="yes"];
+    "User specified entity?" -> "Check session-index" [label="no"];
+    "Check session-index" -> "Offer recent entity" [label="found"];
+    "Check session-index" -> "Ask which entity" [label="empty"];
+    "Find entity" -> "Check structure";
+    "Offer recent entity" -> "Check structure";
+    "Ask which entity" -> "Check structure";
+    "Check structure" -> "Offer upgrade" [label="_state/ found"];
+    "Check structure" -> "Load _brain/" [label="_brain/ OK"];
+    "Offer upgrade" -> "Load _brain/" [label="after upgrade"];
+    "Load _brain/" -> "Check freshness";
+    "Check freshness" -> "Flag stale" [label="> 2 weeks"];
+    "Check freshness" -> "Show summary" [label="fresh"];
+    "Flag stale" -> "Show summary";
+    "Show summary" -> "Offer actions";
+}
 ```
-1. Identify subdomain (ask if ambiguous)
-2. Read _brain/status.md
-3. Read _brain/tasks.md
-4. Read _brain/manifest.json
-5. Show retrieval paths + summary
-6. Offer next actions
-```
 
-## Step-by-Step
+## Step 1: Identify Entity
 
-### Step 1: Identify the Subdomain
-
-If user specifies a subdomain:
+**User specifies entity:**
 ```
 "work on acme" → ventures/acme/
 "focus on health" → life/health/
 ```
 
-If ambiguous, ask:
+**User says "continue" or "resume" (no entity):**
+1. Read `.claude/state/session-index.jsonl`
+2. Find most recent `status: "ongoing"` entry
+3. Offer that entity:
 ```
-Which subdomain?
+▸ checking session-index...
+  └─ Last session: ventures/alive-llc (yesterday, [breakthrough])
 
-[1] ventures/acme
-[2] ventures/beta
-[3] experiments/gamma
+Continue with alive-llc?
+[1] Yes
+[2] Pick different entity
 ```
 
-### Step 2: Load Context
+**No session-index or no ongoing threads:**
+```
+No recent session found.
 
-Read these files in order:
+Which entity?
+[1] ventures/supernormal
+[2] ventures/alive-llc
+[3] experiments/cricket-grid
+```
 
-1. `{subdomain}/_brain/status.md` — Current phase and focus
-2. `{subdomain}/_brain/tasks.md` — Work queue
-3. `{subdomain}/_brain/manifest.json` — Structure map
+**Multiple matches:**
+```
+"work on beta" matches:
+[1] ventures/beta
+[2] experiments/beta-test
+
+Which one?
+```
+
+## Step 2: Check Structure (v1 Detection)
+
+Before loading, check if entity uses v1 structure:
+
+```
+Check: Does {entity}/_state/ exist? (should be _brain/)
+```
+
+If v1 detected:
+```
+[!] ventures/acme uses v1 structure (_state/)
+
+Upgrade to v2?
+[1] Yes, upgrade now
+[2] No, continue with v1
+```
+
+If yes → invoke `/alive:upgrade` with this entity, then continue.
+If no → use `_state/` paths for this session.
+
+## Step 3: Load Context
+
+Read in order:
+1. `{entity}/_brain/status.md` — Phase and focus
+2. `{entity}/_brain/tasks.md` — Work queue
+3. `{entity}/_brain/manifest.json` — Structure map
 
 Show retrieval paths:
 ```
@@ -63,11 +109,23 @@ Show retrieval paths:
   └─ 7 tasks, 2 @urgent
 ```
 
-### Step 3: Show Summary
+## Step 4: Check Freshness
 
-Present the loaded context clearly:
+Check `updated` date in manifest.json or file timestamps:
 
-**Vibrant theme:**
+| Age | Action |
+|-----|--------|
+| < 2 weeks | Proceed normally |
+| 2-4 weeks | Flag: `[!] Status is X days old. Still accurate?` |
+| > 4 weeks | Warn + ask: `[!!] Status is very stale. Update before working?` |
+
+```
+[!] ventures/acme/_brain/status.md is 3 weeks old
+    └─ Still accurate? [y] continue  [u] update first
+```
+
+## Step 5: Show Summary
+
 ```
 ╭─ ALIVE ────────────────────────────────────────────────────────────────╮
 │  do • ventures/acme                                                    │
@@ -87,87 +145,51 @@ TASKS (7 total)
 To Do:
 - [ ] Write launch email
 - [ ] Update docs
-- [ ] Create demo video
 ```
 
-**Minimal theme:**
-```
-## ventures/acme
+## Step 6: Offer Actions
 
-**Phase:** Building
-**Focus:** Landing page launch by Friday
-
-**Tasks:** 7 total, 2 urgent
-- Finalize pricing page @urgent
-- Fix payment webhook @urgent
-```
-
-### Step 4: Offer Next Actions
+Every actionable item gets a number:
 
 ```
 ─────────────────────────────────────────────────────────────────────────
-[1] Start on urgent tasks
-[2] View full task list
-[3] Check changelog
+[1] Finalize pricing page @urgent
+[2] Fix payment webhook @urgent
+[3] Write launch email
+[c] View changelog
 [s] Save when done
 
 What's first?
 ```
 
-## Context Freshness
-
-Flag stale context:
-
-| Age | Signal |
-|-----|--------|
-| < 2 weeks | `[OK]` — proceed normally |
-| 2-4 weeks | `[!]` — flag, ask if still valid |
-| > 4 weeks | Warn explicitly, suggest refresh |
-
-Example:
-```
-[!] ventures/acme/_brain/status.md is 3 weeks old
-    └─ May need refresh. Continue anyway?
-```
-
 ## Edge Cases
 
-**Subdomain doesn't exist:**
+**Entity doesn't exist:**
 ```
 ✗ ventures/acme/ not found
 
-Create it?
-[1] Yes, create ventures/acme/
-[2] No, show available subdomains
+[1] Create ventures/acme/ (→ /alive:new)
+[2] Show available entities
 ```
 
-**No _brain/ folder:**
+**No _brain/ or _state/ folder:**
 ```
-[!] ventures/acme/ exists but has no _brain/
+[!] ventures/acme/ exists but has no context folder
 
-This subdomain needs initialization.
-[1] Initialize _brain/ now
+Initialize _brain/ now?
+[1] Yes, initialize
 [2] Cancel
-```
-
-**Multiple matches:**
-```
-"work on beta" matches:
-[1] ventures/beta
-[2] experiments/beta-test
-
-Which one?
 ```
 
 ## After Loading
 
-Once context is loaded:
-- Stay focused on this subdomain (scoped reading)
-- Track changes for the session
-- When done, prompt to save with `/alive:save`
+- Stay scoped to this entity (don't read other entities)
+- Track changes for session
+- When done → `/alive:save`
 
 ## Related Skills
 
-- `/alive:save` — End session, log changes
-- `/alive:new` — Create a new subdomain
-- `/alive:help` — Quick reference
+- `/alive:daily` — See ALL entities
+- `/alive:save` — End session
+- `/alive:new` — Create entity
+- `/alive:upgrade` — Migrate v1 → v2

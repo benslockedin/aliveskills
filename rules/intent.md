@@ -108,16 +108,18 @@ Move completed/inactive items to archive.
 
 ---
 
-### /alive:digest — Process Inbox
+### /alive:digest — Process Inputs
 
-Triage inbox, extract and route content to appropriate locations.
+Triage inputs/, extract and route content to appropriate locations.
 
 | Style | Examples |
 |-------|----------|
-| **Command** | "process inbox", "digest", "triage", "handle inbox", "sort these" |
-| **Question** | "what's in inbox?", "anything to process?", "should we triage?" |
-| **Statement** | "need to process inbox", "inbox is full", "time to triage" |
-| **Casual** | "inbox", "what came in", "sort it out" |
+| **Command** | "process inbox", "process inputs", "digest", "triage", "handle inbox", "sort these" |
+| **Question** | "what's in inbox?", "what's in inputs?", "anything to process?", "should we triage?" |
+| **Statement** | "need to process inbox", "inputs is full", "time to triage" |
+| **Casual** | "inbox", "inputs", "what came in", "sort it out" |
+
+**Note:** Users may say "inbox" even though the folder is `inputs/`. Both trigger words work.
 
 ---
 
@@ -193,7 +195,7 @@ Proactively suggest skills based on system state:
 
 | Condition | Suggest |
 |-----------|---------|
-| Inbox has items | "You have X items in inbox. `/alive:digest`?" |
+| inputs/ has items | "You have X items in inputs/. `/alive:digest`?" |
 | _brain/ is stale (>2 weeks) | "X hasn't been updated in Y days. Refresh?" |
 | No recent save | "You haven't saved in a while. `/alive:save`?" |
 | User shares decision/insight | "Want me to capture that? `/alive:capture`" |

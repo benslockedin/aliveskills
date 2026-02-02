@@ -10,7 +10,7 @@ You are Claude with access to ALIVE — a file-based context infrastructure that
 
 ### On Session Start
 
-When working on a subdomain, read these files first:
+When working on an entity, read these files first:
 
 | File | Purpose | Why |
 |------|---------|-----|
@@ -87,7 +87,7 @@ The vibe: **Direct, helpful, proud of the system.** You're a guide who knows thi
 
 ## Templates
 
-Templates for creating new subdomains, sub-projects, and _brain/ files live in `.claude/templates/`:
+Templates for creating new entities, sub-projects, and _brain/ files live in `.claude/templates/`:
 
 ```
 .claude/templates/
@@ -96,7 +96,7 @@ Templates for creating new subdomains, sub-projects, and _brain/ files live in `
 └── config/          # Config templates (statusline)
 ```
 
-When creating new subdomains or sub-projects, use these templates as the starting point for _brain/ files. Don't invent structure from scratch.
+When creating new entities or sub-projects, use these templates as the starting point for _brain/ files. Don't invent structure from scratch.
 
 ---
 
@@ -143,7 +143,7 @@ You rarely have full context. Act accordingly:
 |--------|--------|---------|
 | **A** | `archive/` | Inactive items, preserved |
 | **L** | `life/` | Personal responsibilities — THE FOUNDATION |
-| **I** | `inbox/` | Universal input, triage |
+| **I** | `inputs/` | Universal input, triage |
 | **V** | `ventures/` | Businesses with revenue intent |
 | **E** | `experiments/` | Testing grounds, no model yet |
 
@@ -253,7 +253,7 @@ The system advises. The human decides.
 
 ## Goal-Driven Subdomains
 
-Every subdomain should have a single-sentence goal in `status.md`:
+Every entity should have a single-sentence goal in `status.md`:
 
 ```markdown
 **Goal:** Build a $10k MRR SaaS for agency owners.
@@ -268,7 +268,7 @@ This goal:
 
 ## Structure
 
-Every **subdomain** (named project) has:
+Every **entity** (named project) has:
 - `.claude/CLAUDE.md` — Identity (what it is, who's involved)
 - `_brain/` — Current state (status, tasks, insights, changelog, manifest)
 - `_working/` — Drafts in progress
@@ -276,7 +276,7 @@ Every **subdomain** (named project) has:
 Every **area** (organizational folder) has:
 - `README.md` — What this folder contains
 
-Check `_brain/` before answering anything about a subdomain.
+Check `_brain/` before answering anything about an entity.
 
 ---
 
@@ -284,14 +284,15 @@ Check `_brain/` before answering anything about a subdomain.
 
 | Skill | Purpose |
 |-------|---------|
-| `/alive:do` | Start work, load context |
+| `/alive:daily` | Morning check-in, see all entities |
+| `/alive:do` | Start work on one entity |
 | `/alive:save` | End session, log to changelog |
-| `/alive:new` | Create subdomain or area |
+| `/alive:new` | Create entity or area |
 | `/alive:capture` | Quick context grab |
 | `/alive:recall` | Search past context |
 | `/alive:migrate` | Bulk import context |
 | `/alive:archive` | Move to archive |
-| `/alive:digest` | Process inbox |
+| `/alive:digest` | Process inputs |
 | `/alive:sweep` | Clean up stale context |
 | `/alive:help` | Quick reference |
 | `/alive:onboarding` | First-time setup wizard |
@@ -311,6 +312,7 @@ Read these. They define how you operate.
 | `rules/conventions.md` | File naming, _brain files, manifest schema, nested _brain/ rules |
 | `rules/ui-standards.md` | Themes, symbols, output formatting |
 | `rules/intent.md` | Skill routing by prompting style |
+| `rules/learning-loop.md` | Core workflow: daily → work → save → repeat |
 | `rules/working-folder-evolution.md` | When _working/ files should become proper folders |
 
 ---

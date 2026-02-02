@@ -1,48 +1,48 @@
 ---
 name: new
 user-invocable: true
-description: Scaffold a new venture, experiment, or project with full structure. Use when the user says "create X", "new venture", "new experiment", "new project", "set up X", or "start something new".
+description: This skill should be used when the user says "create X", "new venture", "new experiment", "new project", "set up X", "start something new", or wants to scaffold a new entity with full structure.
 ---
 
 # alive:new
 
-Create a new subdomain or area. Scaffold the structure with proper templates.
+Create a new entity or area. Scaffold the v2 structure with proper templates.
 
 ## When to Use
 
 Invoke when the user wants to:
-- Create a new venture, experiment, or life area (subdomain)
-- Create an organizational folder within a subdomain (area)
+- Create a new venture, experiment, or life area (entity)
+- Create an organizational folder within a entity (area)
 - Set up project structure from scratch
 
-## Subdomain vs Area
+## Entity vs Area
 
 | Type | Has _brain/ | Has .claude/ | Has _working/ | Identity |
 |------|-------------|--------------|---------------|----------|
-| **Subdomain** | Yes | Yes | Yes | `.claude/CLAUDE.md` |
+| **Entity** | Yes | Yes | Yes | `.claude/CLAUDE.md` |
 | **Area** | No | No | No | `README.md` |
 
-**Subdomains** are projects with their own state.
-**Areas** are organizational folders within subdomains.
+**Entitys** are projects with their own state.
+**Areas** are organizational folders within entities.
 
 ## Flow
 
 ```
-1. Ask: Subdomain or Area?
-2. If Subdomain: Ask for type (venture/experiment/life) and name
-3. If Area: Ask which subdomain and area name
-4. If Subdomain: Offer ICP template (if applicable)
+1. Ask: Entity or Area?
+2. If Entity: Ask for type (venture/experiment/life) and name
+3. If Area: Ask which entity and area name
+4. If Entity: Offer ICP template (if applicable)
 5. Create structure
 6. Initialize files
 7. Confirm creation
 ```
 
-## Creating a Subdomain
+## Creating a Entity
 
 ### Step 1: Gather Information
 
 ```
-Creating a new subdomain.
+Creating a new entity.
 
 What type?
 [1] Venture (business with revenue intent)
@@ -71,7 +71,7 @@ What type of venture?
 
 ### Step 3: Create Structure
 
-**Subdomain structure:**
+**Entity structure:**
 ```
 ventures/acme-corp/
 ├── .claude/
@@ -152,7 +152,7 @@ None yet.
 - [ ] Identify key stakeholders
 
 ## Done (Recent)
-- [x] Created subdomain ([DATE])
+- [x] Created entity ([DATE])
 ```
 
 **manifest.json:**
@@ -189,12 +189,12 @@ Next: /alive:do acme-corp to start working.
 
 ## Creating an Area
 
-### Step 1: Identify Subdomain
+### Step 1: Identify Entity
 
 ```
 Creating an area (organizational folder).
 
-Which subdomain?
+Which entity?
 [1] ventures/acme-corp
 [2] ventures/beta
 [3] Other (specify)
@@ -247,7 +247,7 @@ Add to `ventures/acme-corp/_brain/manifest.json`:
     {
       "path": "clients/",
       "description": "Active client projects",
-      "has_subdomains": false
+      "has_entities": false
     }
   ]
 }
@@ -307,7 +307,7 @@ ventures/[name]/
 ```
 ✗ ventures/acme already exists
 
-[1] Open existing subdomain
+[1] Open existing entity
 [2] Choose different name
 ```
 
@@ -325,7 +325,7 @@ Try again:
 
 ## Creating a Sub-Project
 
-Sub-projects are containers WITHIN a subdomain that have their own lifecycle (and therefore their own `_brain/`).
+Sub-projects are containers WITHIN a entity that have their own lifecycle (and therefore their own `_brain/`).
 
 ### When to Create a Sub-Project
 
@@ -447,8 +447,8 @@ Add to `ventures/acme-agency/_brain/manifest.json`:
   "areas": [
     {
       "path": "clients/",
-      "has_subdomains": true,
-      "subdomains": ["bigco"]
+      "has_entities": true,
+      "entities": ["bigco"]
     }
   ]
 }
@@ -499,5 +499,6 @@ Next: /alive:do bigco to start working.
 
 ## Related Skills
 
-- `/alive:do` — Start working on the new subdomain
-- `/alive:migrate` — Import existing content
+- `/alive:do` — Start working on the new entity
+- `/alive:onboarding` — Full system setup (not just one entity)
+- `/alive:daily` — See all entities after creating

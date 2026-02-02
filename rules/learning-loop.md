@@ -1,0 +1,170 @@
+# Learning Loop
+
+The core rhythm of ALIVE. This is how context compounds.
+
+---
+
+## The Loop
+
+```
+DAILY → WORK → SAVE → REPEAT
+```
+
+| Step | Skill | Purpose |
+|------|-------|---------|
+| **Daily** | `/alive:daily` | Morning check-in. See all entities, goals, urgent tasks, inputs. |
+| **Work** | `/alive:do` | Focus on ONE entity. Load context, start working. |
+| **Save** | `/alive:save` | End session. Log changes, decisions, next steps. |
+| **Repeat** | — | Come back tomorrow. Context compounds. |
+
+---
+
+## Why This Matters
+
+**AI forgets. ALIVE remembers.**
+
+But only if you run the loop. Each cycle:
+- Captures what happened (save)
+- Surfaces what's stale (daily)
+- Focuses attention (do)
+- Compounds context (repeat)
+
+Skip the loop → context leaks.
+Run the loop → context compounds.
+
+---
+
+## Daily: The Heartbeat
+
+If you're not running `/alive:daily` regularly, you're not using the system.
+
+**What it shows:**
+- Goals across all entities
+- Ongoing threads (sessions marked "ongoing")
+- Urgent tasks across entities
+- Working files that might be stale
+- Items in `inputs/` awaiting triage
+
+**When to run:**
+- Start of each work session
+- Beginning of day
+- After being away
+
+---
+
+## Work: Single Focus
+
+`/alive:do` loads ONE entity's context. This is intentional.
+
+**Why single focus:**
+- Context window is finite
+- Deep work requires focus
+- Switching costs are real
+
+**What it loads:**
+- `_brain/status.md` — Where we are
+- `_brain/tasks.md` — What needs doing
+- `_brain/manifest.json` — What exists
+
+**What it doesn't auto-load:**
+- `insights.md` — Only when relevant
+- `changelog.md` — Only when needed
+- Other entities — Ask first
+
+---
+
+## Save: The Commit
+
+`/alive:save` is how context gets preserved. Without it, work disappears.
+
+**The 3-2-1 flow:**
+1. **WHY** — Save type (ending, checkpoint, pre-compact)
+2. **WHAT'S NEXT** — Thread status (ongoing, paused, closed)
+3. **HOW** — Quality tier (routine, productive, important, breakthrough)
+
+**Quality-based escalation:**
+
+| Quality | Actions |
+|---------|---------|
+| Routine | Changelog, tasks, status, manifest |
+| Productive | + Check `_working/` files, promote if ready |
+| Important | + Extract insights to `insights.md` |
+| Breakthrough | + Create memory in `_brain/memories/`, can update CLAUDE.md |
+
+---
+
+## Session Thread States
+
+Every session has a thread state:
+
+| State | Meaning | Next |
+|-------|---------|------|
+| **Ongoing** | Work continues | Resume with `/alive:do` |
+| **Paused** | Intentionally on hold | Resurface when ready |
+| **Closed** | This thread is done | Archive if entity complete |
+
+**Ongoing threads** surface in `/alive:daily` so you don't lose track.
+
+---
+
+## The Compound Effect
+
+Context compounds like interest:
+
+```
+Day 1: Start project, save context
+Day 2: Resume with full context, make progress, save
+Day 3: Resume with 2 days of context, make more progress, save
+...
+Day 30: You have a month of compounded context
+```
+
+**Without the loop:**
+```
+Day 1: Start project
+Day 2: Where was I? Reconstruct context...
+Day 3: Start over again...
+```
+
+---
+
+## Breaking the Loop
+
+Common failure modes:
+
+| Failure | Impact | Fix |
+|---------|--------|-----|
+| Skip daily | Miss urgent tasks, stale context | Run daily every session |
+| Skip save | Lose progress, decisions | Always save before leaving |
+| Work on multiple entities | Context overflow, shallow work | Use `/alive:do` for single focus |
+| Never close threads | Endless "ongoing" list | Review threads weekly |
+
+---
+
+## Integration with Other Skills
+
+The loop works with the full skill set:
+
+| Skill | Role in Loop |
+|-------|--------------|
+| `/alive:input` | Feed new content → triggers during WORK |
+| `/alive:digest` | Process inputs/ → part of DAILY |
+| `/alive:capture` | Quick notes → during WORK |
+| `/alive:revive` | Resume old session → alternative to DO |
+| `/alive:sweep` | Clean stale context → periodic maintenance |
+
+---
+
+## Summary
+
+```
+DAILY → See everything, pick focus
+WORK  → Load one entity, go deep
+SAVE  → Preserve what happened
+REPEAT → Context compounds
+
+Skip the loop = context leaks
+Run the loop = context compounds
+```
+
+The loop is the system. Everything else supports it.

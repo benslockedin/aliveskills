@@ -1,0 +1,244 @@
+---
+name: power-user-install
+user-invocable: false
+description: Internal skill called by onboarding when user opts in to session analysis. Scans Claude Code history to extract patterns, preferences, and past projects for personalized setup.
+---
+
+# Power User Install
+
+Scan existing Claude Code session history to build a user profile. Called by `/alive:onboarding` when user opts in.
+
+---
+
+## When Invoked
+
+Called internally by onboarding skill when:
+- User is an existing Claude Code user
+- User opts in to "scan my session history"
+
+**Not directly invocable.** Users trigger this through onboarding.
+
+---
+
+## What It Does
+
+1. Find session transcripts in `~/.claude/projects/`
+2. Dispatch agents to extract patterns across sessions
+3. Build user profile with discovered context
+4. Save to `.claude/state/user-profile.md`
+5. Return to onboarding with results
+
+---
+
+## Step 1: Locate Sessions
+
+Find the user's Claude Code sessions:
+
+```bash
+# Session transcripts live here
+ls ~/.claude/projects/*/
+
+# Each project has session files
+# Format: [session-id].jsonl
+```
+
+**Output:** List of session files with timestamps.
+
+---
+
+## Step 2: Sample Recent Sessions
+
+Don't analyze everything — sample strategically:
+
+| Session Age | Action |
+|-------------|--------|
+| Last 7 days | Analyze all |
+| 7-30 days | Sample 5 most recent |
+| 30+ days | Skip (too stale) |
+
+**Target:** 10-15 sessions max for reasonable analysis time.
+
+---
+
+## Step 3: Dispatch Extraction Agents
+
+Run 3 parallel agents over the sampled sessions:
+
+### Agent 1: Projects & Domains
+
+```
+Read the session transcripts at [PATHS]
+
+Extract all projects and domains the user works on:
+- Project names and types (web app, CLI tool, content, etc.)
+- Technologies used (languages, frameworks, tools)
+- Recurring themes or domains
+- Any named ventures, experiments, or areas
+
+Format as a structured list with frequency counts.
+```
+
+### Agent 2: Work Patterns
+
+```
+Read the session transcripts at [PATHS]
+
+Analyze the user's work patterns:
+- How do they typically start sessions?
+- What tasks do they commonly work on?
+- Do they prefer planning first or diving in?
+- How verbose or terse are their requests?
+- Any recurring pain points or frustrations?
+
+Format as observations with evidence.
+```
+
+### Agent 3: Preferences & Style
+
+```
+Read the session transcripts at [PATHS]
+
+Extract user preferences and communication style:
+- Preferred terminology or naming conventions
+- Tool preferences (git workflow, testing approach, etc.)
+- Communication style (direct, detailed, casual)
+- Things they explicitly like or dislike
+- Any stated goals or priorities
+
+Format as a profile with specific examples.
+```
+
+---
+
+## Step 4: Synthesize Results
+
+Combine agent outputs into a user profile:
+
+```markdown
+# User Profile
+
+**Generated:** [DATE]
+**Sessions analyzed:** [COUNT]
+
+## Projects Discovered
+
+| Project | Type | Technologies | Frequency |
+|---------|------|--------------|-----------|
+| [name] | [type] | [tech] | [count] sessions |
+
+## Work Patterns
+
+- [Pattern 1 with evidence]
+- [Pattern 2 with evidence]
+
+## Preferences
+
+- **Communication:** [style]
+- **Workflow:** [approach]
+- **Tools:** [preferences]
+
+## Suggested ALIVE Structure
+
+Based on your history, consider:
+- ventures/[project1]/ — [reason]
+- ventures/[project2]/ — [reason]
+- experiments/[experiment]/ — [reason]
+
+## Notes for Claude
+
+When working with this user:
+- [Observation 1]
+- [Observation 2]
+```
+
+---
+
+## Step 5: Save Profile
+
+Write to `.claude/state/user-profile.md`:
+
+```
+▸ saving user profile...
+  └─ .claude/state/user-profile.md
+
+✓ Profile saved. Found:
+  - [X] projects across [Y] domains
+  - Work style: [summary]
+  - Suggested structure: [summary]
+```
+
+---
+
+## Step 6: Return to Onboarding
+
+Return control to onboarding with summary:
+
+```
+Analysis complete.
+
+Found [X] projects in your history:
+- [project1] ([type])
+- [project2] ([type])
+- [project3] ([type])
+
+Work style: [brief summary]
+
+This context will inform your ALIVE setup. Continuing onboarding...
+```
+
+---
+
+## Privacy Considerations
+
+- **Local only** — All analysis happens locally
+- **No transmission** — Nothing leaves the machine
+- **User control** — Opt-in only, can delete profile anytime
+- **Transparent** — Show what was discovered
+
+---
+
+## Error Handling
+
+| Error | Response |
+|-------|----------|
+| No sessions found | "No Claude Code history found. Skipping analysis." |
+| Sessions unreadable | "Couldn't read some sessions. Proceeding with available data." |
+| Analysis timeout | "Analysis taking too long. Saving partial results." |
+| Empty results | "Couldn't extract patterns. Starting fresh setup." |
+
+---
+
+## Output Files
+
+| File | Purpose |
+|------|---------|
+| `.claude/state/user-profile.md` | Persistent user profile |
+
+This profile is referenced by:
+- Onboarding (for personalized setup suggestions)
+- Daily (for context-aware suggestions)
+- Any skill that benefits from user context
+
+---
+
+## Integration with Onboarding
+
+Onboarding calls this skill like:
+
+```
+User opts in to session analysis
+→ Invoke power-user-install
+→ Wait for completion
+→ Read .claude/state/user-profile.md
+→ Use profile to personalize remaining onboarding
+→ Suggest entity structure based on discovered projects
+```
+
+---
+
+## Notes
+
+- This skill is expensive (reads many files, dispatches agents)
+- Only run once during initial setup
+- Profile can be regenerated with `/alive:onboarding --rescan`
+- Keep analysis under 2 minutes to avoid user frustration
