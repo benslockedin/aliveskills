@@ -179,7 +179,7 @@ When a `_working/` file is finalized:
 **Always update the manifest of the CLOSEST entity to where work happened.**
 
 ```
-ventures/agency/                    ← Parent entity
+04_Ventures/agency/                    ← Parent entity
 ├── _brain/manifest.json            ← Update for agency-level work
 ├── clients/                        ← Area (no manifest)
 │   └── acme/                       ← Nested entity
@@ -261,7 +261,7 @@ The `session_id` field tracks which session last touched each item:
 
 When calling this skill, provide:
 
-- `entity_path`: Path to entity (e.g., `ventures/acme`)
+- `entity_path`: Path to entity (e.g., `04_Ventures/acme`)
 - `operation`: `add_file`, `add_folder`, `add_working`, `promote`, `remove`, `update_timestamps`
 - `file_path`: Path to file being added/removed (if applicable)
 - `description`: Description for new entries (required for add operations)

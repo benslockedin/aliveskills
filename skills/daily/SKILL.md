@@ -24,7 +24,7 @@ Daily aggregates context from every entity and the session index to show:
 Before anything else, check for v1 structure:
 
 ```
-Check: Does inbox/ exist? (should be inputs/)
+Check: Does inbox/ exist? (should be 03_Inputs/)
 Check: Does any _state/ exist? (should be _brain/)
 ```
 
@@ -43,11 +43,12 @@ If yes → invoke `/alive:upgrade` then restart daily.
 
 | Source | Extract |
 |--------|---------|
+| `alive.local.yaml` | Sync script configuration (optional) |
 | `.claude/state/session-index.jsonl` | Ongoing threads with quality tags |
 | `{entity}/_brain/status.md` | Goal line, phase, focus |
 | `{entity}/_brain/tasks.md` | @urgent tagged items |
 | `{entity}/_brain/manifest.json` | working_files array |
-| `inputs/` | Count of pending items |
+| `03_Inputs/` | Count of pending items |
 
 ## Flow
 
@@ -55,16 +56,59 @@ If yes → invoke `/alive:upgrade` then restart daily.
 digraph daily_flow {
     "Start" -> "Check v1 structure";
     "Check v1 structure" -> "Offer upgrade" [label="v1 found"];
-    "Check v1 structure" -> "Scan entities" [label="v2 OK"];
+    "Check v1 structure" -> "Check sync config" [label="v2 OK"];
     "Offer upgrade" -> "Run /alive:upgrade" [label="yes"];
-    "Offer upgrade" -> "Scan entities" [label="no"];
-    "Run /alive:upgrade" -> "Scan entities";
+    "Offer upgrade" -> "Check sync config" [label="no"];
+    "Run /alive:upgrade" -> "Check sync config";
+    "Check sync config" -> "Run sync scripts" [label="scripts found"];
+    "Check sync config" -> "Scan entities" [label="no scripts"];
+    "Run sync scripts" -> "Scan entities";
     "Scan entities" -> "Read session-index";
     "Read session-index" -> "Aggregate data";
     "Aggregate data" -> "Display dashboard";
     "Display dashboard" -> "Wait for selection";
 }
 ```
+
+## External Sync (Optional)
+
+**Power users can configure sync scripts** via `/alive:power-user-install` or manually.
+
+Check for `alive.local.yaml` at ALIVE root:
+
+```yaml
+# alive.local.yaml
+sync:
+  slack: .claude/scripts/slack-sync.mjs
+  gmail: .claude/scripts/gmail-sync.mjs
+```
+
+**If sync sources are configured:**
+
+```
+▸ checking alive.local.yaml for sync scripts...
+  └─ Found: slack, gmail
+
+▸ running sync scripts...
+  └─ slack-sync.mjs... ✓ 3 new items
+  └─ gmail-sync.mjs... ✓ 1 new item
+
+4 new items added to 03_Inputs/
+```
+
+**If no config or no sync section:**
+```
+▸ checking alive.local.yaml...
+  └─ No sync scripts configured
+```
+
+Skip to entity scanning.
+
+**Script requirements:**
+- Scripts should output to `03_Inputs/`
+- Scripts should be idempotent (safe to run multiple times)
+- Scripts should return exit code 0 on success
+- Output format: one line per item added (for counting)
 
 ## Numbered Actions (REQUIRED)
 
@@ -166,7 +210,7 @@ WORKING FILES
 
 ## Section: Inputs
 
-Check `inputs/` folder:
+Check `03_Inputs/` folder:
 - Count files/folders (not counting .DS_Store)
 - Flag if count > 0
 - Flag if no captures in 3+ days
@@ -186,7 +230,7 @@ Check each entity's `_brain/manifest.json` for `updated` date:
 ```
 STALE ENTITIES
 ─────────────────────────────────────────────────────────────────────────
-[7] experiments/cricket-grid — 3 weeks stale
+[7] 05_Experiments/cricket-grid — 3 weeks stale
 ```
 
 ## Freshness Flags

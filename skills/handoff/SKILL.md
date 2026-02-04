@@ -38,7 +38,7 @@ Determine which entity this handoff belongs to based on:
 - What was being worked on in the session
 
 ```
-▸ creating handoff for ventures/supernormal/alive/
+▸ creating handoff for 04_Ventures/supernormal/alive/
 ```
 
 ## Step 2: Ensure Sessions Folder Exists
@@ -216,7 +216,7 @@ created: 2026-02-02T15:30:00
 updated: 2026-02-02T16:45:00    # Added on updates
 session_id: abc12345
 status: pending
-entity: ventures/supernormal/alive
+entity: 04_Ventures/supernormal/alive
 reason: context_compact
 update_count: 0                  # Incremented on each update
 ---
@@ -226,7 +226,7 @@ update_count: 0                  # Incremented on each update
 **Session ID:** abc12345
 **Created:** 2026-02-02 15:30
 **Updated:** 2026-02-02 16:45 (if updated)
-**Entity:** ventures/supernormal/alive
+**Entity:** 04_Ventures/supernormal/alive
 **Reason:** Context compaction
 
 ---
@@ -305,11 +305,11 @@ Read these files in order when resuming:
 
 ## When Done
 
-**Archive this handoff:** Move to ALIVE root `archive/` with mirrored path structure.
+**Archive this handoff:** Move to ALIVE root `01_Archive/` with mirrored path structure.
 
 Example:
-- From: `ventures/supernormal/alive/_working/sessions/handoff.md`
-- To: `archive/ventures/supernormal/alive/sessions/handoff.md`
+- From: `04_Ventures/supernormal/alive/_working/sessions/handoff.md`
+- To: `01_Archive/04_Ventures/supernormal/alive/sessions/handoff.md`
 
 Then remove from `manifest.handoffs[]`.
 ```
@@ -398,7 +398,7 @@ Created (pending) → Resumed → Work completed → Archived
 **When work is complete:**
 ```
 ▸ archiving handoff...
-  └─ Moving to archive/{entity-path}/sessions/
+  └─ Moving to 01_Archive/{entity-path}/sessions/
   └─ Removing from manifest.handoffs[]
 
 ✓ Handoff archived

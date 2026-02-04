@@ -9,7 +9,7 @@ If it makes money (or intends to), it's a venture.
 Each venture is a subdomain with its own `_brain/`:
 
 ```
-ventures/
+04_Ventures/
 ├── mycompany/
 │   ├── _brain/       # Status, tasks, changelog
 │   ├── _working/     # WIP
@@ -21,7 +21,7 @@ ventures/
 
 Use `/alive:new` or manually create:
 
-1. Create folder: `ventures/myventure/`
+1. Create folder: `04_Ventures/myventure/`
 2. Add `_brain/` with status.md, tasks.md, changelog.md
 3. Add `_working/` for drafts
 4. Add areas as needed

@@ -1,6 +1,6 @@
 # Archive Domain Template
 
-**Domain:** archive/
+**Domain:** 01_Archive/
 **Purpose:** Completed work, preserved forever
 
 ---
@@ -8,14 +8,14 @@
 ## Structure
 
 ```
-archive/
-├── ventures/         # Mirrors ventures/
+01_Archive/
+├── 04_Ventures/      # Mirrors 04_Ventures/
 │   └── [name]/       # Archived venture (full structure)
-├── experiments/      # Mirrors experiments/
+├── 05_Experiments/   # Mirrors 05_Experiments/
 │   └── [name]/       # Archived experiment
-├── life/             # Mirrors life/
+├── 02_Life/          # Mirrors 02_Life/
 │   └── [area]/       # Archived life area
-└── inbox/            # Processed inbox items
+└── 03_Inputs/        # Processed inputs items
     └── [file]        # Ephemeral items worth keeping
 ```
 
@@ -35,8 +35,8 @@ archive/
 When archiving, the full path is preserved:
 
 ```
-Active:   ventures/acme/clients/globex/
-Archived: archive/ventures/acme/clients/globex/
+Active:   04_Ventures/acme/clients/globex/
+Archived: 01_Archive/04_Ventures/acme/clients/globex/
 ```
 
 This makes restoration straightforward and keeps context intact.
@@ -52,7 +52,7 @@ This makes restoration straightforward and keeps context intact.
 | Life area | No longer relevant |
 | Client project | Work complete |
 | Area | Contents obsolete |
-| Inbox item | Processed, ephemeral but worth keeping |
+| Inputs item | Processed, ephemeral but worth keeping |
 
 ---
 
@@ -78,7 +78,7 @@ This will:
 Archived content includes metadata:
 
 ```markdown
-<!-- Archived: 2026-01-23 from ventures/acme/clients/globex/ -->
+<!-- Archived: 2026-01-23 from 04_Ventures/acme/clients/globex/ -->
 ```
 
 This helps with context when reviewing archived items.
@@ -90,7 +90,7 @@ This helps with context when reviewing archived items.
 Content can be restored:
 
 ```
-User: "Restore ventures/acme/clients/globex"
+User: "Restore 04_Ventures/acme/clients/globex"
 
 ALIVE: Found in archive. Restore to original location?
 ```
@@ -117,7 +117,7 @@ Use `/alive:recall` to find archived content:
 ```
 User: "Find the Globex contract"
 
-ALIVE: Found: archive/ventures/acme/clients/globex/contract.pdf
+ALIVE: Found: 01_Archive/04_Ventures/acme/clients/globex/contract.pdf
        Archived: 2026-01-23
 
        [1] View content

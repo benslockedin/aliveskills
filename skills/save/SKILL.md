@@ -102,7 +102,7 @@ Quality drives escalating behavior (see Escalating Actions).
 **Always save to the CLOSEST subdomain to where work happened.**
 
 ```
-ventures/agency/                    ← Parent subdomain
+04_Ventures/agency/                 ← Parent subdomain
 ├── _brain/                         ← Save here for agency-level work
 ├── clients/                        ← Area (no _brain/)
 │   └── acme/                       ← Nested subdomain
@@ -115,8 +115,8 @@ ventures/agency/                    ← Parent subdomain
 3. That's where you save
 
 **Examples:**
-- Edited `ventures/agency/clients/acme/proposal.md` → Save to `acme/_brain/`
-- Edited `ventures/agency/templates/invoice.md` → Save to `agency/_brain/`
+- Edited `04_Ventures/agency/clients/acme/proposal.md` → Save to `acme/_brain/`
+- Edited `04_Ventures/agency/templates/invoice.md` → Save to `agency/_brain/`
 - Edited files in both → Save to BOTH (see Multi-Domain Sessions)
 
 ## Cascade Logic
@@ -147,13 +147,28 @@ Does parent (agency) need to know?
 
 ---
 
+## Session ID Source (IMPORTANT)
+
+**Use the session ID from the ALIVE startup hook in the system-reminder.**
+
+Look for this in the system context at the start of the conversation:
+```
+SessionStart:startup hook success: ALIVE session initialized. Session ID: xxxxxxxx
+```
+
+The 8-character ID after "Session ID:" is YOUR session ID for this save.
+
+**DO NOT generate a new UUID.** The session ID comes from the startup hook, not from you.
+
+---
+
 ## Changelog Entry Format
 
 Prepend to `_brain/changelog.md` (most recent first):
 
 ```markdown
 ## 2026-01-30 — Session Summary
-**Session:** [session-id]
+**Session:** [session-id from startup hook]
 **Quality:** [routine/productive/important/breakthrough]
 **Status:** [ongoing/paused/closed]
 
@@ -249,8 +264,10 @@ WORKING FILES REVIEW
     └─ Status: ?
 
 ────────────────────────────────────────────────────────────────────────
-For each file, choose: [K]eep  [P]romote  [D]elete
+For each file, choose: [K]eep  [P]romote  [A]rchive
 ```
+
+**NEVER DELETE. ALWAYS ARCHIVE.** Files are moved to `01_Archive/`, never removed.
 
 ### Step 2: Process Each File (Chinese Menu Style)
 
@@ -262,7 +279,7 @@ Go through each file systematically:
 What should happen to this file?
 [K] Keep in _working/ — still in progress
 [P] Promote — move to permanent location
-[D] Delete — no longer needed
+[A] Archive — no longer needed (move to 01_Archive/)
 ```
 
 **Collect all decisions first, then execute.**
@@ -300,8 +317,8 @@ PROMOTING:
   └─ _working/v2-feedback-session.md → docs/v2-feedback-session.md
      └─ Added to manifest: docs/files[]
 
-DELETING:
-  └─ _working/old-notes.md (removed)
+ARCHIVING:
+  └─ _working/old-notes.md → 01_Archive/_working/old-notes.md
 
 ✓ Working folder cleaned
 ```
@@ -409,7 +426,7 @@ Create `_brain/memories/` folder if needed, then `[date]-[session-id].md`:
 
 **Session:** abc123
 **Quality:** Breakthrough
-**Entity:** ventures/alive-llc
+**Entity:** 04_Ventures/alive-llc
 
 ## Key Quotes
 > "Verbatim quote worth preserving"
@@ -434,7 +451,7 @@ Write to `.claude/state/session-index.jsonl`:
 {
   "ts": "2026-01-30T14:30:00Z",
   "session_id": "abc123",
-  "entity": "ventures/alive-llc",
+  "entity": "04_Ventures/alive-llc",
   "save_type": "end_session",
   "status": "ongoing",
   "quality": "productive",
@@ -517,8 +534,8 @@ If session touched multiple subdomains:
 
 ```
 This session touched:
-[1] ventures/alive-llc — Plugin rebuild
-[2] ventures/supernormal — Client note
+[1] 04_Ventures/alive-llc — Plugin rebuild
+[2] 04_Ventures/supernormal — Client note
 
 Save to both?
 ```

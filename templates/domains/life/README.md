@@ -14,7 +14,7 @@ This is the foundation. Everything else flows from here.
 ## Structure
 
 ```
-life/
+02_Life/
 ├── _brain/           # Your life's context
 ├── _working/         # In-progress personal stuff
 ├── people/           # Everyone you know

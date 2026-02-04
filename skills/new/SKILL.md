@@ -72,7 +72,7 @@ What type of venture?
 
 **Entity structure:**
 ```
-ventures/acme-corp/
+04_Ventures/acme-corp/
 ├── .claude/
 │   └── CLAUDE.md          # Identity
 ├── _brain/
@@ -171,7 +171,7 @@ None yet.
 ### Step 5: Confirm Creation
 
 ```
-✓ Created ventures/acme-corp/
+✓ Created 04_Ventures/acme-corp/
 
 Structure:
 ├── .claude/CLAUDE.md
@@ -194,8 +194,8 @@ Next: /alive:do acme-corp to start working.
 Creating an area (organizational folder).
 
 Which entity?
-[1] ventures/acme-corp
-[2] ventures/beta
+[1] 04_Ventures/acme-corp
+[2] 04_Ventures/beta
 [3] Other (specify)
 ```
 
@@ -213,7 +213,7 @@ Purpose?
 
 **Area structure:**
 ```
-ventures/acme-corp/clients/
+04_Ventures/acme-corp/clients/
 └── README.md
 ```
 
@@ -233,13 +233,13 @@ Each client gets a subfolder with their project files.
 
 ## Notes
 
-- Completed clients move to archive/
-- Key contacts should exist in life/people/
+- Completed clients move to 01_Archive/
+- Key contacts should exist in 02_Life/people/
 ```
 
 ### Step 4: Update Parent Manifest
 
-Add to `ventures/acme-corp/_brain/manifest.json`:
+Add to `04_Ventures/acme-corp/_brain/manifest.json`:
 ```json
 {
   "areas": [
@@ -255,7 +255,7 @@ Add to `ventures/acme-corp/_brain/manifest.json`:
 ### Step 5: Confirm
 
 ```
-✓ Created ventures/acme-corp/clients/
+✓ Created 04_Ventures/acme-corp/clients/
 
 Added to manifest.json as area.
 ```
@@ -266,7 +266,7 @@ When creating ventures, offer relevant templates:
 
 ### Agency Template
 ```
-ventures/[name]/
+04_Ventures/[name]/
 ├── clients/           # Client projects
 ├── templates/         # Reusable deliverables
 ├── operations/        # SOPs, processes
@@ -275,7 +275,7 @@ ventures/[name]/
 
 ### Creator Template
 ```
-ventures/[name]/
+04_Ventures/[name]/
 ├── content/           # By platform
 ├── products/          # Courses, digital
 ├── community/         # Resources
@@ -284,7 +284,7 @@ ventures/[name]/
 
 ### E-commerce Template
 ```
-ventures/[name]/
+04_Ventures/[name]/
 ├── products/          # Inventory
 ├── suppliers/         # Vendor info
 ├── marketing/         # Campaigns
@@ -293,7 +293,7 @@ ventures/[name]/
 
 ### Job Template
 ```
-ventures/[name]/
+04_Ventures/[name]/
 ├── projects/          # Work projects
 ├── docs/              # Documentation
 ├── meetings/          # Notes
@@ -304,7 +304,7 @@ ventures/[name]/
 
 **Name already exists:**
 ```
-✗ ventures/acme already exists
+✗ 04_Ventures/acme already exists
 
 [1] Open existing entity
 [2] Choose different name
@@ -342,7 +342,7 @@ Sub-projects are containers WITHIN a entity that have their own lifecycle (and t
 ```
 Creating a sub-project.
 
-You're working in: ventures/acme-agency/
+You're working in: 04_Ventures/acme-agency/
 
 What are you creating?
 [1] Client (for agency ventures)
@@ -365,15 +365,25 @@ One-line description?
 
 **Sub-project structure:**
 ```
-ventures/acme-agency/clients/bigco/
+04_Ventures/acme-agency/clients/bigco/
 ├── _brain/
 │   ├── status.md
 │   ├── tasks.md
 │   ├── insights.md
 │   ├── changelog.md
 │   └── manifest.json
-├── _working/
+├── _working/         ← Sub-project gets its OWN _working/
 └── README.md
+```
+
+**IMPORTANT:** Each sub-project gets its own `_working/` folder. Working files for this sub-project go here, NOT in the parent's `_working/`.
+
+```
+# WRONG - using parent's _working/
+04_Ventures/acme-agency/_working/clients/bigco/proposal.md
+
+# RIGHT - sub-project has its own _working/
+04_Ventures/acme-agency/clients/bigco/_working/proposal.md
 ```
 
 ### Step 4: Initialize Files
@@ -415,7 +425,7 @@ None yet.
 
 ## [DATE] — Created
 
-Sub-project created within ventures/acme-agency/clients/.
+Sub-project created within 04_Ventures/acme-agency/clients/.
 
 **Type:** Client
 **Description:** Enterprise client, $10k/mo retainer
@@ -428,7 +438,7 @@ Sub-project created within ventures/acme-agency/clients/.
 {
   "name": "bigco",
   "type": "client",
-  "parent": "ventures/acme-agency",
+  "parent": "04_Ventures/acme-agency",
   "description": "Enterprise client, $10k/mo retainer",
   "created": "[DATE]",
   "updated": "[DATE]",
@@ -440,7 +450,7 @@ Sub-project created within ventures/acme-agency/clients/.
 
 ### Step 5: Update Parent
 
-Add to `ventures/acme-agency/_brain/manifest.json`:
+Add to `04_Ventures/acme-agency/_brain/manifest.json`:
 ```json
 {
   "areas": [
@@ -453,7 +463,7 @@ Add to `ventures/acme-agency/_brain/manifest.json`:
 }
 ```
 
-Add to `ventures/acme-agency/_brain/changelog.md`:
+Add to `04_Ventures/acme-agency/_brain/changelog.md`:
 ```markdown
 ## [DATE] — Created client: bigco
 
@@ -463,7 +473,7 @@ Added new client sub-project: bigco (Enterprise client, $10k/mo retainer)
 ### Step 6: Confirm
 
 ```
-✓ Created ventures/acme-agency/clients/bigco/
+✓ Created 04_Ventures/acme-agency/clients/bigco/
 
 Structure:
 ├── _brain/

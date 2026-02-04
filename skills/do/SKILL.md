@@ -37,8 +37,8 @@ digraph do_flow {
 
 **User specifies entity:**
 ```
-"work on acme" → ventures/acme/
-"focus on health" → life/health/
+"work on acme" → 04_Ventures/acme/
+"focus on health" → 02_Life/health/
 ```
 
 **User says "continue" or "resume" (no entity):**
@@ -47,7 +47,7 @@ digraph do_flow {
 3. Offer that entity:
 ```
 ▸ checking session-index...
-  └─ Last session: ventures/alive-llc (yesterday, [breakthrough])
+  └─ Last session: 04_Ventures/alive-llc (yesterday, [breakthrough])
 
 Continue with alive-llc?
 [1] Yes
@@ -59,16 +59,16 @@ Continue with alive-llc?
 No recent session found.
 
 Which entity?
-[1] ventures/supernormal
-[2] ventures/alive-llc
-[3] experiments/cricket-grid
+[1] 04_Ventures/supernormal
+[2] 04_Ventures/alive-llc
+[3] 05_Experiments/cricket-grid
 ```
 
 **Multiple matches:**
 ```
 "work on beta" matches:
-[1] ventures/beta
-[2] experiments/beta-test
+[1] 04_Ventures/beta
+[2] 05_Experiments/beta-test
 
 Which one?
 ```
@@ -83,7 +83,7 @@ Check: Does {entity}/_state/ exist? (should be _brain/)
 
 If v1 detected:
 ```
-[!] ventures/acme uses v1 structure (_state/)
+[!] 04_Ventures/acme uses v1 structure (_state/)
 
 Upgrade to v2?
 [1] Yes, upgrade now
@@ -103,7 +103,7 @@ cd {alive-root}/{entity}/
 
 For example:
 ```bash
-cd ~/Desktop/alive/ventures/supernormal/alive/
+cd ~/Desktop/alive/04_Ventures/supernormal/alive/
 ```
 
 **Why this matters:**
@@ -114,7 +114,7 @@ cd ~/Desktop/alive/ventures/supernormal/alive/
 
 **Show the change:**
 ```
-▸ cd ventures/supernormal/alive/
+▸ cd 04_Ventures/supernormal/alive/
   └─ Working directory set
 ```
 
@@ -127,10 +127,10 @@ Read in order:
 
 Show retrieval paths:
 ```
-▸ reading ventures/acme/_brain/status.md
+▸ reading 04_Ventures/acme/_brain/status.md
   └─ Phase: Building (updated 2 days ago)
 
-▸ reading ventures/acme/_brain/tasks.md
+▸ reading 04_Ventures/acme/_brain/tasks.md
   └─ 7 tasks, 2 @urgent
 ```
 
@@ -185,7 +185,7 @@ Resume this session?
 - Handoff remains in manifest for later
 
 **If [3] Archive:**
-- Move handoff to `archive/{entity-path}/sessions/` (mirrored structure)
+- Move handoff to `01_Archive/{entity-path}/sessions/` (mirrored structure)
 - Remove from `manifest.handoffs`
 - Continue with normal do flow
 
@@ -208,7 +208,7 @@ Check `updated` date in manifest.json or file timestamps:
 | > 4 weeks | Warn + ask: `[!!] Status is very stale. Update before working?` |
 
 ```
-[!] ventures/acme/_brain/status.md is 3 weeks old
+[!] 04_Ventures/acme/_brain/status.md is 3 weeks old
     └─ Still accurate? [y] continue  [u] update first
 ```
 
@@ -216,7 +216,7 @@ Check `updated` date in manifest.json or file timestamps:
 
 ```
 ╭─ ALIVE ────────────────────────────────────────────────────────────────╮
-│  do • ventures/acme                                                    │
+│  do • 04_Ventures/acme                                                 │
 ╰────────────────────────────────────────────────────────────────────────╯
 
 ▸ loaded context
@@ -254,15 +254,15 @@ What's first?
 
 **Entity doesn't exist:**
 ```
-✗ ventures/acme/ not found
+✗ 04_Ventures/acme/ not found
 
-[1] Create ventures/acme/ (→ /alive:new)
+[1] Create 04_Ventures/acme/ (→ /alive:new)
 [2] Show available entities
 ```
 
 **No _brain/ or _state/ folder:**
 ```
-[!] ventures/acme/ exists but has no context folder
+[!] 04_Ventures/acme/ exists but has no context folder
 
 Initialize _brain/ now?
 [1] Yes, initialize

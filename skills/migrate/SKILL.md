@@ -45,7 +45,7 @@ If subdomain doesn't exist:
 ```
 This content needs a home.
 
-[1] Create new subdomain (ventures/experiments/life)
+[1] Create new subdomain (04_Ventures/05_Experiments/02_Life)
 [2] Import to existing subdomain
 ```
 
@@ -77,9 +77,9 @@ For transcripts, extract:
 **People:**
 ```
 Found 3 people:
-- John Smith (client) — not in life/people/
+- John Smith (client) — not in 02_Life/people/
 - Sarah Chen (internal) — exists
-- Mike Wilson (vendor) — not in life/people/
+- Mike Wilson (vendor) — not in 02_Life/people/
 
 Create missing person files?
 [1] Yes, create all
@@ -127,20 +127,20 @@ Add to insights.md?
 ▸ routing extracted content...
 
 People:
-  → life/people/john-smith.md (created)
-  → life/people/mike-wilson.md (created)
+  → 02_Life/people/john-smith.md (created)
+  → 02_Life/people/mike-wilson.md (created)
 
 Decisions:
-  → ventures/acme/_brain/changelog.md (2 entries)
+  → 04_Ventures/acme/_brain/changelog.md (2 entries)
 
 Tasks:
-  → ventures/acme/_brain/tasks.md (5 items)
+  → 04_Ventures/acme/_brain/tasks.md (5 items)
 
 Insights:
-  → ventures/acme/_brain/insights.md (2 entries)
+  → 04_Ventures/acme/_brain/insights.md (2 entries)
 
 Source file:
-  → ventures/acme/meetings/call-2026-01-20.md
+  → 04_Ventures/acme/meetings/call-2026-01-20.md
 ```
 
 ### Step 6: Update Manifest
@@ -254,7 +254,7 @@ Route to:
 **Duplicate detection:**
 ```
 [!] This looks similar to existing content:
-    ventures/acme/meetings/call-2026-01-15.md
+    04_Ventures/acme/meetings/call-2026-01-15.md
 
 [1] Import anyway (may duplicate)
 [2] Skip (already imported)
@@ -265,11 +265,11 @@ Route to:
 
 Once content is imported:
 - Use `/alive:do` to work on the subdomain
-- Use `/alive:digest` if items went to inbox
+- Use `/alive:digest` if items went to 03_Inputs/
 - Use `/alive:sweep` to check for cleanup needs
 
 ## Related Skills
 
 - `/alive:new` — Create subdomain first if needed
-- `/alive:digest` — Process inbox items
+- `/alive:digest` — Process inputs
 - `/alive:capture` — Single item capture (not bulk)

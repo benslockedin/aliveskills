@@ -97,7 +97,7 @@ Enter names, or skip:
 ### Step 3: Create Structure
 
 **Implementation:**
-1. Create domain folders (archive/, life/, inputs/, ventures/, experiments/)
+1. Create domain folders (01_Archive/, 02_Life/, 03_Inputs/, 04_Ventures/, 05_Experiments/)
 2. Create each venture/experiment entity with _brain/, _working/, CLAUDE.md
 3. Create v2 system files:
    - `.claude/state/session-index.jsonl` (empty)
@@ -131,14 +131,14 @@ cp -r ~/.claude/plugins/cache/aliveskills/alive/*/rules/* {alive-root}/.claude/r
 ▸ creating your ALIVE structure...
 
 DOMAINS
-├── archive/           Rest — completed items
-├── life/              First — personal (always prioritized)
+├── 01_Archive/        Rest — completed items
+├── 02_Life/           First — personal (always prioritized)
 │   └── people/        Your contacts (source of truth)
-├── inputs/             Triage — incoming context
-├── ventures/          Work — your businesses
+├── 03_Inputs/         Triage — incoming context
+├── 04_Ventures/       Work — your businesses
 │   ├── acme-agency/
 │   └── saas-product/
-└── experiments/       Test — your experiments
+└── 05_Experiments/    Test — your experiments
     └── new-app-idea/
 
 ✓ Structure created
@@ -160,7 +160,7 @@ ALIVE can customize your Claude Code statusline to show:
 - Context usage
 - Cost
 - Urgent tasks (when any)
-- Inbox count (when any)
+- Inputs count (when any)
 
 Example: session:abc123 | Opus 4.5 | ctx:32% | $1.24 | 🔥 2 | 📥 5
 
@@ -206,9 +206,9 @@ KEY CONCEPTS
 
 [_working/] — Drafts and works-in-progress
 
-[life/people/] — Everyone you know, linked across projects
+[02_Life/people/] — Everyone you know, linked across projects
 
-[inputs/] — Dump anything here, sort later
+[03_Inputs/] — Dump anything here, sort later
 
 ─────────────────────────────────────────────────────────────────────────
 [1] Continue
@@ -231,7 +231,7 @@ Just describe it briefly:
 
 Process capture:
 ```
-▸ capturing to ventures/acme-agency/
+▸ capturing to 04_Ventures/acme-agency/
 
 Adding to _brain/status.md:
   Phase: Building
@@ -274,11 +274,11 @@ No re-explaining. No lost context. AI that remembers.
 ▸ verifying installation...
 
 STRUCTURE
-  ✓ archive/ exists
-  ✓ life/ exists
-  ✓ inputs/ exists
-  ✓ ventures/ exists
-  ✓ experiments/ exists
+  ✓ 01_Archive/ exists
+  ✓ 02_Life/ exists
+  ✓ 03_Inputs/ exists
+  ✓ 04_Ventures/ exists
+  ✓ 05_Experiments/ exists
 
 SYSTEM FILES
   ✓ .claude/CLAUDE.md exists
@@ -372,7 +372,7 @@ That's fine — ALIVE works for any context.
 Want me to create:
 [1] A "personal" venture (for side projects)
 [2] An experiment space (for exploring ideas)
-[3] Just the core structure (life/, inputs/)
+[3] Just the core structure (02_Life/, 03_Inputs/)
 ```
 
 **Existing content:**

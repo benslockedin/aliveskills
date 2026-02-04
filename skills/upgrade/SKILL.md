@@ -1,6 +1,6 @@
 ---
 user-invocable: true
-description: This skill should be used when the user says "upgrade", "migrate to v2", "convert to v2", or when `/alive:daily` or `/alive:do` detect v1 structure (`_state/` instead of `_brain/`, `inbox/` instead of `inputs/`).
+description: This skill should be used when the user says "upgrade", "migrate to v2", "convert to v2", or when `/alive:daily` or `/alive:do` detect v1 structure (`_state/` instead of `_brain/`, `inbox/` instead of `03_Inputs/`).
 ---
 
 # alive:upgrade
@@ -11,23 +11,58 @@ Migrate an ALIVE system from v1 to v2 structure.
 
 | v1 | v2 |
 |----|-----|
-| `inbox/` | `inputs/` |
+| `inbox/` | `03_Inputs/` |
 | `_state/` | `_brain/` |
 | No session-index | `.claude/state/session-index.jsonl` |
 | No memories folder | `{entity}/_brain/memories/` (created on breakthrough saves) |
 
-## Flow
+## Flow (2-Session Approach)
 
-```dot
-digraph upgrade_flow {
-    "Start" -> "Scan for v1 patterns";
-    "Scan for v1 patterns" -> "Show findings";
-    "Show findings" -> "Confirm scope";
-    "Confirm scope" -> "Execute renames";
-    "Execute renames" -> "Create v2 files";
-    "Create v2 files" -> "Verify";
-}
+**Upgrade requires TWO sessions.** Claude can't reload rules mid-session.
+
 ```
+SESSION 1: Update Knowledge
+─────────────────────────────────
+1. Check rules status
+2. Sync rules + CLAUDE.md from plugin
+3. Tell user to exit and restart
+4. EXIT (don't do structural changes yet)
+
+SESSION 2: Structural Migration
+─────────────────────────────────
+1. Detect rules are current (or ask if already done)
+2. Proceed with structural migration
+3. Verify
+```
+
+## CRITICAL: Why 2 Sessions?
+
+**Claude operates with its loaded mental model.** If you sync rules mid-session, Claude still has v1 knowledge. Only a fresh session loads the new rules.
+
+**Wrong approach:**
+1. Sync rules ← Claude still has v1 knowledge
+2. Do structural migration ← Using v1 mental model = errors
+
+**Correct approach:**
+1. Session 1: Sync rules → EXIT
+2. Session 2: Claude loads v2 rules → Do structural migration
+
+---
+
+## Step 0: Check If Already Upgraded
+
+**First, ask if user has already done Session 1:**
+
+```
+Have you already updated rules and restarted Claude?
+
+[1] No — this is my first time running upgrade
+[2] Yes — I already updated rules and restarted
+[3] Not sure — check for me
+```
+
+**If [2] Yes or rules are current:** Skip to Step 3 (structural migration)
+**If [1] No or rules outdated:** Start with Step 1
 
 ## Step 1: Scan for v1 Patterns
 
@@ -37,22 +72,22 @@ Find all v1 artifacts, categorized:
 ▸ scanning for v1 patterns...
 
 ROOT INBOX (v1):
-  └─ inbox/ (should be inputs/)
+  └─ inbox/ (should be 03_Inputs/)
 
 ENTITY _STATE/ FOLDERS (v1):
-  └─ ventures/acme/_state/
-  └─ ventures/beta/_state/
-  └─ life/finance/_state/
+  └─ 04_Ventures/acme/_state/
+  └─ 04_Ventures/beta/_state/
+  └─ 02_Life/finance/_state/
 
 NESTED inbox/ FOLDERS:
-  └─ ventures/acme/clients/foo/inbox/
-  └─ ventures/hypha/inbox/
+  └─ 04_Ventures/acme/clients/foo/inbox/
+  └─ 04_Ventures/hypha/inbox/
 
 SKIP — TEMPLATES:
   └─ _working/template/*/_state/
 
 SKIP — ARCHIVE:
-  └─ archive/*/_state/
+  └─ 01_Archive/*/_state/
 
 V2 FILES STATUS:
   └─ .claude/state/session-index.jsonl [missing/exists]
@@ -62,8 +97,8 @@ RULES STATUS:
   └─ If exists: [X files, Y outdated, Z missing]
 
 ENTITY MEMORIES FOLDERS:
-  └─ ventures/acme/_brain/memories/ [missing/exists]
-  └─ ventures/beta/_brain/memories/ [missing/exists]
+  └─ 04_Ventures/acme/_brain/memories/ [missing/exists]
+  └─ 04_Ventures/beta/_brain/memories/ [missing/exists]
   (memories/ created automatically on breakthrough saves, missing is OK)
 ```
 
@@ -85,31 +120,96 @@ What should be upgraded?
 | Case | Ask |
 |------|-----|
 | Template directories | "Found _state/ in templates. Skip templates?" |
-| Archive | "Found _state/ in archive/. Upgrade archived items too?" |
+| Archive | "Found _state/ in 01_Archive/. Upgrade archived items too?" |
 | Nested entities | "Found _state/ at client level. Treat as entities?" |
 
 **Default recommendations:**
 - Templates → Skip (preserve as v1 templates)
 - Archive → Skip (preserve history)
 - Nested `_state/` → Ask (could be intentional entities)
-- Nested `inbox/` → Rename to `inputs/` (client-level inputs are valid)
+- Nested `inbox/` → Rename to `03_Inputs/` (client-level inputs are valid)
 
-## Step 3: Execute Renames
+## Step 2.5: Sync Rules + CLAUDE.md (SESSION 1)
+
+**This step completes Session 1. Do NOT proceed to structural changes yet.**
+
+```
+▸ checking rules status...
+
+Plugin rules: ~/.claude/plugins/cache/aliveskills/alive/{version}/rules/
+Plugin CLAUDE.md: ~/.claude/plugins/cache/aliveskills/alive/{version}/CLAUDE.md
+User rules:   {alive-root}/.claude/rules/
+User CLAUDE.md: {alive-root}/.claude/CLAUDE.md
+```
+
+**Compare and sync:**
+1. Check each plugin rule file against user's version
+2. If user file is missing → copy from plugin
+3. If user file differs from plugin → merge (preserve user customizations, update plugin sections)
+4. Update `.claude/CLAUDE.md` with v2 framework paths
+
+```
+▸ syncing v2 knowledge...
+
+RULES:
+  └─ behaviors.md [outdated] → updated ✓
+  └─ conventions.md [outdated] → updated ✓
+  └─ intent.md [missing] → installed ✓
+  └─ learning-loop.md [current] → skipped
+  └─ ui-standards.md [outdated] → updated ✓
+  └─ voice.md [current] → skipped
+  └─ working-folder-evolution.md [missing] → installed ✓
+
+CLAUDE.MD:
+  └─ .claude/CLAUDE.md → updated with v2 paths ✓
+
+✓ v2 knowledge installed (5 files updated)
+```
+
+### EXIT REQUIRED
+
+```
+╭─ IMPORTANT ────────────────────────────────────────────────────────────╮
+│                                                                        │
+│  Rules and CLAUDE.md have been updated to v2.                          │
+│                                                                        │
+│  Claude needs to RESTART to load the new knowledge.                    │
+│                                                                        │
+│  Please:                                                               │
+│  1. Exit this Claude Code session (Ctrl+C or close terminal)          │
+│  2. Start a new Claude Code session                                    │
+│  3. Run /alive:upgrade again                                           │
+│                                                                        │
+│  On the next run, upgrade will detect the rules are current and        │
+│  proceed directly to structural migration.                             │
+│                                                                        │
+╰────────────────────────────────────────────────────────────────────────╯
+```
+
+**STOP HERE. Do not proceed to Step 3 in this session.**
+
+---
+
+## Step 3: Execute Renames (SESSION 2 ONLY)
+
+**Only run this step if:**
+- User selected [2] "Yes — I already updated rules" in Step 0, OR
+- Rules check confirms they are current
 
 **Order matters:**
 
-1. Rename `inbox/` → `inputs/`
+1. Rename `inbox/` → `03_Inputs/`
 2. Rename each `_state/` → `_brain/`
 
 Show progress:
 ```
-▸ renaming inbox/ → inputs/
+▸ renaming inbox/ → 03_Inputs/
   ✓ done (3 files preserved)
 
-▸ renaming ventures/acme/_state/ → _brain/
+▸ renaming 04_Ventures/acme/_state/ → _brain/
   ✓ done
 
-▸ renaming ventures/beta/_state/ → _brain/
+▸ renaming 04_Ventures/beta/_state/ → _brain/
   ✓ done
 ```
 
@@ -217,7 +317,7 @@ done
 
 Your statusline was installed on 2026-01-28.
 Plugin has newer version with fixes for:
-  • inputs/ path detection (was inbox/)
+  • 03_Inputs/ path detection (was inbox/)
   • ALIVE root indicator
   • Smart path detection
 
@@ -255,7 +355,7 @@ fi
 ▸ verifying migration...
 
 STRUCTURE
-  ✓ No inbox/ found (now inputs/)
+  ✓ No inbox/ found (now 03_Inputs/)
   ✓ No _state/ found in upgraded entities
   ✓ session-index.jsonl exists
   ✓ All _brain/ folders have required files
@@ -288,7 +388,7 @@ Missing:
 
 When called from `do` with a specific entity:
 ```
-Upgrading ventures/acme only.
+Upgrading 04_Ventures/acme only.
 
 [1] Upgrade this entity
 [2] Upgrade entire system
@@ -298,7 +398,7 @@ Upgrading ventures/acme only.
 **Already v2:**
 ```
 ✓ System is already v2 structure.
-  └─ inputs/ exists
+  └─ 03_Inputs/ exists
   └─ All entities use _brain/
 
 Nothing to upgrade.
@@ -309,10 +409,10 @@ Nothing to upgrade.
 [!] Partial v2 detected
 
 Already v2:
-  └─ ventures/acme/_brain/
+  └─ 04_Ventures/acme/_brain/
 
 Still v1:
-  └─ ventures/beta/_state/
+  └─ 04_Ventures/beta/_state/
   └─ inbox/
 
 Upgrade remaining v1 items?
@@ -335,7 +435,7 @@ Update these to v2 paths?
 
 If yes, replace:
 - `_state/` → `_brain/`
-- `inbox/` → `inputs/`
+- `inbox/` → `03_Inputs/`
 - `subdomain` → `entity` (terminology)
 
 ## After Upgrade
@@ -344,7 +444,7 @@ If yes, replace:
 ✓ Migration complete.
 
 Summary:
-• Renamed inbox/ → inputs/
+• Renamed inbox/ → 03_Inputs/
 • Renamed X entities from _state/ → _brain/
 • Created/verified v2 system files
 • [Updated/Skipped] documentation references

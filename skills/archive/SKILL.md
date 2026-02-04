@@ -25,8 +25,8 @@ Invoke when the user:
 ## Path Preservation
 
 ```
-Active:   ventures/acme/clients/globex/
-Archived: archive/ventures/acme/clients/globex/
+Active:   04_Ventures/acme/clients/globex/
+Archived: 01_Archive/04_Ventures/acme/clients/globex/
 ```
 
 The archive mirrors the working structure exactly.
@@ -49,8 +49,8 @@ The archive mirrors the working structure exactly.
 ```
 What are you archiving?
 
-[1] A subdomain (ventures/acme)
-[2] An area (ventures/acme/clients/globex)
+[1] A subdomain (04_Ventures/acme)
+[2] An area (04_Ventures/acme/clients/globex)
 [3] A file (specific document)
 ```
 
@@ -59,14 +59,14 @@ What are you archiving?
 Before archiving, verify:
 
 ```
-▸ checking ventures/acme/clients/globex/
+▸ checking 04_Ventures/acme/clients/globex/
 
 Status: No _brain/ (this is an area)
 Files: 5 documents
 Related tasks: 2 found in parent subdomain
 
 ─────────────────────────────────────────────────────────────────────────
-[!] Found 2 related tasks in ventures/acme/_brain/tasks.md:
+[!] Found 2 related tasks in 04_Ventures/acme/_brain/tasks.md:
     - [ ] Send final invoice to Globex
     - [ ] Archive Globex files
 
@@ -79,9 +79,9 @@ Complete these first?
 ### Step 3: Archive
 
 ```
-▸ archiving ventures/acme/clients/globex/
+▸ archiving 04_Ventures/acme/clients/globex/
 
-Creating: archive/ventures/acme/clients/globex/
+Creating: 01_Archive/04_Ventures/acme/clients/globex/
 Moving: 5 files
 
 [1] Confirm archive
@@ -93,7 +93,7 @@ Moving: 5 files
 ```
 ▸ moving to archive...
 
-archive/ventures/acme/clients/globex/
+01_Archive/04_Ventures/acme/clients/globex/
 ├── contract.pdf
 ├── deliverables/
 │   ├── report-v1.pdf
@@ -104,20 +104,20 @@ archive/ventures/acme/clients/globex/
 
 ### Step 5: Update Manifests
 
-**Parent manifest (ventures/acme/_brain/manifest.json):**
+**Parent manifest (04_Ventures/acme/_brain/manifest.json):**
 - Remove archived area from `areas[]`
 - Update `folders[]` if needed
 
 **Archive note:**
 Add to archived content:
 ```markdown
-<!-- Archived: 2026-01-23 from ventures/acme/clients/globex/ -->
+<!-- Archived: 2026-01-23 from 04_Ventures/acme/clients/globex/ -->
 ```
 
 ### Step 6: Confirm
 
 ```
-✓ Archived to archive/ventures/acme/clients/globex/
+✓ Archived to 01_Archive/04_Ventures/acme/clients/globex/
 
 5 files moved.
 Parent manifest updated.
@@ -130,7 +130,7 @@ This content is preserved and searchable via /alive:recall.
 When archiving a full subdomain (with _brain/):
 
 ```
-▸ archiving ventures/old-project/
+▸ archiving 04_Ventures/old-project/
 
 This is a full subdomain with state.
 
@@ -146,7 +146,7 @@ Archive everything including _brain/?
 
 Result:
 ```
-archive/ventures/old-project/
+01_Archive/04_Ventures/old-project/
 ├── .claude/
 │   └── CLAUDE.md
 ├── _brain/
@@ -164,7 +164,7 @@ archive/ventures/old-project/
 Experiments that didn't work out:
 
 ```
-▸ archiving experiments/failed-idea/
+▸ archiving 05_Experiments/failed-idea/
 
 Experiment status: Abandoned
 Reason: Market validation failed
@@ -177,12 +177,12 @@ Archive with learnings?
 
 If extracting insights:
 ```
-Found in experiments/failed-idea/_brain/insights.md:
+Found in 05_Experiments/failed-idea/_brain/insights.md:
 - "Target market too small for subscription model"
 - "Customer acquisition cost exceeded LTV"
 
 Copy these to another subdomain before archiving?
-[1] Yes, copy to ventures/main/_brain/insights.md
+[1] Yes, copy to 04_Ventures/main/_brain/insights.md
 [2] No, keep only in archive
 ```
 
@@ -193,12 +193,12 @@ If something needs to come back:
 ```
 User: "Restore the Globex project"
 
-▸ checking archive/ventures/acme/clients/globex/
+▸ checking 01_Archive/04_Ventures/acme/clients/globex/
 
 Found archived content from 2026-01-23.
 
 Restore to original location?
-[1] Yes, restore to ventures/acme/clients/globex/
+[1] Yes, restore to 04_Ventures/acme/clients/globex/
 [2] Restore to different location
 [3] Just view archived content
 ```
@@ -218,7 +218,7 @@ Exception: Temporary files in `_working/` can be deleted after promotion.
 
 **Already archived:**
 ```
-✗ ventures/acme/clients/globex/ not found
+✗ 04_Ventures/acme/clients/globex/ not found
 
 Check archive?
 [1] Yes, search archive
@@ -227,7 +227,7 @@ Check archive?
 
 **Nested archive:**
 ```
-[!] ventures/acme/ contains 3 areas that are already archived.
+[!] 04_Ventures/acme/ contains 3 areas that are already archived.
 
 Archive parent anyway?
 [1] Yes (will nest archives)
@@ -236,7 +236,7 @@ Archive parent anyway?
 
 **Partial archive:**
 ```
-Archive specific items from ventures/acme/clients/?
+Archive specific items from 04_Ventures/acme/clients/?
 
 [1] globex/ (completed)
 [2] initech/ (completed)
@@ -254,7 +254,7 @@ User: "Find the Globex contract"
 
 ▸ searching all locations including archive...
 
-Found: archive/ventures/acme/clients/globex/contract.pdf
+Found: 01_Archive/04_Ventures/acme/clients/globex/contract.pdf
 Archived: 2026-01-23
 
 [1] View content

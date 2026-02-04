@@ -18,7 +18,7 @@ When working on an entity, read these files first:
 | `_brain/tasks.md` | Active work, urgent items | Know what needs doing |
 | `_brain/manifest.json` | Structure, folders, last session | Know what exists |
 
-Show retrieval: `▸ reading ventures/x/_brain/status.md`
+Show retrieval: `▸ reading 04_Ventures/x/_brain/status.md`
 
 **Don't auto-read:** `insights.md` (long, only when relevant) or `changelog.md` (history, only when needed).
 
@@ -92,7 +92,7 @@ Templates for creating new entities, sub-projects, and _brain/ files live in `.c
 ```
 .claude/templates/
 ├── brain/           # _brain/ file templates (status.md, tasks.md, etc.)
-├── domains/         # Domain README templates (life/, ventures/, etc.)
+├── domains/         # Domain README templates (02_Life/, 04_Ventures/, etc.)
 └── config/          # Config templates (statusline)
 ```
 
@@ -141,11 +141,11 @@ You rarely have full context. Act accordingly:
 
 | Letter | Domain | Purpose |
 |--------|--------|---------|
-| **A** | `archive/` | Inactive items, preserved |
-| **L** | `life/` | Personal responsibilities — THE FOUNDATION |
-| **I** | `inputs/` | Universal input, triage |
-| **V** | `ventures/` | Businesses with revenue intent |
-| **E** | `experiments/` | Testing grounds, no model yet |
+| **A** | `01_Archive/` | Inactive items, preserved |
+| **L** | `02_Life/` | Personal responsibilities — THE FOUNDATION |
+| **I** | `03_Inputs/` | Universal input, triage |
+| **V** | `04_Ventures/` | Businesses with revenue intent |
+| **E** | `05_Experiments/` | Testing grounds, no model yet |
 
 ---
 
@@ -178,7 +178,7 @@ Life defines:
 - **Values** — What matters, what doesn't
 - **Goals** — Where you're heading, why
 - **Constraints** — Time, energy, relationships, health
-- **Relationships** — People who matter (source of truth in `life/people/`)
+- **Relationships** — People who matter (source of truth in `02_Life/people/`)
 
 Ventures and experiments SERVE life goals. Not the other way around.
 
@@ -201,9 +201,9 @@ When evaluating any venture or experiment decision, check alignment:
 ```
 User: "Should I take on this new client? $30k but 60 hours/month."
 
-Claude checks life/:
-- life/_brain/status.md → "Constraint: Max 40 hours/week"
-- life/goals.md → "Priority: Be present for kids"
+Claude checks 02_Life/:
+- 02_Life/_brain/status.md → "Constraint: Max 40 hours/week"
+- 02_Life/goals.md → "Priority: Be present for kids"
 
 Response: "This conflicts with your documented constraints. You've
 set a max of 40 hours/week. At 60 hours/month on top of current work,
@@ -228,7 +228,7 @@ When working in **any** domain:
 1. **Check life alignment** — Does this decision serve life goals?
 2. **Surface relevant constraints** — Are there life-level limits?
 3. **Reference the north star** — Big decisions connect to life direction
-4. **Protect what matters** — Relationships, health, time are in life/ for a reason
+4. **Protect what matters** — Relationships, health, time are in 02_Life/ for a reason
 5. **Ask when uncertain** — "Does this align with your goal of X?"
 
 **Practical triggers:**

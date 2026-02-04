@@ -24,7 +24,7 @@ Process with `/alive:digest`:
 ## Structure
 
 ```
-inputs/
+03_Inputs/
 ├── 2026-01-26-meeting-notes.md
 ├── quick-idea.md
 └── link-to-check.md

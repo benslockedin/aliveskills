@@ -9,11 +9,11 @@ Digest external content immediately. Extract meaning, route to destination.
 
 ## Overview
 
-Input handles content that comes FROM OUTSIDE — emails, transcripts, articles, Slack threads. Extract decisions, tasks, people, insights. Route to appropriate entity or dump to `inputs/` for later triage.
+Input handles content that comes FROM OUTSIDE — emails, transcripts, articles, Slack threads. Extract decisions, tasks, people, insights. Route to appropriate entity or dump to `03_Inputs/` for later triage.
 
 **Different from:**
 - `capture` — User's OWN thoughts from conversation ("FYI we decided X")
-- `digest` — Process items already IN inputs/
+- `digest` — Process items already IN 03_Inputs/
 
 **The test:** Did this content originate from the user in this conversation, or come from somewhere else?
 - User types "We decided to use Stripe" → capture (their thought)
@@ -41,20 +41,20 @@ Load context to make intelligent routing decisions:
 | Active entity (from `/alive:do`) | Default routing destination |
 | `{entity}/_brain/manifest.json` | Know what areas exist (clients/, content/) |
 | `{entity}/_brain/status.md` | Understand current focus, suggest relevance |
-| `life/people/` listing | Check for existing person files before creating |
+| `02_Life/people/` listing | Check for existing person files before creating |
 
 ```
 ▸ loading context...
-  └─ Active: ventures/acme
+  └─ Active: 04_Ventures/acme
   └─ Areas: clients/, content/, partnerships/
   └─ Focus: "Closing Q1 deals"
-  └─ People: 47 files in life/people/
+  └─ People: 47 files in 02_Life/people/
 ```
 
 This context informs:
 - **Routing suggestions** — "This looks like a client email → route to clients/?"
 - **Area matching** — If manifest shows `clients/globex/` exists, route there
-- **Person deduplication** — Check before creating new person files
+- **Person deduplication** — Check 02_Life/people/ before creating new person files
 - **Relevance scoring** — Does this relate to current focus?
 
 ## Flow
@@ -63,7 +63,7 @@ This context informs:
 digraph input_flow {
     "Content received" -> "Detect type";
     "Detect type" -> "Ask: Process now or dump?";
-    "Ask: Process now or dump?" -> "Dump to inputs/" [label="dump"];
+    "Ask: Process now or dump?" -> "Dump to 03_Inputs/" [label="dump"];
     "Ask: Process now or dump?" -> "Extract content" [label="process"];
     "Extract content" -> "Show extractions";
     "Show extractions" -> "Confirm routing";
@@ -96,12 +96,12 @@ Always ask:
 ```
 I can:
 [1] Process now — extract decisions, tasks, people, route to entity
-[2] Dump to inputs/ — save for later triage with /alive:digest
+[2] Dump to 03_Inputs/ — save for later triage with /alive:digest
 
 Which?
 ```
 
-If dump → save raw content to `inputs/[date]-[type]-[subject].md` and exit.
+If dump → save raw content to `03_Inputs/[date]-[type]-[subject].md` and exit.
 
 ## Step 3: Extract Content
 
@@ -160,26 +160,26 @@ If entity is active AND manifest shows relevant area:
 ▸ checking manifest...
   └─ Found: clients/globex/ (matches "Globex" in email)
 
-Route to: ventures/acme
+Route to: 04_Ventures/acme
 - Tasks → _brain/tasks.md
 - Decision → _brain/changelog.md
 - Source file → clients/globex/
-- People → life/people/ (with links)
+- People → 02_Life/people/ (with links)
 
-[1] Confirm    [2] Different location    [3] Dump to inputs/
+[1] Confirm    [2] Different location    [3] Dump to 03_Inputs/
 ```
 
 If entity is active but no matching area:
 ```
-Route to: ventures/acme
+Route to: 04_Ventures/acme
 - Tasks → _brain/tasks.md
 - Decision → _brain/changelog.md
-- People → life/people/ (with links)
+- People → 02_Life/people/ (with links)
 
 No matching area for source file. Options:
 [1] Create clients/globex/ area
 [2] Save to _working/
-[3] inputs/ only
+[3] 03_Inputs/ only
 
 [c] Confirm routing    [d] Different entity
 ```
@@ -189,12 +189,12 @@ If no active entity:
 Where should this go?
 
 ▸ scanning entities...
-  └─ ventures/acme — "Globex" mentioned in status.md
-  └─ ventures/beta — no match
+  └─ 04_Ventures/acme — "Globex" mentioned in status.md
+  └─ 04_Ventures/beta — no match
 
-[1] ventures/acme (suggested)
-[2] ventures/beta
-[3] inputs/ (triage later)
+[1] 04_Ventures/acme (suggested)
+[2] 04_Ventures/beta
+[3] 03_Inputs/ (triage later)
 [4] Other
 ```
 
@@ -218,7 +218,7 @@ Where should this go?
 Email thread with Sarah Chen (Globex)
 ```
 
-### People → life/people/
+### People → 02_Life/people/
 
 Check if person exists:
 - If exists → update with new context
@@ -239,20 +239,20 @@ New person file:
 - Budget holder, approved $50k
 
 ## References
-- ventures/acme (potential client)
+- 04_Ventures/acme (potential client)
 ```
 
 ## Step 7: Confirm Done
 
 ```
-✓ Routed to ventures/acme
+✓ Routed to 04_Ventures/acme
 
 Written:
 - 2 tasks → _brain/tasks.md
 - 1 decision → _brain/changelog.md
-- 1 person → life/people/sarah-chen.md (created)
+- 1 person → 02_Life/people/sarah-chen.md (created)
 
-Source saved to: inputs/2026-01-30-email-globex.md
+Source saved to: 03_Inputs/2026-01-30-email-globex.md
 ```
 
 ## Quick Mode
@@ -264,7 +264,7 @@ User: "FYI got this from Sarah: 'Call moved to 3pm Tuesday'"
 ▸ quick input
 
 Task: Call with Sarah — Tuesday 3pm
-Route to: ventures/acme/_brain/tasks.md
+Route to: 04_Ventures/acme/_brain/tasks.md
 
 [1] Confirm    [2] Expand    [3] Cancel
 ```
@@ -273,13 +273,13 @@ Route to: ventures/acme/_brain/tasks.md
 
 When content mentions known people:
 
-1. Check `life/people/` for existing file
+1. Check `02_Life/people/` for existing file
 2. If found → add context, update "Last contact"
 3. If not found → offer to create
 
 ```
 Sarah Chen mentioned in this email.
-Found: life/people/sarah-chen.md
+Found: 02_Life/people/sarah-chen.md
 
 Update with this context?
 [1] Yes, update    [2] Skip person update
@@ -302,7 +302,7 @@ Is this:
 ```
 No clear decisions, tasks, or people found.
 
-[1] Save to inputs/ as reference
+[1] Save to 03_Inputs/ as reference
 [2] Let me try manual extraction
 [3] Cancel
 ```
@@ -310,16 +310,16 @@ No clear decisions, tasks, or people found.
 ### Multiple Entities Could Apply
 ```
 This content could relate to:
-[1] ventures/acme (client discussion)
-[2] ventures/beta (mentioned partnership)
+[1] 04_Ventures/acme (client discussion)
+[2] 04_Ventures/beta (mentioned partnership)
 [3] Both — split routing
-[4] inputs/ (decide later)
+[4] 03_Inputs/ (decide later)
 ```
 
 ## Source Preservation
 
-Always save original to `inputs/` even after routing:
-- File: `inputs/[date]-[type]-[brief-subject].md`
+Always save original to `03_Inputs/` even after routing:
+- File: `03_Inputs/[date]-[type]-[brief-subject].md`
 - Preserves raw content
 - Can be archived after processing
 
@@ -330,7 +330,7 @@ Always save original to `inputs/` even after routing:
 | Just acknowledging pasted content | External content = input trigger | Detect type, ask process/dump |
 | Using capture for forwarded content | Capture = your own notes, Input = external | If it came from outside, use input |
 | Skipping context check | Can't route intelligently without it | Always check manifest + people first |
-| Skipping person file check | Creates duplicates, loses connections | Check life/people/ before creating |
+| Skipping person file check | Creates duplicates, loses connections | Check 02_Life/people/ before creating |
 | Deciding for user when unclear | User owns routing decisions | Always offer options |
 | Skipping confirmations "for speed" | Wrong routing wastes more time | Confirm before writing |
 | Dumping without asking | User might want immediate processing | Always ask process vs dump |
@@ -364,14 +364,14 @@ Use actual folder structure instead.
 ```
 Scan status.md files across all entities for keyword matches.
 
-**No life/people/ folder:**
+**No 02_Life/people/ folder:**
 ```
-▸ life/people/ not found
+▸ 02_Life/people/ not found
   └─ Offer to create with first person file
 ```
 
 ## Related Skills
 
 - `/alive:capture` — Quick mid-session notes (YOUR thoughts)
-- `/alive:digest` — Process items already IN inputs/
+- `/alive:digest` — Process items already IN 03_Inputs/
 - `/alive:do` — Load entity context first

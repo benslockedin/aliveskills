@@ -109,7 +109,7 @@ Every evolved folder gets a README that explains what it is:
 
 **Before:**
 ```
-ventures/acme/_working/
+04_Ventures/acme/_working/
 ├── acme_landing-v0.html
 ├── acme_landing-v1.html
 ├── acme_landing-notes.md
@@ -118,7 +118,7 @@ ventures/acme/_working/
 
 **After:**
 ```
-ventures/acme/landing-page/
+04_Ventures/acme/landing-page/
 ├── README.md
 ├── v0.html
 ├── v1.html
@@ -132,7 +132,7 @@ ventures/acme/landing-page/
 
 **Before:**
 ```
-ventures/acme/_working/
+04_Ventures/acme/_working/
 ├── acme_globex_proposal-draft.md
 ├── acme_globex_proposal-v1.pdf
 ├── acme_globex_scope.md
@@ -141,7 +141,7 @@ ventures/acme/_working/
 
 **After:**
 ```
-ventures/acme/clients/globex/proposal/
+04_Ventures/acme/clients/globex/proposal/
 ├── README.md
 ├── draft.md
 ├── v1.pdf
@@ -155,7 +155,7 @@ ventures/acme/clients/globex/proposal/
 
 **Before:**
 ```
-ventures/ben-flint/_working/
+04_Ventures/ben-flint/_working/
 ├── bf_linkedin_ai-series-1.md
 ├── bf_linkedin_ai-series-2.md
 ├── bf_linkedin_ai-series-3.md
@@ -164,7 +164,7 @@ ventures/ben-flint/_working/
 
 **After:**
 ```
-ventures/ben-flint/content/linkedin/ai-series/
+04_Ventures/ben-flint/content/linkedin/ai-series/
 ├── README.md
 ├── outline.md
 ├── post-1.md

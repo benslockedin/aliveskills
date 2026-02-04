@@ -25,7 +25,7 @@ Invoke when the user:
 | Tasks | `_brain/tasks.md` | Work items |
 | Sessions | `_brain/changelog.md` | Session summaries |
 | Files | `_brain/manifest.json` | File index with summaries |
-| People | `life/people/` | Person files |
+| People | `02_Life/people/` | Person files |
 | Transcripts | `.claude/projects/` | Session transcripts |
 
 ## Flow
@@ -60,9 +60,9 @@ Search order:
 Show retrieval:
 ```
 ▸ searching "pricing"...
-  └─ ventures/acme/_brain/changelog.md    2 matches
-  └─ ventures/beta/_brain/changelog.md    1 match
-  └─ ventures/acme/_brain/insights.md     1 match
+  └─ 04_Ventures/acme/_brain/changelog.md    2 matches
+  └─ 04_Ventures/beta/_brain/changelog.md    1 match
+  └─ 04_Ventures/acme/_brain/insights.md     1 match
 ```
 
 ### Step 3: Present Results
@@ -76,18 +76,18 @@ Show retrieval:
 
 DECISIONS
 ─────────────────────────────────────────────────────────────────────────
-[1] ventures/acme • 2026-01-23
+[1] 04_Ventures/acme • 2026-01-23
     "Pricing model: Chose $97/mo. Rejected $47 (too cheap)..."
 
-[2] ventures/acme • 2026-01-20
+[2] 04_Ventures/acme • 2026-01-20
     "Pricing page: Decided to show annual pricing first..."
 
-[3] ventures/beta • 2026-01-18
+[3] 04_Ventures/beta • 2026-01-18
     "Beta pricing: Free during beta, charge after launch..."
 
 INSIGHTS
 ─────────────────────────────────────────────────────────────────────────
-[4] ventures/acme • 2026-01-22
+[4] 04_Ventures/acme • 2026-01-22
     "Pricing psychology: Charm pricing ($97 vs $100) works..."
 
 ─────────────────────────────────────────────────────────────────────────
@@ -100,7 +100,7 @@ Select a result:
 
 When user selects a result:
 ```
-▸ loading ventures/acme/_brain/changelog.md
+▸ loading 04_Ventures/acme/_brain/changelog.md
 
 ## 2026-01-23 — Session Summary
 
@@ -126,7 +126,7 @@ User: "What did we decide about the tech stack?"
 
 ▸ searching decisions for "tech stack"...
 
-Found in ventures/acme/_brain/changelog.md (2026-01-15):
+Found in 04_Ventures/acme/_brain/changelog.md (2026-01-15):
 - **Tech stack:** Chose Next.js + Supabase. Rejected Rails
   (team unfamiliar) and Firebase (vendor lock-in concerns).
 ```
@@ -139,8 +139,8 @@ User: "What happened last Tuesday?"
 ▸ searching sessions for 2026-01-21...
 
 Found 2 sessions:
-[1] ventures/acme — Landing page work (3 hours)
-[2] ventures/beta — Bug fixes (1 hour)
+[1] 04_Ventures/acme — Landing page work (3 hours)
+[2] 04_Ventures/beta — Bug fixes (1 hour)
 ```
 
 ### File Search
@@ -151,7 +151,7 @@ User: "Where's the contract with Acme?"
 ▸ searching manifest files for "contract"...
 
 Found:
-[1] ventures/agency/clients/acme/contract.pdf
+[1] 04_Ventures/agency/clients/acme/contract.pdf
     "MSA with Acme Corp, $50k retainer, expires March 2026"
 ```
 
@@ -160,9 +160,9 @@ Found:
 ```
 User: "What do we know about John?"
 
-▸ searching life/people/ for "john"...
+▸ searching 02_Life/people/ for "john"...
 
-Found: life/people/john-smith.md
+Found: 02_Life/people/john-smith.md
 - Role: CTO, TechCorp
 - Last contact: 2026-01-20
 - Context: Partnership discussion
@@ -175,7 +175,7 @@ Found: life/people/john-smith.md
 ```
 User: "Find pricing decisions in acme"
 
-▸ searching ventures/acme/ only...
+▸ searching 04_Ventures/acme/ only...
 
 [Searches only that subdomain]
 ```
@@ -187,9 +187,9 @@ User: "Find all mentions of AWS"
 
 ▸ searching all subdomains...
 
-ventures/acme: 3 matches
-ventures/beta: 1 match
-experiments/infra: 5 matches
+04_Ventures/acme: 3 matches
+04_Ventures/beta: 1 match
+05_Experiments/infra: 5 matches
 ```
 
 ### Cross-Reference

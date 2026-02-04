@@ -1,16 +1,16 @@
 ---
 user-invocable: true
-description: This skill should be used when the user says "process inputs", "digest", "triage", "handle inbox", "sort these", "what's in my inbox", "what's in inputs", or "anything to process". Processes the inputs/ buffer.
+description: This skill should be used when the user says "process inputs", "digest", "triage", "handle inbox", "sort these", "what's in my inbox", "what's in inputs", or "anything to process". Processes the 03_Inputs/ buffer.
 ---
 
 # alive:digest
 
-Process the inputs/ buffer. Survey items, triage with user, extract content, route to entities.
+Process the 03_Inputs/ buffer. Survey items, triage with user, extract content, route to entities.
 
 ## When to Use
 
 Invoke when the user:
-- Has items in `inputs/` to process
+- Has items in `03_Inputs/` to process
 - Wants to triage incoming content
 - Needs to route captured content
 - Says "process", "digest", "triage"
@@ -21,6 +21,7 @@ Invoke when the user:
 2. **Prioritize by importance** — Recent and urgent first
 3. **Smart extraction** — Use appropriate agents for complex content
 4. **Manifest-aware routing** — Route to existing areas when possible
+5. **Never delete, always archive** — Processed files move to `01_Archive/03_Inputs/`, never deleted
 
 ## Flow (4 Steps)
 
@@ -33,14 +34,14 @@ STEP 4: Execute         → Route and extract
 
 ## Step 1: Survey Inputs
 
-Scan `inputs/` and present prioritized list:
+Scan `03_Inputs/` and present prioritized list:
 
 ```
 ╭─ ALIVE ────────────────────────────────────────────────────────────────╮
 │  digest                                                                │
 ╰────────────────────────────────────────────────────────────────────────╯
 
-▸ scanning inputs/
+▸ scanning 03_Inputs/
 
 INPUTS (5 items)
 ─────────────────────────────────────────────────────────────────────────
@@ -132,12 +133,12 @@ For simple items:
 ```
 ▸ processing client-email-acme.md
 
-Adding task to ventures/acme/_brain/tasks.md:
+Adding task to 04_Ventures/acme/_brain/tasks.md:
   - [ ] Send project update to client @urgent
 
-Filing email to ventures/acme/clients/emails/
+Filing email to 04_Ventures/acme/clients/emails/
 
-Moving source to: archive/inputs/client-email-acme.md
+Moving source to: 01_Archive/03_Inputs/client-email-acme.md
 
 ✓ Done
 ```
@@ -154,13 +155,13 @@ Analyzing call-transcript-01-22.md...
 EXTRACTION RESULTS
 ─────────────────────────────────────────────────────────────────────────
 People (3):
-  - John Smith (client) → life/people/john-smith.md [update]
+  - John Smith (client) → 02_Life/people/john-smith.md [update]
   - Sarah Chen → exists
   - New: Mike from TechCorp → create?
 
 Decisions (2):
-  - Use AWS over GCP → ventures/acme/_brain/changelog.md
-  - Launch date March 15 → ventures/acme/_brain/changelog.md
+  - Use AWS over GCP → 04_Ventures/acme/_brain/changelog.md
+  - Launch date March 15 → 04_Ventures/acme/_brain/changelog.md
 
 Tasks (4):
   - [ ] Send proposal by Friday
@@ -169,7 +170,7 @@ Tasks (4):
   - [ ] Update timeline
 
 Insights (1):
-  - Client prefers weekly updates → ventures/acme/_brain/insights.md
+  - Client prefers weekly updates → 04_Ventures/acme/_brain/insights.md
 
 ─────────────────────────────────────────────────────────────────────────
 [1] Apply all extractions
@@ -184,13 +185,13 @@ Insights (1):
 Before routing, check if entity has an area for the content:
 
 ```
-▸ checking ventures/acme/_brain/manifest.json
+▸ checking 04_Ventures/acme/_brain/manifest.json
 
 Areas found:
   - clients/ → for client content
   - meetings/ → for transcripts
 
-Route transcript to: ventures/acme/meetings/call-2026-01-22.md
+Route transcript to: 04_Ventures/acme/meetings/call-2026-01-22.md
 ```
 
 ### Routing Destinations
@@ -200,7 +201,7 @@ Route transcript to: ventures/acme/meetings/call-2026-01-22.md
 | Decision | `_brain/changelog.md` |
 | Task | `_brain/tasks.md` |
 | Insight | `_brain/insights.md` |
-| Person info | `life/people/[name].md` |
+| Person info | `02_Life/people/[name].md` |
 | Transcript | Subdomain area or `meetings/` |
 | Document | Subdomain area |
 | Reference | `_working/` or relevant area |
@@ -208,8 +209,8 @@ Route transcript to: ventures/acme/meetings/call-2026-01-22.md
 ### Source File Routing
 
 After extraction, move source file:
-- To entity area if relevant (`ventures/acme/meetings/`)
-- To `archive/inputs/` if ephemeral
+- To entity area if relevant (`04_Ventures/acme/meetings/`)
+- To `01_Archive/03_Inputs/` if ephemeral
 
 ## Multimodal Support
 
@@ -268,7 +269,7 @@ Extracts:
 
 **Empty inputs:**
 ```
-▸ scanning inputs/
+▸ scanning 03_Inputs/
 
 Inputs is empty. Nothing to process.
 
@@ -309,7 +310,7 @@ Added: 6 tasks
 Logged: 2 decisions
 Filed: 2 source files
 
-Inputs remaining: 3 items
+03_Inputs remaining: 3 items
 ```
 
 ## Related Skills

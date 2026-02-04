@@ -29,10 +29,10 @@ Full visual experience. ASCII art, box drawing, retrieval paths.
 **Example:**
 ```
 ╭─ ALIVE ────────────────────────────────────────────────────────────────╮
-│  ventures                                                              │
+│  04_Ventures                                                           │
 ╰────────────────────────────────────────────────────────────────────────╯
 
-▸ scanning ventures/
+▸ scanning 04_Ventures/
   └─ acme/_brain/status.md      Building
   └─ beta/_brain/status.md      Paused [!]
 
@@ -157,18 +157,18 @@ User can say `1` or `acme` or `new` or `n`.
 Show what you're accessing. Make the system visible.
 
 ```
-▸ scanning ventures/
+▸ scanning 04_Ventures/
   └─ acme/_brain/status.md      Building
   └─ beta/_brain/status.md      Paused [!]
 
-▸ reading ventures/acme/_brain/tasks.md
+▸ reading 04_Ventures/acme/_brain/tasks.md
   └─ 7 tasks, 2 @urgent
 ```
 
 When searching:
 ```
 ▸ searching "contract"...
-  └─ ventures/acme/clients/globex/contract.md    ✓ match
+  └─ 04_Ventures/acme/clients/globex/contract.md    ✓ match
   └─ _brain/changelog.md                         2 mentions
 ```
 
@@ -231,18 +231,18 @@ Characters: `╭ ╮ ╰ ╯ │ ─ ├ ┤ ┬ ┴ ┼`
 
 **Success:**
 ```
-✓ Saved to ventures/acme/_brain/changelog.md
+✓ Saved to 04_Ventures/acme/_brain/changelog.md
 ```
 
 **Error:**
 ```
 ✗ Cannot find venture: [name]
-  └─ Check ventures/ folder
+  └─ Check 04_Ventures/ folder
 ```
 
 **Warning:**
 ```
-[!] ventures/beta/_brain/status.md is 3 weeks old
+[!] 04_Ventures/beta/_brain/status.md is 3 weeks old
     └─ May need refresh
 ```
 

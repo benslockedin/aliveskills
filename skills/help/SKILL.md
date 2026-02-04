@@ -46,8 +46,8 @@ CAPTURE & FIND
 
 MANAGE
 ─────────────────────────────────────────────────────────────────────────
-/alive:archive   Move completed items to archive
-/alive:digest    Process inbox items
+/alive:archive   Move completed items to 01_Archive/
+/alive:digest    Process 03_Inputs/ items
 /alive:sweep     Audit system, clean up stale content
 
 HELP
@@ -72,11 +72,11 @@ User: "What does ALIVE stand for?"
 
 ALIVE Framework
 ─────────────────────────────────────────────────────────────────────────
-A — Archive    Inactive items, preserved forever
-L — Life       Personal responsibilities (always first)
-I — Inbox      Universal input, triage point
-V — Ventures   Businesses with revenue intent
-E — Experiments Testing grounds, no model yet
+A — 01_Archive      Inactive items, preserved forever
+L — 02_Life         Personal responsibilities (always first)
+I — 03_Inputs       Universal input, triage point
+V — 04_Ventures     Businesses with revenue intent
+E — 05_Experiments  Testing grounds, no model yet
 
 Life first, always.
 ```
@@ -93,7 +93,7 @@ Has _brain/         Yes                 No
 Has .claude/        Yes                 No
 Has _working/       Yes                 No
 Identity file       .claude/CLAUDE.md   README.md
-Example             ventures/acme/      ventures/acme/clients/
+Example             04_Ventures/acme/      04_Ventures/acme/clients/
 
 Subdomains are projects with their own state.
 Areas are organizational folders within subdomains.
@@ -171,21 +171,21 @@ User: "Tell me more about /alive:digest"
 
 /alive:digest
 ─────────────────────────────────────────────────────────────────────────
-Process inbox items. Triage, extract, and route content.
+Process 03_Inputs/ items. Triage, extract, and route content.
 
 TRIGGERS:
-- "process inbox", "digest", "triage"
-- "what's in inbox", "handle inbox"
+- "process inputs", "digest", "triage"
+- "what's in inputs", "handle inputs"
 
 FLOW:
-1. Survey inbox (prioritized list)
+1. Survey 03_Inputs/ (prioritized list)
 2. Select items to process
 3. Triage each (simple route vs full extraction)
 4. Execute (route and extract)
 
 For complex items (transcripts), spawns specialized agents.
 
-Example: "digest" → shows inbox, lets you pick what to process
+Example: "digest" → shows inputs, lets you pick what to process
 ```
 
 ## Common Questions
@@ -208,9 +208,9 @@ FILE ROUTING
 ─────────────────────────────────────────────────────────────────────────
 Drafts              →  _working/
 Final files         →  Area folders (clients/, content/, etc.)
-Context to process  →  inbox/
-Completed projects  →  archive/
-People info         →  life/people/
+Context to process  →  03_Inputs/
+Completed projects  →  01_Archive/
+People info         →  02_Life/people/
 ```
 
 ### "How do I capture things?"
@@ -237,12 +237,12 @@ The subdomain you referenced doesn't exist.
 
 Check:
 1. Spelling — Names are lowercase with hyphens
-2. Location — Is it in ventures/, experiments/, or life/?
+2. Location — Is it in 04_Ventures/, 05_Experiments/, or 02_Life/?
 3. Archive — May have been archived
 
 List available:
-  ventures/acme, ventures/beta
-  experiments/test-idea
+  04_Ventures/acme, 04_Ventures/beta
+  05_Experiments/test-idea
 
 Create new subdomain with /alive:new
 ```

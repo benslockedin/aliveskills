@@ -1,6 +1,6 @@
 # Inputs Domain Template
 
-**Domain:** inputs/
+**Domain:** 03_Inputs/
 **Purpose:** Universal input, triage point
 
 ---
@@ -8,7 +8,7 @@
 ## Structure
 
 ```
-inputs/
+03_Inputs/
 ├── [file.md]         # Raw captures, notes, dumps
 ├── [transcript.md]   # Call/meeting transcripts
 ├── [document.pdf]    # Documents to process
@@ -100,7 +100,7 @@ Process inputs daily or every few days. Don't let it become a graveyard.
 
 Aim for empty inputs. Everything should move to:
 - An entity's `_brain/` or area
-- `archive/inputs/` if ephemeral
+- `01_Archive/03_Inputs/` if ephemeral
 - Deleted if worthless
 
 ### Quick Capture
@@ -118,7 +118,7 @@ Better to capture imperfectly than to lose context.
 
 Processed items go to:
 - **Relevant area** — If content belongs somewhere specific
-- **archive/inputs/** — If ephemeral but worth keeping
+- **01_Archive/03_Inputs/** — If ephemeral but worth keeping
 - **Deleted** — If temporary and worthless
 
 ---

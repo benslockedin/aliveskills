@@ -110,7 +110,7 @@ Move completed/inactive items to archive.
 
 ### /alive:digest — Process Inputs
 
-Triage inputs/, extract and route content to appropriate locations.
+Triage 03_Inputs/, extract and route content to appropriate locations.
 
 | Style | Examples |
 |-------|----------|
@@ -119,7 +119,7 @@ Triage inputs/, extract and route content to appropriate locations.
 | **Statement** | "need to process inbox", "inputs is full", "time to triage" |
 | **Casual** | "inbox", "inputs", "what came in", "sort it out" |
 
-**Note:** Users may say "inbox" even though the folder is `inputs/`. Both trigger words work.
+**Note:** Users may say "inbox" even though the folder is `03_Inputs/`. Both trigger words work.
 
 ---
 
@@ -195,7 +195,7 @@ Proactively suggest skills based on system state:
 
 | Condition | Suggest |
 |-----------|---------|
-| inputs/ has items | "You have X items in inputs/. `/alive:digest`?" |
+| 03_Inputs/ has items | "You have X items in 03_Inputs/. `/alive:digest`?" |
 | _brain/ is stale (>2 weeks) | "X hasn't been updated in Y days. Refresh?" |
 | No recent save | "You haven't saved in a while. `/alive:save`?" |
 | User shares decision/insight | "Want me to capture that? `/alive:capture`" |

@@ -48,11 +48,11 @@ Invoke when the user:
 ▸ scanning system...
 
 Checking:
-  └─ ventures/ (3 subdomains)
-  └─ experiments/ (2 subdomains)
-  └─ life/ (4 areas)
-  └─ inbox/ (5 items)
-  └─ archive/
+  └─ 04_Ventures/ (3 subdomains)
+  └─ 05_Experiments/ (2 subdomains)
+  └─ 02_Life/ (4 areas)
+  └─ 03_Inputs/ (5 items)
+  └─ 01_Archive/
 ```
 
 ### Step 2: Health Report
@@ -62,24 +62,24 @@ SYSTEM HEALTH
 ─────────────────────────────────────────────────────────────────────────
 
 STALE SUBDOMAINS (not updated >2 weeks)
-[1] [!] ventures/old-project     42 days stale
-[2] [!] experiments/abandoned    28 days stale
+[1] [!] 04_Ventures/old-project     42 days stale
+[2] [!] 05_Experiments/abandoned    28 days stale
 
 STUCK TASKS (in-progress >1 week)
-[3] ventures/acme: "Update documentation" (12 days)
-[4] ventures/beta: "Fix login bug" (8 days)
+[3] 04_Ventures/acme: "Update documentation" (12 days)
+[4] 04_Ventures/beta: "Fix login bug" (8 days)
 
 LARGE _working/ (>5 files)
-[5] ventures/acme/_working/ — 12 files, oldest 3 weeks
+[5] 04_Ventures/acme/_working/ — 12 files, oldest 3 weeks
 
 EMPTY AREAS
-[6] ventures/acme/templates/ — 0 files
+[6] 04_Ventures/acme/templates/ — 0 files
 
 ORPHANED FILES
-[7] ventures/random-note.md — file in subdomain root
+[7] 04_Ventures/random-note.md — file in subdomain root
 
-INBOX BACKLOG
-[8] inbox/ — 5 items pending (oldest: 2 weeks)
+INPUTS BACKLOG
+[8] 03_Inputs/ — 5 items pending (oldest: 2 weeks)
 
 ─────────────────────────────────────────────────────────────────────────
 [#] Address specific issue    [a] Address all    [i] Ignore for now
@@ -92,14 +92,14 @@ What to address?
 #### Stale Subdomain
 
 ```
-▸ [1] ventures/old-project — 42 days stale
+▸ [1] 04_Ventures/old-project — 42 days stale
 
 Last updated: 2025-12-12
 Status: "Building" (unchanged)
 Open tasks: 3
 
 Options:
-[1] Archive — Move to archive/ (project complete/abandoned)
+[1] Archive — Move to 01_Archive/ (project complete/abandoned)
 [2] Refresh — Open and update status
 [3] Ignore — Mark as intentionally dormant
 [4] Skip
@@ -108,7 +108,7 @@ Options:
 #### Stuck Task
 
 ```
-▸ [3] ventures/acme: "Update documentation"
+▸ [3] 04_Ventures/acme: "Update documentation"
 
 In progress for: 12 days
 Assigned: (none)
@@ -116,7 +116,7 @@ Assigned: (none)
 Options:
 [1] Complete — Mark as done
 [2] Reset — Move back to To Do
-[3] Remove — Delete task
+[3] Archive — Move to Done (Recent) with note
 [4] Update — Change status/details
 [5] Skip
 ```
@@ -124,7 +124,7 @@ Options:
 #### Large _working/
 
 ```
-▸ [5] ventures/acme/_working/ — 12 files
+▸ [5] 04_Ventures/acme/_working/ — 12 files
 
 Files:
   - acme_landing-v0.html (3 weeks old)
@@ -143,7 +143,7 @@ Suggestions:
 #### Orphaned File
 
 ```
-▸ [7] ventures/random-note.md
+▸ [7] 04_Ventures/random-note.md
 
 File in subdomain root (should be in area or _working/).
 
@@ -154,7 +154,7 @@ Options:
 [1] Move to _working/
 [2] Move to specific area
 [3] Process as capture
-[4] Delete
+[4] Archive — Move to 01_Archive/
 [5] Skip
 ```
 
@@ -163,7 +163,7 @@ Options:
 ```
 ▸ executing cleanups...
 
-[1] ✓ Archived ventures/old-project/
+[1] ✓ Archived 04_Ventures/old-project/
 [3] ✓ Moved task to "Done"
 [5] ✓ Promoted landing-v2, archived v0 and v1
 [7] ✓ Moved random-note.md to _working/
@@ -198,7 +198,7 @@ Run system audit?
 | Stuck in-progress | 7 days |
 | Large _working/ | 5+ files |
 | Old drafts | 14 days in _working/ |
-| Inbox backlog | 7 days oldest item |
+| Inputs backlog | 7 days oldest item |
 
 ## Quick Sweep
 
@@ -213,7 +213,7 @@ HEALTH SUMMARY
 ─────────────────────────────────────────────────────────────────────────
 Subdomains:  5 active, 2 stale
 Tasks:       23 open, 4 stuck
-Inbox:       5 items (oldest 2 weeks)
+Inputs:      5 items (oldest 2 weeks)
 Working:     18 drafts across 3 subdomains
 
 Status: [!] Needs attention
@@ -229,7 +229,7 @@ Focus on specific domain:
 ```
 User: "Sweep ventures only"
 
-▸ scanning ventures/...
+▸ scanning 04_Ventures/...
 
 [Shows only venture-related issues]
 ```
@@ -264,7 +264,7 @@ last_sweep: 2026-01-23
 System is healthy:
 - All subdomains active
 - No stuck tasks
-- Inbox clear
+- Inputs clear
 - _working/ folders tidy
 
 Next scheduled sweep: 2026-01-30
@@ -284,5 +284,5 @@ Batch cleanup?
 ## Related Skills
 
 - `/alive:archive` — Move items to archive
-- `/alive:digest` — Process inbox backlog
+- `/alive:digest` — Process inputs backlog
 - `/alive:do` — Refresh stale subdomain

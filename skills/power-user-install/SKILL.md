@@ -139,9 +139,9 @@ Combine agent outputs into a user profile:
 ## Suggested ALIVE Structure
 
 Based on your history, consider:
-- ventures/[project1]/ — [reason]
-- ventures/[project2]/ — [reason]
-- experiments/[experiment]/ — [reason]
+- 04_Ventures/[project1]/ — [reason]
+- 04_Ventures/[project2]/ — [reason]
+- 05_Experiments/[experiment]/ — [reason]
 
 ## Notes for Claude
 
@@ -235,9 +235,47 @@ User opts in to session analysis
 
 ---
 
+## Step 7: Configure Sync Scripts (Optional)
+
+After profile analysis, offer to set up external sync sources:
+
+```
+▸ external sync setup
+
+Do you want to sync content from external sources into ALIVE?
+
+Available integrations:
+[1] Slack — Sync messages/threads to 03_Inputs/
+[2] Gmail — Sync important emails to 03_Inputs/
+[3] Skip — Set up later
+```
+
+**If user selects integrations:**
+
+1. Create `.claude/scripts/` folder if needed
+2. Copy sync script templates
+3. Configure `alive.local.yaml` at ALIVE root:
+
+```yaml
+# alive.local.yaml
+theme: vibrant
+sync:
+  slack: .claude/scripts/slack-sync.mjs
+  gmail: .claude/scripts/gmail-sync.mjs
+```
+
+4. Prompt user for credentials/API keys (stored in `.env` or system keychain)
+
+**Script templates location:** Bundled with ALIVE plugin, copied on setup.
+
+**Daily integration:** Once configured, `/alive:daily` will run sync scripts before showing dashboard.
+
+---
+
 ## Notes
 
 - This skill is expensive (reads many files, dispatches agents)
 - Only run once during initial setup
 - Profile can be regenerated with `/alive:onboarding --rescan`
 - Keep analysis under 2 minutes to avoid user frustration
+- Sync scripts are optional power-user features

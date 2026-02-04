@@ -1,6 +1,6 @@
 # Life Domain Template
 
-**Domain:** life/
+**Domain:** 02_Life/
 **Purpose:** Personal responsibilities — life first, always
 
 ---
@@ -8,7 +8,7 @@
 ## Structure
 
 ```
-life/
+02_Life/
 ├── people/           # Source of truth for all people
 │   └── [name].md     # Person files
 └── [area]/           # Life areas (health, finance, etc.)
@@ -55,8 +55,8 @@ The `people/` folder is the source of truth for all people across ALIVE. Other d
 
 ## Links
 
-- ventures/[project]/clients/[company] — Client relationship
-- ventures/[project]/partners/[company] — Partnership
+- 04_Ventures/[project]/clients/[company] — Client relationship
+- 04_Ventures/[project]/partners/[company] — Partnership
 ```
 
 ---

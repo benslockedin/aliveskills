@@ -87,13 +87,22 @@ alive_indicator=""
 
 # Check if we're anywhere in ALIVE
 if [[ "$dir" == *"/alive/"* ]] || [[ "$dir" == */alive ]]; then
-  # Check for subdomain first (more specific)
-  if [[ "$dir" == *"/alive/ventures/"* ]]; then
+  # Check for subdomain first (more specific) - support both new and old folder names
+  if [[ "$dir" == *"/alive/04_Ventures/"* ]]; then
+    subdomain=$(echo "$dir" | sed 's|.*/04_Ventures/||' | cut -d'/' -f1)
+    alive_indicator="📂 ${CYAN}${subdomain}${RESET}"
+  elif [[ "$dir" == *"/alive/ventures/"* ]]; then
     subdomain=$(echo "$dir" | sed 's|.*/ventures/||' | cut -d'/' -f1)
+    alive_indicator="📂 ${CYAN}${subdomain}${RESET}"
+  elif [[ "$dir" == *"/alive/05_Experiments/"* ]]; then
+    subdomain=$(echo "$dir" | sed 's|.*/05_Experiments/||' | cut -d'/' -f1)
     alive_indicator="📂 ${CYAN}${subdomain}${RESET}"
   elif [[ "$dir" == *"/alive/experiments/"* ]]; then
     subdomain=$(echo "$dir" | sed 's|.*/experiments/||' | cut -d'/' -f1)
     alive_indicator="📂 ${CYAN}${subdomain}${RESET}"
+  elif [[ "$dir" == *"/alive/02_Life/"* ]]; then
+    area=$(echo "$dir" | sed 's|.*/02_Life/||' | cut -d'/' -f1)
+    alive_indicator="🏠 ${GREEN}${area}${RESET}"
   elif [[ "$dir" == *"/alive/life/"* ]]; then
     area=$(echo "$dir" | sed 's|.*/life/||' | cut -d'/' -f1)
     alive_indicator="🏠 ${GREEN}${area}${RESET}"
@@ -110,7 +119,8 @@ fi
 # 6. Urgent tasks (only if >0)
 urgent_count=0
 shopt -s nullglob
-for tasks_file in "$ALIVE_ROOT"/ventures/*/_brain/tasks.md; do
+# Check new folder naming (04_Ventures) first, then fallback to old (ventures)
+for tasks_file in "$ALIVE_ROOT"/04_Ventures/*/_brain/tasks.md "$ALIVE_ROOT"/ventures/*/_brain/tasks.md; do
   if [ -f "$tasks_file" ]; then
     urgent_in_file=$(grep -c -E "^\- \[ \].*@urgent" "$tasks_file" 2>/dev/null || echo 0)
     urgent_count=$((urgent_count + urgent_in_file))
@@ -121,9 +131,12 @@ if [ "$urgent_count" -gt 0 ]; then
   components+=("🔥 ${RED}${urgent_count}${RESET}")
 fi
 
-# 7. Inputs (only if >0) — v2 uses "inputs/", v1 used "inbox/"
+# 7. Inputs (only if >0) — v2 uses "03_Inputs/", older versions used "inputs/" or "inbox/"
 inputs_count=0
-if [ -d "$ALIVE_ROOT/inputs" ]; then
+if [ -d "$ALIVE_ROOT/03_Inputs" ]; then
+  inputs_count=$(find "$ALIVE_ROOT/03_Inputs" -type f -not -name ".*" 2>/dev/null | wc -l | tr -d ' ')
+elif [ -d "$ALIVE_ROOT/inputs" ]; then
+  # Fallback for older v2 structure
   inputs_count=$(find "$ALIVE_ROOT/inputs" -type f -not -name ".*" 2>/dev/null | wc -l | tr -d ' ')
 elif [ -d "$ALIVE_ROOT/inbox" ]; then
   # Fallback for v1 structure

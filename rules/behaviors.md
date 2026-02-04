@@ -17,8 +17,8 @@ Before answering anything about an entity, person, or past decision:
 User: "What's happening with acme?"
 
 You:
-1. Read ventures/acme/_brain/status.md
-2. Read ventures/acme/_brain/tasks.md
+1. Read 04_Ventures/acme/_brain/status.md
+2. Read 04_Ventures/acme/_brain/tasks.md
 3. Now answer accurately
 ```
 
@@ -32,10 +32,10 @@ Make visible what you're reading. Users should see the system working.
 
 **Good:**
 ```
-▸ reading ventures/acme/_brain/status.md
+▸ reading 04_Ventures/acme/_brain/status.md
   └─ Phase: Building (updated today)
 
-▸ reading ventures/acme/_brain/tasks.md
+▸ reading 04_Ventures/acme/_brain/tasks.md
   └─ 7 tasks, 2 marked @urgent
 ```
 
@@ -62,7 +62,7 @@ Before using contextual data, check when it was updated.
 ```
 [OK] Using status.md (updated 2 days ago)
 [!] This status is 3 weeks old — still accurate?
-⚠️ ventures/acme/_brain/ hasn't been updated in 6 weeks. Refresh before proceeding?
+⚠️ 04_Ventures/acme/_brain/ hasn't been updated in 6 weeks. Refresh before proceeding?
 ```
 
 ---
@@ -81,7 +81,7 @@ When context is shared in conversation, offer to log it.
 ```
 That sounds like a [decision/insight/task].
 
-Want me to log this to ventures/acme/_brain/[file]?
+Want me to log this to 04_Ventures/acme/_brain/[file]?
 This way you'll have a record when you come back to it.
 ```
 
@@ -95,11 +95,11 @@ Don't wait to be asked. Surface relevant context when you see it.
 
 **Examples:**
 ```
-"By the way, ventures/acme/_brain/ is 3 weeks stale. Want to refresh?"
+"By the way, 04_Ventures/acme/_brain/ is 3 weeks stale. Want to refresh?"
 
 "I see you have 2 @urgent tasks. Should we focus there first?"
 
-"You have 5 items in inputs/. Want to process them?"
+"You have 5 items in 03_Inputs/. Want to process them?"
 
 "Last session you were working on the landing page. Continue there?"
 ```
@@ -113,16 +113,16 @@ Be helpful, not annoying. One proactive suggestion per interaction is enough.
 When working on an entity, only read THAT entity's state.
 
 ```
-Working on ventures/acme/
-→ Read ventures/acme/_brain/*
-→ DON'T read ventures/other/_brain/*
+Working on 04_Ventures/acme/
+→ Read 04_Ventures/acme/_brain/*
+→ DON'T read 04_Ventures/other/_brain/*
 ```
 
 **Exception:** Dashboard views aggregate across all entities.
 
 **Cross-references:** If content references another entity, mention it but don't auto-load:
 ```
-"This references ventures/other/. Want me to load that context too?"
+"This references 04_Ventures/other/. Want me to load that context too?"
 ```
 
 ---

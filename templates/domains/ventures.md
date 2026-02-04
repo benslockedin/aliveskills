@@ -1,6 +1,6 @@
 # Ventures Domain Template
 
-**Domain:** ventures/
+**Domain:** 04_Ventures/
 **Purpose:** Businesses with revenue intent
 
 ---
@@ -8,7 +8,7 @@
 ## Structure
 
 ```
-ventures/
+04_Ventures/
 └── [name]/           # Each venture is a subdomain
     ├── .claude/
     │   └── CLAUDE.md # Identity
@@ -31,7 +31,7 @@ ventures/
 Client work, deliverables, retainers.
 
 ```
-ventures/[name]/
+04_Ventures/[name]/
 ├── clients/          # Client projects
 ├── templates/        # Reusable deliverables
 ├── operations/       # SOPs, processes
@@ -43,7 +43,7 @@ ventures/[name]/
 Content, courses, community.
 
 ```
-ventures/[name]/
+04_Ventures/[name]/
 ├── content/          # By platform (twitter/, youtube/, etc.)
 ├── products/         # Courses, digital products
 ├── community/        # Resources for community
@@ -55,7 +55,7 @@ ventures/[name]/
 Products, inventory, fulfillment.
 
 ```
-ventures/[name]/
+04_Ventures/[name]/
 ├── products/         # Inventory
 ├── suppliers/        # Vendor info
 ├── marketing/        # Campaigns
@@ -67,7 +67,7 @@ ventures/[name]/
 Employment brought into ALIVE.
 
 ```
-ventures/[name]/
+04_Ventures/[name]/
 ├── projects/         # Work projects
 ├── docs/             # Documentation
 ├── meetings/         # Notes
@@ -79,7 +79,7 @@ ventures/[name]/
 Generic starting point.
 
 ```
-ventures/[name]/
+04_Ventures/[name]/
 ├── .claude/
 ├── _brain/
 └── _working/
@@ -198,5 +198,5 @@ None yet.
 ## Notes
 
 - Every venture must have revenue intent (even if future)
-- Reference people from life/people/, don't duplicate
-- When complete, archive to archive/ventures/[name]/
+- Reference people from 02_Life/people/, don't duplicate
+- When complete, archive to 01_Archive/04_Ventures/[name]/

@@ -9,12 +9,12 @@ Completed ventures, graduated experiments, old projects.
 Anything that's done but worth keeping:
 
 ```
-archive/
-├── ventures/
+01_Archive/
+├── 04_Ventures/
 │   └── old-company/     # Mirrors original path
-├── experiments/
+├── 05_Experiments/
 │   └── failed-idea/
-└── life/
+└── 02_Life/
     └── old-area/
 ```
 
@@ -23,7 +23,7 @@ archive/
 Archive mirrors the original structure. When you archive:
 
 ```
-ventures/mycompany/ → archive/ventures/mycompany/
+04_Ventures/mycompany/ → 01_Archive/04_Ventures/mycompany/
 ```
 
 Path is preserved for context.

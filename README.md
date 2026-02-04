@@ -45,11 +45,11 @@ That's it. Your AI now has persistent memory.
 
 | Letter | Domain | Purpose |
 |--------|--------|---------|
-| **A** | archive/ | Inactive items, preserved |
-| **L** | life/ | Personal — plans, people, patterns |
-| **I** | inbox/ | Incoming context, triage |
-| **V** | ventures/ | Businesses with revenue intent |
-| **E** | experiments/ | Testing grounds |
+| **A** | 01_Archive/ | Inactive items, preserved |
+| **L** | 02_Life/ | Personal — plans, people, patterns |
+| **I** | 03_Inputs/ | Incoming context, triage |
+| **V** | 04_Ventures/ | Businesses with revenue intent |
+| **E** | 05_Experiments/ | Testing grounds |
 
 **Life first, always.** Ventures and experiments are expressions of life.
 
@@ -58,7 +58,7 @@ That's it. Your AI now has persistent memory.
 Every subdomain has a `_brain/` folder:
 
 ```
-ventures/mycompany/_brain/
+04_Ventures/mycompany/_brain/
 ├── status.md      # Current phase + goal
 ├── tasks.md       # What needs doing
 ├── changelog.md   # What happened + decisions
@@ -77,7 +77,7 @@ Claude reads these files to understand your context. Updates them as you work. E
 | `/alive:new` | "Create a venture/experiment" — scaffolds structure |
 | `/alive:capture` | "Remember this" — quick context grab |
 | `/alive:recall` | "What did we decide about X?" — searches history |
-| `/alive:digest` | "Process my inbox" — triages incoming context |
+| `/alive:digest` | "Process my inputs" — triages incoming context |
 | `/alive:help` | "What should I do?" — contextual guidance |
 
 ## Community

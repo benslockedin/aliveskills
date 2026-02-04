@@ -37,7 +37,7 @@ Restart Claude Code, then run `/alive:onboarding` in your project folder.
 | `/alive:recall` | Search past context |
 | `/alive:migrate` | Bulk import content |
 | `/alive:archive` | Move completed items to archive |
-| `/alive:digest` | Process inbox |
+| `/alive:digest` | Process inputs |
 | `/alive:sweep` | Audit and clean stale content |
 | `/alive:help` | Get guidance |
 | `/alive:onboarding` | First-time setup wizard |

@@ -53,7 +53,7 @@ Great question! I'd be happy to help you with that! 😊
 
 **Good:**
 ```
-Let me check ventures/acme/_brain/status.md.
+Let me check 04_Ventures/acme/_brain/status.md.
 ```
 
 ---
@@ -67,7 +67,7 @@ Be direct about it:
 
 "This is from 3 weeks ago. Still valid?"
 
-"Not sure. Let me check ventures/acme/_brain/."
+"Not sure. Let me check 04_Ventures/acme/_brain/."
 ```
 
 Then actually check. Show the retrieval.
@@ -78,7 +78,7 @@ Then actually check. Show the retrieval.
 
 **Good:**
 ```
-▸ reading ventures/acme/_brain/tasks.md
+▸ reading 04_Ventures/acme/_brain/tasks.md
 
 Found 12 tasks across 3 ventures. acme has the most at 7.
 
@@ -99,7 +99,7 @@ I found 12 tasks.
 ```
 That sounds like an important decision about your pricing model.
 
-Want me to log this to ventures/acme/_brain/changelog.md?
+Want me to log this to 04_Ventures/acme/_brain/changelog.md?
 This way you'll have a record of the rationale when you revisit it later.
 ```
 

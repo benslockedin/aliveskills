@@ -38,7 +38,7 @@ Invoke when the user:
 | **Task** | `_brain/tasks.md` | "Need to follow up with John" |
 | **Status update** | `_brain/status.md` | "Now in launch phase" |
 | **Reference** | `_working/` or area | "Here's the contract" |
-| **Person** | `life/people/` | "Met Sarah at conference" |
+| **Person** | `02_Life/people/` | "Met Sarah at conference" |
 
 ## Step-by-Step
 
@@ -59,8 +59,8 @@ Extract:
 
 If subdomain is active (from `/alive:do`):
 ```
-Active: ventures/acme
-→ Route to ventures/acme/_brain/changelog.md
+Active: 04_Ventures/acme
+→ Route to 04_Ventures/acme/_brain/changelog.md
 ```
 
 If no active subdomain:
@@ -68,8 +68,8 @@ If no active subdomain:
 This looks like a decision about payments.
 
 Which subdomain?
-[1] ventures/acme
-[2] ventures/beta
+[1] 04_Ventures/acme
+[2] 04_Ventures/beta
 [3] Other
 ```
 
@@ -81,7 +81,7 @@ Which subdomain?
 **Decision:** Use Stripe over PayPal
 **Rationale:** PayPal fees too high in AU
 
-Route to: ventures/acme/_brain/changelog.md
+Route to: 04_Ventures/acme/_brain/changelog.md
 
 [1] Confirm
 [2] Edit
@@ -121,7 +121,7 @@ For tasks, add to tasks.md:
 ### Step 5: Confirm
 
 ```
-✓ Captured to ventures/acme/_brain/changelog.md
+✓ Captured to 04_Ventures/acme/_brain/changelog.md
 
 Decision logged with rationale.
 ```
@@ -136,11 +136,11 @@ User: "/capture Had a call with John about the partnership"
 ▸ capturing
 
 Type: Reference (meeting note)
-Person: John (checking life/people/john.md...)
+Person: John (checking 02_Life/people/john.md...)
 Related: Partnership discussion
 
-Route to: ventures/acme/_brain/changelog.md
-Also update: life/people/john.md (last contact)
+Route to: 04_Ventures/acme/_brain/changelog.md
+Also update: 02_Life/people/john.md (last contact)
 
 [1] Confirm
 [2] Edit
@@ -155,7 +155,7 @@ User: "FYI the deadline moved to Friday"
 
 ▸ quick capture
 
-✓ Logged to ventures/acme/_brain/changelog.md
+✓ Logged to 04_Ventures/acme/_brain/changelog.md
   └─ "Deadline moved to Friday"
 ```
 
@@ -168,10 +168,10 @@ User: "Met Sarah at the conference, she's the CEO of TechCo"
 
 ▸ capturing person
 
-Check life/people/sarah.md... not found
+Check 02_Life/people/sarah.md... not found
 
 Create new person file?
-[1] Yes, create life/people/sarah.md
+[1] Yes, create 02_Life/people/sarah.md
 [2] No, just log the meeting
 ```
 
@@ -197,7 +197,7 @@ If creating:
 | "learned", "realized", "found out" | Insight | insights.md |
 | "need to", "should", "follow up" | Task | tasks.md |
 | "now in", "phase", "focus" | Status | status.md |
-| "met", "talked to", "call with" | Person | life/people/ + changelog |
+| "met", "talked to", "call with" | Person | 02_Life/people/ + changelog |
 | "here's", "document", "file" | Reference | _working/ or area |
 
 ## Edge Cases
@@ -231,10 +231,10 @@ Confirm all three?
 [?] No active subdomain.
 
 Where does this belong?
-[1] ventures/acme
-[2] ventures/beta
-[3] life/[area]
-[4] inbox/ (triage later)
+[1] 04_Ventures/acme
+[2] 04_Ventures/beta
+[3] 02_Life/[area]
+[4] 03_Inputs/ (triage later)
 ```
 
 ## Commit Log Entry
@@ -246,7 +246,7 @@ Every capture logs to `.claude/state/commit-log.jsonl`:
   "ts": "2026-01-23T14:30:00Z",
   "type": "DECISION",
   "content": "Use Stripe over PayPal - AU fees",
-  "domain": "ventures/acme",
+  "domain": "04_Ventures/acme",
   "file": "_brain/changelog.md",
   "session_id": "abc123"
 }
@@ -255,5 +255,5 @@ Every capture logs to `.claude/state/commit-log.jsonl`:
 ## Related Skills
 
 - `/alive:save` — End full session (not quick capture)
-- `/alive:digest` — Process inbox items (bulk capture)
+- `/alive:digest` — Process inputs (bulk capture)
 - `/alive:do` — Load subdomain context first

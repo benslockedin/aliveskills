@@ -1,6 +1,6 @@
 # Experiments Domain Template
 
-**Domain:** experiments/
+**Domain:** 05_Experiments/
 **Purpose:** Testing grounds, no revenue model yet
 
 ---
@@ -8,7 +8,7 @@
 ## Structure
 
 ```
-experiments/
+05_Experiments/
 └── [name]/           # Each experiment is a subdomain
     ├── .claude/
     │   └── CLAUDE.md # Identity
@@ -117,7 +117,7 @@ Everything current lives in `_brain/`:
 | **Exploring** | Initial research, ideation |
 | **Validating** | Testing hypothesis with real data |
 | **Pivoting** | Changing direction based on learnings |
-| **Graduating** | Success! Moving to ventures/ |
+| **Graduating** | Success! Moving to 04_Ventures/ |
 | **Abandoned** | Didn't work, archive learnings |
 
 ---
@@ -133,11 +133,11 @@ When an experiment succeeds:
 5. Reference experiment in venture's changelog
 
 ```markdown
-# In ventures/new-venture/_brain/changelog.md
+# In 04_Ventures/new-venture/_brain/changelog.md
 
 ## [DATE] — Created from Experiment
 
-Graduated from experiments/[name]/.
+Graduated from 05_Experiments/[name]/.
 Original hypothesis: [what we tested]
 Key learnings: [what we learned]
 ```
@@ -160,7 +160,7 @@ When an experiment doesn't work:
 ## Example Areas
 
 ```
-experiments/[name]/
+05_Experiments/[name]/
 ├── research/         # Market research, competitor analysis
 ├── prototypes/       # Quick builds, MVPs
 ├── interviews/       # User research

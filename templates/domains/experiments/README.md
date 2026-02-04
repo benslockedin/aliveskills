@@ -9,7 +9,7 @@ Ideas being validated. If it works, promote to venture.
 Each experiment is a subdomain:
 
 ```
-experiments/
+05_Experiments/
 ├── app-idea/
 │   ├── _brain/       # Hypothesis, learnings
 │   ├── _working/     # Prototypes
@@ -29,6 +29,6 @@ experiments/
 ## Graduation
 
 When an experiment validates:
-1. Create venture: `ventures/newname/`
+1. Create venture: `04_Ventures/newname/`
 2. Move relevant files
-3. Archive experiment: `archive/experiments/oldname/`
+3. Archive experiment: `01_Archive/05_Experiments/oldname/`

@@ -95,14 +95,14 @@ Merge agent outputs into comprehensive context:
 
 SESSION: Plugin rebuild v2
 DATE: 2026-01-30
-ENTITY: ventures/alive-llc
+ENTITY: 04_Ventures/alive-llc
 QUALITY: Breakthrough
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 DECISIONS (with rationale)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-1. **inbox/ → inputs/**
+1. **inbox/ → 03_Inputs/**
    Rationale: "You're only as good as your inputs — reframes from
    passive receiving to active feeding"
 
