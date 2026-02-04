@@ -60,27 +60,43 @@ mkdir -p {entity}/_working/sessions/
 
 **Before creating a new handoff, check if one already exists for this session ID.**
 
-Check `manifest.handoffs[]` for matching `session_id`:
+Check TWO locations (since handoffs are archived immediately on resume):
+
+1. `manifest.handoffs[]` — for pending handoffs not yet resumed
+2. `01_Archive/{entity-path}/sessions/` — for previously resumed handoffs
 
 ```
 ▸ checking for existing handoff...
   └─ Session ID: {current_session_id}
+  └─ Checking manifest.handoffs[]...
+  └─ Checking archive...
 ```
 
-**If handoff exists with same session_id:**
+**If handoff found (either location):**
 ```
 [!] Found existing handoff for this session:
     └─ {existing_handoff_path}
     └─ Created: {timestamp}
+    └─ Source: [manifest | archive]
 
-Updating existing handoff instead of creating new...
+Retrieving and updating existing handoff...
 ```
 
+**If found in archive:**
+1. Read the archived handoff content
+2. Copy back to `_working/sessions/` for updating
+3. Dispatch subagent with UPDATE instructions
+4. Save updated version to `_working/sessions/`
+5. Add back to `manifest.handoffs[]`
+
+This creates a **cumulative handoff** — each compaction appends to the same document.
+
 → Skip to Step 3, but **UPDATE** the existing file instead of creating new:
-- Read the existing handoff
+- Read the existing handoff (from archive or manifest location)
 - Dispatch subagent with instruction to UPDATE/APPEND
 - Preserve original context, add new progress
 - Update the `updated` timestamp in frontmatter
+- Increment `update_count` in frontmatter
 
 **If no existing handoff for this session:**
 ```
@@ -110,30 +126,40 @@ YOUR TASK:
 Analyse this entire conversation and create a comprehensive handoff document.
 ```
 
-**For UPDATING existing handoff:**
+**For UPDATING existing handoff (cumulative):**
 ```
 You are UPDATING an existing handoff document for session continuity.
+
+This is a CUMULATIVE handoff — the session has compacted multiple times.
+Each update builds on previous context. The goal is ONE comprehensive document.
 
 CONTEXT:
 - Session ID: {session_id}
 - Entity: {entity_path}
 - Reason for handoff: {compact/resuming later}
-- Existing handoff: {existing_handoff_path}
+- Update number: {update_count + 1}
+- Retrieved from: {archive | manifest}
 
 EXISTING HANDOFF CONTENT:
 {paste existing handoff content here}
 
 YOUR TASK:
-Update the existing handoff with progress made since it was created.
-- Preserve the original context and decisions
-- Update "Current State" to reflect new progress
-- Add any new decisions made
-- Add any new files modified
-- Update "Next Steps" to reflect current state
-- Add new critical details discovered
+Update the existing handoff with progress made since the last save.
 
-Do NOT duplicate information already in the handoff.
-Add an "## Update: {timestamp}" section at the end with new progress.
+DO:
+- Preserve ALL original context and decisions (don't summarize away detail)
+- Update "Current State" section with new completions
+- Add any new decisions to the Decisions section
+- Add any new files to "Files Modified"
+- Update "Next Steps" to reflect current priorities
+- Add new "## Update {N}: {timestamp}" section at the end
+
+DON'T:
+- Duplicate information already in the handoff
+- Remove or condense previous updates
+- Lose any detail from earlier in the session
+
+The next reader should see the FULL session history in one document.
 ```
 
 **Common context for both:
