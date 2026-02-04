@@ -303,15 +303,16 @@ Read these files in order when resuming:
 
 ---
 
-## When Done
+## Auto-Archive Note
 
-**Archive this handoff:** Move to ALIVE root `01_Archive/` with mirrored path structure.
+**This handoff will be automatically archived when resumed.**
 
-Example:
-- From: `04_Ventures/supernormal/alive/_working/sessions/handoff.md`
-- To: `01_Archive/04_Ventures/supernormal/alive/sessions/handoff.md`
+When you run `/alive:do` and select "Yes" to resume:
+1. The content is loaded into the session
+2. This file is immediately moved to `01_Archive/`
+3. No manual cleanup needed
 
-Then remove from `manifest.handoffs[]`.
+You don't need to remember to archive — it happens automatically.
 ```
 
 ### Write the File
@@ -392,17 +393,31 @@ if reason in ["compact", "context full", "coming back", "resume later"]:
 ## Handoff Lifecycle
 
 ```
-Created (pending) → Resumed → Work completed → Archived
+Created (pending) → Resumed (ARCHIVED IMMEDIATELY) → Work continues
 ```
 
-**When work is complete:**
+**Archiving happens ON RESUME, not later.** When `/alive:do` loads a handoff:
+
+1. Read handoff content into memory
+2. **Archive immediately** (move to `01_Archive/`)
+3. Remove from `manifest.handoffs[]`
+4. Present context to user
+
 ```
-▸ archiving handoff...
+▸ loading handoff...
+  └─ Reading content
+
+▸ archiving handoff (already read)...
   └─ Moving to 01_Archive/{entity-path}/sessions/
   └─ Removing from manifest.handoffs[]
 
-✓ Handoff archived
+✓ Handoff archived — context loaded
 ```
+
+**Why immediate archive?**
+- The handoff's job is done once read
+- "Archive later" gets forgotten 100% of the time
+- Archive on read = 100% adherence
 
 ## Quality Standards
 

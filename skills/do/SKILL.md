@@ -170,23 +170,27 @@ Look in `manifest.json` for:
 ╰────────────────────────────────────────────────────────────────────────╯
 
 Resume this session?
-[1] Yes — load handoff and continue where we left off
-[2] No — start fresh (handoff stays for later)
-[3] Archive — I finished this elsewhere, archive the handoff
+[1] Yes — load handoff and continue
+[2] No — start fresh (archive handoff)
 ```
 
-**If [1] Yes:**
-1. Read the handoff document
-2. Present the context, current state, and next steps to user
-3. Skip to "After Loading" section — user is now briefed
+**If [1] Yes (ARCHIVE IMMEDIATELY):**
+1. Read the handoff document content into memory
+2. **IMMEDIATELY archive the file** (don't wait until later):
+   ```
+   ▸ archiving handoff (already read)...
+     └─ Moving to 01_Archive/{entity-path}/sessions/
+     └─ Removing from manifest.handoffs
+
+   ✓ Handoff archived — context loaded
+   ```
+3. Present the context, current state, and next steps to user
+4. Skip to "After Loading" section — user is now briefed
+
+**Why archive immediately?** The handoff's job is done once read. Archiving later gets forgotten. Archive on read ensures 100% adherence.
 
 **If [2] No:**
-- Continue with normal do flow
-- Handoff remains in manifest for later
-
-**If [3] Archive:**
-- Move handoff to `01_Archive/{entity-path}/sessions/` (mirrored structure)
-- Remove from `manifest.handoffs`
+- Archive the handoff (user chose not to resume, so it's stale)
 - Continue with normal do flow
 
 **If no pending handoffs:**
