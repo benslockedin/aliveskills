@@ -266,3 +266,16 @@ When calling this skill, provide:
 - `file_path`: Path to file being added/removed (if applicable)
 - `description`: Description for new entries (required for add operations)
 - `session_id`: Current session ID
+
+---
+
+## UI Treatment
+
+This skill uses **Tier 3: Utility** formatting.
+
+**Visual elements:**
+- Compact logo (4-line ASCII art header)
+- Double-line border wrap (entire response)
+- Version footer: `ALIVE v2.0` (right-aligned)
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.

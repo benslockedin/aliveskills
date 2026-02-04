@@ -264,3 +264,16 @@ Rules: Check .claude/rules/ for detailed behaviors
 
 - `/alive:onboarding` — First-time setup
 - `/alive:do` — Start working (most common next step)
+
+---
+
+## UI Treatment
+
+This skill uses **Tier 2: Core Workflow** formatting.
+
+**Visual elements:**
+- Compact logo (4-line ASCII art header)
+- Double-line border wrap (entire response)
+- Community footer: `Free: Join the ALIVE community → skool.com/aliveoperators`
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.

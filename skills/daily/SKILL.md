@@ -276,3 +276,16 @@ After showing dashboard, remind:
 - `/alive:revive` — Resume past session
 - `/alive:digest` — Process inputs
 - `/alive:save` — End session
+
+---
+
+## UI Treatment
+
+This skill uses **Tier 1: Entry Point** formatting.
+
+**Visual elements:**
+- Full logo (24-line ASCII art header)
+- Double-line border wrap (entire response)
+- Community footer: `Free: Join the ALIVE community → skool.com/aliveoperators`
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.

@@ -375,3 +375,16 @@ Scan status.md files across all entities for keyword matches.
 - `/alive:capture` — Quick mid-session notes (YOUR thoughts)
 - `/alive:digest` — Process items already IN 03_Inputs/
 - `/alive:do` — Load entity context first
+
+---
+
+## UI Treatment
+
+This skill uses **Tier 3: Utility** formatting.
+
+**Visual elements:**
+- Compact logo (4-line ASCII art header)
+- Double-line border wrap (entire response)
+- Version footer: `ALIVE v2.0` (right-aligned)
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.

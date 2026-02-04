@@ -211,3 +211,16 @@ Can only load from _brain/ files (no full extraction).
 - `/alive:daily` — Shows threads, picks one → calls revive
 - `/alive:do` — Fresh start on entity (no extraction)
 - `/alive:save` — End session, log to index
+
+---
+
+## UI Treatment
+
+This skill uses **Tier 3: Utility** formatting.
+
+**Visual elements:**
+- Compact logo (4-line ASCII art header)
+- Double-line border wrap (entire response)
+- Version footer: `ALIVE v2.0` (right-aligned)
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.

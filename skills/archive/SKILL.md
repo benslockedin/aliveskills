@@ -266,3 +266,16 @@ Archived: 2026-01-23
 - `/alive:recall` — Find archived content
 - `/alive:sweep` — Identify archive candidates
 - `/alive:new` — Create new subdomain (opposite of archive)
+
+---
+
+## UI Treatment
+
+This skill uses **Tier 3: Utility** formatting.
+
+**Visual elements:**
+- Compact logo (4-line ASCII art header)
+- Double-line border wrap (entire response)
+- Version footer: `ALIVE v2.0` (right-aligned)
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.

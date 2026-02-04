@@ -511,3 +511,16 @@ Next: /alive:do bigco to start working.
 - `/alive:do` — Start working on the new entity
 - `/alive:onboarding` — Full system setup (not just one entity)
 - `/alive:daily` — See all entities after creating
+
+---
+
+## UI Treatment
+
+This skill uses **Tier 3: Utility** formatting.
+
+**Visual elements:**
+- Compact logo (4-line ASCII art header)
+- Double-line border wrap (entire response)
+- Version footer: `ALIVE v2.0` (right-aligned)
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.

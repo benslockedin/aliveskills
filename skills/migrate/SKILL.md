@@ -273,3 +273,16 @@ Once content is imported:
 - `/alive:new` — Create subdomain first if needed
 - `/alive:digest` — Process inputs
 - `/alive:capture` — Single item capture (not bulk)
+
+---
+
+## UI Treatment
+
+This skill uses **Tier 3: Utility** formatting.
+
+**Visual elements:**
+- Compact logo (4-line ASCII art header)
+- Double-line border wrap (entire response)
+- Version footer: `ALIVE v2.0` (right-aligned)
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.

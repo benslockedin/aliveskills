@@ -581,3 +581,16 @@ Write to `.claude/state/changelog.md` for system-level changes.
 - `/alive:revive` — Resume past session
 - `/alive:capture` — Quick mid-session note
 - `/alive:handoff` — Session continuity (called automatically when pre-compact or ongoing)
+
+---
+
+## UI Treatment
+
+This skill uses **Tier 2: Core Workflow** formatting.
+
+**Visual elements:**
+- Compact logo (4-line ASCII art header)
+- Double-line border wrap (entire response)
+- Community footer: `Free: Join the ALIVE community → skool.com/aliveoperators`
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.

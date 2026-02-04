@@ -263,3 +263,16 @@ Verify before acting on it?
 - `/alive:do` — Load subdomain after finding
 - `/alive:digest` — Process found content
 - `/alive:archive` — Find archived items
+
+---
+
+## UI Treatment
+
+This skill uses **Tier 3: Utility** formatting.
+
+**Visual elements:**
+- Compact logo (4-line ASCII art header)
+- Double-line border wrap (entire response)
+- Version footer: `ALIVE v2.0` (right-aligned)
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.

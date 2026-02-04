@@ -401,3 +401,16 @@ What's first?
 - `/alive:do` — Focus on one entity
 - `/alive:help` — Quick reference
 - `/alive:upgrade` — For v1 → v2 migration (not fresh setup)
+
+---
+
+## UI Treatment
+
+This skill uses **Tier 1: Entry Point** formatting.
+
+**Visual elements:**
+- Full logo (24-line ASCII art header)
+- Double-line border wrap (entire response)
+- Community footer: `Free: Join the ALIVE community → skool.com/aliveoperators`
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
