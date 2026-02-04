@@ -65,7 +65,6 @@ Sub-projects are containers WITHIN an entity that have their own lifecycle. They
 │   └── ...
 ├── _working/         ← Sub-project drafts (NOT in parent's _working/)
 │   └── proposal-v0.md
-└── README.md
 ```
 
 **WRONG:** `04_Ventures/agency/_working/clients/bigco/proposal.md`
