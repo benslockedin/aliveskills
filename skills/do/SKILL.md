@@ -9,19 +9,6 @@ Focus on ONE entity. Load context from its `_brain/` folder and show current sta
 
 **Different from `/alive:daily`:** Do focuses on ONE entity. Daily shows EVERYTHING.
 
-## UI Treatment
-
-This skill uses **Tier 2: Core Workflow** formatting.
-
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Community footer: `Free: Join the ALIVE community → skool.com/aliveoperators`
-
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
-
----
-
 ## Flow
 
 ```dot
@@ -119,27 +106,54 @@ For example:
 cd ~/Desktop/alive/04_Ventures/supernormal/alive/
 ```
 
+**Why this matters:**
+- Claude's system context automatically reads `.claude/CLAUDE.md` from the working directory
+- Local `CLAUDE.md` files get picked up
+- All relative paths in the session work correctly
+- The entity becomes the "home base" for the session
+
 **Show the change:**
 ```
 ▸ cd 04_Ventures/supernormal/alive/
   └─ Working directory set
 ```
 
-## Step 3: Load Context
+## Step 3: Load Context (MANDATORY — All 4 Files)
+
+**You MUST read all 4 files. Do not skip any.**
 
 Read in order:
 1. `{entity}/_brain/status.md` — Phase and focus
 2. `{entity}/_brain/tasks.md` — Work queue
 3. `{entity}/_brain/manifest.json` — Structure map
+4. `{entity}/_brain/changelog.md` — **Last 200 lines** (recent session history)
 
-Show retrieval paths:
+**The changelog is CRITICAL.** It contains:
+- What happened in recent sessions
+- Decisions made and why
+- Context that won't be in status.md
+- Where we left off last time
+
+**Show retrieval paths:**
 ```
 ▸ reading 04_Ventures/acme/_brain/status.md
   └─ Phase: Building (updated 2 days ago)
 
 ▸ reading 04_Ventures/acme/_brain/tasks.md
   └─ 7 tasks, 2 @urgent
+
+▸ reading 04_Ventures/acme/_brain/manifest.json
+  └─ 12 files tracked
+
+▸ reading 04_Ventures/acme/_brain/changelog.md (last 200 lines)
+  └─ Last session: 2026-02-04 — Plugin UI updates
 ```
+
+**Implementation:**
+```
+Read(file_path: "{entity}/_brain/changelog.md", offset: -200)
+```
+Or read the full file if it's less than 200 lines.
 
 ## Step 3.5: Check for Pending Handoffs
 
@@ -293,4 +307,3 @@ Initialize _brain/ now?
 - `/alive:new` — Create entity
 - `/alive:upgrade` — Migrate v1 → v2
 - `/alive:handoff` — Session continuity (creates handoff docs for resumption)
-
