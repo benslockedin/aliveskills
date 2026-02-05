@@ -106,12 +106,6 @@ For example:
 cd ~/Desktop/alive/04_Ventures/supernormal/alive/
 ```
 
-**Why this matters:**
-- Claude's system context automatically reads `.claude/CLAUDE.md` from the working directory
-- Local `CLAUDE.md` files get picked up
-- All relative paths in the session work correctly
-- The entity becomes the "home base" for the session
-
 **Show the change:**
 ```
 ▸ cd 04_Ventures/supernormal/alive/

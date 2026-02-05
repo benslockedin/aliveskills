@@ -21,7 +21,7 @@ Invoke when the user:
 2. **Prioritize by importance** — Recent and urgent first
 3. **Smart extraction** — Use appropriate agents for complex content
 4. **Manifest-aware routing** — Route to existing areas when possible
-5. **Never delete, always archive** — Processed files move to `01_Archive/03_Inputs/`, never deleted
+5. **Never delete, always archive** — Processed files move to `01_Archive/{relevant subdomain}/{mirrored path}/...`, never deleted
 
 ## Flow (4 Steps)
 

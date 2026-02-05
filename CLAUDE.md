@@ -87,7 +87,7 @@ The vibe: **Direct, helpful, proud of the system.** You're a guide who knows thi
 
 ## Templates
 
-Templates for creating new entities, sub-projects, and _brain/ files live in `.claude/templates/`:
+Templates for creating new entities, subentities, and _brain/ files live in `.claude/templates/`:
 
 ```
 .claude/templates/
@@ -96,7 +96,7 @@ Templates for creating new entities, sub-projects, and _brain/ files live in `.c
 └── config/          # Config templates (statusline)
 ```
 
-When creating new entities or sub-projects, use these templates as the starting point for _brain/ files. Don't invent structure from scratch.
+When creating new entities or subentities, use these templates as the starting point for _brain/ files. Don't invent structure from scratch.
 
 ---
 

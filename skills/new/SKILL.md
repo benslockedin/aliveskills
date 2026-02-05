@@ -322,13 +322,13 @@ Names must be:
 Try again:
 ```
 
-## Creating a Sub-Project
+## Creating a Subentity
 
-Sub-projects are containers WITHIN a entity that have their own lifecycle (and therefore their own `_brain/`).
+Subentitys are containers WITHIN a entity that have their own lifecycle (and therefore their own `_brain/`).
 
-### When to Create a Sub-Project
+### When to Create a Subentity
 
-| Parent Type | Sub-Project Examples |
+| Parent Type | Subentity Examples |
 |-------------|---------------------|
 | Agency venture | Clients, retainers |
 | E-commerce venture | Campaigns, product lines |
@@ -340,14 +340,14 @@ Sub-projects are containers WITHIN a entity that have their own lifecycle (and t
 ### Step 1: Identify Context
 
 ```
-Creating a sub-project.
+Creating a subentity.
 
 You're working in: 04_Ventures/acme-agency/
 
 What are you creating?
 [1] Client (for agency ventures)
 [2] Campaign (for ecommerce/marketing)
-[3] Project (generic sub-project)
+[3] Project (generic subentity)
 [4] Custom
 ```
 
@@ -363,7 +363,7 @@ One-line description?
 
 ### Step 3: Create Structure
 
-**Sub-project structure:**
+**Subentity structure:**
 ```
 04_Ventures/acme-agency/clients/bigco/
 ├── _brain/
@@ -372,17 +372,17 @@ One-line description?
 │   ├── insights.md
 │   ├── changelog.md
 │   └── manifest.json
-├── _working/         ← Sub-project gets its OWN _working/
+├── _working/         ← Subentity gets its OWN _working/
 └── README.md
 ```
 
-**IMPORTANT:** Each sub-project gets its own `_working/` folder. Working files for this sub-project go here, NOT in the parent's `_working/`.
+**IMPORTANT:** Each subentity gets its own `_working/` folder. Working files for this subentity go here, NOT in the parent's `_working/`.
 
 ```
 # WRONG - using parent's _working/
 04_Ventures/acme-agency/_working/clients/bigco/proposal.md
 
-# RIGHT - sub-project has its own _working/
+# RIGHT - subentity has its own _working/
 04_Ventures/acme-agency/clients/bigco/_working/proposal.md
 ```
 
@@ -416,7 +416,7 @@ None yet.
 - [ ] Identify key contacts
 
 ## Done (Recent)
-- [x] Created sub-project ([DATE])
+- [x] Created subentity ([DATE])
 ```
 
 **changelog.md:**
@@ -425,7 +425,7 @@ None yet.
 
 ## [DATE] — Created
 
-Sub-project created within 04_Ventures/acme-agency/clients/.
+Subentity created within 04_Ventures/acme-agency/clients/.
 
 **Type:** Client
 **Description:** Enterprise client, $10k/mo retainer
@@ -467,7 +467,7 @@ Add to `04_Ventures/acme-agency/_brain/changelog.md`:
 ```markdown
 ## [DATE] — Created client: bigco
 
-Added new client sub-project: bigco (Enterprise client, $10k/mo retainer)
+Added new client subentity: bigco (Enterprise client, $10k/mo retainer)
 ```
 
 ### Step 6: Confirm
@@ -491,9 +491,9 @@ Parent manifest updated.
 Next: /alive:do bigco to start working.
 ```
 
-## Sub-Project vs Area
+## Subentity vs Area
 
-| Question | Sub-Project | Area |
+| Question | Subentity | Area |
 |----------|-------------|------|
 | Has its own lifecycle? | Yes | No |
 | Can be "done"? | Yes | No |
@@ -501,9 +501,9 @@ Next: /alive:do bigco to start working.
 | Gets `_brain/`? | Yes | No |
 
 **Examples:**
-- `clients/bigco/` → Sub-project (has lifecycle)
+- `clients/bigco/` → Subentity (has lifecycle)
 - `templates/` → Area (organizational only)
-- `campaigns/summer-sale/` → Sub-project (has lifecycle)
+- `campaigns/summer-sale/` → Subentity (has lifecycle)
 - `brand/` → Area (organizational only)
 
 ## Related Skills
