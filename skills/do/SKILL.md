@@ -59,9 +59,9 @@ Continue with alive-llc?
 No recent session found.
 
 Which entity?
-[1] 04_Ventures/supernormal
-[2] 04_Ventures/alive-llc
-[3] 05_Experiments/cricket-grid
+[1] 04_Ventures/acme-agency
+[2] 04_Ventures/side-project
+[3] 05_Experiments/new-idea
 ```
 
 **Multiple matches:**
@@ -103,7 +103,7 @@ cd {alive-root}/{entity}/
 
 For example:
 ```bash
-cd ~/Desktop/alive/04_Ventures/supernormal/alive/
+cd ~/Desktop/alive/04_Ventures/acme-agency/
 ```
 
 **Why this matters:**
@@ -114,7 +114,7 @@ cd ~/Desktop/alive/04_Ventures/supernormal/alive/
 
 **Show the change:**
 ```
-▸ cd 04_Ventures/supernormal/alive/
+▸ cd 04_Ventures/acme-agency/
   └─ Working directory set
 ```
 

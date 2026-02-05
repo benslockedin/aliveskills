@@ -131,12 +131,12 @@ Every actionable item gets a number. User picks a number to focus.
 ONGOING THREADS
 ─────────────────────────────────────────────────────────────────────────
 [1] alive-llc — Plugin rebuild [breakthrough]        yesterday
-[2] supernormal — Client proposal [productive]       2 days ago
+[2] acme-agency — Client proposal [productive]       2 days ago
 
 URGENT TASKS
 ─────────────────────────────────────────────────────────────────────────
 [3] alive-llc: Finalize daily skill @urgent
-[4] supernormal: Send proposal to Acme @urgent
+[4] acme-agency: Send proposal to Acme @urgent
 
 WORKING FILES
 ─────────────────────────────────────────────────────────────────────────
@@ -165,7 +165,7 @@ Show entity name + goal. Max 5, sorted by recency.
 YOUR GOALS
 ─────────────────────────────────────────────────────────────────────────
 • alive-llc: Ship v2 plugin by Feb 15
-• supernormal: Close 3 new clients this month
+• acme-agency: Close 3 new clients this month
 • hypha: Launch Feb 6
 ```
 
@@ -183,7 +183,7 @@ Quality tags: `[routine]` `[productive]` `[important]` `[breakthrough]`
 ONGOING THREADS
 ─────────────────────────────────────────────────────────────────────────
 [1] alive-llc — Plugin rebuild [breakthrough]        yesterday
-[2] supernormal — Client proposal [productive]       2 days ago
+[2] acme-agency — Client proposal [productive]       2 days ago
 ```
 
 If no session-index.jsonl exists or empty:
@@ -204,7 +204,7 @@ Scan all `_brain/tasks.md` files:
 URGENT TASKS
 ─────────────────────────────────────────────────────────────────────────
 [3] alive-llc: Finalize daily skill @urgent
-[4] supernormal: Send proposal to Acme @urgent
+[4] acme-agency: Send proposal to Acme @urgent
 ```
 
 ## Section: Working Files
@@ -218,7 +218,7 @@ Scan all `_brain/manifest.json` files:
 WORKING FILES
 ─────────────────────────────────────────────────────────────────────────
 [5] alive-llc/_working/v2-design.md                  1 day old
-[6] supernormal/_working/acme-proposal-v0.md         3 days old
+[6] acme-agency/_working/acme-proposal-v0.md         3 days old
 ```
 
 ## Section: Inputs

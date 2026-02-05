@@ -548,7 +548,7 @@ If session touched multiple subdomains:
 ```
 This session touched:
 [1] 04_Ventures/alive-llc — Plugin rebuild
-[2] 04_Ventures/supernormal — Client note
+[2] 04_Ventures/acme-agency — Client note
 
 Save to both?
 ```

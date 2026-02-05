@@ -4,8 +4,9 @@
   "description": "Persistent memory for Claude Code. Your decisions, tasks, and insights survive every session.",
   "author": {
     "name": "Ben Flint",
-    "email": "ben@supernormalsystems.com",
-    "url": "https://aliveskills.com"
+    "url": "https://aliveskills.com",
+    "twitter": "@benslockedin",
+    "instagram": "@benslockedin"
   },
   "homepage": "https://aliveskills.com",
   "repository": "https://github.com/benslockedin/aliveskills",

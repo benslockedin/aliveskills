@@ -124,9 +124,9 @@ Use columns where it improves information density. The vertical pipe `│` separ
 ```
 ║  VENTURES                        │  EXPERIMENTS                                        ║
 ║  ────────────────────────────────│──────────────────────────────────────────────────   ║
-║  [1] supernormal    Building     │  [4] cricket-grid    Paused [!]                     ║
+║  [1] acme-agency    Building     │  [4] cricket-grid    Paused [!]                     ║
 ║  [2] berties        Growing      │  [5] new-idea        Starting                       ║
-║  [3] audience-strat Ready        │                                                     ║
+║  [3] side-project   Ready        │                                                     ║
 ```
 
 ---
@@ -168,12 +168,12 @@ Use columns where it improves information density. The vertical pipe `│` separ
 ║                                                                                          ║
 ║  YOUR GOALS                                                                              ║
 ║  ──────────────────────────────────────────────────────────────────────────────────────  ║
-║  • supernormal: Ship ALIVE plugin by Feb 15                                              ║
+║  • acme-agency: Ship client portal by Feb 15                                             ║
 ║  • berties: 6 products, profitable monthly                                               ║
 ║                                                                                          ║
 ║  VENTURES                        │  EXPERIMENTS                                          ║
 ║  ────────────────────────────────│────────────────────────────────────────────────────   ║
-║  [1] supernormal    Building     │  [3] cricket-grid    Paused [!]                       ║
+║  [1] acme-agency    Building     │  [3] cricket-grid    Paused [!]                       ║
 ║  [2] berties        Growing      │                                                       ║
 ║                                                                                          ║
 ║  INPUTS                                                                                  ║
@@ -195,7 +195,7 @@ Use columns where it improves information density. The vertical pipe `│` separ
 ╔══════════════════════════════════════════════════════════════════════════════════════════╗
 ║                                                                                          ║
 ║    ▄▀█ █░░ █ █░█ █▀▀                                                                     ║
-║    █▀█ █▄▄ █ ▀▄▀ ██▄            do • ventures/supernormal/alive                          ║
+║    █▀█ █▄▄ █ ▀▄▀ ██▄            do • ventures/acme-agency                                ║
 ║                                                                                          ║
 ║  ════════════════════════════════════════════════════════════════════════════════════    ║
 ║                                                                                          ║
@@ -233,7 +233,7 @@ Use columns where it improves information density. The vertical pipe `│` separ
 ║                                                                                          ║
 ║  ════════════════════════════════════════════════════════════════════════════════════    ║
 ║                                                                                          ║
-║  ▸ capturing to ventures/supernormal/alive/_brain/changelog.md                           ║
+║  ▸ capturing to ventures/acme-agency/_brain/changelog.md                                 ║
 ║                                                                                          ║
 ║  ✓ Captured: "Decided to use double-line borders for all skill outputs"                  ║
 ║                                                                                          ║

@@ -155,16 +155,16 @@ Every evolved folder gets a README that explains what it is:
 
 **Before:**
 ```
-04_Ventures/ben-flint/_working/
-├── bf_linkedin_ai-series-1.md
-├── bf_linkedin_ai-series-2.md
-├── bf_linkedin_ai-series-3.md
-├── bf_linkedin_ai-series-outline.md
+04_Ventures/acme/_working/
+├── acme_linkedin_ai-series-1.md
+├── acme_linkedin_ai-series-2.md
+├── acme_linkedin_ai-series-3.md
+├── acme_linkedin_ai-series-outline.md
 ```
 
 **After:**
 ```
-04_Ventures/ben-flint/content/linkedin/ai-series/
+04_Ventures/acme/content/linkedin/ai-series/
 ├── README.md
 ├── outline.md
 ├── post-1.md
