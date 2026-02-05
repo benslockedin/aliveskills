@@ -9,6 +9,19 @@ Resume a past session with full context extraction from the raw transcript.
 
 **Key principle:** Save stays fast. Revive does the heavy lifting by reading the actual session.
 
+## UI Treatment
+
+This skill uses **Tier 3: Utility** formatting.
+
+**Visual elements:**
+- Compact logo (4-line ASCII art header)
+- Double-line border wrap (entire response)
+- Version footer: `ALIVE v2.0` (right-aligned)
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+
+---
+
 ## The Heavy Extraction
 
 Revive reads the raw session transcript at `~/.claude/projects/.../{session_id}.jsonl` and dispatches agents to extract:
@@ -212,15 +225,3 @@ Can only load from _brain/ files (no full extraction).
 - `/alive:do` — Fresh start on entity (no extraction)
 - `/alive:save` — End session, log to index
 
----
-
-## UI Treatment
-
-This skill uses **Tier 3: Utility** formatting.
-
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
-
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.

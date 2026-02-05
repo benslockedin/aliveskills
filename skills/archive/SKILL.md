@@ -7,6 +7,19 @@ description: Move completed or inactive items to the archive. Use when the user 
 
 Move completed or inactive items to archive. Preserve full path structure.
 
+## UI Treatment
+
+This skill uses **Tier 3: Utility** formatting.
+
+**Visual elements:**
+- Compact logo (4-line ASCII art header)
+- Double-line border wrap (entire response)
+- Version footer: `ALIVE v2.0` (right-aligned)
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+
+---
+
 ## When to Use
 
 Invoke when the user:
@@ -267,15 +280,3 @@ Archived: 2026-01-23
 - `/alive:sweep` — Identify archive candidates
 - `/alive:new` — Create new subdomain (opposite of archive)
 
----
-
-## UI Treatment
-
-This skill uses **Tier 3: Utility** formatting.
-
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
-
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.

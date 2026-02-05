@@ -7,6 +7,19 @@ description: Use when the user says "daily", "dashboard", "morning", "let's go",
 
 Morning entry point. Surface what matters across ALL entities. The heartbeat of the learning loop.
 
+## UI Treatment
+
+This skill uses **Tier 1: Entry Point** formatting.
+
+**Visual elements:**
+- Full logo (24-line ASCII art header)
+- Double-line border wrap (entire response)
+- Community footer: `Free: Join the ALIVE community → skool.com/aliveoperators`
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+
+---
+
 ## Overview
 
 Daily aggregates context from every entity and the session index to show:
@@ -277,15 +290,3 @@ After showing dashboard, remind:
 - `/alive:digest` — Process inputs
 - `/alive:save` — End session
 
----
-
-## UI Treatment
-
-This skill uses **Tier 1: Entry Point** formatting.
-
-**Visual elements:**
-- Full logo (24-line ASCII art header)
-- Double-line border wrap (entire response)
-- Community footer: `Free: Join the ALIVE community → skool.com/aliveoperators`
-
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.

@@ -7,6 +7,19 @@ description: Internal skill for maintaining entity manifests. Called by save, ne
 
 Internal skill for updating `_brain/manifest.json`. Called by other skills, not directly by users.
 
+## UI Treatment
+
+This skill uses **Tier 3: Utility** formatting.
+
+**Visual elements:**
+- Compact logo (4-line ASCII art header)
+- Double-line border wrap (entire response)
+- Version footer: `ALIVE v2.0` (right-aligned)
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+
+---
+
 ## The Manifest Rule
 
 **The manifest is a complete semantic sitemap.**
@@ -267,15 +280,3 @@ When calling this skill, provide:
 - `description`: Description for new entries (required for add operations)
 - `session_id`: Current session ID
 
----
-
-## UI Treatment
-
-This skill uses **Tier 3: Utility** formatting.
-
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
-
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.

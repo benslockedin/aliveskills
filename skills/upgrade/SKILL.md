@@ -7,6 +7,19 @@ description: This skill should be used when the user says "upgrade", "migrate to
 
 Migrate an ALIVE system from v1 to v2 structure.
 
+## UI Treatment
+
+This skill uses **Tier 3: Utility** formatting.
+
+**Visual elements:**
+- Compact logo (4-line ASCII art header)
+- Double-line border wrap (entire response)
+- Version footer: `ALIVE v2.0` (right-aligned)
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+
+---
+
 ## v1 → v2 Changes
 
 | v1 | v2 |
@@ -458,15 +471,3 @@ Next: Run /alive:daily to see your v2 dashboard.
 - `/alive:do` — Detects v1, calls this skill
 - `/alive:onboarding` — Fresh v2 setup (no migration)
 
----
-
-## UI Treatment
-
-This skill uses **Tier 3: Utility** formatting.
-
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
-
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.

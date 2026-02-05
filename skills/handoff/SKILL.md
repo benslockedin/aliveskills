@@ -9,6 +9,19 @@ Create a comprehensive handoff document that enables a zero-context future sessi
 
 **Core principle:** The next Claude instance has NO memory. This document IS their memory.
 
+## UI Treatment
+
+This skill uses **Tier 3: Utility** formatting.
+
+**Visual elements:**
+- Compact logo (4-line ASCII art header)
+- Double-line border wrap (entire response)
+- Version footer: `ALIVE v2.0` (right-aligned)
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+
+---
+
 ## When This Runs
 
 Called by `/alive:save` when save reason is:
@@ -483,15 +496,3 @@ If specific code patterns, implementations, or snippets are essential:
 - `/alive:save` — Calls this skill when appropriate
 - `/alive:do` — Checks for pending handoffs on load
 
----
-
-## UI Treatment
-
-This skill uses **Tier 3: Utility** formatting.
-
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
-
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.

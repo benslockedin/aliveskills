@@ -7,6 +7,19 @@ description: This skill should be used when the user says "create X", "new ventu
 
 Create a new entity or area. Scaffold the v2 structure with proper templates.
 
+## UI Treatment
+
+This skill uses **Tier 3: Utility** formatting.
+
+**Visual elements:**
+- Compact logo (4-line ASCII art header)
+- Double-line border wrap (entire response)
+- Version footer: `ALIVE v2.0` (right-aligned)
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+
+---
+
 ## When to Use
 
 Invoke when the user wants to:
@@ -512,15 +525,3 @@ Next: /alive:do bigco to start working.
 - `/alive:onboarding` — Full system setup (not just one entity)
 - `/alive:daily` — See all entities after creating
 
----
-
-## UI Treatment
-
-This skill uses **Tier 3: Utility** formatting.
-
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
-
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.

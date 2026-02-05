@@ -9,6 +9,19 @@ Focus on ONE entity. Load context from its `_brain/` folder and show current sta
 
 **Different from `/alive:daily`:** Do focuses on ONE entity. Daily shows EVERYTHING.
 
+## UI Treatment
+
+This skill uses **Tier 2: Core Workflow** formatting.
+
+**Visual elements:**
+- Compact logo (4-line ASCII art header)
+- Double-line border wrap (entire response)
+- Community footer: `Free: Join the ALIVE community → skool.com/aliveoperators`
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+
+---
+
 ## Flow
 
 ```dot
@@ -281,15 +294,3 @@ Initialize _brain/ now?
 - `/alive:upgrade` — Migrate v1 → v2
 - `/alive:handoff` — Session continuity (creates handoff docs for resumption)
 
----
-
-## UI Treatment
-
-This skill uses **Tier 2: Core Workflow** formatting.
-
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Community footer: `Free: Join the ALIVE community → skool.com/aliveoperators`
-
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.

@@ -7,6 +7,19 @@ description: Use when user pastes external content (email thread, meeting transc
 
 Digest external content immediately. Extract meaning, route to destination.
 
+## UI Treatment
+
+This skill uses **Tier 3: Utility** formatting.
+
+**Visual elements:**
+- Compact logo (4-line ASCII art header)
+- Double-line border wrap (entire response)
+- Version footer: `ALIVE v2.0` (right-aligned)
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+
+---
+
 ## Overview
 
 Input handles content that comes FROM OUTSIDE — emails, transcripts, articles, Slack threads. Extract decisions, tasks, people, insights. Route to appropriate entity or dump to `03_Inputs/` for later triage.
@@ -376,15 +389,3 @@ Scan status.md files across all entities for keyword matches.
 - `/alive:digest` — Process items already IN 03_Inputs/
 - `/alive:do` — Load entity context first
 
----
-
-## UI Treatment
-
-This skill uses **Tier 3: Utility** formatting.
-
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
-
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.

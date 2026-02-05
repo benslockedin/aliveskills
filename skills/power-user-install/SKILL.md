@@ -7,6 +7,17 @@ description: Internal skill called by onboarding when user opts in to session an
 
 Scan existing Claude Code session history to build a user profile. Called by `/alive:onboarding` when user opts in.
 
+## UI Treatment
+
+This skill uses **Tier 3: Utility** formatting.
+
+**Visual elements:**
+- Compact logo (4-line ASCII art header)
+- Double-line border wrap (entire response)
+- Version footer: `ALIVE v2.0` (right-aligned)
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+
 ---
 
 ## When Invoked
@@ -280,15 +291,3 @@ sync:
 - Keep analysis under 2 minutes to avoid user frustration
 - Sync scripts are optional power-user features
 
----
-
-## UI Treatment
-
-This skill uses **Tier 3: Utility** formatting.
-
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
-
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.

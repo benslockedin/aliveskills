@@ -7,6 +7,19 @@ description: Audit the system for stale content and cleanup opportunities. Use w
 
 Audit the system. Find stale content, identify cleanup opportunities, maintain health.
 
+## UI Treatment
+
+This skill uses **Tier 3: Utility** formatting.
+
+**Visual elements:**
+- Compact logo (4-line ASCII art header)
+- Double-line border wrap (entire response)
+- Version footer: `ALIVE v2.0` (right-aligned)
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+
+---
+
 ## When to Use
 
 Invoke when the user:
@@ -287,15 +300,3 @@ Batch cleanup?
 - `/alive:digest` — Process inputs backlog
 - `/alive:do` — Refresh stale subdomain
 
----
-
-## UI Treatment
-
-This skill uses **Tier 3: Utility** formatting.
-
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
-
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.

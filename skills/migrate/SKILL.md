@@ -7,6 +7,19 @@ description: Bulk import existing content, transcripts, or documents into ALIVE.
 
 Bulk import content into ALIVE. Extract and route existing files, transcripts, or documents.
 
+## UI Treatment
+
+This skill uses **Tier 3: Utility** formatting.
+
+**Visual elements:**
+- Compact logo (4-line ASCII art header)
+- Double-line border wrap (entire response)
+- Version footer: `ALIVE v2.0` (right-aligned)
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+
+---
+
 ## When to Use
 
 Invoke when the user:
@@ -274,15 +287,3 @@ Once content is imported:
 - `/alive:digest` — Process inputs
 - `/alive:capture` — Single item capture (not bulk)
 
----
-
-## UI Treatment
-
-This skill uses **Tier 3: Utility** formatting.
-
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
-
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
