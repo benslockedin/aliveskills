@@ -125,7 +125,7 @@ Use columns where it improves information density. The vertical pipe `│` separ
 ║  VENTURES                        │  EXPERIMENTS                                        ║
 ║  ────────────────────────────────│──────────────────────────────────────────────────   ║
 ║  [1] acme-agency    Building     │  [4] cricket-grid    Paused [!]                     ║
-║  [2] berties        Growing      │  [5] new-idea        Starting                       ║
+║  [2] apex           Growing      │  [5] new-idea        Starting                       ║
 ║  [3] side-project   Ready        │                                                     ║
 ```
 
@@ -169,12 +169,12 @@ Use columns where it improves information density. The vertical pipe `│` separ
 ║  YOUR GOALS                                                                              ║
 ║  ──────────────────────────────────────────────────────────────────────────────────────  ║
 ║  • acme-agency: Ship client portal by Feb 15                                             ║
-║  • berties: 6 products, profitable monthly                                               ║
+║  • apex: 6 products, profitable monthly                                                  ║
 ║                                                                                          ║
 ║  VENTURES                        │  EXPERIMENTS                                          ║
 ║  ────────────────────────────────│────────────────────────────────────────────────────   ║
 ║  [1] acme-agency    Building     │  [3] cricket-grid    Paused [!]                       ║
-║  [2] berties        Growing      │                                                       ║
+║  [2] apex           Growing      │                                                       ║
 ║                                                                                          ║
 ║  INPUTS                                                                                  ║
 ║  ──────────────────────────────────────────────────────────────────────────────────────  ║
