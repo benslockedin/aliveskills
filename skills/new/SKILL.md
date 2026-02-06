@@ -7,6 +7,19 @@ description: This skill should be used when the user says "create X", "new ventu
 
 Create a new entity or area. Scaffold the v2 structure with proper templates.
 
+## UI Treatment
+
+This skill uses **Tier 3: Utility** formatting.
+
+**Visual elements:**
+- Compact logo (4-line ASCII art header)
+- Double-line border wrap (entire response)
+- Version footer: `ALIVE v2.0` (right-aligned)
+
+See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+
+---
+
 ## When to Use
 
 Invoke when the user wants to:
@@ -328,13 +341,13 @@ Names must be:
 Try again:
 ```
 
-## Creating a Sub-Project
+## Creating a Sub-Entity
 
-Sub-projects are containers WITHIN a entity that have their own lifecycle (and therefore their own `_brain/`).
+Sub-entitys are containers WITHIN a entity that have their own lifecycle (and therefore their own `_brain/`).
 
-### When to Create a Sub-Project
+### When to Create a Sub-Entity
 
-| Parent Type | Sub-Project Examples |
+| Parent Type | Sub-Entity Examples |
 |-------------|---------------------|
 | Agency venture | Clients, retainers |
 | E-commerce venture | Campaigns, product lines |
@@ -346,14 +359,14 @@ Sub-projects are containers WITHIN a entity that have their own lifecycle (and t
 ### Step 1: Identify Context
 
 ```
-Creating a sub-project.
+Creating a sub-entity.
 
 You're working in: 04_Ventures/acme-agency/
 
 What are you creating?
 [1] Client (for agency ventures)
 [2] Campaign (for ecommerce/marketing)
-[3] Project (generic sub-project)
+[3] Project (generic sub-entity)
 [4] Custom
 ```
 
@@ -369,7 +382,7 @@ One-line description?
 
 ### Step 3: Create Structure
 
-**Sub-project structure:**
+**Sub-entity structure:**
 ```
 04_Ventures/acme-agency/clients/bigco/
 ├── _brain/
@@ -378,18 +391,18 @@ One-line description?
 │   ├── insights.md
 │   ├── changelog.md
 │   └── manifest.json
-├── _working/         ← Sub-project gets its OWN _working/
-├── _references/      ← Sub-project gets its OWN _references/
+├── _working/         ← Sub-entity gets its OWN _working/
+├── _references/      ← Sub-entity gets its OWN _references/
 └── README.md
 ```
 
-**IMPORTANT:** Each sub-project gets its own `_working/` and `_references/` folders. Working files for this sub-project go here, NOT in the parent's folders.
+**IMPORTANT:** Each sub-entity gets its own `_working/` and `_references/` folders. Working files for this sub-entity go here, NOT in the parent's folders.
 
 ```
 # WRONG - using parent's _working/
 04_Ventures/acme-agency/_working/clients/bigco/proposal.md
 
-# RIGHT - sub-project has its own _working/
+# RIGHT - sub-entity has its own _working/
 04_Ventures/acme-agency/clients/bigco/_working/proposal.md
 ```
 
@@ -423,7 +436,7 @@ None yet.
 - [ ] Identify key contacts
 
 ## Done (Recent)
-- [x] Created sub-project ([DATE])
+- [x] Created sub-entity ([DATE])
 ```
 
 **changelog.md:**
@@ -432,7 +445,7 @@ None yet.
 
 ## [DATE] — Created
 
-Sub-project created within 04_Ventures/acme-agency/clients/.
+Sub-entity created within 04_Ventures/acme-agency/clients/.
 
 **Type:** Client
 **Description:** Enterprise client, $10k/mo retainer
@@ -476,7 +489,7 @@ Add to `04_Ventures/acme-agency/_brain/changelog.md`:
 ```markdown
 ## [DATE] — Created client: bigco
 
-Added new client sub-project: bigco (Enterprise client, $10k/mo retainer)
+Added new client sub-entity: bigco (Enterprise client, $10k/mo retainer)
 ```
 
 ### Step 6: Confirm
@@ -501,9 +514,9 @@ Parent manifest updated.
 Next: /alive:do bigco to start working.
 ```
 
-## Sub-Project vs Area
+## Sub-Entity vs Area
 
-| Question | Sub-Project | Area |
+| Question | Sub-Entity | Area |
 |----------|-------------|------|
 | Has its own lifecycle? | Yes | No |
 | Can be "done"? | Yes | No |
@@ -513,9 +526,9 @@ Next: /alive:do bigco to start working.
 | Gets `_references/`? | Yes | No |
 
 **Examples:**
-- `clients/bigco/` → Sub-project (has lifecycle)
+- `clients/bigco/` → Sub-entity (has lifecycle)
 - `templates/` → Area (organizational only)
-- `campaigns/summer-sale/` → Sub-project (has lifecycle)
+- `campaigns/summer-sale/` → Sub-entity (has lifecycle)
 - `brand/` → Area (organizational only)
 
 ## Related Skills

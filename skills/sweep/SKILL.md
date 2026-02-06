@@ -130,15 +130,15 @@ If no violations: `✓ Root structure clean`
 
 ```
 ▸ scanning 04_Ventures/
-  └─ supernormal/ (entity)
-  └─ berties/ (entity)
+  └─ acme/ (entity)
+  └─ side-hustle/ (entity)
 
 ▸ scanning 05_Experiments/
-  └─ cricket-grid/ (entity)
+  └─ new-idea/ (entity)
 
 ▸ scanning 02_Life/
   └─ people/ (area — always expected)
-  └─ health/ (area or entity — check for _brain/)
+  └─ fitness/ (area or entity — check for _brain/)
 ```
 
 Build the list of entities to audit. Each entity gets a sub-agent.
@@ -387,10 +387,10 @@ ENTITY RESULTS
 ─────────────────────────────────────────────────────────────────────────
 [Entity Name]          Critical  Warnings  Info
 ─────────────────────────────────────────────────────────────────────────
-supernormal/alive         0        3        2
-berties                   1        1        0
-cricket-grid              0        0        1
-health                    0        2        0
+acme/webapp               0        3        2
+side-hustle               1        1        0
+new-idea                  0        0        1
+fitness                   0        2        0
 ─────────────────────────────────────────────────────────────────────────
 TOTAL                     1        6        3
 ```
@@ -398,7 +398,7 @@ TOTAL                     1        6        3
 Then expand each entity's findings:
 
 ```
-BERTIES — 1 critical, 1 warning
+SIDE-HUSTLE — 1 critical, 1 warning
 ─────────────────────────────────────────────────────────────────────────
 
 CRITICAL:
@@ -411,7 +411,7 @@ WARNINGS:
 
 ─────────────────────────────────────────────────────────────────────────
 
-SUPERNORMAL/ALIVE — 0 critical, 3 warnings, 2 info
+ACME/WEBAPP — 0 critical, 3 warnings, 2 info
 ─────────────────────────────────────────────────────────────────────────
 
 WARNINGS:
@@ -525,15 +525,15 @@ Root:        ✓ Clean (6 allowed folders, 0 violations)
 Inputs:      3 items (oldest 5 days)
 
 Entities:
-  supernormal/alive    Building    Updated 2 days ago     7 _working/ files
-  berties              Growing     Updated 18 days ago    3 _working/ files  [!]
-  cricket-grid         Starting    Updated 1 day ago      0 _working/ files
+  acme/webapp          Building    Updated 2 days ago     7 _working/ files
+  side-hustle          Growing     Updated 18 days ago    3 _working/ files  [!]
+  new-idea             Starting    Updated 1 day ago      0 _working/ files
 
 Status: [!] 1 entity stale
 
 ─────────────────────────────────────────────────────────────────────────
 [1] Full sweep (deep audit)
-[2] Sweep berties only
+[2] Sweep side-hustle only
 [3] Done
 ```
 

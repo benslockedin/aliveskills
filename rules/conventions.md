@@ -44,7 +44,7 @@ project/
 
 ## Nested Entities
 
-Sub-projects are containers WITHIN an entity that have their own lifecycle. They get their own `_brain/`, `_working/`, and `_references/`.
+Sub-entities are containers WITHIN an entity that have their own lifecycle. They get their own `_brain/`, `_working/`, and `_references/`.
 
 **The rule:** If it can be started, paused, or completed independently — it gets `_brain/`, `_working/`, and `_references/`.
 
@@ -60,27 +60,27 @@ Sub-projects are containers WITHIN an entity that have their own lifecycle. They
 **Nested entity structure:**
 ```
 04_Ventures/agency/clients/bigco/
-├── _brain/           ← Sub-project state
+├── _brain/           ← Sub-entity state
 │   ├── status.md
 │   ├── tasks.md
 │   └── ...
-├── _working/         ← Sub-project drafts (NOT in parent's _working/)
+├── _working/         ← Sub-entity drafts (NOT in parent's _working/)
 │   └── proposal-v0.md
-├── _references/      ← Sub-project references (NOT in parent's _references/)
+├── _references/      ← Sub-entity references (NOT in parent's _references/)
 └── README.md
 ```
 
 **WRONG:** `04_Ventures/agency/_working/clients/bigco/proposal.md`
 **RIGHT:** `04_Ventures/agency/clients/bigco/_working/proposal.md`
 
-**When creating sub-projects:**
+**When creating sub-entitys:**
 1. Create `_brain/` with status.md, tasks.md, insights.md, changelog.md, manifest.json
-2. Create `_working/` for drafts (at sub-project level, not parent)
-3. Create `_references/` for reference material (at sub-project level, not parent)
+2. Create `_working/` for drafts (at sub-entity level, not parent)
+3. Create `_references/` for reference material (at sub-entity level, not parent)
 4. Log creation in parent's `_brain/changelog.md`
 5. Update parent's `_brain/manifest.json`
 
-Use `/alive:new` to create sub-projects properly.
+Use `/alive:new` to create sub-entitys properly.
 
 ---
 
@@ -420,24 +420,21 @@ See: 02_Life/people/john-smith.md
 
 ## Third-Party Skill Overrides
 
-When using third-party skills (like superpowers), ALIVE conventions take precedence.
+When using third-party skills, ALIVE conventions take precedence.
 
 ### Plan File Locations
 
-**Override for `superpowers:brainstorming` and `superpowers:writing-plans`:**
-
 | Skill Default | ALIVE Override |
 |---------------|----------------|
-| `docs/plans/` | `_working/plans/` |
 | `{root}/docs/plans/` | `{entity}/_working/plans/` |
 
 **Why:** Plans are work-in-progress until approved. WIP files belong in `_working/`, not permanent documentation folders.
 
 ```
-# Wrong (superpowers default)
+# Wrong
 ~/alive/docs/plans/feature-plan.md
 
-# Right (ALIVE override)
+# Right
 ~/alive/04_Ventures/acme/_working/plans/feature-plan.md
 ```
 
@@ -457,11 +454,6 @@ When using third-party skills (like superpowers), ALIVE conventions take precede
    - Completed docs → appropriate area within entity
    - Session artifacts → `{entity}/_working/sessions/`
 3. **Use ALIVE folder conventions** — Numbered domains, `_brain/`, etc.
-
-**This applies to ALL skills including:**
-- `superpowers:brainstorming` → `_working/plans/`
-- `superpowers:writing-plans` → `_working/plans/`
-- Any skill that outputs documents, specs, or artifacts
 
 **Never create orphan files at:**
 - ALIVE root (`~/alive/`)
