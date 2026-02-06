@@ -53,7 +53,7 @@ CORE SKILLS
 
 CAPTURE & FIND
 ─────────────────────────────────────────────────────────────────────────
-/alive:capture   Quick context grab from conversation
+/alive:capture-context   Capture context into ALIVE
 /alive:recall    Search past context, decisions, sessions
 /alive:migrate   Bulk import content into ALIVE
 
@@ -232,7 +232,7 @@ People info         →  02_Life/people/
 CAPTURE METHODS
 ─────────────────────────────────────────────────────────────────────────
 Quick:    "FYI we decided X" → I'll offer to capture
-Direct:   /alive:capture → Prompts for content
+Direct:   /alive:capture-context → Analyses and routes content
 Inline:   "capture: [content]" → Captures immediately
 Session:  /alive:save → Logs whole session
 ```

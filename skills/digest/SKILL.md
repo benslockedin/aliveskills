@@ -328,7 +328,7 @@ Filed: 2 source files
 
 ## Related Skills
 
-- `/alive:input` — Single item capture and immediate routing
+- `/alive:capture-context` — Capture and route content into ALIVE
 - `/alive:do` — Work on entity after digest
 - `/alive:daily` — Shows inputs count, links here
 

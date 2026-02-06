@@ -56,16 +56,17 @@ Scaffold a new venture, experiment, life area, or organizational folder.
 
 ---
 
-### /alive:capture — Quick Context Grab
+### /alive:capture-context — Capture Context
 
-Capture context from conversation, notes, or quick input.
+Capture any content into ALIVE — quick notes, emails, transcripts, articles, decisions, anything worth preserving.
 
 | Style | Examples |
 |-------|----------|
-| **Command** | "capture this", "grab that", "note this", "save this context", "remember this" |
-| **Question** | "can you capture that?", "should we note this?", "want me to log that?" |
-| **Statement** | "I learned something", "had a call with X", "just decided X", "FYI", "for context" |
-| **Casual** | "note", "fyi", "btw", "oh also", "quick note" |
+| **Command** | "capture this", "note this", "remember this", "process this", "digest this" |
+| **Question** | "can you capture that?", "should we note this?", "what should I do with this?" |
+| **Statement** | "I learned something", "had a call with X", "just decided X", "FYI", "here's an email", "from my call" |
+| **Casual** | "note", "fyi", "btw", "oh also", "quick note", "here's some context" |
+| **Paste** | User pastes external content (email, transcript, article, Slack messages) |
 
 ---
 
@@ -166,14 +167,14 @@ Guide new users through initial setup.
 
 When intent is unclear between skills:
 
-### do vs capture
+### do vs capture-context
 ```
 User: "about acme..."
 
 Ask: "Are you wanting to start working on acme, or capture some context about it?"
 ```
 
-### save vs capture
+### save vs capture-context
 ```
 User: "log this"
 
@@ -198,7 +199,7 @@ Proactively suggest skills based on system state:
 | 03_Inputs/ has items | "You have X items in 03_Inputs/. `/alive:digest`?" |
 | _brain/ is stale (>2 weeks) | "X hasn't been updated in Y days. Refresh?" |
 | No recent save | "You haven't saved in a while. `/alive:save`?" |
-| User shares decision/insight | "Want me to capture that? `/alive:capture`" |
+| User shares decision/insight | "Want me to capture that? `/alive:capture-context`" |
 | Session start | "Welcome back. `/alive:do` to load context?" |
 
 ---

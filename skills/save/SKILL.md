@@ -67,33 +67,25 @@ What's next for this thread?
 [3] Closed — work is done
 ```
 
-### Handoff Check (After Steps 1-2)
+### Handoff Check (MANDATORY — After Steps 1-2)
 
-**If user selected:**
+**If user selected EITHER of these:**
 - WHY = "Pre-compact" (context limit), OR
 - WHAT'S NEXT = "Ongoing" (coming back)
 
-**Then invoke handoff before continuing:**
+**You MUST invoke `/alive:handoff` using the Skill tool. Do NOT attempt to create a handoff document yourself — the skill has specific logic you cannot replicate inline.**
 
+**Action:** Call the Skill tool with `skill: "alive:handoff"` NOW, then proceed to Step 3.
+
+After the handoff skill completes, show:
 ```
-▸ This session needs a handoff for continuity.
-
-Creating handoff document so the next session can pick up exactly where we left off...
-```
-
-→ **Invoke `/alive:handoff`**
-
-Handoff will:
-1. Create comprehensive handoff document in `_working/sessions/`
-2. Update manifest with pending handoff
-3. Return control here to continue with Step 3
-
-```
-✓ Handoff created: alive-plugin-feedback-abc12345-2026-02-02-1530.md
+✓ Handoff created
   └─ Next session will be prompted to resume
 
 Continuing with save...
 ```
+
+**If NEITHER condition is met** (ending + closed/paused), skip handoff and proceed to Step 3.
 
 ### Step 3: HOW (Quality)
 
@@ -419,7 +411,8 @@ In `_brain/manifest.json`:
   ],
   "key_files": [
     {"path": "CLAUDE.md", "description": "Entity identity"}
-  ]
+  ],
+  "handoffs": []
 }
 ```
 
@@ -592,6 +585,6 @@ Write to `.claude/state/changelog.md` for system-level changes.
 - `/alive:do` — Load entity to work
 - `/alive:daily` — Morning dashboard
 - `/alive:revive` — Resume past session
-- `/alive:capture` — Quick mid-session note
+- `/alive:capture-context` — Capture context mid-session
 - `/alive:handoff` — Session continuity (called automatically when pre-compact or ongoing)
 

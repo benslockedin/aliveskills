@@ -288,7 +288,7 @@ Check `_brain/` before answering anything about an entity.
 | `/alive:do` | Start work on one entity |
 | `/alive:save` | End session, log to changelog |
 | `/alive:new` | Create entity or area |
-| `/alive:capture` | Quick context grab |
+| `/alive:capture-context` | Capture context into ALIVE |
 | `/alive:recall` | Search past context |
 | `/alive:migrate` | Bulk import context |
 | `/alive:archive` | Move to archive |

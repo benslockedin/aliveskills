@@ -1181,11 +1181,9 @@ Context compounds each cycle. Skip the save, lose the context.
 OTHER USEFUL COMMANDS
 ─────────────────────────────────────────────────────────────────────────
 
-/alive:capture  Quick capture. Grab a decision, insight, or task
-                without interrupting flow.
-
-/alive:input    Process external content. Meeting transcript?
-                Article? Dump it here, I'll extract and route it.
+/alive:capture-context  Capture context. Dump in anything — a decision,
+                        transcript, email, article — I'll extract what
+                        matters and route it to the right place.
 
 /alive:recall   Search your history. "What did we decide about
                 pricing?" — I'll find it.

@@ -147,7 +147,7 @@ TASKS IDENTIFIED
 Completed:
 - [x] Build daily skill
 - [x] Build save skill with Will's feedback
-- [x] Build input skill
+- [x] Build capture-context skill
 
 Remaining:
 - [ ] Polish do skill @urgent

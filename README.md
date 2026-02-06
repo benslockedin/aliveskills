@@ -75,7 +75,7 @@ Claude reads these files to understand your context. Updates them as you work. E
 | `/alive:do` | "Let's work on X" — loads context, starts session |
 | `/alive:save` | "We're done" — logs progress, cleans up |
 | `/alive:new` | "Create a venture/experiment" — scaffolds structure |
-| `/alive:capture` | "Remember this" — quick context grab |
+| `/alive:capture-context` | "Here's some context" — capture and route to ALIVE |
 | `/alive:recall` | "What did we decide about X?" — searches history |
 | `/alive:digest` | "Process my inputs" — triages incoming context |
 | `/alive:help` | "What should I do?" — contextual guidance |

@@ -33,7 +33,7 @@ Restart Claude Code, then run `/alive:onboarding` in your project folder.
 | `/alive:do` | Start a work session |
 | `/alive:save` | End session, log progress |
 | `/alive:new` | Create subdomain, area, or subentity |
-| `/alive:capture` | Quick context grab |
+| `/alive:capture-context` | Capture context into ALIVE |
 | `/alive:recall` | Search past context |
 | `/alive:migrate` | Bulk import content |
 | `/alive:archive` | Move completed items to archive |

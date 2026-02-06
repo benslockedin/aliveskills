@@ -147,9 +147,8 @@ The loop works with the full skill set:
 
 | Skill | Role in Loop |
 |-------|--------------|
-| `/alive:input` | Feed new content → triggers during WORK |
+| `/alive:capture-context` | Capture context → triggers during WORK |
 | `/alive:digest` | Process 03_Inputs/ → part of DAILY |
-| `/alive:capture` | Quick notes → during WORK |
 | `/alive:revive` | Resume old session → alternative to DO |
 | `/alive:sweep` | Clean stale context → periodic maintenance |
 
