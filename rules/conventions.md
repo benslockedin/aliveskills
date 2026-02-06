@@ -41,9 +41,9 @@ project/
 
 ---
 
-## Nested Entities (Subentities)
+## Nested Entities
 
-Subentities are containers WITHIN an entity that have their own lifecycle. They get their own `_brain/` AND their own `_working/`.
+Sub-projects are containers WITHIN an entity that have their own lifecycle. They get their own `_brain/` AND their own `_working/`.
 
 **The rule:** If it can be started, paused, or completed independently — it gets `_brain/` and `_working/`.
 
@@ -59,24 +59,25 @@ Subentities are containers WITHIN an entity that have their own lifecycle. They 
 **Nested entity structure:**
 ```
 04_Ventures/agency/clients/bigco/
-├── _brain/           ← Subentity state
+├── _brain/           ← Sub-project state
 │   ├── status.md
 │   ├── tasks.md
 │   └── ...
-├── _working/         ← Subentity drafts (NOT in parent's _working/)
+├── _working/         ← Sub-project drafts (NOT in parent's _working/)
 │   └── proposal-v0.md
+└── README.md
 ```
 
 **WRONG:** `04_Ventures/agency/_working/clients/bigco/proposal.md`
 **RIGHT:** `04_Ventures/agency/clients/bigco/_working/proposal.md`
 
-**When creating subentities:**
+**When creating sub-projects:**
 1. Create `_brain/` with status.md, tasks.md, insights.md, changelog.md, manifest.json
-2. Create `_working/` for drafts (at subentity level, not parent)
+2. Create `_working/` for drafts (at sub-project level, not parent)
 3. Log creation in parent's `_brain/changelog.md`
 4. Update parent's `_brain/manifest.json`
 
-Use `/alive:new` to create subentities properly.
+Use `/alive:new` to create sub-projects properly.
 
 ---
 
@@ -177,13 +178,11 @@ Every entity has `_brain/` with these files:
 
 ```json
 {
-  "name": "Project Name",
-  "type": "entity",
+  "name": "project-name",
   "description": "One sentence description",
-  "goal": "Single sentence goal",
   "created": "2026-01-20",
   "updated": "2026-01-23",
-  "session_id": "last-session-id",
+  "session_id": "abc12345",
 
   "folders": ["_brain", "_working", "clients", "content"],
 
@@ -191,47 +190,53 @@ Every entity has `_brain/` with these files:
     {
       "path": "clients/",
       "description": "Active client projects",
-      "has_subdomains": false
-    }
-  ],
-
-  "files": [
-    {
-      "path": "_brain/status.md",
-      "summary": "Building phase, landing page launch Friday",
-      "sessions": ["abc123", "def456"],
-      "modified": "2026-01-23"
+      "has_entities": false,
+      "files": [
+        {
+          "path": "README.md",
+          "description": "Client area overview"
+        }
+      ]
     },
     {
-      "path": "clients/acme/contract.pdf",
-      "summary": "MSA with Acme, $50k retainer, expires March 2026",
-      "sessions": ["xyz789"],
-      "modified": "2026-01-10",
-      "key": true
+      "path": "content/",
+      "description": "Marketing and brand content",
+      "files": [
+        {
+          "path": "landing-page.md",
+          "description": "Main landing page copy",
+          "session_id": "xyz789"
+        }
+      ]
     }
   ],
 
   "working_files": [
     {
       "path": "_working/landing-v0.html",
-      "summary": "Draft landing page with hero, features, pricing",
-      "sessions": ["abc123", "def456", "ghi789"],
-      "created": "2026-01-20",
-      "modified": "2026-01-23"
+      "description": "Draft landing page with hero and features",
+      "session_id": "abc123"
     }
   ],
 
-  "sessions": ["abc123", "def456", "ghi789"]
+  "key_files": [
+    {
+      "path": "CLAUDE.md",
+      "description": "Entity identity and navigation"
+    }
+  ],
+
+  "handoffs": []
 }
 ```
 
 **Key fields:**
-- `type` — Always "entity" for entities
-- `goal` — Single-sentence goal for filtering decisions
-- `sessions` — Array of all session IDs that touched this entity
-- `summary` (on files) — AI-generated one-liner
-- `sessions` (on files) — Session IDs that touched this file
-- `key: true` (on files) — Mark important files
+- `description` (on files) — AI-generated one-liner describing the file
+- `session_id` (on files) — Last session that modified this file (optional)
+- `key_files` — Important reference files at entity root or cross-cutting
+- `handoffs` — Pending session handoffs for `/alive:do` to detect on load
+- `areas[].has_entities` — True if area contains nested entities (e.g. clients/)
+- `areas[].files[]` — Files within this area, with description and optional session_id
 
 ---
 
@@ -328,21 +333,24 @@ See: 02_Life/people/john-smith.md
 
 ## Third-Party Skill Overrides
 
-When using third-party skills, ALIVE conventions take precedence.
+When using third-party skills (like superpowers), ALIVE conventions take precedence.
 
 ### Plan File Locations
 
+**Override for `superpowers:brainstorming` and `superpowers:writing-plans`:**
+
 | Skill Default | ALIVE Override |
 |---------------|----------------|
+| `docs/plans/` | `_working/plans/` |
 | `{root}/docs/plans/` | `{entity}/_working/plans/` |
 
 **Why:** Plans are work-in-progress until approved. WIP files belong in `_working/`, not permanent documentation folders.
 
 ```
-# Wrong
+# Wrong (superpowers default)
 ~/alive/docs/plans/feature-plan.md
 
-# Right
+# Right (ALIVE override)
 ~/alive/04_Ventures/acme/_working/plans/feature-plan.md
 ```
 
@@ -362,6 +370,11 @@ When using third-party skills, ALIVE conventions take precedence.
    - Completed docs → appropriate area within entity
    - Session artifacts → `{entity}/_working/sessions/`
 3. **Use ALIVE folder conventions** — Numbered domains, `_brain/`, etc.
+
+**This applies to ALL skills including:**
+- `superpowers:brainstorming` → `_working/plans/`
+- `superpowers:writing-plans` → `_working/plans/`
+- Any skill that outputs documents, specs, or artifacts
 
 **Never create orphan files at:**
 - ALIVE root (`~/alive/`)

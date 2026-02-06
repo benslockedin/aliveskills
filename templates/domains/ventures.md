@@ -9,7 +9,7 @@
 
 ```
 04_Ventures/
-└── [name]/           # Each venture is a subdomain
+└── [name]/           # Each venture is an entity
     ├── .claude/
     │   └── CLAUDE.md # Identity
     ├── _brain/
@@ -169,7 +169,7 @@ None yet.
 - [ ] Identify key stakeholders
 
 ## Done (Recent)
-- [x] Created subdomain ([DATE])
+- [x] Created entity ([DATE])
 ```
 
 ---
@@ -179,17 +179,15 @@ None yet.
 ```json
 {
   "name": "[Venture Name]",
-  "type": "subdomain",
   "description": "[One sentence description]",
-  "goal": "[Single sentence goal]",
   "created": "[DATE]",
   "updated": "[DATE]",
   "session_id": "[current-session]",
   "folders": ["_brain", "_working"],
   "areas": [],
-  "files": [],
   "working_files": [],
-  "sessions": []
+  "key_files": [],
+  "handoffs": []
 }
 ```
 

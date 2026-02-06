@@ -1,14 +1,12 @@
 {
-  "name": "[SUBDOMAIN_NAME]",
-  "type": "subdomain",
+  "name": "[ENTITY_NAME]",
   "description": "[One sentence description]",
-  "goal": "[Single sentence goal]",
   "created": "[DATE]",
   "updated": "[DATE]",
   "session_id": "[current-session]",
   "folders": ["_brain", "_working"],
   "areas": [],
-  "files": [],
   "working_files": [],
-  "sessions": []
+  "key_files": [],
+  "handoffs": []
 }

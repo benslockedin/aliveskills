@@ -7,19 +7,6 @@ description: This skill should be used when the user says "create X", "new ventu
 
 Create a new entity or area. Scaffold the v2 structure with proper templates.
 
-## UI Treatment
-
-This skill uses **Tier 3: Utility** formatting.
-
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
-
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
-
----
-
 ## When to Use
 
 Invoke when the user wants to:
@@ -172,12 +159,14 @@ None yet.
 {
   "name": "[Name]",
   "description": "[One sentence]",
+  "created": "[DATE]",
   "updated": "[DATE]",
   "session_id": "[current-session]",
   "folders": ["_brain", "_working"],
   "areas": [],
-  "files": [],
-  "working_files": []
+  "working_files": [],
+  "key_files": [],
+  "handoffs": []
 }
 ```
 
@@ -335,13 +324,13 @@ Names must be:
 Try again:
 ```
 
-## Creating a Subentity
+## Creating a Sub-Project
 
-Subentitys are containers WITHIN a entity that have their own lifecycle (and therefore their own `_brain/`).
+Sub-projects are containers WITHIN a entity that have their own lifecycle (and therefore their own `_brain/`).
 
-### When to Create a Subentity
+### When to Create a Sub-Project
 
-| Parent Type | Subentity Examples |
+| Parent Type | Sub-Project Examples |
 |-------------|---------------------|
 | Agency venture | Clients, retainers |
 | E-commerce venture | Campaigns, product lines |
@@ -353,14 +342,14 @@ Subentitys are containers WITHIN a entity that have their own lifecycle (and the
 ### Step 1: Identify Context
 
 ```
-Creating a subentity.
+Creating a sub-project.
 
 You're working in: 04_Ventures/acme-agency/
 
 What are you creating?
 [1] Client (for agency ventures)
 [2] Campaign (for ecommerce/marketing)
-[3] Project (generic subentity)
+[3] Project (generic sub-project)
 [4] Custom
 ```
 
@@ -376,7 +365,7 @@ One-line description?
 
 ### Step 3: Create Structure
 
-**Subentity structure:**
+**Sub-project structure:**
 ```
 04_Ventures/acme-agency/clients/bigco/
 ├── _brain/
@@ -385,17 +374,17 @@ One-line description?
 │   ├── insights.md
 │   ├── changelog.md
 │   └── manifest.json
-├── _working/         ← Subentity gets its OWN _working/
+├── _working/         ← Sub-project gets its OWN _working/
 └── README.md
 ```
 
-**IMPORTANT:** Each subentity gets its own `_working/` folder. Working files for this subentity go here, NOT in the parent's `_working/`.
+**IMPORTANT:** Each sub-project gets its own `_working/` folder. Working files for this sub-project go here, NOT in the parent's `_working/`.
 
 ```
 # WRONG - using parent's _working/
 04_Ventures/acme-agency/_working/clients/bigco/proposal.md
 
-# RIGHT - subentity has its own _working/
+# RIGHT - sub-project has its own _working/
 04_Ventures/acme-agency/clients/bigco/_working/proposal.md
 ```
 
@@ -429,7 +418,7 @@ None yet.
 - [ ] Identify key contacts
 
 ## Done (Recent)
-- [x] Created subentity ([DATE])
+- [x] Created sub-project ([DATE])
 ```
 
 **changelog.md:**
@@ -438,7 +427,7 @@ None yet.
 
 ## [DATE] — Created
 
-Subentity created within 04_Ventures/acme-agency/clients/.
+Sub-project created within 04_Ventures/acme-agency/clients/.
 
 **Type:** Client
 **Description:** Enterprise client, $10k/mo retainer
@@ -450,14 +439,15 @@ Subentity created within 04_Ventures/acme-agency/clients/.
 ```json
 {
   "name": "bigco",
-  "type": "client",
-  "parent": "04_Ventures/acme-agency",
   "description": "Enterprise client, $10k/mo retainer",
   "created": "[DATE]",
   "updated": "[DATE]",
   "session_id": "[current-session]",
   "folders": ["_brain", "_working"],
-  "files": []
+  "areas": [],
+  "working_files": [],
+  "key_files": [],
+  "handoffs": []
 }
 ```
 
@@ -480,7 +470,7 @@ Add to `04_Ventures/acme-agency/_brain/changelog.md`:
 ```markdown
 ## [DATE] — Created client: bigco
 
-Added new client subentity: bigco (Enterprise client, $10k/mo retainer)
+Added new client sub-project: bigco (Enterprise client, $10k/mo retainer)
 ```
 
 ### Step 6: Confirm
@@ -504,9 +494,9 @@ Parent manifest updated.
 Next: /alive:do bigco to start working.
 ```
 
-## Subentity vs Area
+## Sub-Project vs Area
 
-| Question | Subentity | Area |
+| Question | Sub-Project | Area |
 |----------|-------------|------|
 | Has its own lifecycle? | Yes | No |
 | Can be "done"? | Yes | No |
@@ -514,9 +504,9 @@ Next: /alive:do bigco to start working.
 | Gets `_brain/`? | Yes | No |
 
 **Examples:**
-- `clients/bigco/` → Subentity (has lifecycle)
+- `clients/bigco/` → Sub-project (has lifecycle)
 - `templates/` → Area (organizational only)
-- `campaigns/summer-sale/` → Subentity (has lifecycle)
+- `campaigns/summer-sale/` → Sub-project (has lifecycle)
 - `brand/` → Area (organizational only)
 
 ## Related Skills
@@ -524,4 +514,3 @@ Next: /alive:do bigco to start working.
 - `/alive:do` — Start working on the new entity
 - `/alive:onboarding` — Full system setup (not just one entity)
 - `/alive:daily` — See all entities after creating
-

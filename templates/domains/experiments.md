@@ -9,7 +9,7 @@
 
 ```
 05_Experiments/
-└── [name]/           # Each experiment is a subdomain
+└── [name]/           # Each experiment is an entity
     ├── .claude/
     │   └── CLAUDE.md # Identity
     ├── _brain/

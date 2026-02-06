@@ -7,19 +7,6 @@ description: Bulk import existing content, transcripts, or documents into ALIVE.
 
 Bulk import content into ALIVE. Extract and route existing files, transcripts, or documents.
 
-## UI Treatment
-
-This skill uses **Tier 3: Utility** formatting.
-
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
-
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
-
----
-
 ## When to Use
 
 Invoke when the user:
@@ -32,7 +19,7 @@ Invoke when the user:
 
 ```
 1. Identify source (file, folder, URL)
-2. Create or select destination subdomain
+2. Create or select destination entity
 3. Analyze content
 4. Extract structured data
 5. Route to appropriate locations
@@ -54,12 +41,12 @@ What are you migrating?
 
 ### Step 2: Create or Select Destination
 
-If subdomain doesn't exist:
+If entity doesn't exist:
 ```
 This content needs a home.
 
-[1] Create new subdomain (04_Ventures/05_Experiments/02_Life)
-[2] Import to existing subdomain
+[1] Create new entity (04_Ventures/05_Experiments/02_Life)
+[2] Import to existing entity
 ```
 
 If creating, invoke `/alive:new` first to scaffold properly.
@@ -158,16 +145,21 @@ Source file:
 
 ### Step 6: Update Manifest
 
-Add imported files and summaries:
+Add imported files to the appropriate area:
 
 ```json
 {
-  "files": [
+  "areas": [
     {
-      "path": "meetings/call-2026-01-20.md",
-      "summary": "Call with John Smith about AWS migration, launch timeline",
-      "sessions": ["migrate-abc123"],
-      "modified": "2026-01-23"
+      "path": "meetings/",
+      "description": "Meeting transcripts and notes",
+      "files": [
+        {
+          "path": "call-2026-01-20.md",
+          "description": "Call with John Smith about AWS migration, launch timeline",
+          "session_id": "abc123"
+        }
+      ]
     }
   ]
 }
@@ -258,7 +250,7 @@ This decision mentions multiple ventures:
 - Timeline relates to beta
 
 Route to:
-[1] Both subdomains
+[1] Both entitys
 [2] Just acme
 [3] Just beta
 [4] Let me specify
@@ -277,13 +269,12 @@ Route to:
 ## After Migration
 
 Once content is imported:
-- Use `/alive:do` to work on the subdomain
+- Use `/alive:do` to work on the entity
 - Use `/alive:digest` if items went to 03_Inputs/
 - Use `/alive:sweep` to check for cleanup needs
 
 ## Related Skills
 
-- `/alive:new` — Create subdomain first if needed
+- `/alive:new` — Create entity first if needed
 - `/alive:digest` — Process inputs
-- `/alive:capture` — Single item capture (not bulk)
-
+- `/alive:capture-context` — Single item capture (not bulk)
