@@ -55,15 +55,18 @@ That's it. Your AI now has persistent memory.
 
 ## How It Works
 
-Every subdomain has a `_brain/` folder:
+Every entity has `_brain/`, `_working/`, and `_references/`:
 
 ```
-04_Ventures/mycompany/_brain/
-├── status.md      # Current phase + goal
-├── tasks.md       # What needs doing
-├── changelog.md   # What happened + decisions
-├── insights.md    # Learnings
-└── manifest.json  # Structure map
+04_Ventures/mycompany/
+├── _brain/
+│   ├── status.md      # Current phase + goal
+│   ├── tasks.md       # What needs doing
+│   ├── changelog.md   # What happened + decisions
+│   ├── insights.md    # Learnings
+│   └── manifest.json  # Structure map
+├── _working/           # Drafts in progress
+└── _references/        # Reference materials and source documents
 ```
 
 Claude reads these files to understand your context. Updates them as you work. Everything persists.

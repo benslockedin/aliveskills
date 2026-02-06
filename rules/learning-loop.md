@@ -69,6 +69,7 @@ If you're not running `/alive:daily` regularly, you're not using the system.
 **What it doesn't auto-load:**
 - `insights.md` — Only when relevant
 - `changelog.md` — Only when needed
+- `_references/` raw files — On demand (manifest index is always loaded)
 - Other entities — Ask first
 
 ---

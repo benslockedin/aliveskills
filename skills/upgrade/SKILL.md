@@ -372,6 +372,7 @@ STRUCTURE
   ✓ No _state/ found in upgraded entities
   ✓ session-index.jsonl exists
   ✓ All _brain/ folders have required files
+  ✓ All entities have _references/ folder
 
 RULES
   ✓ .claude/rules/ exists

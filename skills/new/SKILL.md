@@ -16,10 +16,10 @@ Invoke when the user wants to:
 
 ## Entity vs Area
 
-| Type | Has _brain/ | Has .claude/ | Has _working/ | Identity |
-|------|-------------|--------------|---------------|----------|
-| **Entity** | Yes | Yes | Yes | `.claude/CLAUDE.md` |
-| **Area** | No | No | No | `README.md` |
+| Type | Has _brain/ | Has .claude/ | Has _working/ | Has _references/ | Identity |
+|------|-------------|--------------|---------------|------------------|----------|
+| **Entity** | Yes | Yes | Yes | Yes | `.claude/CLAUDE.md` |
+| **Area** | No | No | No | No | `README.md` |
 
 **Entitys** are projects with their own state.
 **Areas** are organizational folders within entities.
@@ -81,7 +81,8 @@ What type of venture?
 │   ├── insights.md        # Learnings
 │   ├── changelog.md       # History
 │   └── manifest.json      # Structure map
-└── _working/              # Drafts
+├── _working/              # Drafts
+└── _references/           # Reference material
 ```
 
 ### Step 4: Initialize Files
@@ -119,6 +120,7 @@ Everything current lives in `_brain/`:
 - `manifest.json` — Structure map
 
 Drafts live in `_working/`.
+Reference material lives in `_references/`.
 ```
 
 **status.md:**
@@ -162,9 +164,10 @@ None yet.
   "created": "[DATE]",
   "updated": "[DATE]",
   "session_id": "[current-session]",
-  "folders": ["_brain", "_working"],
+  "folders": ["_brain", "_working", "_references"],
   "areas": [],
   "working_files": [],
+  "references": [],
   "key_files": [],
   "handoffs": []
 }
@@ -183,7 +186,8 @@ Structure:
 │   ├── insights.md
 │   ├── changelog.md
 │   └── manifest.json
-└── _working/
+├── _working/
+└── _references/
 
 Next: /alive:do acme-corp to start working.
 ```
@@ -375,10 +379,11 @@ One-line description?
 │   ├── changelog.md
 │   └── manifest.json
 ├── _working/         ← Sub-project gets its OWN _working/
+├── _references/      ← Sub-project gets its OWN _references/
 └── README.md
 ```
 
-**IMPORTANT:** Each sub-project gets its own `_working/` folder. Working files for this sub-project go here, NOT in the parent's `_working/`.
+**IMPORTANT:** Each sub-project gets its own `_working/` and `_references/` folders. Working files for this sub-project go here, NOT in the parent's folders.
 
 ```
 # WRONG - using parent's _working/
@@ -443,9 +448,10 @@ Sub-project created within 04_Ventures/acme-agency/clients/.
   "created": "[DATE]",
   "updated": "[DATE]",
   "session_id": "[current-session]",
-  "folders": ["_brain", "_working"],
+  "folders": ["_brain", "_working", "_references"],
   "areas": [],
   "working_files": [],
+  "references": [],
   "key_files": [],
   "handoffs": []
 }
@@ -486,6 +492,7 @@ Structure:
 │   ├── changelog.md
 │   └── manifest.json
 ├── _working/
+├── _references/
 └── README.md
 
 Parent changelog updated.
@@ -502,6 +509,8 @@ Next: /alive:do bigco to start working.
 | Can be "done"? | Yes | No |
 | Needs status tracking? | Yes | No |
 | Gets `_brain/`? | Yes | No |
+| Gets `_working/`? | Yes | No |
+| Gets `_references/`? | Yes | No |
 
 **Examples:**
 - `clients/bigco/` → Sub-project (has lifecycle)

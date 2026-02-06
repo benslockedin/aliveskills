@@ -105,6 +105,7 @@ SUBDOMAIN vs AREA
 Has _brain/         Yes                 No
 Has .claude/        Yes                 No
 Has _working/       Yes                 No
+Has _references/    Yes                 No
 Identity file       .claude/CLAUDE.md   README.md
 Example             04_Ventures/acme/      04_Ventures/acme/clients/
 
@@ -221,6 +222,7 @@ FILE ROUTING
 ─────────────────────────────────────────────────────────────────────────
 Drafts              →  _working/
 Final files         →  Area folders (clients/, content/, etc.)
+Reference materials →  _references/ (emails, calls, screenshots)
 Context to process  →  03_Inputs/
 Completed projects  →  01_Archive/
 People info         →  02_Life/people/

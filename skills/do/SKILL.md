@@ -143,7 +143,7 @@ Read in order:
   └─ 7 tasks, 2 @urgent
 
 ▸ reading 04_Ventures/acme/_brain/manifest.json
-  └─ 12 files tracked
+  └─ 12 files tracked, 3 references
 
 ▸ reading 04_Ventures/acme/_brain/changelog.md (last 200 lines)
   └─ Last session: 2026-02-04 — Plugin UI updates
@@ -154,6 +154,8 @@ Read in order:
 Read(file_path: "{entity}/_brain/changelog.md", offset: -200)
 ```
 Or read the full file if it's less than 200 lines.
+
+**References:** If the manifest has a `references` array, mention the count to the user (e.g. "3 reference docs available"). Don't load the files — just surface awareness. Users can ask to read specific references on demand.
 
 ## Step 3.5: Check for Pending Handoffs
 

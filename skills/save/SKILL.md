@@ -395,7 +395,7 @@ In `_brain/manifest.json`:
   "description": "One sentence purpose",
   "updated": "2026-01-30",
   "session_id": "abc123",
-  "folders": ["_brain", "_working", "docs"],
+  "folders": ["_brain", "_working", "_references", "docs"],
   "areas": [
     {
       "path": "docs/",
@@ -420,6 +420,8 @@ In `_brain/manifest.json`:
 1. Identify which area it belongs to
 2. Add to that area's `files` array with description
 3. If promoted from `_working/`, remove from `working_files`
+
+**References:** If any files were added to `_references/` during the session, update the manifest's `references` array with an entry for each: `path`, `type` (e.g. article, transcript, doc), and `summary`.
 
 ---
 
@@ -451,7 +453,9 @@ If yes, offer to update entity `CLAUDE.md`.
 
 ## Session Index Entry
 
-Write to `.claude/state/session-index.jsonl`:
+**Append** a new line to the END of `.claude/state/session-index.jsonl`:
+
+Use `echo '...' >> file` (double `>>`) to append, NOT overwrite. Each entry is one JSON object per line (JSONL format). Newest entries go at the bottom.
 
 ```json
 {

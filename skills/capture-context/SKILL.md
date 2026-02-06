@@ -5,7 +5,7 @@ description: Capture context into the ALIVE system. Use when user shares any con
 
 # alive:capture-context
 
-Capture context into ALIVE. User gives you content, you analyse it, extract what matters, and route it to the right places.
+Capture context into ALIVE. User gives you content — you understand it, confirm intent, store it properly, and identify what action comes next.
 
 ## UI Treatment
 
@@ -25,11 +25,14 @@ See `rules/ui-standards.md` for exact border characters, logo assets, and format
 The user has context they want in the system. It might be a quick thought, a pasted email, a meeting transcript, a screenshot, an article — anything. Your job:
 
 1. Receive it
-2. Understand what it is
-3. Know where we are in ALIVE (active entity, what areas exist)
-4. Extract the valuable parts (decisions, tasks, insights, people, key context)
-5. Route extractions to the right `_brain/` files
-6. Store the source material where it belongs
+2. Understand what it is and what entity it relates to
+3. Confirm what the user wants to do with it (the action)
+4. Confirm where to store it, and whether to extract to `_brain/`
+5. Store the source material in `_references/` with YAML front matter
+6. If user opted in, extract valuable parts (decisions, tasks, insights, people) to `_brain/`
+7. Note the pending action — but don't execute it
+
+**The skill captures and classifies. It does not execute the action.** If the user wants to write a response to an email, the skill stores the email and identifies "write response" as the action. The response gets written after the skill exits.
 
 **One skill for all incoming context. No distinction between "your thoughts" and "external content."**
 
@@ -42,7 +45,7 @@ The user has context they want in the system. It might be a quick thought, a pas
 | Check | Why |
 |-------|-----|
 | Active entity (from `/alive:do`) | Default routing destination |
-| `{entity}/_brain/manifest.json` | Know what areas exist (clients/, content/) |
+| `{entity}/_brain/manifest.json` | Know what areas exist, existing references |
 | `{entity}/_brain/status.md` | Current focus — informs relevance |
 | `02_Life/people/` listing | Check for existing person files before creating |
 
@@ -50,6 +53,7 @@ The user has context they want in the system. It might be a quick thought, a pas
 ▸ loading context...
   └─ Active: 04_Ventures/acme
   └─ Areas: clients/, content/, partnerships/
+  └─ References: 3 existing in _references/
   └─ Focus: "Closing Q1 deals"
   └─ People: 47 files in 02_Life/people/
 ```
@@ -63,88 +67,32 @@ If no entity is active, scan entities for keyword matches to suggest routing.
 ```
 Content received
     ↓
-Detect complexity
+Context check (entity, manifest, people)
     ↓
-┌─────────────┐     ┌─────────────────┐
-│ Quick note  │     │ Substantial     │
-│ (1-2 items) │     │ (multi-extract) │
-└──────┬──────┘     └────────┬────────┘
-       ↓                     ↓
-  Quick capture         Full extraction
-       ↓                     ↓
-  Confirm + write       Show extractions
-                             ↓
-                        Confirm routing
-                             ↓
-                        Write to destinations
-                             ↓
-                        Store source material
-                             ↓
-                        Update person files
-                             ↓
-                        Confirm done
+Identify (content type, entity match, people)
+    ↓
+Question 1: Confirm what it is +
+what do you want to do with it?
+    ↓
+Question 2: Confirm where to store +
+what to extract to _brain/
+    ↓
+Store source to _references/
+(If opted in) Extract to _brain/
+Handle people
+    ↓
+Confirm done + note pending action
 ```
+
+**Every capture follows this flow.** Whether it's a one-line decision or a 50-message email thread, the same steps apply. The system adjusts depth based on content complexity, but the flow is always: identify → confirm intent → confirm storage → execute.
+
+**Manifest is NOT updated here.** The `/alive:save` skill handles manifest updates at session end.
 
 ---
 
-## Quick Capture (Simple Content)
+## Step 1: Identify
 
-For brief, clear context — a decision, a task, a quick FYI. One or two items, no complex extraction needed.
-
-**Triggers:** Short statements, "FYI", "btw", "note this", single clear item.
-
-### Step 1: Parse and Classify
-
-| Signal | Type | Destination |
-|--------|------|-------------|
-| "decided", "chose", "going with" | Decision | `_brain/changelog.md` |
-| "learned", "realised", "found out" | Insight | `_brain/insights.md` |
-| "need to", "should", "follow up", "todo" | Task | `_brain/tasks.md` |
-| "now in", "phase", "focus" | Status update | `_brain/status.md` |
-| "met", "talked to", "call with" | Person | `02_Life/people/` + changelog |
-
-### Step 2: Confirm and Write
-
-```
-▸ quick capture
-
-Decision: Use Stripe over PayPal
-Rationale: PayPal fees too high in AU
-Route to: 04_Ventures/acme/_brain/changelog.md
-
-[1] Confirm
-[2] Edit
-[3] Different destination
-```
-
-### Step 3: Done
-
-```
-✓ Captured to 04_Ventures/acme/_brain/changelog.md
-```
-
-### FYI Mode (Ultra-Quick)
-
-When it's obviously a simple log entry:
-
-```
-User: "FYI the deadline moved to Friday"
-
-▸ quick capture
-
-✓ Logged to 04_Ventures/acme/_brain/changelog.md
-  └─ "Deadline moved to Friday"
-```
-
----
-
-## Full Extraction (Substantial Content)
-
-For emails, transcripts, articles, multi-item pastes — anything that needs proper extraction.
-
-**Triggers:** Multi-line pasted content, emails, transcripts, articles, complex context with multiple extractable items.
-
-### Step 1: Detect Content Type
+Detect content type, match to entity, identify people mentioned.
 
 | Type | Signals |
 |------|---------|
@@ -153,131 +101,273 @@ For emails, transcripts, articles, multi-item pastes — anything that needs pro
 | Slack/Chat | @mentions, emoji reactions, thread format |
 | Article | Long-form prose, headings, no dialogue |
 | Document | Structured content, sections |
-| Notes | Bullet points, informal structure |
+| Screenshot | Image file shared |
+| Quick thought | Short statement, decision, FYI, note |
 | Unknown | Ask user to clarify |
 
 ```
-▸ detecting content type...
-  └─ Email thread (3 messages)
+▸ identifying...
+  └─ Type: Email from Sarah Chen (Globex)
+  └─ Entity match: 04_Ventures/acme (Globex in manifest)
+  └─ Person: Sarah Chen — found in 02_Life/people/sarah-chen.md
 ```
 
-### Step 2: Process or Dump?
+For quick thoughts ("FYI the deadline moved to Friday"), identification is instant — type is obvious, entity is the active one.
 
-Always offer the choice:
+---
+
+## Step 2: Confirm Intent (Question 1)
+
+**Use AskUserQuestion.** Confirm what the content is AND what the user wants to do with it. The system makes an assumption based on context and presents it as the first option.
 
 ```
-[1] Process now — extract and route to entity
-[2] Dump to 03_Inputs/ — save for later triage with /alive:digest
+This is an email from Sarah Chen (Globex) about the pilot program pricing.
+
+What do you want to do?
+[1] Store email + extract key points to _brain/ (Recommended)
+[2] Store email + write a response (I'll help draft after storing)
+[3] Just store as reference (no extraction to _brain/)
+[4] Dump to 03_Inputs/ for later
 ```
+
+For simple content:
+```
+Quick note: "FYI the deadline moved to Friday"
+
+What do you want to do?
+[1] Store as reference + log to _brain/ (Recommended)
+[2] Just store as reference
+[3] Just log to _brain/ (no reference file)
+[4] Dump to 03_Inputs/ for later
+```
+
+**The action is identified here but NOT executed.** If the user picks "Write a response", note it as the pending action for after the skill completes.
 
 If dump → save raw content to `03_Inputs/[date]-[type]-[subject].md` and exit.
 
-### Step 3: Extract
+---
 
-Run extraction based on content type. Pull out:
+## Step 3: Confirm Storage + Extraction (Question 2)
 
-| Extract | What to Look For |
-|---------|------------------|
-| **Decisions** | Agreements, confirmations, "we'll do X", conclusions |
-| **Tasks** | Action items, commitments, deadlines, follow-ups |
-| **Insights** | Key learnings, revelations, market signals |
-| **People** | Names + roles, companies, relationships |
-| **Key context** | Budget figures, dates, constraints, important facts |
+**Use AskUserQuestion.** Show what the system will extract and where everything goes. The system recommends `_references/` by default for source material.
 
-### Step 4: Show Extractions
-
-Present everything found. Let the user verify before writing.
-
+If user chose to extract to `_brain/` in Q1, show what will be extracted:
 ```
-▸ extracted from email thread
+I'll store and extract:
+
+SOURCE → _references/emails/2026-02-06-globex-pilot-pricing.md
+- YAML front matter + AI summary + raw email
+
+EXTRACTIONS → _brain/ (you chose to extract)
+- 2 tasks → tasks.md
+- 1 decision → changelog.md
+- Key context (budget $50k, Feb 15 start)
 
 PEOPLE
-- Sarah Chen (CEO, Globex) — new contact
-- John (mentioned as "our CTO")
+- Sarah Chen — update existing file with new context
 
-DECISIONS
-- Moving forward with pilot program
-- Starting Feb 15
-
-TASKS
-- [ ] Send contract by Friday
-- [ ] Schedule kickoff call
-
-KEY CONTEXT
-- Budget approved for $50k
-- 3-month initial engagement
-
-─────────────────────────────────────────────────────────────────────────
-[1] Confirm and route    [2] Edit extractions    [3] Cancel
+[1] Confirm
+[2] Edit extractions
+[3] Different storage location
+[4] Skip _brain/ extraction, just store
 ```
 
-### Step 5: Determine Routing
-
-**Use manifest to suggest specific areas.**
-
-If entity is active AND manifest shows a matching area:
+If user chose "just store" in Q1:
 ```
-▸ checking manifest...
-  └─ Found: clients/globex/ (matches "Globex" in email)
+I'll store:
 
-Route to: 04_Ventures/acme
-- Tasks → _brain/tasks.md
-- Decision → _brain/changelog.md
-- Source file → clients/globex/
-- People → 02_Life/people/ (with links)
+SOURCE → _references/emails/2026-02-06-globex-pilot-pricing.md
+- YAML front matter + AI summary + raw email
 
-[1] Confirm    [2] Different location    [3] Dump to 03_Inputs/
+PEOPLE
+- Sarah Chen — update existing file with new context
+
+[1] Confirm
+[2] Actually, extract to _brain/ too
+[3] Different storage location
 ```
 
-If entity is active but no matching area:
+For simpler content:
 ```
-Route to: 04_Ventures/acme
-- Tasks → _brain/tasks.md
-- Decision → _brain/changelog.md
-- People → 02_Life/people/
+I'll capture:
 
-No matching area for source file. Options:
-[1] Create clients/globex/ area
-[2] Save source to _working/
-[3] Save source to 03_Inputs/
-```
+SOURCE → _references/notes/2026-02-06-deadline-update.md
 
-If no active entity:
-```
-Where should this go?
+EXTRACTION → _brain/changelog.md (you chose to log)
+- "Deadline moved to Friday"
 
-▸ scanning entities for matches...
-  └─ 04_Ventures/acme — "Globex" mentioned in status.md
-  └─ 04_Ventures/beta — no match
-
-[1] 04_Ventures/acme (suggested)
-[2] 04_Ventures/beta
-[3] 03_Inputs/ (triage later)
+[1] Confirm
+[2] No reference needed, just log it
+[3] Different destination
 ```
 
-### Step 6: Write to Destinations
+**The user controls what happens.** They can store without extracting, extract without storing a reference, or do both. The skill adapts to their choice from Q1.
+
+---
+
+## Step 4: Store Source to `_references/`
+
+This is the authoritative guide for how reference files are structured.
+
+### `_references/` Folder Structure
+
+Subfolders are **dynamic** — created based on content type as content arrives. Not prescribed upfront. The skill suggests the subfolder based on what's being captured.
+
+```
+_references/
+├── emails/
+│   ├── 2026-02-06-globex-pilot-pricing.md
+│   └── 2026-02-03-investor-intro.md
+├── calls/
+│   └── 2026-02-05-partner-sync.md
+├── notes/
+│   └── 2026-02-06-deadline-update.md
+└── screenshots/
+    └── 2026-02-06-competitor-landing/
+        ├── screenshot.png
+        └── analysis.md
+```
+
+Common subfolder types: `emails/`, `calls/`, `messages/`, `screenshots/`, `articles/`, `notes/`, `documents/`. But any descriptive name works — the system creates what makes sense for the content.
+
+### Text Content Template
+
+All text-based references (emails, transcripts, messages, notes, articles) use this format:
+
+```markdown
+---
+type: email
+date: 2026-02-06
+summary: Sarah Chen confirms Globex pilot pricing at $50k, starting Feb 15
+source: Sarah Chen (Globex)
+tags: [pricing, pilot, globex]
+subject: Re: Pilot program pricing
+from: sarah@globex.com
+to: will@acme.com
+---
+
+## Summary
+
+Sarah confirms the pilot program budget at $50k for a 3-month engagement
+starting Feb 15. She needs the contract by Friday to get sign-off from
+their board. John (CTO) will be the technical lead on their side.
+
+Key points:
+- Budget: $50k approved
+- Timeline: 3 months starting Feb 15
+- Blocker: Contract needed by Friday for board sign-off
+- Technical lead: John (CTO)
+
+## Raw
+
+[Full original text preserved exactly as received]
+```
+
+### YAML Front Matter Schema
+
+**Required fields:**
+
+| Field | Description |
+|-------|-------------|
+| `type` | Content kind: email, call, screenshot, message, article, note, document |
+| `date` | When created/received (ISO format: YYYY-MM-DD) |
+| `summary` | One-line summary — this is what appears in the manifest index |
+
+**Likely required:**
+
+| Field | Description |
+|-------|-------------|
+| `source` | Who/where it came from (person name, website, app) |
+| `tags` | Array of tags for searchability |
+
+**Type-dependent (optional):**
+
+| Field | Applies to | Description |
+|-------|-----------|-------------|
+| `from`, `to`, `subject` | email | Email metadata |
+| `participants`, `duration` | call | Call metadata |
+| `platform` | message | Source platform (Slack, iMessage, etc.) |
+| `file` | non-text | Path to the original asset file |
+| `url` | article | Source URL |
+
+### Non-Text Content Template
+
+Non-text content (screenshots, videos, PDFs) gets a **subfolder** containing the original file plus a companion analysis.md:
+
+```
+_references/screenshots/2026-02-06-competitor-landing/
+├── screenshot.png
+└── analysis.md
+```
+
+The analysis.md follows the same YAML front matter pattern with an additional `file` field:
+
+```markdown
+---
+type: screenshot
+date: 2026-02-06
+summary: Competitor landing page showing new $49/mo pricing tier
+source: competitor website
+tags: [competitor, pricing]
+file: screenshot.png
+---
+
+## Analysis
+
+[AI-generated detailed description of the visual content —
+what's shown, key information, relevant observations]
+```
+
+### File Naming Convention
+
+Pattern: `YYYY-MM-DD-descriptive-name.md`
+
+```
+_references/emails/2026-02-06-globex-pilot-pricing.md
+_references/calls/2026-02-05-partner-weekly-sync.md
+_references/notes/2026-02-06-deadline-update.md
+_references/screenshots/2026-02-06-competitor-landing/
+```
+
+### Three-Tier Access
+
+References are designed for efficient access without context bloat:
+
+```
+Tier 1: manifest.json      → "What references exist?" (always loaded)
+Tier 2: YAML front matter   → "Tell me more about this one" (on demand)
+Tier 3: Raw content         → "Give me the full thing" (on demand)
+```
+
+The manifest holds a lightweight index. Front matter holds rich metadata. Raw content only loads when specifically needed.
+
+---
+
+## Step 5: Extract to `_brain/` (If User Opted In)
+
+**Only if the user chose extraction in Step 2.** Route extracted items to the appropriate `_brain/` files. Link back to the reference file where the extraction came from.
 
 **Tasks → tasks.md**
 ```markdown
 ## To Do
-- [ ] Send contract by Friday (from email 2026-01-30)
-- [ ] Schedule kickoff call (from email 2026-01-30)
+- [ ] Send contract by Friday (from email 2026-02-06)
+- [ ] Schedule kickoff call (from email 2026-02-06)
 ```
 
 **Decisions → changelog.md**
 ```markdown
-## 2026-01-30 — Context Captured
+## 2026-02-06 — Context Captured
 
 ### Decisions
 - **Globex pilot:** Moving forward with Feb 15 start. Budget $50k approved.
 
 ### Source
-Email thread with Sarah Chen (Globex)
+Email from Sarah Chen (Globex) → _references/emails/2026-02-06-globex-pilot-pricing.md
 ```
 
 **Insights → insights.md**
 ```markdown
-## 2026-01-30 — [Insight Title]
+## 2026-02-06 — [Insight Title]
 
 **Category:** [market / product / process / technical / people]
 **Learning:** The insight itself
@@ -285,7 +375,9 @@ Email thread with Sarah Chen (Globex)
 **Applies to:** Where this matters
 ```
 
-### Step 7: Handle People
+---
+
+## Step 6: Handle People
 
 For every person mentioned:
 
@@ -299,7 +391,7 @@ For every person mentioned:
 
 **Role:** CEO
 **Company:** Globex
-**Met:** 2026-01-30 (email)
+**Met:** 2026-02-06 (email)
 
 ---
 
@@ -320,50 +412,55 @@ Update with this context?
 [1] Yes, update    [2] Skip
 ```
 
-### Step 8: Store Source Material
+---
 
-Save the original content for reference. Where it goes depends on context:
-
-| Situation | Store Location |
-|-----------|---------------|
-| Matches an existing area (e.g. `clients/globex/`) | That area folder |
-| Active entity, no matching area | `_working/` with entity prefix |
-| No clear entity | `03_Inputs/` for later triage |
-
-File naming: `[date]-[type]-[brief-subject].md`
-Example: `2026-01-30-email-globex-pilot.md`
-
-**Always preserve the original.** Even after extraction, the source has value.
-
-### Step 9: Confirm Done
+## Step 7: Confirm Done + Note Action
 
 ```
 ✓ Captured and routed to 04_Ventures/acme
 
-Written:
+Stored:
+- Source → _references/emails/2026-02-06-globex-pilot-pricing.md
+
+Extracted:
 - 2 tasks → _brain/tasks.md
 - 1 decision → _brain/changelog.md
-- 1 person → 02_Life/people/sarah-chen.md (created)
+- 1 person → 02_Life/people/sarah-chen.md (updated)
 
-Source saved to: clients/globex/2026-01-30-email-globex-pilot.md
+─────────────────────────────────────────────────────────────────────────
+Pending action: Write response to Sarah's email
 ```
+
+If user chose "just store" (no extraction):
+```
+✓ Stored to 04_Ventures/acme
+
+Stored:
+- Source → _references/emails/2026-02-06-globex-pilot-pricing.md
+- 1 person → 02_Life/people/sarah-chen.md (updated)
+
+─────────────────────────────────────────────────────────────────────────
+Pending action: Write response to Sarah's email
+```
+
+**The pending action line only appears if the user selected an action in Step 2.** After the skill exits, proceed with the action.
+
+**Manifest is updated later by `/alive:save`**, not by this skill. The save skill will detect new files in `_references/` and add them to the manifest's `references` array.
 
 ---
 
-## Multiple Items in One Capture
+## Finished Artifacts vs Reference Material
 
-When content contains items for different types:
+Not everything goes to `_references/`. The distinction:
 
-```
-"We decided X, I learned Y, and need to do Z"
+| Content | Where | Why |
+|---------|-------|-----|
+| Email, transcript, message | `_references/` | Source material — may need to re-read |
+| Screenshot, video | `_references/` (subfolder) | Visual evidence with companion analysis |
+| Quick thought, FYI, decision | `_brain/` only (or `_references/notes/` if substantial) | Often no source worth preserving separately |
+| Spreadsheet, contract, PDF | Area folder in entity | Finished artifact — belongs with its project |
 
-Capturing 3 items:
-1. Decision: X → changelog.md
-2. Insight: Y → insights.md
-3. Task: Z → tasks.md
-
-Confirm all three?
-```
+**The test:** Is this source material you might reference later? → `_references/`. Is this a finished file that belongs in a project? → Area folder. Is the meaning enough without the source? → `_brain/` only.
 
 ---
 
@@ -374,8 +471,12 @@ If no entity has been loaded with `/alive:do`:
 ```
 [?] No active entity.
 
+▸ scanning entities for matches...
+  └─ 04_Ventures/acme — "Globex" mentioned in status.md
+  └─ 04_Ventures/beta — no match
+
 Where does this belong?
-[1] 04_Ventures/acme
+[1] 04_Ventures/acme (suggested)
 [2] 04_Ventures/beta
 [3] 02_Life/[area]
 [4] 03_Inputs/ (triage later)
@@ -385,7 +486,7 @@ Where does this belong?
 
 ## Ambiguous Content
 
-When it's unclear what type something is:
+When it's unclear what type something is or what the user wants:
 
 ```
 "John mentioned we should reconsider the pricing"
@@ -405,9 +506,15 @@ Which fits best?
 **No manifest.json:**
 ```
 ▸ no manifest found, scanning folders...
-  └─ Found: clients/, content/, _working/
+  └─ Found: clients/, content/, _working/, _references/
 ```
 Use actual folder structure for routing suggestions.
+
+**No _references/ folder:**
+```
+▸ _references/ not found — creating it
+  └─ Created _references/
+```
 
 **No 02_Life/people/ folder:**
 ```

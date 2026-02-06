@@ -19,6 +19,7 @@
     │   ├── changelog.md
     │   └── manifest.json
     ├── _working/     # Drafts
+    ├── _references/  # Reference materials
     └── [areas]/      # Organizational folders
 ```
 
@@ -82,7 +83,8 @@ Generic starting point.
 04_Ventures/[name]/
 ├── .claude/
 ├── _brain/
-└── _working/
+├── _working/
+└── _references/
 ```
 
 ---
@@ -183,7 +185,7 @@ None yet.
   "created": "[DATE]",
   "updated": "[DATE]",
   "session_id": "[current-session]",
-  "folders": ["_brain", "_working"],
+  "folders": ["_brain", "_working", "_references"],
   "areas": [],
   "working_files": [],
   "key_files": [],

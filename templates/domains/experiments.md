@@ -19,6 +19,7 @@
     │   ├── changelog.md
     │   └── manifest.json
     ├── _working/     # Drafts
+    ├── _references/  # Reference materials
     └── [areas]/      # Optional organizational folders
 ```
 

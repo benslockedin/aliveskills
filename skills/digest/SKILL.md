@@ -149,9 +149,10 @@ For simple items:
 Adding task to 04_Ventures/acme/_brain/tasks.md:
   - [ ] Send project update to client @urgent
 
-Filing email to 04_Ventures/acme/clients/emails/
+Storing email to: 04_Ventures/acme/_references/emails/2026-02-06-client-update-request.md
+  - YAML front matter + AI summary + raw email
 
-Moving source to: 01_Archive/03_Inputs/client-email-acme.md
+Archiving source: 03_Inputs/client-email-acme.md → 01_Archive/03_Inputs/
 
 ✓ Done
 ```
@@ -202,28 +203,107 @@ Before routing, check if entity has an area for the content:
 
 Areas found:
   - clients/ → for client content
-  - meetings/ → for transcripts
+  - _references/ → for source material
 
-Route transcript to: 04_Ventures/acme/meetings/call-2026-01-22.md
+Route transcript to: 04_Ventures/acme/_references/calls/2026-01-22-partner-sync.md
 ```
 
 ### Routing Destinations
 
-| Content Type | Destination |
-|--------------|-------------|
+**Extracted content** routes to `_brain/`:
+
+| Extraction | Destination |
+|------------|-------------|
 | Decision | `_brain/changelog.md` |
 | Task | `_brain/tasks.md` |
 | Insight | `_brain/insights.md` |
 | Person info | `02_Life/people/[name].md` |
-| Transcript | Subdomain area or `meetings/` |
-| Document | Subdomain area |
-| Reference | `_working/` or relevant area |
 
 ### Source File Routing
 
-After extraction, move source file:
-- To entity area if relevant (`04_Ventures/acme/meetings/`)
-- To `01_Archive/03_Inputs/` if ephemeral
+After extraction, the **source file** needs to be stored. Default is `_references/` — the same format used by `/alive:capture-context`.
+
+**Text-based source files** (emails, transcripts, notes, messages) → create a markdown file in `_references/` with three sections:
+
+1. **YAML front matter** — structured metadata for scanning without loading
+2. **AI Summary** — detailed summary richer than the one-line front matter summary
+3. **Raw** — the full original text, preserved exactly as received
+
+```markdown
+---
+type: email
+date: 2026-02-06
+summary: Client requests project update and asks about new feature
+source: John Smith (Acme Corp)
+tags: [client, update-request, feature]
+subject: Re: Project status
+from: john@acme.com
+to: will@company.com
+---
+
+## Summary
+
+John is requesting a project status update by end of week. He also
+raises a new feature request for bulk export functionality. He mentions
+the board meeting is next Tuesday and needs numbers to present.
+
+Key points:
+- Status update needed by Friday
+- New feature request: bulk export
+- Board meeting Tuesday — needs metrics
+
+## Raw
+
+[Full original email text preserved exactly as received]
+```
+
+File naming: `YYYY-MM-DD-descriptive-name.md`
+Subfolder: dynamic based on content type (`emails/`, `calls/`, `messages/`, `notes/`, `articles/`)
+
+```
+_references/emails/2026-02-06-client-update-request.md
+_references/calls/2026-01-22-partner-sync.md
+```
+
+**Non-text source files** (screenshots, PDFs, audio) → store in a `_references/` subfolder with the original file plus a companion analysis.md that follows the same front matter pattern:
+
+```
+_references/documents/2026-02-06-contract-scan/
+├── contract-scan.pdf
+└── analysis.md
+```
+
+The analysis.md uses the same three-section structure — YAML front matter + Analysis (instead of Summary) + a `file:` field pointing to the original asset:
+
+```markdown
+---
+type: document
+date: 2026-02-06
+summary: Scanned contract with Globex, 12-month term, $50k value
+source: Legal team
+tags: [contract, globex]
+file: contract-scan.pdf
+---
+
+## Analysis
+
+[AI-generated description of the document contents,
+key terms, important clauses, relevant observations]
+```
+
+**Finished artifacts** (spreadsheets, contracts, final documents) → these aren't references, they're project files. Route to the appropriate area folder in the entity:
+
+```
+04_Ventures/acme/clients/globex/contract-v1.pdf
+04_Ventures/acme/financials/q1-budget.xlsx
+```
+
+**The test:** Is this source material you might reference later? → `_references/`. Is this a finished file that belongs in a project? → Area folder.
+
+**After routing, archive the original from inputs:**
+```
+mv 03_Inputs/client-email-acme.md → 01_Archive/03_Inputs/client-email-acme.md
+```
 
 ## Multimodal Support
 

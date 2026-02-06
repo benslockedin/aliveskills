@@ -38,6 +38,7 @@ Invoke when the user:
 | Tasks | `_brain/tasks.md` | Work items |
 | Sessions | `_brain/changelog.md` | Session summaries |
 | Files | `_brain/manifest.json` | File index with summaries |
+| References | `_references/` | Emails, calls, screenshots, articles |
 | People | `02_Life/people/` | Person files |
 | Transcripts | `.claude/projects/` | Session transcripts |
 
@@ -68,7 +69,13 @@ Scope: All subdomains (no specific one mentioned)
 Search order:
 1. `_brain/changelog.md` — Decisions section
 2. `_brain/insights.md` — Related learnings
-3. `_brain/manifest.json` — File summaries
+3. `_brain/manifest.json` — File summaries + references index
+4. `_references/` — Front matter first, then raw content if needed
+
+**References use three-tier access:**
+- **Tier 1:** `manifest.json` `references` array (always loaded — check here first)
+- **Tier 2:** YAML front matter in `_references/*.md` (on demand — when manifest matches)
+- **Tier 3:** Raw file content (on demand — when deeper context needed)
 
 Show retrieval:
 ```
@@ -76,6 +83,7 @@ Show retrieval:
   └─ 04_Ventures/acme/_brain/changelog.md    2 matches
   └─ 04_Ventures/beta/_brain/changelog.md    1 match
   └─ 04_Ventures/acme/_brain/insights.md     1 match
+  └─ 04_Ventures/acme/_references/           1 match (email)
 ```
 
 ### Step 3: Present Results
@@ -166,6 +174,19 @@ User: "Where's the contract with Acme?"
 Found:
 [1] 04_Ventures/agency/clients/acme/contract.pdf
     "MSA with Acme Corp, $50k retainer, expires March 2026"
+```
+
+### Reference Search
+
+```
+User: "Find that email about the contract terms"
+
+▸ searching manifest references for "contract"...
+  └─ 04_Ventures/acme/_references/email-contract-terms-2026-01-18.md
+
+Found:
+[1] 04_Ventures/acme/_references/email-contract-terms-2026-01-18.md
+    Type: email | From: john@acme.com | "Contract terms for Q2 retainer"
 ```
 
 ### Person Search

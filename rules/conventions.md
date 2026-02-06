@@ -33,6 +33,7 @@ project/
 | Has `.claude/` | Yes | No |
 | Has `_brain/` | Yes | No |
 | Has `_working/` | Yes | No |
+| Has `_references/` | Yes | No |
 | Identity file | `.claude/CLAUDE.md` | `README.md` |
 | Example | `04_Ventures/acme/` | `04_Ventures/acme/clients/` |
 
@@ -43,18 +44,18 @@ project/
 
 ## Nested Entities
 
-Sub-projects are containers WITHIN an entity that have their own lifecycle. They get their own `_brain/` AND their own `_working/`.
+Sub-projects are containers WITHIN an entity that have their own lifecycle. They get their own `_brain/`, `_working/`, and `_references/`.
 
-**The rule:** If it can be started, paused, or completed independently — it gets `_brain/` and `_working/`.
+**The rule:** If it can be started, paused, or completed independently — it gets `_brain/`, `_working/`, and `_references/`.
 
-| Container | Gets _brain/? | Gets _working/? | Why |
-|-----------|---------------|-----------------|-----|
-| `04_Ventures/agency/` | Yes | Yes | Entity |
-| `04_Ventures/agency/clients/bigco/` | Yes | Yes | Independent lifecycle (can be "done") |
-| `04_Ventures/agency/clients/` | No | No | Organizational folder (area) |
-| `04_Ventures/agency/brand/` | No | No | Organizational folder (area) |
-| `04_Ventures/shop/campaigns/summer/` | Yes | Yes | Independent lifecycle |
-| `04_Ventures/shop/products/` | No | No | Organizational folder |
+| Container | Gets _brain/? | Gets _working/? | Gets _references/? | Why |
+|-----------|---------------|-----------------|---------------------|-----|
+| `04_Ventures/agency/` | Yes | Yes | Yes | Entity |
+| `04_Ventures/agency/clients/bigco/` | Yes | Yes | Yes | Independent lifecycle (can be "done") |
+| `04_Ventures/agency/clients/` | No | No | No | Organizational folder (area) |
+| `04_Ventures/agency/brand/` | No | No | No | Organizational folder (area) |
+| `04_Ventures/shop/campaigns/summer/` | Yes | Yes | Yes | Independent lifecycle |
+| `04_Ventures/shop/products/` | No | No | No | Organizational folder |
 
 **Nested entity structure:**
 ```
@@ -65,6 +66,7 @@ Sub-projects are containers WITHIN an entity that have their own lifecycle. They
 │   └── ...
 ├── _working/         ← Sub-project drafts (NOT in parent's _working/)
 │   └── proposal-v0.md
+├── _references/      ← Sub-project references (NOT in parent's _references/)
 └── README.md
 ```
 
@@ -74,8 +76,9 @@ Sub-projects are containers WITHIN an entity that have their own lifecycle. They
 **When creating sub-projects:**
 1. Create `_brain/` with status.md, tasks.md, insights.md, changelog.md, manifest.json
 2. Create `_working/` for drafts (at sub-project level, not parent)
-3. Log creation in parent's `_brain/changelog.md`
-4. Update parent's `_brain/manifest.json`
+3. Create `_references/` for reference material (at sub-project level, not parent)
+4. Log creation in parent's `_brain/changelog.md`
+5. Update parent's `_brain/manifest.json`
 
 Use `/alive:new` to create sub-projects properly.
 
@@ -184,7 +187,7 @@ Every entity has `_brain/` with these files:
   "updated": "2026-01-23",
   "session_id": "abc12345",
 
-  "folders": ["_brain", "_working", "clients", "content"],
+  "folders": ["_brain", "_working", "_references", "clients", "content"],
 
   "areas": [
     {
@@ -226,7 +229,15 @@ Every entity has `_brain/` with these files:
     }
   ],
 
-  "handoffs": []
+  "handoffs": [],
+
+  "references": [
+    {
+      "path": "_references/emails/2026-02-06-supplier-quote.md",
+      "type": "email",
+      "summary": "Supplier confirms 15% price increase, bulk order before Feb 28"
+    }
+  ]
 }
 ```
 
@@ -237,6 +248,82 @@ Every entity has `_brain/` with these files:
 - `handoffs` — Pending session handoffs for `/alive:do` to detect on load
 - `areas[].has_entities` — True if area contains nested entities (e.g. clients/)
 - `areas[].files[]` — Files within this area, with description and optional session_id
+- `references` — Lightweight index of files in `_references/`. Each entry has `path`, `type`, and `summary`. Loaded via three-tier pattern: manifest (index) → front matter (rich metadata) → raw content (full text/asset).
+
+---
+
+## _references/ Structure
+
+External context useful to the entity — emails, messages, call transcripts, screenshots, articles, documents.
+
+### Access Pattern
+
+```
+Tier 1: manifest.json     → Quick index (always loaded)
+Tier 2: YAML front matter  → Rich metadata (on demand)
+Tier 3: Raw content        → Full text/asset (on demand)
+```
+
+### Subfolders
+
+Dynamic — created by content type, not prescribed. Examples: `emails/`, `calls/`, `screenshots/`, `messages/`, `articles/`.
+
+### File Naming
+
+Pattern: `YYYY-MM-DD-descriptive-name.md`
+
+### Text Content (emails, transcripts, messages)
+
+Markdown file with YAML front matter + `## Summary` + `## Raw` sections:
+
+```yaml
+---
+type: email
+date: 2026-02-06
+summary: Supplier confirms 15% price increase on fabric starting March
+source: John Smith
+tags: [pricing, supplier]
+subject: Q1 pricing update
+from: john@supplier.com
+to: will@company.com
+---
+```
+
+### Non-Text Content (screenshots, videos, PDFs)
+
+Subfolder with original file + companion `analysis.md`:
+
+```
+_references/screenshots/2026-02-06-competitor-landing/
+├── screenshot.png
+└── analysis.md       ← Same front matter pattern, plus file: field
+```
+
+### Front Matter Fields
+
+| Field | Required | Notes |
+|-------|----------|-------|
+| `type` | Yes | email, call, screenshot, message, article, document, etc. |
+| `date` | Yes | ISO format |
+| `summary` | Yes | One-line (mirrors manifest entry) |
+| `source` | Usually | Who/where it came from |
+| `tags` | Usually | Array for searchability |
+| `from`, `to`, `subject` | email | Email metadata |
+| `participants`, `duration` | call | Call metadata |
+| `platform` | message | Slack, iMessage, etc. |
+| `file` | non-text | Path to original asset |
+
+### Manifest Entry
+
+```json
+"references": [
+  {
+    "path": "_references/emails/2026-02-06-supplier-quote.md",
+    "type": "email",
+    "summary": "Supplier confirms 15% price increase, bulk order before Feb 28"
+  }
+]
+```
 
 ---
 

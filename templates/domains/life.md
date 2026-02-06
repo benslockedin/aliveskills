@@ -20,7 +20,8 @@
     │   ├── insights.md
     │   ├── changelog.md
     │   └── manifest.json
-    └── _working/
+    ├── _working/
+    └── _references/
 ```
 
 ---

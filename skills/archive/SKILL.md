@@ -169,6 +169,7 @@ Result:
 │   ├── changelog.md
 │   └── manifest.json
 ├── _working/
+├── _references/
 └── [all areas and files]
 ```
 

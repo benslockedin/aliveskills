@@ -4,9 +4,10 @@
   "created": "[DATE]",
   "updated": "[DATE]",
   "session_id": "[current-session]",
-  "folders": ["_brain", "_working"],
+  "folders": ["_brain", "_working", "_references"],
   "areas": [],
   "working_files": [],
+  "references": [],
   "key_files": [],
   "handoffs": []
 }

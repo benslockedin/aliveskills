@@ -139,31 +139,32 @@ Tasks:
 Insights:
   → 04_Ventures/acme/_brain/insights.md (2 entries)
 
-Source file:
-  → 04_Ventures/acme/meetings/call-2026-01-20.md
+Source (reference):
+  → 04_Ventures/acme/_references/call-john-smith-2026-01-20.md
 ```
+
+**Reference routing:** When the source material is a reference type (email, call transcript, screenshot, article), route it to `_references/` with YAML front matter rather than a generic area folder. See the capture-context skill for front matter format.
 
 ### Step 6: Update Manifest
 
-Add imported files to the appropriate area:
+Add imported files to the manifest. Reference materials go in the `references` array:
 
 ```json
 {
-  "areas": [
+  "references": [
     {
-      "path": "meetings/",
-      "description": "Meeting transcripts and notes",
-      "files": [
-        {
-          "path": "call-2026-01-20.md",
-          "description": "Call with John Smith about AWS migration, launch timeline",
-          "session_id": "abc123"
-        }
-      ]
+      "path": "_references/call-john-smith-2026-01-20.md",
+      "type": "call",
+      "summary": "Call with John Smith about AWS migration, launch timeline",
+      "date": "2026-01-20",
+      "people": ["john-smith"],
+      "session": "abc123"
     }
   ]
 }
 ```
+
+Non-reference files go in the standard `files` or `areas` arrays as usual.
 
 ### Step 7: Confirm
 
@@ -190,7 +191,8 @@ For call/meeting transcripts:
 3. Extract decisions
 4. Extract insights
 5. Update person files with "last contact"
-6. File source in appropriate area
+6. Store source as reference in `_references/` with YAML front matter
+7. Add to `manifest.json` `references` array
 
 ### Document Migration
 
