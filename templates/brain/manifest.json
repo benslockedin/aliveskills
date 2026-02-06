@@ -1,14 +1,23 @@
 {
-  "name": "[SUBDOMAIN_NAME]",
-  "type": "subdomain",
-  "description": "[One sentence description]",
-  "goal": "[Single sentence goal]",
-  "created": "[DATE]",
-  "updated": "[DATE]",
-  "session_id": "[current-session]",
-  "folders": ["_brain", "_working"],
-  "areas": [],
-  "files": [],
-  "working_files": [],
-  "sessions": []
+  "name": "Entity/Area/Subdomain Name",
+  "description": "One sentence purpose",
+  "updated": "2026-01-30",
+  "session_id": "abc123",
+  "folders": ["_brain", "_working", "docs"],
+  "areas": [
+    {
+      "path": "docs/",
+      "description": "Reference documentation",
+      "files": [
+        {"path": "README.md", "description": "Index of documentation"},
+        {"path": "architecture.md", "description": "System architecture"}
+      ]
+    }
+  ],
+  "working_files": [
+    {"path": "_working/draft-v0.md", "description": "Landing page draft"}
+  ],
+  "key_files": [
+    {"path": "CLAUDE.md", "description": "Entity identity"}
+  ]
 }
