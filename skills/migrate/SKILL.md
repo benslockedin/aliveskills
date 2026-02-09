@@ -1,11 +1,26 @@
 ---
 user-invocable: true
 description: Bulk import existing content, transcripts, or documents into ALIVE. Use when the user says "migrate X", "import X", "bring in X", "bulk add", or "load from X".
+plugin_version: "2.1.0"
 ---
 
 # alive:migrate
 
 Bulk import content into ALIVE. Extract and route existing files, transcripts, or documents.
+
+## Version Check (Before Main Flow)
+
+Compare your `plugin_version` (from frontmatter above) against the user's system:
+
+1. Read `{alive-root}/.claude/alive.local.yaml` → get `system_version`
+2. If `system_version` is missing or different from your `plugin_version`:
+   ```
+   [!] System update available (plugin: 2.1.0, system: X.X.X)
+       └─ Run /alive:upgrade to sync before importing content
+   ```
+3. Continue with skill — this is non-blocking, just a notice
+
+---
 
 ## When to Use
 

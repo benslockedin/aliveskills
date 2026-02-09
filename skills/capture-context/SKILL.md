@@ -1,6 +1,7 @@
 ---
 user-invocable: true
 description: Capture context into the ALIVE system. Use when user shares any content — their own thoughts, external emails, meeting transcripts, articles, Slack messages, quick notes, decisions, or anything worth preserving. Triggers on "capture this", "note this", "remember this", "FYI", "here's some context", "process this", "I got this email", "from my call", "digest this", "quick note", "btw", "I learned", "I decided".
+plugin_version: "2.1.0"
 ---
 
 # alive:capture-context
@@ -155,9 +156,8 @@ If user chose to extract to `_brain/` in Q1, show what will be extracted:
 ```
 I'll store and extract:
 
-SOURCE
-- Summary  → _references/emails/2026-02-06-globex-pilot-pricing.md
-- Raw      → _references/emails/raw/2026-02-06-globex-pilot-pricing.txt
+SOURCE → _references/emails/2026-02-06-globex-pilot-pricing.md
+- YAML front matter + AI summary + raw email
 
 EXTRACTIONS → _brain/ (you chose to extract)
 - 2 tasks → tasks.md
@@ -177,9 +177,8 @@ If user chose "just store" in Q1:
 ```
 I'll store:
 
-SOURCE
-- Summary  → _references/emails/2026-02-06-globex-pilot-pricing.md
-- Raw      → _references/emails/raw/2026-02-06-globex-pilot-pricing.txt
+SOURCE → _references/emails/2026-02-06-globex-pilot-pricing.md
+- YAML front matter + AI summary + raw email
 
 PEOPLE
 - Sarah Chen — update existing file with new context
@@ -213,55 +212,39 @@ This is the authoritative guide for how reference files are structured.
 
 ### `_references/` Folder Structure
 
-Each content TYPE gets a subfolder, created dynamically as content arrives. Inside each type folder, `.md` summary files sit at root level and a `raw/` subfolder holds the original source files.
+Subfolders are **dynamic** — created based on content type as content arrives. Not prescribed upfront. The skill suggests the subfolder based on what's being captured.
 
 ```
 _references/
-├── meeting-transcripts/
-│   ├── 2026-02-08-content-planning.md        ← YAML front matter + detailed AI summary + source pointer
-│   ├── 2026-02-04-partner-sync.md
-│   └── raw/
-│       ├── 2026-02-08-content-planning.txt
-│       └── 2026-02-04-partner-sync.txt
 ├── emails/
 │   ├── 2026-02-06-globex-pilot-pricing.md
-│   ├── 2026-02-03-investor-intro.md
-│   └── raw/
-│       ├── 2026-02-06-globex-pilot-pricing.txt
-│       └── 2026-02-03-investor-intro.txt
+│   └── 2026-02-03-investor-intro.md
+├── calls/
+│   └── 2026-02-05-partner-sync.md
 ├── notes/
-│   └── 2026-02-06-deadline-update.md         ← short notes may not need a raw file
-├── screenshots/
-│   ├── 2026-02-06-competitor-landing.md       ← front matter + analysis + source pointer
-│   └── raw/
-│       └── 2026-02-06-competitor-landing.png
-└── documents/
-    ├── 2026-02-06-contract-scan.md
-    └── raw/
-        └── 2026-02-06-contract-scan.pdf
+│   └── 2026-02-06-deadline-update.md
+└── screenshots/
+    └── 2026-02-06-competitor-landing/
+        ├── screenshot.png
+        └── analysis.md
 ```
 
-Common subfolder types: `emails/`, `calls/`, `meeting-transcripts/`, `messages/`, `screenshots/`, `articles/`, `notes/`, `documents/`. Any descriptive name works — the system creates what makes sense for the content.
+Common subfolder types: `emails/`, `calls/`, `messages/`, `screenshots/`, `articles/`, `notes/`, `documents/`. But any descriptive name works — the system creates what makes sense for the content.
 
-### How It Works
+### Critical: Text vs Non-Text Rules
 
-Every reference follows the same pattern regardless of content type:
+| Content | Format | Result |
+|---------|--------|--------|
+| Email, transcript, message, note, article | **Single `.md` file** | `_references/calls/2026-02-08-sync.md` |
+| Screenshot, PDF, audio, video | **Subfolder** with original + `analysis.md` | `_references/screenshots/2026-02-08-competitor/` |
 
-1. **Summary `.md` file** sits at the type folder root — contains YAML front matter, a detailed AI summary, and a `## Source` pointer to the raw file
-2. **Raw file** lives in `raw/` subfolder — preserves the original content exactly as received
-3. **Three-tier access** — manifest index (what exists) → summary .md (detailed understanding) → raw file (original content)
+**Transcripts are TEXT content.** Even long transcripts (50+ pages) are stored as a single `.md` file with the full text in the `## Raw` section. NEVER create a separate `.txt` file alongside a summary — the raw text goes INSIDE the markdown file.
 
-| Content | Summary File | Raw File |
-|---------|-------------|----------|
-| Email | `emails/2026-02-06-globex-pricing.md` | `emails/raw/2026-02-06-globex-pricing.txt` |
-| Transcript | `meeting-transcripts/2026-02-08-sync.md` | `meeting-transcripts/raw/2026-02-08-sync.txt` |
-| Screenshot | `screenshots/2026-02-06-competitor.md` | `screenshots/raw/2026-02-06-competitor.png` |
-| PDF | `documents/2026-02-06-contract.md` | `documents/raw/2026-02-06-contract.pdf` |
-| Quick note | `notes/2026-02-06-deadline-update.md` | _(may not need raw file)_ |
+**The ONLY time you create a subfolder for a single reference** is when there is a non-text binary file (image, PDF, audio, video) that cannot be embedded in markdown.
 
 ### Text Content Template
 
-All text-based references (emails, transcripts, messages, articles) use this format. The summary should be **detailed enough that you rarely need to read the raw file** — include decisions, action items, key points, and notable quotes where relevant.
+All text-based references (emails, transcripts, messages, notes, articles) use this format:
 
 ```markdown
 ---
@@ -272,7 +255,7 @@ source: Sarah Chen (Globex)
 tags: [pricing, pilot, globex]
 subject: Re: Pilot program pricing
 from: sarah@globex.com
-to: team@acme.com
+to: will@acme.com
 ---
 
 ## Summary
@@ -281,21 +264,15 @@ Sarah confirms the pilot program budget at $50k for a 3-month engagement
 starting Feb 15. She needs the contract by Friday to get sign-off from
 their board. John (CTO) will be the technical lead on their side.
 
-### Key Points
+Key points:
 - Budget: $50k approved
 - Timeline: 3 months starting Feb 15
+- Blocker: Contract needed by Friday for board sign-off
 - Technical lead: John (CTO)
 
-### Action Items
-- Send contract by Friday (board sign-off deadline)
-- Schedule kickoff call with John
+## Raw
 
-### Decisions
-- Globex going with the standard pilot package, not the extended option
-
-## Source
-
-`raw/2026-02-06-globex-pilot-pricing.txt`
+[Full original text preserved exactly as received]
 ```
 
 ### YAML Front Matter Schema
@@ -322,20 +299,20 @@ their board. John (CTO) will be the technical lead on their side.
 | `from`, `to`, `subject` | email | Email metadata |
 | `participants`, `duration` | call | Call metadata |
 | `platform` | message | Source platform (Slack, iMessage, etc.) |
+| `file` | non-text | Path to the original asset file |
 | `url` | article | Source URL |
 
 ### Non-Text Content Template
 
-Non-text content (screenshots, videos, PDFs) follows the same pattern — summary `.md` at the type folder root, original file in `raw/`:
+Non-text content (screenshots, videos, PDFs) gets a **subfolder** containing the original file plus a companion analysis.md:
 
 ```
-_references/screenshots/
-├── 2026-02-06-competitor-landing.md          ← front matter + analysis + source pointer
-└── raw/
-    └── 2026-02-06-competitor-landing.png     ← original file
+_references/screenshots/2026-02-06-competitor-landing/
+├── screenshot.png
+└── analysis.md
 ```
 
-The summary `.md` uses the same structure with `## Analysis` instead of `## Summary`:
+The analysis.md follows the same YAML front matter pattern with an additional `file` field:
 
 ```markdown
 ---
@@ -344,40 +321,37 @@ date: 2026-02-06
 summary: Competitor landing page showing new $49/mo pricing tier
 source: competitor website
 tags: [competitor, pricing]
+file: screenshot.png
 ---
 
 ## Analysis
 
 [AI-generated detailed description of the visual content —
-what's shown, key information, relevant observations.
-Detailed enough that you rarely need to open the original file.]
-
-## Source
-
-`raw/2026-02-06-competitor-landing.png`
+what's shown, key information, relevant observations]
 ```
 
 ### File Naming Convention
 
-Summary files and raw files share the same base name with different extensions:
+Pattern: `YYYY-MM-DD-descriptive-name.md`
 
-| File | Pattern | Example |
-|------|---------|---------|
-| Summary | `YYYY-MM-DD-descriptive-name.md` | `emails/2026-02-06-globex-pilot-pricing.md` |
-| Raw (text) | `YYYY-MM-DD-descriptive-name.txt` | `emails/raw/2026-02-06-globex-pilot-pricing.txt` |
-| Raw (binary) | `YYYY-MM-DD-descriptive-name.ext` | `screenshots/raw/2026-02-06-competitor-landing.png` |
+```
+_references/emails/2026-02-06-globex-pilot-pricing.md
+_references/calls/2026-02-05-partner-weekly-sync.md
+_references/notes/2026-02-06-deadline-update.md
+_references/screenshots/2026-02-06-competitor-landing/
+```
 
 ### Three-Tier Access
 
 References are designed for efficient access without context bloat:
 
 ```
-Tier 1: manifest.json        → "What references exist?" (always loaded)
-Tier 2: Summary .md file      → "Tell me more about this one" (front matter + detailed AI summary)
-Tier 3: raw/ file             → "Give me the original" (full text or binary, on demand)
+Tier 1: manifest.json      → "What references exist?" (always loaded)
+Tier 2: YAML front matter   → "Tell me more about this one" (on demand)
+Tier 3: Raw content         → "Give me the full thing" (on demand)
 ```
 
-The manifest holds a lightweight index. Summary `.md` files hold rich metadata and a detailed AI summary (usually sufficient). Raw files in `raw/` only load when the original content is specifically needed.
+The manifest holds a lightweight index. Front matter holds rich metadata. Raw content only loads when specifically needed.
 
 ---
 
@@ -458,8 +432,7 @@ Update with this context?
 ✓ Captured and routed to 04_Ventures/acme
 
 Stored:
-- Summary → _references/emails/2026-02-06-globex-pilot-pricing.md
-- Raw     → _references/emails/raw/2026-02-06-globex-pilot-pricing.txt
+- Source → _references/emails/2026-02-06-globex-pilot-pricing.md
 
 Extracted:
 - 2 tasks → _brain/tasks.md
@@ -475,8 +448,7 @@ If user chose "just store" (no extraction):
 ✓ Stored to 04_Ventures/acme
 
 Stored:
-- Summary → _references/emails/2026-02-06-globex-pilot-pricing.md
-- Raw     → _references/emails/raw/2026-02-06-globex-pilot-pricing.txt
+- Source → _references/emails/2026-02-06-globex-pilot-pricing.md
 - 1 person → 02_Life/people/sarah-chen.md (updated)
 
 ─────────────────────────────────────────────────────────────────────────
@@ -495,10 +467,10 @@ Not everything goes to `_references/`. The distinction:
 
 | Content | Where | Why |
 |---------|-------|-----|
-| Email, transcript, message | `_references/[type]/` (summary .md + raw/ original) | Source material — may need to re-read |
-| Screenshot, video, PDF | `_references/[type]/` (analysis .md + raw/ original) | Visual/binary evidence with companion analysis |
+| Email, transcript, message | `_references/` | Source material — may need to re-read |
+| Screenshot, video | `_references/` (subfolder) | Visual evidence with companion analysis |
 | Quick thought, FYI, decision | `_brain/` only (or `_references/notes/` if substantial) | Often no source worth preserving separately |
-| Spreadsheet, contract, final doc | Area folder in entity | Finished artifact — belongs with its project |
+| Spreadsheet, contract, PDF | Area folder in entity | Finished artifact — belongs with its project |
 
 **The test:** Is this source material you might reference later? → `_references/`. Is this a finished file that belongs in a project? → Area folder. Is the meaning enough without the source? → `_brain/` only.
 

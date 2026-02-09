@@ -1,6 +1,7 @@
 ---
 user-invocable: true
 description: This skill should be used when the user says "work on X", "focus on X", "open X", "status of X", "let's do X", "continue", "resume", "keep going", or "pick up where I left off". Focuses on one specific venture, experiment, or life area.
+plugin_version: "2.1.0"
 ---
 
 # alive:do
@@ -8,6 +9,20 @@ description: This skill should be used when the user says "work on X", "focus on
 Focus on ONE entity. Load context from its `_brain/` folder and show current state.
 
 **Different from `/alive:daily`:** Do focuses on ONE entity. Daily shows EVERYTHING.
+
+## Version Check (Before Main Flow)
+
+Compare your `plugin_version` (from frontmatter above) against the user's system:
+
+1. Read `{alive-root}/.claude/alive.local.yaml` → get `system_version`
+2. If `system_version` is missing or different from your `plugin_version`:
+   ```
+   [!] System update available (plugin: 2.1.0, system: X.X.X)
+       └─ Run /alive:upgrade to sync
+   ```
+3. Continue with skill — this is non-blocking, just a notice
+
+---
 
 ## Flow
 

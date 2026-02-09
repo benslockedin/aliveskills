@@ -1,6 +1,7 @@
 ---
 user-invocable: true
 description: Use when ending a work session, wrapping up, stepping away, or preserving session context. Triggers on "save", "wrap up", "end session", "done for now", "I'm done", "brb", "stepping away", "checkpoint", "commit progress".
+plugin_version: "2.1.0"
 ---
 
 # alive:save
@@ -17,6 +18,20 @@ This skill uses **Tier 2: Core Workflow** formatting.
 - Community footer: `Free: Join the ALIVE community → skool.com/aliveoperators`
 
 See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+
+---
+
+## Version Check (Before Main Flow)
+
+Compare your `plugin_version` (from frontmatter above) against the user's system:
+
+1. Read `{alive-root}/.claude/alive.local.yaml` → get `system_version`
+2. If `system_version` is missing or different from your `plugin_version`:
+   ```
+   [!] System update available (plugin: 2.1.0, system: X.X.X)
+       └─ Run /alive:upgrade to sync
+   ```
+3. Continue with skill — this is non-blocking, just a notice
 
 ---
 

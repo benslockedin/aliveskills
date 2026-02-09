@@ -1,5 +1,6 @@
 ---
 description: Use when saving a session due to context compaction, "compact", "running out of context", or planning to resume later. Creates comprehensive handoff document for zero-context session continuity. Called by save skill, not directly by user.
+plugin_version: "2.1.0"
 ---
 
 # alive:handoff
@@ -50,7 +51,7 @@ Determine which entity this handoff belongs to based on:
 - What was being worked on in the session
 
 ```
-▸ creating handoff for 04_Ventures/acme-agency/
+▸ creating handoff for 04_Ventures/supernormal/alive/
 ```
 
 ## Step 2: Ensure Sessions Folder Exists
@@ -254,7 +255,7 @@ created: 2026-02-02T15:30:00
 updated: 2026-02-02T16:45:00    # Added on updates
 session_id: abc12345
 status: pending
-entity: 04_Ventures/acme-agency
+entity: 04_Ventures/supernormal/alive
 reason: context_compact
 update_count: 0                  # Incremented on each update
 ---
@@ -264,7 +265,7 @@ update_count: 0                  # Incremented on each update
 **Session ID:** abc12345
 **Created:** 2026-02-02 15:30
 **Updated:** 2026-02-02 16:45 (if updated)
-**Entity:** 04_Ventures/acme-agency
+**Entity:** 04_Ventures/supernormal/alive
 **Reason:** Context compaction
 
 ---

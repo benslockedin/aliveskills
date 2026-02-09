@@ -1,6 +1,7 @@
 ---
 user-invocable: true
 description: This skill should be used when the user says "create X", "new venture", "new experiment", "new project", "set up X", "start something new", or wants to scaffold a new entity with full structure.
+plugin_version: "2.1.0"
 ---
 
 # alive:new
@@ -95,15 +96,7 @@ What type of venture?
 │   ├── changelog.md       # History
 │   └── manifest.json      # Structure map
 ├── _working/              # Drafts
-└── _references/           # Reference material (summary .md files + raw/ subfolders)
-    ├── emails/
-    │   ├── 2026-02-06-client-update.md   # YAML front matter + AI summary + source pointer
-    │   └── raw/
-    │       └── 2026-02-06-client-update.txt
-    └── screenshots/
-        ├── 2026-02-06-competitor.md
-        └── raw/
-            └── 2026-02-06-competitor.png
+└── _references/           # Reference material
 ```
 
 ### Step 4: Initialize Files
@@ -141,7 +134,7 @@ Everything current lives in `_brain/`:
 - `manifest.json` — Structure map
 
 Drafts live in `_working/`.
-Reference material lives in `_references/` (summary .md files with raw originals in `raw/` subfolders).
+Reference material lives in `_references/`.
 ```
 
 **status.md:**
@@ -208,7 +201,7 @@ Structure:
 │   ├── changelog.md
 │   └── manifest.json
 ├── _working/
-└── _references/           # Summary .md files + raw/ subfolders per type
+└── _references/
 
 Next: /alive:do acme-corp to start working.
 ```

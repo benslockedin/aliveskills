@@ -1,6 +1,7 @@
 ---
 user-invocable: true
 description: This skill should be used when the user says "process inputs", "digest", "triage", "handle inbox", "sort these", "what's in my inbox", "what's in inputs", or "anything to process". Processes the 03_Inputs/ buffer.
+plugin_version: "2.1.0"
 ---
 
 # alive:digest
@@ -149,9 +150,8 @@ For simple items:
 Adding task to 04_Ventures/acme/_brain/tasks.md:
   - [ ] Send project update to client @urgent
 
-Storing email:
-  Summary → 04_Ventures/acme/_references/emails/2026-02-06-client-update-request.md
-  Raw     → 04_Ventures/acme/_references/emails/raw/2026-02-06-client-update-request.txt
+Storing email to: 04_Ventures/acme/_references/emails/2026-02-06-client-update-request.md
+  - YAML front matter + AI summary + raw email
 
 Archiving source: 03_Inputs/client-email-acme.md → 01_Archive/03_Inputs/
 
@@ -224,9 +224,13 @@ Route transcript to: 04_Ventures/acme/_references/calls/2026-01-22-partner-sync.
 
 After extraction, the **source file** needs to be stored. Default is `_references/` — the same format used by `/alive:capture-context`.
 
-Every reference creates two files: a **summary `.md`** at the type folder root, and the **original content** in a `raw/` subfolder. The summary should be detailed enough that you rarely need the raw file.
+**CRITICAL: Text content = single `.md` file. NEVER create a folder with separate summary + transcript files.** Even long transcripts (50+ pages) go in ONE markdown file with the full text in the `## Raw` section. The only time a subfolder is used is for non-text binary files (images, PDFs, audio).
 
-**Text-based source files** (emails, transcripts, notes, messages) → create a summary `.md` with YAML front matter + detailed AI summary + source pointer, and store the original text in `raw/`:
+**Text-based source files** (emails, transcripts, notes, messages) → create a single markdown file in `_references/` with three sections:
+
+1. **YAML front matter** — structured metadata for scanning without loading
+2. **AI Summary** — detailed summary richer than the one-line front matter summary
+3. **Raw** — the full original text, preserved exactly as received
 
 ```markdown
 ---
@@ -237,7 +241,7 @@ source: John Smith (Acme Corp)
 tags: [client, update-request, feature]
 subject: Re: Project status
 from: john@acme.com
-to: team@company.com
+to: will@company.com
 ---
 
 ## Summary
@@ -246,38 +250,33 @@ John is requesting a project status update by end of week. He also
 raises a new feature request for bulk export functionality. He mentions
 the board meeting is next Tuesday and needs numbers to present.
 
-### Key Points
+Key points:
 - Status update needed by Friday
 - New feature request: bulk export
 - Board meeting Tuesday — needs metrics
 
-### Action Items
-- Send project update by Friday
-- Respond to bulk export feature request
+## Raw
 
-## Source
-
-`raw/2026-02-06-client-update-request.txt`
+[Full original email text preserved exactly as received]
 ```
 
-File naming: summary `.md` and raw file share the same base name.
-Subfolder: dynamic based on content type (`emails/`, `calls/`, `meeting-transcripts/`, `messages/`, `notes/`, `articles/`)
+File naming: `YYYY-MM-DD-descriptive-name.md`
+Subfolder: dynamic based on content type (`emails/`, `calls/`, `messages/`, `notes/`, `articles/`)
 
 ```
-_references/emails/2026-02-06-client-update-request.md        ← summary
-_references/emails/raw/2026-02-06-client-update-request.txt   ← raw original
-_references/calls/2026-01-22-partner-sync.md                  ← summary
-_references/calls/raw/2026-01-22-partner-sync.txt             ← raw original
+_references/emails/2026-02-06-client-update-request.md
+_references/calls/2026-01-22-partner-sync.md
 ```
 
-**Non-text source files** (screenshots, PDFs, audio) → same pattern. Summary `.md` at type root, original in `raw/`:
+**Non-text source files** (screenshots, PDFs, audio) → store in a `_references/` subfolder with the original file plus a companion analysis.md that follows the same front matter pattern:
 
 ```
-_references/documents/2026-02-06-contract-scan.md             ← summary with analysis
-_references/documents/raw/2026-02-06-contract-scan.pdf        ← original file
+_references/documents/2026-02-06-contract-scan/
+├── contract-scan.pdf
+└── analysis.md
 ```
 
-The summary `.md` uses `## Analysis` instead of `## Summary` and points to the raw file:
+The analysis.md uses the same three-section structure — YAML front matter + Analysis (instead of Summary) + a `file:` field pointing to the original asset:
 
 ```markdown
 ---
@@ -286,17 +285,13 @@ date: 2026-02-06
 summary: Scanned contract with Globex, 12-month term, $50k value
 source: Legal team
 tags: [contract, globex]
+file: contract-scan.pdf
 ---
 
 ## Analysis
 
 [AI-generated description of the document contents,
-key terms, important clauses, relevant observations.
-Detailed enough that you rarely need to open the original.]
-
-## Source
-
-`raw/2026-02-06-contract-scan.pdf`
+key terms, important clauses, relevant observations]
 ```
 
 **Finished artifacts** (spreadsheets, contracts, final documents) → these aren't references, they're project files. Route to the appropriate area folder in the entity:
