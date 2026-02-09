@@ -159,73 +159,6 @@ Or read the full file if it's less than 200 lines.
 
 **References:** If the manifest has a `references` array, mention the count to the user (e.g. "3 reference docs available"). Don't load the files — just surface awareness. Users can ask to read specific references on demand.
 
-## Step 3.5: Check for Pending Handoffs
-
-**After loading manifest, check for pending handoffs:**
-
-```
-▸ checking for pending handoffs...
-```
-
-Look in `manifest.json` for:
-```json
-{
-  "handoffs": [
-    {
-      "path": "_working/sessions/description-sessionid-timestamp.md",
-      "status": "pending",
-      "created": "2026-02-02T15:30:00",
-      "description": "Brief description"
-    }
-  ]
-}
-```
-
-**If pending handoffs found:**
-
-```
-╭─ UNFINISHED SESSION ──────────────────────────────────────────────────╮
-│                                                                        │
-│  Found handoff from previous session:                                  │
-│                                                                        │
-│  📄 alive-plugin-feedback-abc12345-2026-02-02-1530.md                  │
-│     Created: 2026-02-02 15:30                                          │
-│     Reason: Context compaction                                         │
-│                                                                        │
-╰────────────────────────────────────────────────────────────────────────╯
-
-Resume this session?
-[1] Yes — load handoff and continue
-[2] No — start fresh (archive handoff)
-```
-
-**If [1] Yes (ARCHIVE IMMEDIATELY):**
-1. Read the handoff document content into memory
-2. **IMMEDIATELY archive the file** (don't wait until later):
-   ```
-   ▸ archiving handoff (already read)...
-     └─ Moving to 01_Archive/{entity-path}/sessions/
-     └─ Removing from manifest.handoffs
-
-   ✓ Handoff archived — context loaded
-   ```
-3. Present the context, current state, and next steps to user
-4. Skip to "After Loading" section — user is now briefed
-
-**Why archive immediately?** The handoff's job is done once read. Archiving later gets forgotten. Archive on read ensures 100% adherence.
-
-**If [2] No:**
-- Archive the handoff (user chose not to resume, so it's stale)
-- Continue with normal do flow
-
-**If no pending handoffs:**
-```
-▸ checking for pending handoffs...
-  └─ None found
-```
-
-Continue to Step 4.
-
 ## Step 4: Check Freshness
 
 Check `updated` date in manifest.json or file timestamps:
@@ -243,6 +176,33 @@ Check `updated` date in manifest.json or file timestamps:
 
 ## Step 5: Show Summary
 
+**Always show the full summary — status, tasks, and any pending handoffs.**
+
+Handoffs are part of the overview, not a blocking gate. But they should be **prominent** — a pending handoff means a previous session left unfinished work, and the user should know about it.
+
+### Check manifest.handoffs[]
+
+After loading `manifest.json` in Step 3, check the `handoffs` array:
+
+```json
+{
+  "handoffs": [
+    {
+      "session_id": "abc12345",
+      "date": "2026-02-02",
+      "reason": "pre-compact",
+      "thread": "ongoing",
+      "file": "_working/sessions/plugin-feedback-abc12345-2026-02-02.md",
+      "summary": "Brief description of what was in progress"
+    }
+  ]
+}
+```
+
+Each entry represents an unfinished session with context that would otherwise be lost.
+
+### Summary Display
+
 ```
 ╭─ ALIVE ────────────────────────────────────────────────────────────────╮
 │  do • 04_Ventures/acme                                                 │
@@ -254,6 +214,12 @@ STATUS
 Phase: Building
 Focus: Landing page launch by Friday
 
+[!] HANDOFFS (2 pending — previous sessions left unfinished work)
+[r1] Plugin feedback session — 2026-02-02 (context compact)
+     "Fixed 6 PR review comments, redesigned _references/ structure"
+[r2] Landing page wireframes — 2026-02-03 (resuming later)
+     "Hero section done, pricing table in progress"
+
 TASKS (7 total)
 @urgent:
 - [ ] Finalize pricing page
@@ -264,20 +230,64 @@ To Do:
 - [ ] Update docs
 ```
 
+**Key details:**
+- Show the `[!]` flag to draw attention
+- Include the `summary` from each handoff entry so the user knows what's in each one
+- Show the `reason` (context compact, resuming later) and `date`
+- Handoffs appear BEFORE tasks — they represent prior work that may be more relevant than the task list
+
+**If no handoffs:** Omit the HANDOFFS section entirely. Don't show "0 handoffs".
+
+**If only handoffs, no tasks:** Show handoffs and note "No tasks in queue."
+
+**If handoffs exist, nudge the user:**
+```
+[!] You have 2 pending handoffs from previous sessions.
+    These contain context that would otherwise be lost.
+    Pick [r1] or [r2] to resume, or choose a task to start fresh.
+```
+
 ## Step 6: Offer Actions
 
-Every actionable item gets a number:
+Every actionable item gets a number. Handoffs appear alongside tasks:
 
 ```
 ─────────────────────────────────────────────────────────────────────────
 [1] Finalize pricing page @urgent
 [2] Fix payment webhook @urgent
 [3] Write launch email
+[r1] Resume: Plugin feedback session (Feb 2)
+[r2] Resume: Landing page wireframes (Feb 3)
 [c] View changelog
 [s] Save when done
 
 What's first?
 ```
+
+**If no handoffs:** Omit the `[r#]` lines.
+
+## Resuming a Handoff
+
+When the user picks a handoff (e.g. `r1` or "resume the plugin feedback session"):
+
+1. **Read the handoff document** into memory
+2. **Archive immediately** — move file to `01_Archive/{entity-path}/sessions/` and remove from `manifest.handoffs[]`:
+   ```
+   ▸ loading handoff...
+     └─ Reading _working/sessions/plugin-feedback-abc12345-2026-02-02.md
+
+   ▸ archiving handoff (already read)...
+     └─ Moving to 01_Archive/{entity-path}/sessions/
+     └─ Removing from manifest.handoffs[]
+
+   ✓ Handoff archived — context loaded
+   ```
+3. **Present the context** from the handoff — current state, decisions, and next steps
+4. Continue working from where the handoff left off
+
+**Why archive immediately?** The handoff's job is done once read. "Archive later" gets forgotten 100% of the time. Archive on read = 100% adherence.
+
+**If user picks a task instead of a handoff:** Proceed normally. Handoffs stay in manifest until explicitly resumed or cleaned up by `/alive:sweep`.
 
 ## Edge Cases
 
