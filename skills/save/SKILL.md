@@ -190,16 +190,40 @@ Prepend to `_brain/changelog.md` (most recent first):
 ---
 ```
 
-## Status Update
+## Status Update (Surgical — Not Full Overwrite)
 
-Review each field in `_brain/status.md`, update if changed:
+**Re-read `_brain/status.md` before writing.** Get the current version, not the one loaded at session start. Another session may have updated it — respect their changes.
 
-- **Goal** — the subdomain's overarching objective
-- **Phase** — current stage (planning, building, launching, etc.)
-- **Updated** — today's date
-- **Current Focus** — what we're working on right now
-- **Blockers** — anything preventing progress
-- **Next Milestone** — the next concrete target
+**Use the Edit tool, not Write.** Only modify fields that actually changed this session.
+
+### Field Rules
+
+| Field | Rule |
+|-------|------|
+| **Goal, Phase, Next Milestone** | Protected — only update if user explicitly discussed changing it |
+| **Updated** | Always set to today's date |
+| **Blockers** | Merge — add new blockers, remove resolved ones, leave others untouched |
+| **Current Focus** | Quality-gated — see below |
+
+### Current Focus — Quality Gates
+
+Before updating, evaluate what's already there. If the existing focus reflects a bigger strategic priority than this session's work, preserve it.
+
+| Session Quality | Action |
+|----------------|--------|
+| **Routine / Productive** | **Append only.** Add a line to "Recent work:" about what this session did. Never replace existing focus. |
+| **Important / Breakthrough** | **May replace.** If the session meaningfully shifted direction, replace Current Focus entirely. Ask user first for Important. |
+
+**Append format:**
+```
+## Current Focus
+
+Landing page launch by Friday
+
+**Recent work:**
+- Fixed webhook bug (2026-02-09)
+- Refactored payment flow (2026-02-09)
+```
 
 ## Tasks Update
 
