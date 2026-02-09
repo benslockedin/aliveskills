@@ -30,15 +30,16 @@ project/
 
 | | Entity | Area |
 |---|--------|------|
-| Has `.claude/` | Yes | No |
 | Has `_brain/` | Yes | No |
 | Has `_working/` | Yes | No |
 | Has `_references/` | Yes | No |
-| Identity file | `.claude/CLAUDE.md` | `README.md` |
+| Has `.claude/` | Optional | No |
+| Has `CLAUDE.md` | Yes (in `.claude/` or root) | No |
+| Identity file | `CLAUDE.md` | `README.md` |
 | Example | `04_Ventures/acme/` | `04_Ventures/acme/clients/` |
 
-**Entities** are projects with their own state.
-**Areas** are organizational folders within entities.
+**Entities** are projects with their own state. Every entity MUST have a `CLAUDE.md` — ideally in `.claude/CLAUDE.md`, but root-level `CLAUDE.md` is also valid.
+**Areas** are organisational folders within entities.
 
 ---
 
@@ -73,14 +74,14 @@ Sub-entities are containers WITHIN an entity that have their own lifecycle. They
 **WRONG:** `04_Ventures/agency/_working/clients/bigco/proposal.md`
 **RIGHT:** `04_Ventures/agency/clients/bigco/_working/proposal.md`
 
-**When creating sub-entitys:**
+**When creating sub-entities:**
 1. Create `_brain/` with status.md, tasks.md, insights.md, changelog.md, manifest.json
 2. Create `_working/` for drafts (at sub-entity level, not parent)
 3. Create `_references/` for reference material (at sub-entity level, not parent)
 4. Log creation in parent's `_brain/changelog.md`
 5. Update parent's `_brain/manifest.json`
 
-Use `/alive:new` to create sub-entitys properly.
+Use `/alive:new` to create sub-entities properly.
 
 ---
 
@@ -254,7 +255,7 @@ Every entity has `_brain/` with these files:
 
 ## _references/ Structure
 
-External context useful to the entity — emails, messages, call transcripts, screenshots, articles, documents.
+**ALL external context put into the ALIVE system.** Emails, messages, call transcripts, screenshots, articles, documents — any source material worth preserving.
 
 Each content TYPE gets a subfolder. Inside each type folder, `.md` summary files sit at root level and a `raw/` subfolder holds the original source files.
 
@@ -303,6 +304,7 @@ Summary files and raw files share the same base name with different extensions:
 | Summary | `YYYY-MM-DD-descriptive-name.md` | `emails/2026-02-06-supplier-quote.md` |
 | Raw (text) | `YYYY-MM-DD-descriptive-name.txt` | `emails/raw/2026-02-06-supplier-quote.txt` |
 | Raw (binary) | `YYYY-MM-DD-descriptive-name.ext` | `screenshots/raw/2026-02-06-competitor-landing.png` |
+
 
 ### Text Content (emails, transcripts, messages)
 

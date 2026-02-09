@@ -25,7 +25,7 @@ See `rules/ui-standards.md` for exact border characters, logo assets, and format
 
 Invoke when the user wants to:
 - Create a new venture, experiment, or life area (entity)
-- Create an organizational folder within a entity (area)
+- Create an organizational folder within an entity (area)
 - Set up project structure from scratch
 
 ## Entity vs Area
@@ -35,7 +35,7 @@ Invoke when the user wants to:
 | **Entity** | Yes | Yes | Yes | Yes | `.claude/CLAUDE.md` |
 | **Area** | No | No | No | No | `README.md` |
 
-**Entitys** are projects with their own state.
+**Entities** are projects with their own state.
 **Areas** are organizational folders within entities.
 
 ## Flow
@@ -352,7 +352,7 @@ Try again:
 
 ## Creating a Sub-Entity
 
-Sub-entitys are containers WITHIN a entity that have their own lifecycle (and therefore their own `_brain/`).
+Sub-entities are containers WITHIN an entity that have their own lifecycle (and therefore their own `_brain/`).
 
 ### When to Create a Sub-Entity
 

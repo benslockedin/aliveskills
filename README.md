@@ -75,13 +75,20 @@ Claude reads these files to understand your context. Updates them as you work. E
 
 | Skill | When to Use |
 |-------|-------------|
+| `/alive:daily` | "Start my day" — morning dashboard across all entities |
 | `/alive:do` | "Let's work on X" — loads context, starts session |
 | `/alive:save` | "We're done" — logs progress, cleans up |
 | `/alive:new` | "Create a venture/experiment" — scaffolds structure |
 | `/alive:capture-context` | "Here's some context" — capture and route to ALIVE |
-| `/alive:recall` | "What did we decide about X?" — searches history |
 | `/alive:digest` | "Process my inputs" — triages incoming context |
-| `/alive:help` | "What should I do?" — contextual guidance |
+| `/alive:recall` | "What did we decide about X?" — searches history |
+| `/alive:archive` | "Done with X" — moves to archive |
+| `/alive:sweep` | "Clean up" — audits for stale context |
+| `/alive:migrate` | "Import these files" — bulk import into ALIVE |
+| `/alive:revive` | "Pick up where I left off" — resume a past session |
+| `/alive:upgrade` | "Update system" — sync to latest version |
+| `/alive:onboarding` | "Get started" — first-time setup wizard |
+| `/alive:help` | "How does X work?" — contextual guidance |
 
 ## Community
 

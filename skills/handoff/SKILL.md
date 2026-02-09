@@ -51,7 +51,7 @@ Determine which entity this handoff belongs to based on:
 - What was being worked on in the session
 
 ```
-▸ creating handoff for 04_Ventures/supernormal/alive/
+▸ creating handoff for 04_Ventures/acme/
 ```
 
 ## Step 2: Ensure Sessions Folder Exists
@@ -255,7 +255,7 @@ created: 2026-02-02T15:30:00
 updated: 2026-02-02T16:45:00    # Added on updates
 session_id: abc12345
 status: pending
-entity: 04_Ventures/supernormal/alive
+entity: 04_Ventures/acme
 reason: context_compact
 update_count: 0                  # Incremented on each update
 ---
@@ -265,7 +265,7 @@ update_count: 0                  # Incremented on each update
 **Session ID:** abc12345
 **Created:** 2026-02-02 15:30
 **Updated:** 2026-02-02 16:45 (if updated)
-**Entity:** 04_Ventures/supernormal/alive
+**Entity:** 04_Ventures/acme
 **Reason:** Context compaction
 
 ---

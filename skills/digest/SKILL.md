@@ -384,7 +384,7 @@ Inputs is empty. Nothing to process.
 This transcript mentions both acme and beta projects.
 
 Route extractions to:
-[1] Both entitys
+[1] Both entities
 [2] Just acme
 [3] Just beta
 [4] Let me specify for each item

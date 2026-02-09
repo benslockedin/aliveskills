@@ -61,16 +61,16 @@ If you're not running `/alive:daily` regularly, you're not using the system.
 - Deep work requires focus
 - Switching costs are real
 
-**What it loads:**
+**What it loads (mandatory):**
 - `_brain/status.md` — Where we are
 - `_brain/tasks.md` — What needs doing
 - `_brain/manifest.json` — What exists
+- `_brain/changelog.md` (first 200 lines) — Recent session history, decisions, context
 
-**What it doesn't auto-load:**
-- `insights.md` — Only when relevant
-- `changelog.md` — Only when needed
-- `_references/` raw files — On demand (manifest index is always loaded)
-- Other entities — Ask first
+**What it loads on demand:**
+- `insights.md` — When making decisions that past learnings could inform, or when the user asks "what did we learn about X"
+- `_references/` raw files — When deeper context on a specific reference is needed (manifest index is always loaded for awareness)
+- Other entities — Ask before cross-loading
 
 ---
 

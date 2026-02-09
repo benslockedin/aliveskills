@@ -60,7 +60,8 @@ If entity doesn't exist:
 ```
 This content needs a home.
 
-[1] Create new entity (04_Ventures/05_Experiments/02_Life)
+[1] Create new entity
+    └─ Venture (04_Ventures/), Experiment (05_Experiments/), or Life (02_Life/)
 [2] Import to existing entity
 ```
 
@@ -267,7 +268,7 @@ This decision mentions multiple ventures:
 - Timeline relates to beta
 
 Route to:
-[1] Both entitys
+[1] Both entities
 [2] Just acme
 [3] Just beta
 [4] Let me specify

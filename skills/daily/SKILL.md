@@ -145,17 +145,17 @@ Every actionable item gets a number. User picks a number to focus.
 ```
 ONGOING THREADS
 ─────────────────────────────────────────────────────────────────────────
-[1] alive-llc — Plugin rebuild [breakthrough]        yesterday
-[2] supernormal — Client proposal [productive]       2 days ago
+[1] acme — Plugin rebuild [breakthrough]        yesterday
+[2] side-project — Client proposal [productive]       2 days ago
 
 URGENT TASKS
 ─────────────────────────────────────────────────────────────────────────
-[3] alive-llc: Finalize daily skill @urgent
-[4] supernormal: Send proposal to Acme @urgent
+[3] acme: Finalize daily skill @urgent
+[4] side-project: Send proposal to Acme @urgent
 
 WORKING FILES
 ─────────────────────────────────────────────────────────────────────────
-[5] alive-llc/_working/v2-design.md                  1 day old
+[5] acme/_working/v2-design.md                  1 day old
 
 ─────────────────────────────────────────────────────────────────────────
 [#] Pick number to focus    [i] Process inputs    [n] New entity
@@ -179,8 +179,8 @@ Show entity name + goal. Max 5, sorted by recency.
 ```
 YOUR GOALS
 ─────────────────────────────────────────────────────────────────────────
-• alive-llc: Ship v2 plugin by Feb 15
-• supernormal: Close 3 new clients this month
+• acme: Ship v2 plugin by Feb 15
+• side-project: Close 3 new clients this month
 • hypha: Launch Feb 6
 ```
 
@@ -197,8 +197,8 @@ Quality tags: `[routine]` `[productive]` `[important]` `[breakthrough]`
 ```
 ONGOING THREADS
 ─────────────────────────────────────────────────────────────────────────
-[1] alive-llc — Plugin rebuild [breakthrough]        yesterday
-[2] supernormal — Client proposal [productive]       2 days ago
+[1] acme — Plugin rebuild [breakthrough]        yesterday
+[2] side-project — Client proposal [productive]       2 days ago
 ```
 
 If no session-index.jsonl exists or empty:
@@ -218,8 +218,8 @@ Scan all `_brain/tasks.md` files:
 ```
 URGENT TASKS
 ─────────────────────────────────────────────────────────────────────────
-[3] alive-llc: Finalize daily skill @urgent
-[4] supernormal: Send proposal to Acme @urgent
+[3] acme: Finalize daily skill @urgent
+[4] side-project: Send proposal to Acme @urgent
 ```
 
 ## Section: Working Files
@@ -232,8 +232,8 @@ Scan all `_brain/manifest.json` files:
 ```
 WORKING FILES
 ─────────────────────────────────────────────────────────────────────────
-[5] alive-llc/_working/v2-design.md                  1 day old
-[6] supernormal/_working/acme-proposal-v0.md         3 days old
+[5] acme/_working/v2-design.md                  1 day old
+[6] side-project/_working/acme-proposal-v0.md         3 days old
 ```
 
 ## Section: Inputs

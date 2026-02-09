@@ -121,6 +121,8 @@ For quick thoughts ("FYI the deadline moved to Friday"), identification is insta
 
 **Use AskUserQuestion.** Confirm what the content is AND what the user wants to do with it. The system makes an assumption based on context and presents it as the first option.
 
+**Allow variability.** The options below are examples — adapt them based on the content type and what the user likely wants. AskUserQuestion always includes "Other" for custom input. The user's intent may not fit neatly into predefined categories, so options should be suggestive, not exhaustive.
+
 ```
 This is an email from Sarah Chen (Globex) about the pilot program pricing.
 

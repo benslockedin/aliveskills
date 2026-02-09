@@ -170,7 +170,6 @@ Read in order:
 ```
 Read(file_path: "{entity}/_brain/changelog.md", limit: 200)
 ```
-Or read the full file if it's less than 200 lines.
 
 **References:** If the manifest has a `references` array, mention the count to the user (e.g. "3 reference docs available"). Don't load the files — just surface awareness. Users can ask to read specific references on demand.
 
