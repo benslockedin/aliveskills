@@ -261,8 +261,10 @@ the board meeting is next Tuesday and needs numbers to present.
 `raw/2026-02-06-client-update-request.txt`
 ```
 
-File naming: summary `.md` and raw file share the same base name.
+File naming: summary `.md` and raw file share the same base name, using `YYYY-MM-DD-descriptive-name` convention.
 Subfolder: dynamic based on content type (`emails/`, `calls/`, `meeting-transcripts/`, `messages/`, `notes/`, `articles/`)
+
+**Rename garbage filenames.** When source files have auto-generated or meaningless names (e.g. `CleanShot 2026-02-06 at 14.32.07@2x.png`, `IMG_4521.jpg`, `document (3).pdf`), rename them to the `YYYY-MM-DD-descriptive-name.ext` convention before storing.
 
 ```
 _references/emails/2026-02-06-client-update-request.md        ← summary

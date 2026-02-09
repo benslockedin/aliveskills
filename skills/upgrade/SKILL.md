@@ -93,7 +93,8 @@ SESSION 1 (now):
 SESSION 2 (after restart):
   [C] Folder structure — add _references/, fix old folder names
   [D] Manifest schema — update all manifest.json files
-  [E] Config — set system_version in alive.local.yaml
+  [E] References audit — restructure loose context into _references/ format
+  [F] Config — set system_version in alive.local.yaml
   → Then /alive:sweep to verify
 
 ════════════════════════════════════════════════════════════════════════════
@@ -300,37 +301,99 @@ ALIVE ROOT: {alive-root}
 TASK 1 — Find all manifest files:
 Search for _brain/manifest.json in all entities (same entity paths as folder structure task).
 
-TASK 2 — For each manifest.json, read it and check:
+TASK 2 — For each manifest.json, read it and check against the TARGET SCHEMA below. Fix any deviations.
 
-a) Does "folders" array include "_references"?
-   If not → add "_references" to the array
+TARGET SCHEMA (v2):
 
-b) Does a "references" array exist at the top level?
-   If not → add: "references": []
+{
+  "name": "entity-name",
+  "description": "One sentence description",
+  "goal": "Single-sentence goal that filters all decisions",
+  "created": "2026-01-20",
+  "updated": "2026-01-23",
+  "session_ids": ["abc12345", "def67890"],
 
-c) Does a "key_files" array exist?
-   If not → add: "key_files": [{"path": "CLAUDE.md", "description": "Entity identity"}]
+  "folders": ["_brain", "_working", "_references", "...other folders"],
 
-d) Does a "handoffs" array exist?
-   If not → add: "handoffs": []
+  "areas": [
+    {
+      "path": "clients/",
+      "description": "Active client projects",
+      "has_entities": false,
+      "files": [
+        {
+          "path": "README.md",
+          "description": "Client area overview",
+          "date_created": "2026-01-20",
+          "date_modified": "2026-01-23",
+          "session_ids": ["abc12345"]
+        }
+      ]
+    }
+  ],
 
-e) Are there any OLD schema fields that should be removed?
-   Remove if found: "type", "sessions" (top-level array),
-   top-level "files" array with "summary"/"modified"/"key" fields
+  "working_files": [
+    {
+      "path": "_working/landing-v0.html",
+      "description": "Draft landing page with hero and features",
+      "date_created": "2026-01-20",
+      "date_modified": "2026-01-23",
+      "session_ids": ["abc123"]
+    }
+  ],
 
-f) Check root-level "session_id" (string) → convert to "session_ids" (array).
-   If "session_id": "abc123" exists → replace with "session_ids": ["abc123"]
+  "key_files": [
+    {
+      "path": "CLAUDE.md",
+      "description": "Entity identity and navigation",
+      "date_created": "2026-01-20",
+      "date_modified": "2026-01-23"
+    }
+  ],
 
-g) Check for "goal" field at entity root.
-   If missing → add "goal": "" (empty, user will fill in)
+  "handoffs": [],
 
-h) Check areas[].files[] and working_files[] format — each file entry should have:
-   {"path": "...", "description": "...", "date_created": "...", "date_modified": "...", "session_ids": [...]}
-   If old format has "summary" instead of "description" → rename field
-   If old format has singular "session_id" → convert to "session_ids" array
-   If missing "date_created"/"date_modified" → add with today's date
+  "references": [
+    {
+      "path": "_references/emails/2026-02-06-supplier-quote.md",
+      "type": "email",
+      "description": "Supplier confirms 15% price increase, bulk order before Feb 28",
+      "date_created": "2026-02-06",
+      "date_modified": "2026-02-06",
+      "session_ids": ["xyz789"]
+    }
+  ]
+}
 
-TASK 3 — Update the "updated" field to today's date and "session_ids" to include the current session ID.
+MIGRATION CHECKS — compare each manifest against the target schema:
+
+a) ROOT FIELDS:
+   - "goal" missing → add "goal": "" (empty, user will fill in)
+   - "session_id" (string) exists → convert to "session_ids" (array): ["old-value"]
+   - "session_ids" missing entirely → add "session_ids": []
+
+b) FOLDERS ARRAY:
+   - "_references" not in "folders" → add it
+
+c) REQUIRED TOP-LEVEL ARRAYS:
+   - "references" missing → add "references": []
+   - "key_files" missing → add "key_files": [{"path": "CLAUDE.md", "description": "Entity identity"}]
+   - "handoffs" missing → add "handoffs": []
+
+d) DEPRECATED FIELDS — remove if found:
+   - "type" (top-level)
+   - "sessions" (top-level array)
+   - Top-level "files" array with old "summary"/"modified"/"key" fields
+
+e) FILE ENTRY FORMAT — check ALL entries in areas[].files[], working_files[], key_files[], references[]:
+   - "summary" field → rename to "description"
+   - "session_id" (string) → convert to "session_ids" (array)
+   - "date_created" missing → add with today's date
+   - "date_modified" missing → add with today's date
+
+f) REFERENCES ENTRIES — each must have "type" field (email, call, screenshot, etc.)
+
+g) Update "updated" field to today's date and append current session ID to "session_ids".
 
 IMPORTANT:
 - Use Edit tool, not Write — preserve existing data
@@ -342,20 +405,174 @@ Report format per entity:
 - Entity: [path]
 - Fields added: [list]
 - Fields removed: [list]
+- Fields renamed: [list]
 - Already current: true/false
 ```
 
 **Show results:**
 ```
 ▸ updating manifest schemas...
-  └─ 04_Ventures/acme — added references[], _references to folders
+  └─ 04_Ventures/acme — added goal, references[], converted session_id → session_ids
   └─ 04_Ventures/beta — already current
-  └─ 05_Experiments/test — added handoffs[], key_files[]
+  └─ 05_Experiments/test — added handoffs[], key_files[], date fields on 3 entries
 
 ✓ Manifests updated (2 changed, 1 current)
 ```
 
-### Step E: Config Update
+### Step E: References Content Audit (Subagent)
+
+**This step audits each entity's `_references/` folder and restructures any loose or non-conforming context files into the correct format.**
+
+Step C creates the `_references/` folder. This step ensures what's INSIDE it is correct — and finds context files elsewhere in the entity that should be moved into `_references/`.
+
+**Launch a Task subagent with this prompt:**
+
+```
+You are auditing and restructuring _references/ content across all ALIVE entities. Your job is to ensure every entity's reference material follows the correct structure.
+
+ALIVE ROOT: {alive-root}
+
+WHAT _references/ SHOULD LOOK LIKE:
+
+_references/
+├── meeting-transcripts/
+│   ├── 2026-02-08-content-planning.md        ← YAML front matter + AI summary
+│   └── raw/
+│       └── 2026-02-08-content-planning.txt   ← Original source file
+├── emails/
+│   ├── 2026-02-06-supplier-quote.md
+│   └── raw/
+│       └── 2026-02-06-supplier-quote.txt
+├── screenshots/
+│   ├── 2026-02-06-competitor-landing.md
+│   └── raw/
+│       └── 2026-02-06-competitor-landing.png
+└── documents/
+    ├── 2026-02-06-contract-scan.md
+    └── raw/
+        └── 2026-02-06-contract-scan.pdf
+
+REQUIRED YAML FRONT MATTER on every summary .md file:
+
+---
+type: email | call | screenshot | document | article | message
+date: 2026-02-06
+description: One-line description of what this reference contains
+source: Where it came from (person name, tool, etc.)
+tags: [keyword, keyword, keyword]
+# Additional fields by type:
+# emails: from, to, subject
+# calls/meetings: participants, duration
+# messages: platform
+---
+
+FIND ALL ENTITIES:
+Search for _brain/ folders in:
+- {alive-root}/04_Ventures/*/
+- {alive-root}/04_Ventures/*/*/
+- {alive-root}/05_Experiments/*/
+- {alive-root}/05_Experiments/*/*/
+- {alive-root}/02_Life/*/
+
+FOR EACH ENTITY, run these 6 audits:
+
+AUDIT 1 — Find loose context files that should be in _references/:
+Search the entire entity (excluding _brain/, _working/, .claude/, 01_Archive/) for files that look like reference material:
+- Transcript files (.txt files with meeting/call content)
+- Email exports
+- Screenshot images with no summary .md
+- PDFs, documents that are source material (not working drafts)
+- Files in folders named "context/", "notes/", "research/", "docs/" that are external source material
+- Any file that is clearly captured external content, not something the user created
+
+For each found: report the file path and what type of reference it appears to be.
+Do NOT move anything — just report. The user will approve moves.
+
+AUDIT 2 — Check _references/ subfolder structure:
+For each subfolder in _references/:
+a) Does a raw/ subfolder exist? If not → flag as needing one
+b) Are there files directly in _references/ root that should be in a type subfolder? → flag
+
+AUDIT 3 — Validate YAML front matter on all summary .md files in _references/:
+For each .md file (NOT in raw/ subfolders):
+a) Does it have YAML front matter (--- delimiters)? If not → flag as MISSING FRONT MATTER
+b) Does front matter have ALL required fields?
+   Required always: type, date, description, source, tags
+   Required for emails: from, to, subject
+   Required for calls/meetings: participants, duration (if known)
+c) Does "description" use the correct field name? (not "summary") → flag if wrong
+d) Is the front matter well-formed YAML? → flag if malformed
+
+For each issue: report the file, what's missing/wrong, and suggest the fix.
+
+AUDIT 4 — Check raw/ file pairing:
+For each summary .md in _references/:
+a) Does a corresponding raw file exist in the raw/ subfolder? → flag if missing
+b) Does the summary .md have a ## Source section pointing to the raw file? → flag if missing
+c) Do the summary .md and raw file share the same base name? → flag if mismatched
+
+For each found raw file:
+a) Does a corresponding summary .md exist? → flag orphaned raw files that have no summary
+
+AUDIT 5 — Check file naming convention:
+For all files in _references/ (both summary and raw):
+a) Does the filename follow YYYY-MM-DD-descriptive-name pattern? → flag if not
+b) Are there garbage filenames (CleanShot, IMG_xxxx, document (3), etc.)? → flag with suggested rename
+
+AUDIT 6 — Check manifest references[] entries:
+Read _brain/manifest.json and compare against actual _references/ contents:
+a) Files in _references/ that have NO manifest entry → flag as untracked
+b) Manifest entries that point to files that DON'T EXIST → flag as stale
+c) Manifest entries missing required fields (type, description, date_created, date_modified, session_ids) → flag
+
+AFTER ALL AUDITS, produce a structured report:
+
+ENTITY: [path]
+  Loose context files found: [count]
+    - [path] → suggest move to _references/[type]/
+  Missing raw/ subfolders: [count]
+    - [subfolder]
+  Front matter issues: [count]
+    - [file]: missing [fields]
+  Orphaned raw files: [count]
+    - [file]: no summary .md
+  Naming issues: [count]
+    - [file] → suggested rename: [new name]
+  Manifest sync issues: [count]
+    - [file]: untracked / stale / missing fields
+
+THEN: For each issue category, ask the user:
+  "Fix [category] issues? [y/n]"
+
+When fixing:
+- Create missing raw/ subfolders
+- Add missing YAML front matter fields to existing .md files (use Edit, not Write)
+- Rename garbage filenames
+- Add ## Source sections pointing to raw files
+- Add missing manifest references[] entries
+- Remove stale manifest entries
+- Do NOT move loose context files without explicit user approval per file
+
+IMPORTANT:
+- Use Edit tool for all file modifications — never Write (which overwrites)
+- Do NOT touch files in 01_Archive/
+- Do NOT modify raw/ file contents — only rename if naming convention is wrong
+- Report everything before fixing — user approves each category
+- If an entity's _references/ is empty, just report "No references yet" and move on
+```
+
+**Show results:**
+```
+▸ auditing _references/ content...
+  └─ 04_Ventures/acme — 3 front matter issues, 1 orphaned raw file
+  └─ 04_Ventures/beta — clean ✓
+  └─ 05_Experiments/test — 2 loose context files found, 1 naming issue
+
+Fix front matter issues in acme? [y/n]
+Fix loose files in test? [y/n]
+```
+
+### Step F: Config Update
 
 **Update `{alive-root}/.claude/alive.local.yaml`:**
 
@@ -408,8 +625,9 @@ The sweep will catch any issues the subagents missed. If sweep finds problems, f
 ║  [B] CLAUDE.md: X sections added, Y updated                            ║
 ║  [C] Folders: X _references/ created, Y renames                        ║
 ║  [D] Manifests: X updated, Y current                                   ║
-║  [E] Config: system_version set to 2.1.0                               ║
-║  [F] Sweep: ✓ passed                                                   ║
+║  [E] References: X issues fixed, Y entities clean                      ║
+║  [F] Config: system_version set to 2.1.0                               ║
+║  [G] Sweep: ✓ passed                                                   ║
 ║                                                                        ║
 ║  ──────────────────────────────────────────────────────────────────    ║
 ║                                                                ALIVE v2.1║
@@ -455,7 +673,8 @@ Skip directly to Session 2 steps.
 | **Folders** | Add `_references/` to all entities. Rename `inbox/`→`03_Inputs/`, `archive/`→`01_Archive/`, `life/`→`02_Life/`, `ventures/`→`04_Ventures/`, `experiments/`→`05_Experiments/`, `_state/`→`_brain/`. |
 | **Rules** | Sync all 7 rule files. Key changes: `_references/` system in conventions.md and behaviors.md, folder renames in all files, visual identity system in ui-standards.md. |
 | **CLAUDE.md** | Add `_references/` to structure, update session protocol to delegate to `/alive:save`, remove duplicated sections (Capture Triggers, Context Freshness, etc.), condense Life First. |
-| **Manifests** | Add `references[]`, `key_files[]`, `handoffs[]`, `goal`. Add `_references` to folders. Convert `session_id` (string) → `session_ids` (array). Add `date_created`, `date_modified`, `session_ids` to file entries. Remove deprecated `type`, old `files[]` format. |
+| **Manifests** | Add `references[]`, `key_files[]`, `handoffs[]`, `goal`. Add `_references` to folders. Convert `session_id` (string) → `session_ids` (array). Add `date_created`, `date_modified`, `session_ids` to file entries. Rename `summary` → `description`. Remove deprecated `type`, old `files[]` format. |
+| **References** | Audit all `_references/` content: validate YAML front matter, ensure `raw/` subfolders exist, check summary/raw file pairing, fix garbage filenames, sync manifest `references[]` entries, find loose context files that should be in `_references/`. |
 | **Config** | Add `system_version: "2.1.0"` to alive.local.yaml. |
 | **Statusline** | Update statusline-command.sh if configured (numbered folder detection, ALIVE root indicator). |
 

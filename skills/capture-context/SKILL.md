@@ -370,6 +370,8 @@ Summary files and raw files share the same base name with different extensions:
 | Raw (text) | `YYYY-MM-DD-descriptive-name.txt` | `emails/raw/2026-02-06-globex-pilot-pricing.txt` |
 | Raw (binary) | `YYYY-MM-DD-descriptive-name.ext` | `screenshots/raw/2026-02-06-competitor-landing.png` |
 
+**Rename garbage filenames.** When source files have auto-generated or meaningless names (e.g. `CleanShot 2026-02-06 at 14.32.07@2x.png`, `IMG_4521.jpg`, `document (3).pdf`), rename them to the `YYYY-MM-DD-descriptive-name.ext` convention before storing. The summary `.md` and raw file should always share the same base name.
+
 ### Three-Tier Access
 
 References are designed for efficient access without context bloat:
