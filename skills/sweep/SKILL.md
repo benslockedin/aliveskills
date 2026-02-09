@@ -470,7 +470,6 @@ What to address?
 | **ORPHAN_HANDOFF** | Archive to `01_Archive/{entity}/sessions/` |
 | **BAD_NAME** | Suggest rename following `[entity]_[context]_[name].ext` |
 | **BAD_FRONTMATTER / NO_FRONTMATTER** | Add or fix YAML front matter with required fields (`type`, `date`, `summary`) |
-| **MISSING_ANALYSIS** | Create companion analysis.md from template |
 | **ORPHAN_REF** | Add to manifest references[] / Archive |
 | **GHOST_REF** | Remove from manifest references[] |
 | **OLD_REF** | Review relevance / Archive / Keep |
