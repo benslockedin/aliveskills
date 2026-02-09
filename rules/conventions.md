@@ -184,9 +184,10 @@ Every entity has `_brain/` with these files:
 {
   "name": "project-name",
   "description": "One sentence description",
+  "goal": "Single-sentence goal that filters all decisions",
   "created": "2026-01-20",
   "updated": "2026-01-23",
-  "session_id": "abc12345",
+  "session_ids": ["abc12345", "def67890"],
 
   "folders": ["_brain", "_working", "_references", "clients", "content"],
 
@@ -198,7 +199,10 @@ Every entity has `_brain/` with these files:
       "files": [
         {
           "path": "README.md",
-          "description": "Client area overview"
+          "description": "Client area overview",
+          "date_created": "2026-01-20",
+          "date_modified": "2026-01-23",
+          "session_ids": ["abc12345"]
         }
       ]
     },
@@ -209,7 +213,9 @@ Every entity has `_brain/` with these files:
         {
           "path": "landing-page.md",
           "description": "Main landing page copy",
-          "session_id": "xyz789"
+          "date_created": "2026-01-22",
+          "date_modified": "2026-01-23",
+          "session_ids": ["xyz789", "abc12345"]
         }
       ]
     }
@@ -219,14 +225,18 @@ Every entity has `_brain/` with these files:
     {
       "path": "_working/landing-v0.html",
       "description": "Draft landing page with hero and features",
-      "session_id": "abc123"
+      "date_created": "2026-01-20",
+      "date_modified": "2026-01-23",
+      "session_ids": ["abc123"]
     }
   ],
 
   "key_files": [
     {
       "path": "CLAUDE.md",
-      "description": "Entity identity and navigation"
+      "description": "Entity identity and navigation",
+      "date_created": "2026-01-20",
+      "date_modified": "2026-01-23"
     }
   ],
 
@@ -236,20 +246,44 @@ Every entity has `_brain/` with these files:
     {
       "path": "_references/emails/2026-02-06-supplier-quote.md",
       "type": "email",
-      "summary": "Supplier confirms 15% price increase, bulk order before Feb 28"
+      "description": "Supplier confirms 15% price increase, bulk order before Feb 28",
+      "date_created": "2026-02-06",
+      "date_modified": "2026-02-06",
+      "session_ids": ["xyz789"]
     }
   ]
 }
 ```
 
 **Key fields:**
-- `description` (on files) — AI-generated one-liner describing the file
-- `session_id` (on files) — Last session that modified this file (optional)
-- `key_files` — Important reference files at entity root or cross-cutting
-- `handoffs` — Pending session handoffs for `/alive:do` to detect on load
-- `areas[].has_entities` — True if area contains nested entities (e.g. clients/)
-- `areas[].files[]` — Files within this area, with description and optional session_id
-- `references` — Lightweight index of files in `_references/`. Each entry has `path`, `type`, and `summary`. Loaded via three-tier pattern: manifest (index) → front matter (rich metadata) → raw content (full text/asset).
+
+| Field | Location | Description |
+|-------|----------|-------------|
+| `goal` | Entity root | Single-sentence goal — filters decisions, enables alignment advice |
+| `session_ids` | Entity root + file entries | Array of session IDs that have touched this entity/file. Append new sessions, don't overwrite. |
+| `description` | All file entries | AI-generated one-liner describing the file. Standardised everywhere (not `summary`). |
+| `date_created` | File entries | ISO date when the file was first added to the manifest |
+| `date_modified` | File entries | ISO date when the file was last modified |
+| `key_files` | Entity root | Important reference files at entity root or cross-cutting |
+| `handoffs` | Entity root | Pending session handoffs for `/alive:do` to detect on load. Uses singular `session_id` (one handoff = one session). |
+| `areas[].has_entities` | Area entries | True if area contains nested entities (e.g. clients/) |
+| `references` | Entity root | Lightweight index of `_references/` files. Each entry has `path`, `type`, `description`, `date_created`, `date_modified`, `session_ids`. Three-tier access: manifest index → summary .md → raw/ file. |
+
+**File entry schema** (applies to `areas[].files[]`, `working_files[]`, `key_files[]`, `references[]`):
+
+```json
+{
+  "path": "relative/path/to/file.md",
+  "description": "What this file is/contains",
+  "date_created": "2026-01-20",
+  "date_modified": "2026-01-23",
+  "session_ids": ["abc12345"]
+}
+```
+
+- `date_created` and `date_modified` — ISO date format (YYYY-MM-DD)
+- `session_ids` — Array. Append the current session ID when modifying. Optional for files not created/tracked by sessions (e.g. `CLAUDE.md`).
+- `references[]` additionally has `type` (email, call, screenshot, etc.)
 
 ---
 
@@ -305,6 +339,7 @@ Summary files and raw files share the same base name with different extensions:
 | Raw (text) | `YYYY-MM-DD-descriptive-name.txt` | `emails/raw/2026-02-06-supplier-quote.txt` |
 | Raw (binary) | `YYYY-MM-DD-descriptive-name.ext` | `screenshots/raw/2026-02-06-competitor-landing.png` |
 
+**Raw file renaming:** When incoming files have garbage names (e.g. `CleanShot 2026-02-06 at 14.32.07@2x.png`, `IMG_4521.jpg`, `document (3).pdf`), rename them to the `YYYY-MM-DD-descriptive-name.ext` convention before storing. The summary `.md` and raw file should share the same base name.
 
 ### Text Content (emails, transcripts, messages)
 
@@ -314,7 +349,7 @@ Summary `.md` with YAML front matter + `## Summary` (with subheaders for key poi
 ---
 type: email
 date: 2026-02-06
-summary: Supplier confirms 15% price increase on fabric starting March
+description: Supplier confirms 15% price increase on fabric starting March
 source: John Smith
 tags: [pricing, supplier]
 subject: Q1 pricing update
@@ -358,7 +393,7 @@ Summary `.md` uses `## Analysis` instead of `## Summary`:
 ---
 type: screenshot
 date: 2026-02-06
-summary: Competitor landing page showing new $49/mo pricing tier
+description: Competitor landing page showing new $49/mo pricing tier
 source: competitor website
 tags: [competitor, pricing]
 ---
@@ -379,7 +414,7 @@ relevant observations. Detailed enough that you rarely need the original.]
 |-------|----------|-------|
 | `type` | Yes | email, call, screenshot, message, article, document, etc. |
 | `date` | Yes | ISO format |
-| `summary` | Yes | One-line (mirrors manifest entry) |
+| `description` | Yes | One-line (mirrors manifest entry) |
 | `source` | Usually | Who/where it came from |
 | `tags` | Usually | Array for searchability |
 | `from`, `to`, `subject` | email | Email metadata |
@@ -393,7 +428,10 @@ relevant observations. Detailed enough that you rarely need the original.]
   {
     "path": "_references/emails/2026-02-06-supplier-quote.md",
     "type": "email",
-    "summary": "Supplier confirms 15% price increase, bulk order before Feb 28"
+    "description": "Supplier confirms 15% price increase, bulk order before Feb 28",
+    "date_created": "2026-02-06",
+    "date_modified": "2026-02-06",
+    "session_ids": ["abc12345"]
   }
 ]
 ```

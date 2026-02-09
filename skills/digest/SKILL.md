@@ -233,7 +233,7 @@ Every reference creates two files: a **summary `.md`** at the type folder root, 
 ---
 type: email
 date: 2026-02-06
-summary: Client requests project update and asks about new feature
+description: Client requests project update and asks about new feature
 source: John Smith (Acme Corp)
 tags: [client, update-request, feature]
 subject: Re: Project status
@@ -284,7 +284,7 @@ The summary `.md` uses `## Analysis` instead of `## Summary` and points to the r
 ---
 type: document
 date: 2026-02-06
-summary: Scanned contract with Globex, 12-month term, $50k value
+description: Scanned contract with Globex, 12-month term, $50k value
 source: Legal team
 tags: [contract, globex]
 ---

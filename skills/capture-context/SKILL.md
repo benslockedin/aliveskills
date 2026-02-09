@@ -270,7 +270,7 @@ All text-based references (emails, transcripts, messages, articles) use this for
 ---
 type: email
 date: 2026-02-06
-summary: Sarah Chen confirms Globex pilot pricing at $50k, starting Feb 15
+description: Sarah Chen confirms Globex pilot pricing at $50k, starting Feb 15
 source: Sarah Chen (Globex)
 tags: [pricing, pilot, globex]
 subject: Re: Pilot program pricing
@@ -309,7 +309,7 @@ their board. John (CTO) will be the technical lead on their side.
 |-------|-------------|
 | `type` | Content kind: email, call, screenshot, message, article, note, document |
 | `date` | When created/received (ISO format: YYYY-MM-DD) |
-| `summary` | One-line summary — this is what appears in the manifest index |
+| `description` | One-line description — this is what appears in the manifest index |
 
 **Likely required:**
 
@@ -344,7 +344,7 @@ The summary `.md` uses the same structure with `## Analysis` instead of `## Summ
 ---
 type: screenshot
 date: 2026-02-06
-summary: Competitor landing page showing new $49/mo pricing tier
+description: Competitor landing page showing new $49/mo pricing tier
 source: competitor website
 tags: [competitor, pricing]
 ---

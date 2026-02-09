@@ -202,8 +202,8 @@ Read _brain/manifest.json and do a FULL reconciliation against what actually exi
         - In _working/ → should be in working_files[]
         - In an area folder → should be in that area's files[]
         - At entity root → should be in key_files[] or flagged as orphan
-     c. Generate a proposed manifest entry with description
-   - Report: UNTRACKED: {path} — proposed entry: {"path": "{path}", "description": "{generated description}"}
+     c. Generate a proposed manifest entry with description, date_created, date_modified, session_ids
+   - Report: UNTRACKED: {path} — proposed entry: {"path": "{path}", "description": "{generated description}", "date_created": "{date}", "date_modified": "{date}", "session_ids": []}
 
 3. **Stale descriptions:** Files where the manifest description seems wrong
    - Read the file, compare to manifest description
@@ -216,6 +216,13 @@ Read _brain/manifest.json and do a FULL reconciliation against what actually exi
 5. **Area accuracy:** Do manifest.areas[] match actual area folders?
    - Area folders on disk not in manifest.areas[] → MISSING_AREA
    - Areas in manifest.areas[] not on disk → GHOST_AREA
+
+6. **Missing file metadata:** Check all file entries in manifest for required fields
+   - Every file entry (in areas[].files[], working_files[], key_files[]) must have: `date_created`, `date_modified`, `session_ids` (array)
+   - Report: MISSING_METADATA: {path} — missing {field(s)} (e.g. "missing date_created, date_modified")
+   - Also check entity root manifest fields: must have `goal`, `session_ids` (array, not singular `session_id`)
+   - Report: LEGACY_FIELD: manifest root has `session_id` (singular) — should be `session_ids` (array)
+   - Report: MISSING_GOAL: manifest root is missing `goal` field
 
 ## C. _brain/ Freshness
 
@@ -459,8 +466,11 @@ What to address?
 |---------|---------------|
 | **MISSING file** | Create from template |
 | **GHOST manifest entry** | Remove from manifest |
-| **UNTRACKED file** | Add to manifest (with generated description) / Move to correct location / Archive |
-| **Manifest reconciliation** (batch) | Add ALL untracked files to manifest at once — uses sub-agent generated descriptions |
+| **UNTRACKED file** | Add to manifest (with generated description, date_created, date_modified, session_ids) / Move to correct location / Archive |
+| **Manifest reconciliation** (batch) | Add ALL untracked files to manifest at once — uses sub-agent generated descriptions and metadata |
+| **MISSING_METADATA** | Add missing `date_created`, `date_modified`, `session_ids` fields to manifest file entries |
+| **LEGACY_FIELD** | Convert manifest root `session_id` (singular) to `session_ids` (array) |
+| **MISSING_GOAL** | Prompt user for entity goal, add `goal` field to manifest root |
 | **STALE _brain/** | Open entity with `/alive:do` to refresh |
 | **STUCK task** | Mark done / Reset to To Do / Update |
 | **STALE_DRAFT** | Archive / Promote / Keep |

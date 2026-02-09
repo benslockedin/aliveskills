@@ -171,10 +171,11 @@ Add imported files to the manifest. Reference materials go in the `references` a
     {
       "path": "_references/call-john-smith-2026-01-20.md",
       "type": "call",
-      "summary": "Call with John Smith about AWS migration, launch timeline",
-      "date": "2026-01-20",
+      "description": "Call with John Smith about AWS migration, launch timeline",
+      "date_created": "2026-01-20",
+      "date_modified": "2026-01-20",
       "people": ["john-smith"],
-      "session": "abc123"
+      "session_ids": ["abc123"]
     }
   ]
 }

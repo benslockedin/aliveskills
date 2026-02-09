@@ -371,8 +371,8 @@ ARCHIVING:
 
 For each promoted file:
 1. Remove from `working_files`
-2. Add to appropriate area's `files[]` array with description
-3. Include `session_id` for traceability
+2. Add to appropriate area's `files[]` array with `description`, `date_created`, `date_modified`, and `session_ids`
+3. Append current session ID to the file entry's `session_ids` array for traceability
 
 **Key principle:** `_working/` is temporary. Finished files MUST move.
 
@@ -432,24 +432,48 @@ In `_brain/manifest.json`:
 {
   "name": "ProjectName",
   "description": "One sentence purpose",
+  "goal": "Single-sentence goal for this entity",
   "updated": "2026-01-30",
-  "session_id": "abc123",
+  "session_ids": ["prev123", "abc123"],
   "folders": ["_brain", "_working", "_references", "docs"],
   "areas": [
     {
       "path": "docs/",
       "description": "Reference documentation",
       "files": [
-        {"path": "README.md", "description": "Index of documentation"},
-        {"path": "architecture.md", "description": "System architecture"}
+        {
+          "path": "README.md",
+          "description": "Index of documentation",
+          "date_created": "2026-01-20",
+          "date_modified": "2026-01-30",
+          "session_ids": ["abc123"]
+        },
+        {
+          "path": "architecture.md",
+          "description": "System architecture",
+          "date_created": "2026-01-22",
+          "date_modified": "2026-01-28",
+          "session_ids": ["def456"]
+        }
       ]
     }
   ],
   "working_files": [
-    {"path": "_working/draft-v0.md", "description": "Landing page draft"}
+    {
+      "path": "_working/draft-v0.md",
+      "description": "Landing page draft",
+      "date_created": "2026-01-28",
+      "date_modified": "2026-01-30",
+      "session_ids": ["abc123"]
+    }
   ],
   "key_files": [
-    {"path": "CLAUDE.md", "description": "Entity identity"}
+    {
+      "path": "CLAUDE.md",
+      "description": "Entity identity",
+      "date_created": "2026-01-20",
+      "date_modified": "2026-01-30"
+    }
   ],
   "handoffs": []
 }
@@ -457,10 +481,10 @@ In `_brain/manifest.json`:
 
 **For each new file this session:**
 1. Identify which area it belongs to
-2. Add to that area's `files` array with description
+2. Add to that area's `files` array with `description`, `date_created`, `date_modified`, and `session_ids`
 3. If promoted from `_working/`, remove from `working_files`
 
-**References:** If any files were added to `_references/` during the session, update the manifest's `references` array with entries following the three-tier pattern: index in manifest (path, type, summary), YAML front matter in .md files (type, date, summary, source, tags), and raw originals in `raw/` subfolders. See `rules/conventions.md` for the full `_references/` structure.
+**References:** If any files were added to `_references/` during the session, update the manifest's `references` array with entries following the three-tier pattern: index in manifest (path, type, description, date_created, date_modified, session_ids), YAML front matter in .md files (type, date, description, source, tags), and raw originals in `raw/` subfolders. See `rules/conventions.md` for the full `_references/` structure.
 
 ---
 
@@ -550,7 +574,7 @@ Tasks:
 - [ ] New tasks added
 
 Manifest:
-- [ ] session_id updated
+- [ ] session_ids updated (current session appended)
 - [ ] New files added with descriptions
 - [ ] working_files accurate
 - [ ] Saving to CLOSEST subdomain
@@ -573,7 +597,7 @@ Fix any failures before proceeding.
 - [ ] changelog.md — new entry exists
 - [ ] status.md — fields updated
 - [ ] tasks.md — changes reflected
-- [ ] manifest.json — session_id current
+- [ ] manifest.json — session_ids includes current session
 
 If ANY file wasn't updated, fix now.
 ```

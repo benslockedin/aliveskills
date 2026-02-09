@@ -315,14 +315,22 @@ d) Does a "handoffs" array exist?
    If not → add: "handoffs": []
 
 e) Are there any OLD schema fields that should be removed?
-   Remove if found: "type", "goal" (top-level), "sessions" (top-level array),
+   Remove if found: "type", "sessions" (top-level array),
    top-level "files" array with "summary"/"modified"/"key" fields
 
-f) Check areas[].files[] format — each file entry should have:
-   {"path": "...", "description": "..."} and optionally "session_id"
-   If old format (with "summary" instead of "description") → rename field
+f) Check root-level "session_id" (string) → convert to "session_ids" (array).
+   If "session_id": "abc123" exists → replace with "session_ids": ["abc123"]
 
-TASK 3 — Update the "updated" field to today's date and "session_id" to the current session ID.
+g) Check for "goal" field at entity root.
+   If missing → add "goal": "" (empty, user will fill in)
+
+h) Check areas[].files[] and working_files[] format — each file entry should have:
+   {"path": "...", "description": "...", "date_created": "...", "date_modified": "...", "session_ids": [...]}
+   If old format has "summary" instead of "description" → rename field
+   If old format has singular "session_id" → convert to "session_ids" array
+   If missing "date_created"/"date_modified" → add with today's date
+
+TASK 3 — Update the "updated" field to today's date and "session_ids" to include the current session ID.
 
 IMPORTANT:
 - Use Edit tool, not Write — preserve existing data
@@ -447,7 +455,7 @@ Skip directly to Session 2 steps.
 | **Folders** | Add `_references/` to all entities. Rename `inbox/`→`03_Inputs/`, `archive/`→`01_Archive/`, `life/`→`02_Life/`, `ventures/`→`04_Ventures/`, `experiments/`→`05_Experiments/`, `_state/`→`_brain/`. |
 | **Rules** | Sync all 7 rule files. Key changes: `_references/` system in conventions.md and behaviors.md, folder renames in all files, visual identity system in ui-standards.md. |
 | **CLAUDE.md** | Add `_references/` to structure, update session protocol to delegate to `/alive:save`, remove duplicated sections (Capture Triggers, Context Freshness, etc.), condense Life First. |
-| **Manifests** | Add `references[]`, `key_files[]`, `handoffs[]`. Add `_references` to folders. Remove deprecated `type`, `goal`, old `files[]` format. |
+| **Manifests** | Add `references[]`, `key_files[]`, `handoffs[]`, `goal`. Add `_references` to folders. Convert `session_id` (string) → `session_ids` (array). Add `date_created`, `date_modified`, `session_ids` to file entries. Remove deprecated `type`, old `files[]` format. |
 | **Config** | Add `system_version: "2.1.0"` to alive.local.yaml. |
 | **Statusline** | Update statusline-command.sh if configured (numbered folder detection, ALIVE root indicator). |
 

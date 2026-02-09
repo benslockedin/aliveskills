@@ -183,9 +183,10 @@ None yet.
 {
   "name": "[Name]",
   "description": "[One sentence]",
+  "goal": "[Single-sentence goal]",
   "created": "[DATE]",
   "updated": "[DATE]",
-  "session_id": "[current-session]",
+  "session_ids": ["[current-session]"],
   "folders": ["_brain", "_working", "_references"],
   "areas": [],
   "working_files": [],
@@ -467,9 +468,10 @@ Sub-entity created within 04_Ventures/acme-agency/clients/.
 {
   "name": "bigco",
   "description": "Enterprise client, $10k/mo retainer",
+  "goal": "[Single-sentence goal]",
   "created": "[DATE]",
   "updated": "[DATE]",
-  "session_id": "[current-session]",
+  "session_ids": ["[current-session]"],
   "folders": ["_brain", "_working", "_references"],
   "areas": [],
   "working_files": [],
