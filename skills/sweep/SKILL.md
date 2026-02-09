@@ -290,27 +290,36 @@ For any area with has_entities: true in manifest:
 
 ## H. _references/ Folder Audit
 
-List all files in _references/ and check:
+Each type subfolder (emails/, calls/, meeting-transcripts/, etc.) should have summary `.md` files at root and a `raw/` subfolder for originals.
 
-1. **Front matter validation:** Every .md file must have valid YAML front matter with required fields
+1. **Structure validation:** Each type subfolder must have a `raw/` subfolder
+   - Report: MISSING_RAW: {type-folder}/ has no raw/ subfolder
+
+2. **Summary-raw pairing:** Every summary `.md` should have a corresponding file in `raw/` (and vice versa)
+   - Report: ORPHAN_SUMMARY: {filename}.md has no matching file in raw/
+   - Report: ORPHAN_RAW: raw/{filename} has no matching summary .md
+   - Exception: `notes/` type may not always need raw files
+
+3. **Front matter validation:** Every summary `.md` must have valid YAML front matter
    - Required: `type`, `date`, `summary`
+   - Must have `## Source` section pointing to raw file
    - Report: BAD_FRONTMATTER: {filename} — missing {field}
    - Report: NO_FRONTMATTER: {filename} — no YAML front matter found
+   - Report: NO_SOURCE: {filename} — missing ## Source pointer to raw file
 
-2. **Companion files:** Non-text content (PDFs, images, screenshots) stored in subfolders must have a companion analysis.md
-   - e.g. _references/call-2026-01-15/recording.mp3 needs _references/call-2026-01-15/analysis.md
-   - Report: MISSING_ANALYSIS: {subfolder} — non-text content without companion analysis.md
-
-3. **Orphaned references:** Files in _references/ not tracked in manifest's `references` array
+4. **Orphaned references:** Summary .md files not tracked in manifest's `references` array
    - Compare disk contents against manifest.references[].path
    - Report: ORPHAN_REF: {filename} exists in _references/ but not in manifest references[]
 
-4. **Missing references:** Entries in manifest's `references` array where the file doesn't exist on disk
+5. **Missing references:** Entries in manifest's `references` array where the file doesn't exist on disk
    - Report: GHOST_REF: {path} listed in manifest references[] but missing from disk
 
-5. **Stale references:** References older than 90 days (based on `date` front matter field)
+6. **Stale references:** References older than 90 days (based on `date` front matter field)
    - Low priority — INFO level only
    - Report: OLD_REF: {filename} — {age} days old, may no longer be relevant
+
+7. **Raw files at wrong level:** Raw content files (.txt, .pdf, .png) sitting at type folder root instead of in `raw/`
+   - Report: MISPLACED_RAW: {filename} should be in raw/ subfolder
 
 ## I. Archive References
 

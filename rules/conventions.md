@@ -256,27 +256,59 @@ Every entity has `_brain/` with these files:
 
 External context useful to the entity — emails, messages, call transcripts, screenshots, articles, documents.
 
+Each content TYPE gets a subfolder. Inside each type folder, `.md` summary files sit at root level and a `raw/` subfolder holds the original source files.
+
+```
+_references/
+├── meeting-transcripts/
+│   ├── 2026-02-08-content-planning.md        ← YAML front matter + detailed AI summary + source pointer
+│   ├── 2026-02-04-partner-sync.md
+│   └── raw/
+│       ├── 2026-02-08-content-planning.txt
+│       └── 2026-02-04-partner-sync.txt
+├── emails/
+│   ├── 2026-02-06-supplier-quote.md
+│   └── raw/
+│       └── 2026-02-06-supplier-quote.txt
+├── screenshots/
+│   ├── 2026-02-06-competitor-landing.md       ← front matter + analysis + source pointer
+│   └── raw/
+│       └── 2026-02-06-competitor-landing.png
+└── documents/
+    ├── 2026-02-06-contract-scan.md
+    └── raw/
+        └── 2026-02-06-contract-scan.pdf
+```
+
 ### Access Pattern
 
 ```
-Tier 1: manifest.json     → Quick index (always loaded)
-Tier 2: YAML front matter  → Rich metadata (on demand)
-Tier 3: Raw content        → Full text/asset (on demand)
+Tier 1: manifest.json        → Quick index (always loaded)
+Tier 2: Summary .md file      → Detailed AI summary + rich metadata (on demand)
+Tier 3: raw/ file             → Original content — full text or binary (on demand)
 ```
+
+The summary `.md` should be detailed enough that you rarely need the raw file.
 
 ### Subfolders
 
-Dynamic — created by content type, not prescribed. Examples: `emails/`, `calls/`, `screenshots/`, `messages/`, `articles/`.
+Dynamic — created by content type, not prescribed. Examples: `emails/`, `calls/`, `meeting-transcripts/`, `screenshots/`, `messages/`, `articles/`, `documents/`. Each type folder contains a `raw/` subfolder for original files.
 
 ### File Naming
 
-Pattern: `YYYY-MM-DD-descriptive-name.md`
+Summary files and raw files share the same base name with different extensions:
+
+| File | Pattern | Example |
+|------|---------|---------|
+| Summary | `YYYY-MM-DD-descriptive-name.md` | `emails/2026-02-06-supplier-quote.md` |
+| Raw (text) | `YYYY-MM-DD-descriptive-name.txt` | `emails/raw/2026-02-06-supplier-quote.txt` |
+| Raw (binary) | `YYYY-MM-DD-descriptive-name.ext` | `screenshots/raw/2026-02-06-competitor-landing.png` |
 
 ### Text Content (emails, transcripts, messages)
 
-Markdown file with YAML front matter + `## Summary` + `## Raw` sections:
+Summary `.md` with YAML front matter + `## Summary` (with subheaders for key points, action items, decisions as appropriate) + `## Source` pointer to raw file:
 
-```yaml
+```markdown
 ---
 type: email
 date: 2026-02-06
@@ -285,18 +317,58 @@ source: John Smith
 tags: [pricing, supplier]
 subject: Q1 pricing update
 from: john@supplier.com
-to: will@company.com
+to: team@company.com
 ---
+
+## Summary
+
+John confirms a 15% price increase on all fabric orders starting March 1.
+Recommends placing a bulk order before Feb 28 to lock in current pricing.
+
+### Key Points
+- 15% increase effective March 1
+- Bulk order before Feb 28 locks current rate
+- Minimum order: 500 units for bulk pricing
+
+### Action Items
+- Decide on bulk order quantity by Feb 20
+- Confirm shipping timeline with warehouse
+
+## Source
+
+`raw/2026-02-06-supplier-quote.txt`
 ```
 
 ### Non-Text Content (screenshots, videos, PDFs)
 
-Subfolder with original file + companion `analysis.md`:
+Same pattern — summary `.md` at type root, original in `raw/`:
 
 ```
-_references/screenshots/2026-02-06-competitor-landing/
-├── screenshot.png
-└── analysis.md       ← Same front matter pattern, plus file: field
+_references/screenshots/
+├── 2026-02-06-competitor-landing.md
+└── raw/
+    └── 2026-02-06-competitor-landing.png
+```
+
+Summary `.md` uses `## Analysis` instead of `## Summary`:
+
+```markdown
+---
+type: screenshot
+date: 2026-02-06
+summary: Competitor landing page showing new $49/mo pricing tier
+source: competitor website
+tags: [competitor, pricing]
+---
+
+## Analysis
+
+[AI-generated detailed description — what's shown, key information,
+relevant observations. Detailed enough that you rarely need the original.]
+
+## Source
+
+`raw/2026-02-06-competitor-landing.png`
 ```
 
 ### Front Matter Fields
@@ -311,7 +383,6 @@ _references/screenshots/2026-02-06-competitor-landing/
 | `from`, `to`, `subject` | email | Email metadata |
 | `participants`, `duration` | call | Call metadata |
 | `platform` | message | Slack, iMessage, etc. |
-| `file` | non-text | Path to original asset |
 
 ### Manifest Entry
 
