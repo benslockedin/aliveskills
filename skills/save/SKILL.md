@@ -421,20 +421,25 @@ In `_brain/manifest.json`:
 2. Add to that area's `files` array with description
 3. If promoted from `_working/`, remove from `working_files`
 
-**References:** If any files were added to `_references/` during the session, update the manifest's `references` array with an entry for each: `path`, `type` (e.g. article, transcript, doc), and `summary`.
+**References:** If any files were added to `_references/` during the session, update the manifest's `references` array with entries following the three-tier pattern: index in manifest (path, type, summary), YAML front matter in .md files (type, date, summary, source, tags), and raw originals in `raw/` subfolders. See `rules/conventions.md` for the full `_references/` structure.
 
 ---
 
 ## Memories (Breakthrough Only)
 
-Create `_brain/memories/` folder if needed, then `[date]-[session-id].md`:
+Create `_brain/memories/` folder if needed, then `[date]-[session-id].md`.
+
+**Memories use YAML front matter** (same pattern as `_references/`):
 
 ```markdown
-# Session Memory — 2026-01-30
-
-**Session:** abc123
-**Quality:** Breakthrough
-**Entity:** 04_Ventures/alive-llc
+---
+type: memory
+date: 2026-01-30
+session: abc123
+entity: 04_Ventures/alive-llc
+summary: One-line summary of what made this session a breakthrough
+tags: [pricing, pivot, architecture]
+---
 
 ## Key Quotes
 > "Verbatim quote worth preserving"
@@ -445,6 +450,17 @@ Create `_brain/memories/` folder if needed, then `[date]-[session-id].md`:
 ## Insights
 - What was learned
 ```
+
+### YAML Front Matter Schema (Memories)
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `type` | Yes | Always `memory` |
+| `date` | Yes | Session date (ISO format: YYYY-MM-DD) |
+| `session` | Yes | Session ID from startup hook |
+| `entity` | Yes | Entity path (e.g. `04_Ventures/alive-llc`) |
+| `summary` | Yes | One-line summary — what made this a breakthrough |
+| `tags` | Yes | Array of tags for searchability |
 
 Ask: "Any changes to this entity's identity or purpose?"
 If yes, offer to update entity `CLAUDE.md`.

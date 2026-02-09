@@ -126,13 +126,15 @@ Read in order:
 1. `{entity}/_brain/status.md` — Phase and focus
 2. `{entity}/_brain/tasks.md` — Work queue
 3. `{entity}/_brain/manifest.json` — Structure map
-4. `{entity}/_brain/changelog.md` — **Last 200 lines** (recent session history)
+4. `{entity}/_brain/changelog.md` — **First 200 lines** (recent session history)
 
 **The changelog is CRITICAL.** It contains:
 - What happened in recent sessions
 - Decisions made and why
 - Context that won't be in status.md
 - Where we left off last time
+
+**Why first 200 lines?** The save skill **prepends** new entries (most recent first). So the top of the file has the newest sessions.
 
 **Show retrieval paths:**
 ```
@@ -145,13 +147,13 @@ Read in order:
 ▸ reading 04_Ventures/acme/_brain/manifest.json
   └─ 12 files tracked, 3 references
 
-▸ reading 04_Ventures/acme/_brain/changelog.md (last 200 lines)
+▸ reading 04_Ventures/acme/_brain/changelog.md (first 200 lines)
   └─ Last session: 2026-02-04 — Plugin UI updates
 ```
 
 **Implementation:**
 ```
-Read(file_path: "{entity}/_brain/changelog.md", offset: -200)
+Read(file_path: "{entity}/_brain/changelog.md", limit: 200)
 ```
 Or read the full file if it's less than 200 lines.
 
