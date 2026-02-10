@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: This skill should be used when the user says "process inputs", "digest", "triage", "handle inbox", "sort these", "what's in my inbox", "what's in inputs", or "anything to process". Processes the 03_Inputs/ buffer.
-plugin_version: "2.1.0"
+plugin_version: "2.1.1"
 ---
 
 # alive:digest

@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Capture context into the ALIVE system. Use when user shares any content — their own thoughts, external emails, meeting transcripts, articles, Slack messages, quick notes, decisions, or anything worth preserving. Triggers on "capture this", "note this", "remember this", "FYI", "here's some context", "process this", "I got this email", "from my call", "digest this", "quick note", "btw", "I learned", "I decided".
-plugin_version: "2.1.0"
+plugin_version: "2.1.1"
 ---
 
 # alive:capture-context

@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Use when the user says "daily", "dashboard", "morning", "let's go", "what's happening", "what should I work on", "start my day", "overview", "show me everything", or wants to see the full system state across all entities including ongoing threads, goals, urgent tasks, and inputs status.
-plugin_version: "2.1.0"
+plugin_version: "2.1.1"
 ---
 
 # alive:daily

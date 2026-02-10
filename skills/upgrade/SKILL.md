@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: This skill should be used when the user says "upgrade", "update system", "sync", or when another skill detects a version mismatch between plugin_version and system_version in alive.local.yaml.
-plugin_version: "2.1.0"
+plugin_version: "2.1.1"
 ---
 
 # alive:upgrade
@@ -40,12 +40,13 @@ When they match → system is current.
 ```
 1. Detect versions (plugin vs system)
 2. If match → "You're up to date"
-3. If mismatch → identify required migrations
-4. Show migration plan, get user approval
-5. Session 1: Sync rules + CLAUDE.md → EXIT (Claude must reload)
-6. Session 2: Structural changes via subagents
-7. Run /alive:sweep to verify
-8. Update system_version in alive.local.yaml
+3. If mismatch → check Migration Registry for required migrations
+4. If NO structural migrations → fast path (bump system_version only)
+5. If structural migrations → show plan, get user approval
+6. Session 1: Sync rules + CLAUDE.md → EXIT (Claude must reload)
+7. Session 2: Structural changes via subagents
+8. Run /alive:sweep to verify
+9. Update system_version in alive.local.yaml
 ```
 
 ---
@@ -55,7 +56,7 @@ When they match → system is current.
 ```
 ▸ checking versions...
 
-Plugin version: 2.1.0 (from skill frontmatter)
+Plugin version: 2.1.1 (from skill frontmatter)
 System version: [read from alive.local.yaml]
 ```
 
@@ -69,9 +70,45 @@ System version: [read from alive.local.yaml]
 
 ```
 ▸ versions detected
-  └─ Plugin: 2.1.0 | System: unknown
-  └─ Migrations needed: pre-2.1.0 → 2.1.0
+  └─ Plugin: 2.1.1 | System: unknown
+  └─ Migrations needed: pre-2.1.1 → 2.1.1
 ```
+
+---
+
+## Step 1.5: Check Migration Registry (Fast Path)
+
+After detecting a version mismatch, check the Migration Registry (at the bottom of this skill) for entries covering the version gap.
+
+**If NO structural migration entry exists for the version gap** (e.g. the gap is a skill-only update), take the fast path:
+
+```
+▸ checking versions...
+  └─ Plugin: 2.1.1 | System: 2.1.0
+
+▸ checking migration registry...
+  └─ No structural migrations needed for 2.1.0 → 2.1.1
+  └─ This update contained skill improvements only (auto-applied by plugin)
+
+▸ updating config...
+  └─ system_version: "2.1.1"
+
+✓ System version synced. No migration needed.
+```
+
+**Implementation:**
+1. Read the Migration Registry section of this skill
+2. Look for an entry covering the user's current `system_version` → `plugin_version` gap
+3. If an entry exists with `type: skill-only` → fast path: just update `system_version` in alive.local.yaml and exit
+4. If an entry exists with structural changes → proceed to Step 2 (full migration)
+5. If no entry exists at all and `system_version` is `"unknown"` → proceed to Step 2 (full migration for fresh/unknown systems)
+
+**Fast path actions:**
+- Update `system_version` in `{alive-root}/.claude/alive.local.yaml` to match `plugin_version`
+- Show the user what changed (from the registry entry's description)
+- Exit — no restart needed, no structural changes
+
+**STOP here if fast path was taken. Do not proceed to Step 2.**
 
 ---
 
@@ -80,7 +117,7 @@ System version: [read from alive.local.yaml]
 List all changes that will be applied. **Get user approval before proceeding.**
 
 ```
-UPGRADE PLAN: → 2.1.0
+UPGRADE PLAN: → 2.1.1
 ════════════════════════════════════════════════════════════════════════════
 
 This upgrade requires TWO sessions (Claude must restart to load new rules).
@@ -581,14 +618,14 @@ Read the current file. Add or update `system_version` field:
 ```yaml
 theme: vibrant
 onboarding_complete: true
-system_version: "2.1.0"
+system_version: "2.1.1"
 ```
 
 Use Edit if the file exists (preserve other fields). Use Write only if the file doesn't exist.
 
 ```
 ▸ updating config...
-  └─ alive.local.yaml — set system_version: "2.1.0"
+  └─ alive.local.yaml — set system_version: "2.1.1"
 
 ✓ Config updated
 ```
@@ -619,14 +656,14 @@ The sweep will catch any issues the subagents missed. If sweep finds problems, f
 ║                                                                        ║
 ║  UPGRADE SUMMARY                                                       ║
 ║  ──────────────────────────────────────────────────────────────────    ║
-║  Plugin: 2.1.0 → System: 2.1.0 ✓                                      ║
+║  Plugin: 2.1.1 → System: 2.1.1 ✓                                      ║
 ║                                                                        ║
 ║  [A] Rules: X updated, Y current                                       ║
 ║  [B] CLAUDE.md: X sections added, Y updated                            ║
 ║  [C] Folders: X _references/ created, Y renames                        ║
 ║  [D] Manifests: X updated, Y current                                   ║
 ║  [E] References: X issues fixed, Y entities clean                      ║
-║  [F] Config: system_version set to 2.1.0                               ║
+║  [F] Config: system_version set to 2.1.1                               ║
 ║  [G] Sweep: ✓ passed                                                   ║
 ║                                                                        ║
 ║  ──────────────────────────────────────────────────────────────────    ║
@@ -640,7 +677,7 @@ The sweep will catch any issues the subagents missed. If sweep finds problems, f
 
 **Already up to date:**
 ```
-✓ System is current (2.1.0)
+✓ System is current (2.1.1)
   └─ No upgrade needed.
 ```
 
@@ -650,7 +687,7 @@ The sweep will catch any issues the subagents missed. If sweep finds problems, f
 
 This file tracks your system version. Creating it now.
 ```
-Create the file with `system_version: "2.1.0"` and `onboarding_complete: true`.
+Create the file with `system_version: "2.1.1"` and `onboarding_complete: true`.
 
 **Single entity upgrade (from /alive:do):**
 ```
@@ -666,7 +703,7 @@ Skip directly to Session 2 steps.
 
 ## Migration Registry
 
-### pre-2.1.0 → 2.1.0
+### pre-2.1.1 → 2.1.1
 
 | Category | Changes |
 |----------|---------|
@@ -675,8 +712,23 @@ Skip directly to Session 2 steps.
 | **CLAUDE.md** | Add `_references/` to structure, update session protocol to delegate to `/alive:save`, remove duplicated sections (Capture Triggers, Context Freshness, etc.), condense Life First. |
 | **Manifests** | Add `references[]`, `key_files[]`, `handoffs[]`, `goal`. Add `_references` to folders. Convert `session_id` (string) → `session_ids` (array). Add `date_created`, `date_modified`, `session_ids` to file entries. Rename `summary` → `description`. Remove deprecated `type`, old `files[]` format. |
 | **References** | Audit all `_references/` content: validate YAML front matter, ensure `raw/` subfolders exist, check summary/raw file pairing, fix garbage filenames, sync manifest `references[]` entries, find loose context files that should be in `_references/`. |
-| **Config** | Add `system_version: "2.1.0"` to alive.local.yaml. |
+| **Config** | Add `system_version: "2.1.1"` to alive.local.yaml. |
 | **Statusline** | Update statusline-command.sh if configured (numbered folder detection, ALIVE root indicator). |
+
+### 2.1.0 → 2.1.1
+
+**Type: skill-only** (no structural migration needed — fast path)
+
+| Category | Changes |
+|----------|---------|
+| **Skills** | Onboarding rewritten as two-session flow (system setup → restart → content setup). Upgrade skill gains fast path for skill-only updates. All 16 skills bumped to 2.1.1. |
+| **Onboarding** | `alive.local.yaml` now comprehensive: includes `alive_root`, `timezone`, `theme`, `working_style`, `onboarding_part` tracking. Two-session flow with forced restart between system and content setup. Added AI conversation history import prompt (Step 20). |
+| **Versioning** | `alive.local.yaml` now always includes `system_version` from initial onboarding. Migration Registry supports `type: skill-only` entries for fast-path upgrades. |
+| **Config** | Update `system_version: "2.1.1"` in alive.local.yaml. |
+
+No structural changes. Plugin auto-update delivers the new skill files. Users just need `system_version` bumped.
+
+---
 
 **Future migrations will be added as new sections here.**
 

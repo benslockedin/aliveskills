@@ -1,6 +1,6 @@
 ---
 description: Use when saving a session due to context compaction, "compact", "running out of context", or planning to resume later. Creates comprehensive handoff document for zero-context session continuity. Called by save skill, not directly by user.
-plugin_version: "2.1.0"
+plugin_version: "2.1.1"
 ---
 
 # alive:handoff

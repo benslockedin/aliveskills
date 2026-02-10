@@ -1,7 +1,7 @@
 ---
 user-invocable: false
 description: Internal skill called by onboarding when user opts in to session analysis. Scans Claude Code history to extract patterns, preferences, and past projects for personalized setup.
-plugin_version: "2.1.0"
+plugin_version: "2.1.1"
 ---
 
 # Power User Install
