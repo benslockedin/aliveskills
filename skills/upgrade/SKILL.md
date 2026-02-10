@@ -15,7 +15,7 @@ This skill uses **Tier 3: Utility** formatting.
 **Visual elements:**
 - Compact logo (4-line ASCII art header)
 - Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.1` (right-aligned)
+- Version footer: `ALIVE v3.0.1` (right-aligned)
 
 See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
 
@@ -70,8 +70,8 @@ System version: [read from alive.local.yaml]
 
 ```
 ▸ versions detected
-  └─ Plugin: 2.1.1 | System: unknown
-  └─ Migrations needed: pre-2.1.1 → 2.1.1
+  └─ Plugin: 3.0.1 | System: unknown
+  └─ Migrations needed: pre-2.1.1 → 3.0.1
 ```
 
 ---
@@ -84,14 +84,11 @@ After detecting a version mismatch, check the Migration Registry (at the bottom 
 
 ```
 ▸ checking versions...
-  └─ Plugin: 2.1.1 | System: 2.1.0
+  └─ Plugin: 3.0.1 | System: 2.1.1
 
 ▸ checking migration registry...
-  └─ No structural migrations needed for 2.1.0 → 2.1.1
-  └─ This update contained skill improvements only (auto-applied by plugin)
-
-▸ updating config...
-  └─ system_version: "2.1.1"
+  └─ Structural migrations needed for 2.1.1 → 3.0.1
+  └─ See migration plan below
 
 ✓ System version synced. No migration needed.
 ```
@@ -618,14 +615,14 @@ Read the current file. Add or update `system_version` field:
 ```yaml
 theme: vibrant
 onboarding_complete: true
-system_version: "2.1.1"
+system_version: "3.0.1"
 ```
 
 Use Edit if the file exists (preserve other fields). Use Write only if the file doesn't exist.
 
 ```
 ▸ updating config...
-  └─ alive.local.yaml — set system_version: "2.1.1"
+  └─ alive.local.yaml — set system_version: "3.0.1"
 
 ✓ Config updated
 ```
@@ -656,18 +653,18 @@ The sweep will catch any issues the subagents missed. If sweep finds problems, f
 ║                                                                        ║
 ║  UPGRADE SUMMARY                                                       ║
 ║  ──────────────────────────────────────────────────────────────────    ║
-║  Plugin: 2.1.1 → System: 2.1.1 ✓                                      ║
+║  Plugin: 3.0.1 → System: 3.0.1 ✓                                      ║
 ║                                                                        ║
 ║  [A] Rules: X updated, Y current                                       ║
 ║  [B] CLAUDE.md: X sections added, Y updated                            ║
 ║  [C] Folders: X _references/ created, Y renames                        ║
 ║  [D] Manifests: X updated, Y current                                   ║
 ║  [E] References: X issues fixed, Y projects clean                      ║
-║  [F] Config: system_version set to 2.1.1                               ║
+║  [F] Config: system_version set to 3.0.1                               ║
 ║  [G] Sweep: ✓ passed                                                   ║
 ║                                                                        ║
 ║  ──────────────────────────────────────────────────────────────────    ║
-║                                                                ALIVE v2.1║
+║                                                            ALIVE v3.0.1║
 ╚══════════════════════════════════════════════════════════════════════════╝
 ```
 
@@ -677,7 +674,7 @@ The sweep will catch any issues the subagents missed. If sweep finds problems, f
 
 **Already up to date:**
 ```
-✓ System is current (2.1.1)
+✓ System is current (3.0.1)
   └─ No upgrade needed.
 ```
 
@@ -687,7 +684,7 @@ The sweep will catch any issues the subagents missed. If sweep finds problems, f
 
 This file tracks your system version. Creating it now.
 ```
-Create the file with `system_version: "2.1.1"` and `onboarding_complete: true`.
+Create the file with `system_version: "3.0.1"` and `onboarding_complete: true`.
 
 **Single project upgrade (from /alive:work):**
 ```
@@ -727,6 +724,17 @@ Skip directly to Session 2 steps.
 | **Config** | Update `system_version: "2.1.1"` in alive.local.yaml. |
 
 No structural changes. Plugin auto-update delivers the new skill files. Users just need `system_version` bumped.
+
+### 2.1.1 → 3.0.1
+
+| Category | Changes |
+|----------|---------|
+| **Product** | Rebranded to aliveOS Unlimited Elephant. Version jump from 2.1.1 to 3.0.1. |
+| **Terminology** | "entity" → "project", "subdomain" → "project", "sub-entity" → "sub-project", "has_entities" → "has_projects" across all rules, templates, skills, and CLAUDE.md. |
+| **Skills** | `do` renamed to `work`. `capture-context` renamed to `capture`. `power-user-install` renamed to `scan`. Skill descriptions rewritten (what-it-does first, triggers second). |
+| **Rules** | New `anti-patterns.md` (9 rules). `capture` skill now proactively invokes on external content. All rules updated for terminology changes. |
+| **UI** | Elephant mascot (Beate Schwichtenberg large, jrei small). Roman FIGlet "ALIVE" wordmark. Boot screen with manifesto. |
+| **Config** | Update `system_version: "3.0.1"` in alive.local.yaml. |
 
 ---
 

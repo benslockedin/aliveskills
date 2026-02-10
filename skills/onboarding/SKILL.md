@@ -816,7 +816,7 @@ Example: If user chose `~/Desktop/alive/` as their ALIVE location:
 - `behaviors.md` — How Claude reads and updates context
 - `conventions.md` — File naming, folder structure
 - `intent.md` — Understanding user commands
-- `learning-loop.md` — The daily/do/save rhythm
+- `learning-loop.md` — The daily/work/save rhythm
 - `ui-standards.md` — Visual formatting
 - `voice.md` — How Claude communicates
 - `working-folder-evolution.md` — When drafts become projects

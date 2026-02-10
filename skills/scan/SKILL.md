@@ -238,7 +238,7 @@ Onboarding calls this skill like:
 
 ```
 User opts in to session analysis
-→ Invoke power-user-install
+→ Invoke scan
 → Wait for completion
 → Read .claude/state/user-profile.md
 → Use profile to personalize remaining onboarding
