@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Move completed or inactive items to the archive. Use when the user says "archive X", "shelve X", "close X", "deactivate X", "done with X", "X is complete", or "finished with X".
-plugin_version: "2.1.1"
+plugin_version: "3.0.1"
 ---
 
 # alive:archive
@@ -15,7 +15,7 @@ This skill uses **Tier 3: Utility** formatting.
 **Visual elements:**
 - Compact logo (4-line ASCII art header)
 - Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
+- Version footer: `ALIVE v3.0.1` (right-aligned)
 
 See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
 
@@ -63,7 +63,7 @@ The archive mirrors the working structure exactly.
 ```
 What are you archiving?
 
-[1] A subdomain (04_Ventures/acme)
+[1] A project (04_Ventures/acme)
 [2] An area (04_Ventures/acme/clients/globex)
 [3] A file (specific document)
 ```
@@ -77,7 +77,7 @@ Before archiving, verify:
 
 Status: No _brain/ (this is an area)
 Files: 5 documents
-Related tasks: 2 found in parent subdomain
+Related tasks: 2 found in parent project
 
 ─────────────────────────────────────────────────────────────────────────
 [!] Found 2 related tasks in 04_Ventures/acme/_brain/tasks.md:
@@ -139,21 +139,21 @@ Parent manifest updated.
 This content is preserved and searchable via /alive:recall.
 ```
 
-## Archiving Subdomains
+## Archiving Projects
 
-When archiving a full subdomain (with _brain/):
+When archiving a full project (with _brain/):
 
 ```
 ▸ archiving 04_Ventures/old-project/
 
-This is a full subdomain with state.
+This is a full project with state.
 
 Current status: Completed
 Last updated: 2026-01-15 (8 days ago)
 Open tasks: 0
 
 Archive everything including _brain/?
-[1] Yes, archive full subdomain
+[1] Yes, archive full project
 [2] No, just archive specific areas
 [3] Cancel
 ```
@@ -196,7 +196,7 @@ Found in 05_Experiments/failed-idea/_brain/insights.md:
 - "Target market too small for subscription model"
 - "Customer acquisition cost exceeded LTV"
 
-Copy these to another subdomain before archiving?
+Copy these to another project before archiving?
 [1] Yes, copy to 04_Ventures/main/_brain/insights.md
 [2] No, keep only in archive
 ```
@@ -280,5 +280,5 @@ Archived: 2026-01-23
 
 - `/alive:recall` — Find archived content
 - `/alive:sweep` — Identify archive candidates
-- `/alive:new` — Create new subdomain (opposite of archive)
+- `/alive:new` — Create new project (opposite of archive)
 

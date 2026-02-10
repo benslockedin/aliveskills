@@ -11,7 +11,7 @@
 02_Life/
 ├── people/           # Source of truth for all people
 │   └── [name].md     # Person files
-└── [entity]/         # Life entities (health, finance, etc.)
+└── [project]/         # Life projects (health, finance, etc.)
     ├── .claude/
     │   └── CLAUDE.md
     ├── _brain/
@@ -62,9 +62,9 @@ The `people/` folder is the source of truth for all people across ALIVE. Other d
 
 ---
 
-## Life Entity Template
+## Life Project Template
 
-Life entities (health, finance, relationships, etc.) are full entities — they have `_brain/`, `_working/`, and `_references/` just like ventures and experiments.
+Life projects (health, finance, relationships, etc.) are full projects — they have `_brain/`, `_working/`, and `_references/` just like ventures and experiments.
 
 ### CLAUDE.md
 
@@ -119,9 +119,9 @@ None.
 
 ---
 
-## Common Life Entities
+## Common Life Projects
 
-| Entity | Purpose |
+| Project | Purpose |
 |--------|---------|
 | health/ | Physical and mental health |
 | finance/ | Money, investments, budgets |
@@ -129,12 +129,12 @@ None.
 | growth/ | Learning, skills, development |
 | home/ | Living space, maintenance |
 
-These are full entities — each gets `_brain/`, `_working/`, and `_references/`.
+These are full projects — each gets `_brain/`, `_working/`, and `_references/`.
 
 ---
 
 ## Notes
 
-- Life entities are optional — create only what you need
+- Life projects are optional — create only what you need
 - people/ is always present (source of truth for all people)
 - Life first, always — this domain takes priority

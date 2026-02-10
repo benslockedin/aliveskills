@@ -19,7 +19,7 @@ Route user intent to skills. Match INTENT, not keywords. People phrase things di
 
 ### /alive:daily — Morning Dashboard
 
-See everything across all entities. The heartbeat.
+See everything across all projects. The heartbeat.
 
 | Style | Examples |
 |-------|----------|
@@ -30,7 +30,7 @@ See everything across all entities. The heartbeat.
 
 ---
 
-### /alive:do — Start Work
+### /alive:work — Start Work
 
 Load context, check what's in progress, begin working.
 
@@ -56,9 +56,9 @@ Log session to changelog, update state, wrap up.
 
 ---
 
-### /alive:new — Create Subdomain or Area
+### /alive:new — Create Project or Area
 
-Scaffold a new venture, experiment, life area, or organizational folder.
+Scaffold a new venture, experiment, life area, or folder.
 
 | Style | Examples |
 |-------|----------|
@@ -69,7 +69,7 @@ Scaffold a new venture, experiment, life area, or organizational folder.
 
 ---
 
-### /alive:capture-context — Capture Context
+### /alive:capture — Capture Context
 
 Capture any content into ALIVE — quick notes, emails, transcripts, articles, decisions, anything worth preserving.
 
@@ -237,14 +237,14 @@ Proactively suggest skills based on system state:
 
 | Condition | Suggest |
 |-----------|---------|
-| Session start (first message) | "Welcome back. `/alive:daily` to see everything, or `/alive:do` to jump into an entity?" |
+| Session start (first message) | "Welcome back. `/alive:daily` to see everything, or `/alive:work` to jump into an project?" |
 | 03_Inputs/ has items | "You have X items in 03_Inputs/. `/alive:digest`?" |
 | _brain/ is stale (>2 weeks) | "X hasn't been updated in Y days. `/alive:sweep`?" |
 | No recent save | "You haven't saved in a while. `/alive:save`?" |
-| User shares decision/insight | "Want me to capture that? `/alive:capture-context`" |
+| User shares decision/insight | "Want me to capture that? `/alive:capture`" |
 | Version mismatch detected | "[!] System update available. `/alive:upgrade`?" |
 | Ongoing thread from previous session | "You have an ongoing thread from yesterday. `/alive:revive`?" |
-| Entity work is done / completed | "Looks like X is complete. `/alive:archive`?" |
+| Project work is done / completed | "Looks like X is complete. `/alive:archive`?" |
 
 ---
 

@@ -1,12 +1,12 @@
 # Working Folder Evolution
 
-When `_working/` accumulates related files, evolve them into proper organizational folders.
+When `_working/` accumulates related files, evolve them into proper folders.
 
 ---
 
 ## The Principle
 
-`_working/` is a staging area, not a permanent home. When multiple related files accumulate around a single project or concept, they should graduate into a proper organizational folder with a README.
+`_working/` is a staging area, not a permanent home. When multiple related files accumulate around a single project or concept, they should graduate into a proper folder with a README.
 
 ---
 
@@ -225,6 +225,6 @@ Want me to evolve these into a proper landing-page/ folder with a README?
 | Question | Answer |
 |----------|--------|
 | When to evolve? | 3+ related files, or logical project grouping |
-| Where to put it? | Sibling to _working/, or appropriate area folder |
+| Where to put it? | Sibling to _working/, or appropriate folder |
 | What's required? | README.md explaining the project |
 | What stays in _working/? | Truly temporary, single-file drafts |

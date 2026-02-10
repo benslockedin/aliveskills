@@ -15,7 +15,7 @@ Every skill belongs to a tier that determines its visual treatment:
 | Tier | Skills | Logo | Border | Footer |
 |------|--------|------|--------|--------|
 | **1: Entry Points** | `onboarding`, `daily` | Full (24-line) | Double-line wrap | Community |
-| **2: Core Workflow** | `do`, `save`, `help` | Compact (4-line) | Double-line wrap | Community |
+| **2: Core Workflow** | `work`, `save`, `help` | Compact (4-line) | Double-line wrap | Community |
 | **3: Utility** | All others | Compact (4-line) | Double-line wrap | Version |
 
 ### Border Characters (Double-Line)
@@ -81,7 +81,7 @@ Used by: All skills except `onboarding` and `daily`
 
 ### Community Footer (Tier 1 & 2)
 
-Used by: `onboarding`, `daily`, `do`, `save`, `help`
+Used by: `onboarding`, `daily`, `work`, `save`, `help`
 
 ```
 ║  ──────────────────────────────────────────────────────────────────────────────────    ║
@@ -96,7 +96,7 @@ Used by: All other skills
 
 ```
 ║  ──────────────────────────────────────────────────────────────────────────────────    ║
-║                                                                              ALIVE v2.0║
+║                                                                              ALIVE v3.0.1║
 ╚════════════════════════════════════════════════════════════════════════════════════════╝
 ```
 
@@ -106,7 +106,7 @@ Used by: All other skills
 
 Use columns where it improves information density. The vertical pipe `│` separates columns.
 
-### Status + Tasks (for `/alive:do`)
+### Status + Tasks (for `/alive:work`)
 
 ```
 ║  STATUS                          │  TASKS                                              ║
@@ -119,7 +119,7 @@ Use columns where it improves information density. The vertical pipe `│` separ
 ║  Next: PR to main                │  [6] Review all rules in plugin                     ║
 ```
 
-### Entity Grid (for `/alive:daily`)
+### Project Grid (for `/alive:daily`)
 
 ```
 ║  VENTURES                        │  EXPERIMENTS                                        ║
@@ -181,7 +181,7 @@ Use columns where it improves information density. The vertical pipe `│` separ
 ║  [!] 2 items pending triage                                                              ║
 ║                                                                                          ║
 ║  ──────────────────────────────────────────────────────────────────────────────────────  ║
-║  [#] Pick number    [i] Process inputs    [n] New entity                                 ║
+║  [#] Pick number    [i] Process inputs    [n] New project                                 ║
 ║                                                                                          ║
 ║  ──────────────────────────────────────────────────────────────────────────────────────  ║
 ║  Free: Join the ALIVE community → skool.com/aliveoperators                               ║
@@ -189,7 +189,7 @@ Use columns where it improves information density. The vertical pipe `│` separ
 ╚══════════════════════════════════════════════════════════════════════════════════════════╝
 ```
 
-### Tier 2 Example: `/alive:do`
+### Tier 2 Example: `/alive:work`
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════════════════════╗
@@ -223,7 +223,7 @@ Use columns where it improves information density. The vertical pipe `│` separ
 ╚══════════════════════════════════════════════════════════════════════════════════════════╝
 ```
 
-### Tier 3 Example: `/alive:capture-context`
+### Tier 3 Example: `/alive:capture`
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════════════════════╗
@@ -238,7 +238,7 @@ Use columns where it improves information density. The vertical pipe `│` separ
 ║  ✓ Captured: "Decided to use double-line borders for all skill outputs"                  ║
 ║                                                                                          ║
 ║  ──────────────────────────────────────────────────────────────────────────────────────  ║
-║                                                                              ALIVE v2.0  ║
+║                                                                              ALIVE v3.0.1  ║
 ╚══════════════════════════════════════════════════════════════════════════════════════════╝
 ```
 
@@ -274,7 +274,7 @@ Full visual experience. ASCII art, box drawing, retrieval paths.
 
 Clean output. No ASCII art, shorter lines. Saves context window.
 
-**Dashboard header:** Simple `ALIVE v2.0`
+**Dashboard header:** Simple `ALIVE v3.0.1`
 **Skill headers:** Markdown `## Ventures`
 **Retrieval paths:** Hidden unless error
 **Separators:** Short `---`

@@ -10,7 +10,7 @@ You are Claude with access to ALIVE — a file-based context infrastructure that
 
 ### On Session Start
 
-When working on an entity, read these files first:
+When working on an project, read these files first:
 
 | File | Purpose | Why |
 |------|---------|-----|
@@ -85,9 +85,9 @@ Life is not just prioritised. **Life is foundational.** Ventures and experiments
 
 ---
 
-## Goal-Driven Entities
+## Goal-Driven Projects
 
-Every entity should have a single-sentence goal in `status.md`:
+Every project should have a single-sentence goal in `status.md`:
 
 ```markdown
 **Goal:** Build a $10k MRR SaaS for agency owners.
@@ -99,16 +99,16 @@ This goal filters decisions ("Does this serve the goal?"), enables advice (Claud
 
 ## Structure
 
-Every **entity** (named project) has:
+Every **project** (named project) has:
 - `.claude/CLAUDE.md` — Identity (what it is, who's involved)
 - `_brain/` — Current state (status, tasks, insights, changelog, manifest)
 - `_working/` — Drafts in progress
 - `_references/` — Reference materials and source documents (YAML front matter indexed in manifest `references` array for scanning without loading)
 
-Every **area** (organisational folder) has:
+Every **area** (folder) has:
 - `README.md` — What this folder contains
 
-Check `_brain/` before answering anything about an entity.
+Check `_brain/` before answering anything about an project.
 
 ---
 
@@ -131,10 +131,10 @@ If the answer is no, you haven't finished.
 
 Read `rules/` for detailed guidance on:
 - **voice.md** — How to talk (direct, no fluff, no false enthusiasm)
-- **behaviors.md** — Context behaviours in detail
+- **behaviors.md** — Context behaviors in detail
 - **conventions.md** — File naming, _brain files, manifest structure
 - **ui-standards.md** — Themes, symbols, output formatting
-- **intent.md** — How to recognise what skill the user wants
+- **intent.md** — How to recognize what skill the user wants
 - **learning-loop.md** — Core workflow: daily → work → save → repeat
 - **working-folder-evolution.md** — When _working/ files should become proper folders
 
@@ -144,7 +144,7 @@ The vibe: **Direct, helpful, proud of the system.** You're a guide who knows thi
 
 ## Templates
 
-Templates for creating new entities, subentities, and _brain/ files live in `.claude/templates/`. When creating new structure, use these as the starting point — don't invent from scratch.
+Templates for creating new projects, sub-projects, and _brain/ files live in `.claude/templates/`. When creating new structure, use these as the starting point — don't invent from scratch.
 
 ---
 
@@ -152,11 +152,11 @@ Templates for creating new entities, subentities, and _brain/ files live in `.cl
 
 | Skill | Purpose |
 |-------|---------|
-| `/alive:daily` | Morning check-in, see all entities |
-| `/alive:do` | Start work on one entity |
+| `/alive:daily` | Morning check-in, see all projects |
+| `/alive:work` | Start work on one project |
 | `/alive:save` | End session, log to changelog |
-| `/alive:new` | Create entity or area |
-| `/alive:capture-context` | Capture context into ALIVE |
+| `/alive:new` | Create project or area |
+| `/alive:capture` | Capture context into ALIVE |
 | `/alive:recall` | Search past context |
 | `/alive:migrate` | Bulk import context |
 | `/alive:archive` | Move to archive |
@@ -165,7 +165,7 @@ Templates for creating new entities, subentities, and _brain/ files live in `.cl
 | `/alive:help` | Quick reference |
 | `/alive:onboarding` | First-time setup wizard |
 
-See `rules/intent.md` for how to recognise when users want these skills.
+See `rules/intent.md` for how to recognize when users want these skills.
 
 ---
 

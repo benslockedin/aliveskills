@@ -1,14 +1,14 @@
 ---
 user-invocable: true
-description: This skill should be used when the user says "work on X", "focus on X", "open X", "status of X", "let's do X", "continue", "resume", "keep going", or "pick up where I left off". Focuses on one specific venture, experiment, or life area.
-plugin_version: "2.1.1"
+description: Load one project's full context and start working — reads _brain/, surfaces tasks, and picks up where you left off. Use when the user says "work on X", "focus on X", "open X", "status of X", "continue", "resume", or "pick up where I left off".
+plugin_version: "3.0.1"
 ---
 
-# alive:do
+# alive:work
 
-Focus on ONE entity. Load context from its `_brain/` folder and show current state.
+Focus on ONE project. Load context from its `_brain/` folder and show current state.
 
-**Different from `/alive:daily`:** Do focuses on ONE entity. Daily shows EVERYTHING.
+**Different from `/alive:daily`:** Do focuses on ONE project. Daily shows EVERYTHING.
 
 ## Version Check (Before Main Flow)
 
@@ -28,18 +28,18 @@ Compare your `plugin_version` (from frontmatter above) against the user's system
 
 ```dot
 digraph do_flow {
-    "Start" -> "User specified entity?";
-    "User specified entity?" -> "Find entity" [label="yes"];
-    "User specified entity?" -> "Check session-index" [label="no"];
-    "Check session-index" -> "Offer recent entity" [label="found"];
-    "Check session-index" -> "Ask which entity" [label="empty"];
-    "Find entity" -> "Check structure";
-    "Offer recent entity" -> "Check structure";
-    "Ask which entity" -> "Check structure";
+    "Start" -> "User specified project?";
+    "User specified project?" -> "Find project" [label="yes"];
+    "User specified project?" -> "Check session-index" [label="no"];
+    "Check session-index" -> "Offer recent project" [label="found"];
+    "Check session-index" -> "Ask which project" [label="empty"];
+    "Find project" -> "Check structure";
+    "Offer recent project" -> "Check structure";
+    "Ask which project" -> "Check structure";
     "Check structure" -> "Offer upgrade" [label="_state/ found"];
-    "Check structure" -> "cd into entity" [label="_brain/ OK"];
-    "Offer upgrade" -> "cd into entity" [label="after upgrade"];
-    "cd into entity" -> "Load _brain/";
+    "Check structure" -> "cd into project" [label="_brain/ OK"];
+    "Offer upgrade" -> "cd into project" [label="after upgrade"];
+    "cd into project" -> "Load _brain/";
     "Load _brain/" -> "Check freshness";
     "Check freshness" -> "Flag stale" [label="> 2 weeks"];
     "Check freshness" -> "Show summary" [label="fresh"];
@@ -48,32 +48,32 @@ digraph do_flow {
 }
 ```
 
-## Step 1: Identify Entity
+## Step 1: Identify Project
 
-**User specifies entity:**
+**User specifies project:**
 ```
 "work on acme" → 04_Ventures/acme/
 "focus on health" → 02_Life/health/
 ```
 
-**User says "continue" or "resume" (no entity):**
+**User says "continue" or "resume" (no project):**
 1. Read `.claude/state/session-index.jsonl`
 2. Find most recent `status: "ongoing"` entry
-3. Offer that entity:
+3. Offer that project:
 ```
 ▸ checking session-index...
   └─ Last session: 04_Ventures/alive-llc (yesterday, [breakthrough])
 
 Continue with alive-llc?
 [1] Yes
-[2] Pick different entity
+[2] Pick different project
 ```
 
 **No session-index or no ongoing threads:**
 ```
 No recent session found.
 
-Which entity?
+Which project?
 [1] 04_Ventures/acme-agency
 [2] 04_Ventures/side-project
 [3] 05_Experiments/new-idea
@@ -90,10 +90,10 @@ Which one?
 
 ## Step 2: Check Structure (v1 Detection)
 
-Before loading, check if entity uses v1 structure:
+Before loading, check if project uses v1 structure:
 
 ```
-Check: Does {entity}/_state/ exist? (should be _brain/)
+Check: Does {project}/_state/ exist? (should be _brain/)
 ```
 
 If v1 detected:
@@ -105,15 +105,15 @@ Upgrade to v2?
 [2] No, continue with v1
 ```
 
-If yes → invoke `/alive:upgrade` with this entity, then continue.
+If yes → invoke `/alive:upgrade` with this project, then continue.
 If no → use `_state/` paths for this session.
 
-## Step 2.5: Change to Entity Directory (MANDATORY)
+## Step 2.5: Change to Project Directory (MANDATORY)
 
-**Before loading context, `cd` into the entity directory:**
+**Before loading context, `cd` into the project directory:**
 
 ```bash
-cd {alive-root}/{entity}/
+cd {alive-root}/{project}/
 ```
 
 For example:
@@ -125,7 +125,7 @@ cd ~/Desktop/alive/04_Ventures/acme-agency/
 - Claude's system context automatically reads `.claude/CLAUDE.md` from the working directory
 - Local `CLAUDE.md` files get picked up
 - All relative paths in the session work correctly
-- The entity becomes the "home base" for the session
+- The project becomes the "home base" for the session
 
 **Show the change:**
 ```
@@ -138,10 +138,10 @@ cd ~/Desktop/alive/04_Ventures/acme-agency/
 **You MUST read all 4 files. Do not skip any.**
 
 Read in order:
-1. `{entity}/_brain/status.md` — Phase and focus
-2. `{entity}/_brain/tasks.md` — Work queue
-3. `{entity}/_brain/manifest.json` — Structure map
-4. `{entity}/_brain/changelog.md` — **First 200 lines** (recent session history)
+1. `{project}/_brain/status.md` — Phase and focus
+2. `{project}/_brain/tasks.md` — Work queue
+3. `{project}/_brain/manifest.json` — Structure map
+4. `{project}/_brain/changelog.md` — **First 200 lines** (recent session history)
 
 **The changelog is CRITICAL.** It contains:
 - What happened in recent sessions
@@ -168,7 +168,7 @@ Read in order:
 
 **Implementation:**
 ```
-Read(file_path: "{entity}/_brain/changelog.md", limit: 200)
+Read(file_path: "{project}/_brain/changelog.md", limit: 200)
 ```
 
 **References:** If the manifest has a `references` array, mention the count to the user (e.g. "3 reference docs available"). Don't load the files — just surface awareness. Users can ask to read specific references on demand.
@@ -285,13 +285,13 @@ What's first?
 When the user picks a handoff (e.g. `r1` or "resume the plugin feedback session"):
 
 1. **Read the handoff document** into memory
-2. **Archive immediately** — move file to `01_Archive/{entity-path}/sessions/` and remove from `manifest.handoffs[]`:
+2. **Archive immediately** — move file to `01_Archive/{project-path}/sessions/` and remove from `manifest.handoffs[]`:
    ```
    ▸ loading handoff...
      └─ Reading _working/sessions/plugin-feedback-abc12345-2026-02-02.md
 
    ▸ archiving handoff (already read)...
-     └─ Moving to 01_Archive/{entity-path}/sessions/
+     └─ Moving to 01_Archive/{project-path}/sessions/
      └─ Removing from manifest.handoffs[]
 
    ✓ Handoff archived — context loaded
@@ -305,12 +305,12 @@ When the user picks a handoff (e.g. `r1` or "resume the plugin feedback session"
 
 ## Edge Cases
 
-**Entity doesn't exist:**
+**Project doesn't exist:**
 ```
 ✗ 04_Ventures/acme/ not found
 
 [1] Create 04_Ventures/acme/ (→ /alive:new)
-[2] Show available entities
+[2] Show available projects
 ```
 
 **No _brain/ or _state/ folder:**
@@ -324,14 +324,14 @@ Initialize _brain/ now?
 
 ## After Loading
 
-- Stay scoped to this entity (don't read other entities)
+- Stay scoped to this project (don't read other projects)
 - Track changes for session
 - When done → `/alive:save`
 
 ## Related Skills
 
-- `/alive:daily` — See ALL entities
+- `/alive:daily` — See ALL projects
 - `/alive:save` — End session
-- `/alive:new` — Create entity
+- `/alive:new` — Create project
 - `/alive:upgrade` — Migrate v1 → v2
 - `/alive:handoff` — Session continuity (creates handoff docs for resumption)

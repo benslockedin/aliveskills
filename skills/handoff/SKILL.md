@@ -1,6 +1,6 @@
 ---
-description: Use when saving a session due to context compaction, "compact", "running out of context", or planning to resume later. Creates comprehensive handoff document for zero-context session continuity. Called by save skill, not directly by user.
-plugin_version: "2.1.1"
+description: Create a comprehensive handoff document for zero-context session continuity. Used during saves when context is compacting or work will resume later. Called by the save skill, not directly by user.
+plugin_version: "3.0.1"
 ---
 
 # alive:handoff
@@ -16,7 +16,7 @@ This skill uses **Tier 3: Utility** formatting.
 **Visual elements:**
 - Compact logo (4-line ASCII art header)
 - Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
+- Version footer: `ALIVE v3.0.1` (right-aligned)
 
 See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
 
@@ -34,8 +34,8 @@ Called by `/alive:save` when save reason is:
 
 ```dot
 digraph handoff_flow {
-    "Save skill calls handoff" -> "Identify entity";
-    "Identify entity" -> "Check _working/sessions/";
+    "Save skill calls handoff" -> "Identify project";
+    "Identify project" -> "Check _working/sessions/";
     "Check _working/sessions/" -> "Create if missing";
     "Create if missing" -> "Dispatch deep-dive subagent";
     "Dispatch deep-dive subagent" -> "Write handoff document";
@@ -44,9 +44,9 @@ digraph handoff_flow {
 }
 ```
 
-## Step 1: Identify Entity
+## Step 1: Identify Project
 
-Determine which entity this handoff belongs to based on:
+Determine which project this handoff belongs to based on:
 - Current working directory
 - What was being worked on in the session
 
@@ -56,11 +56,11 @@ Determine which entity this handoff belongs to based on:
 
 ## Step 2: Ensure Sessions Folder Exists
 
-Check for `{entity}/_working/sessions/` folder:
+Check for `{project}/_working/sessions/` folder:
 
 ```bash
 # If missing, create it
-mkdir -p {entity}/_working/sessions/
+mkdir -p {project}/_working/sessions/
 ```
 
 ```
@@ -76,7 +76,7 @@ mkdir -p {entity}/_working/sessions/
 Check TWO locations (since handoffs are archived immediately on resume):
 
 1. `manifest.handoffs[]` — for pending handoffs not yet resumed
-2. `01_Archive/{entity-path}/sessions/` — for previously resumed handoffs
+2. `01_Archive/{project-path}/sessions/` — for previously resumed handoffs
 
 ```
 ▸ checking for existing handoff...
@@ -132,7 +132,7 @@ You are creating a handoff document for session continuity.
 
 CONTEXT:
 - Session ID: {session_id}
-- Entity: {entity_path}
+- Project: {entity_path}
 - Reason for handoff: {compact/resuming later}
 
 YOUR TASK:
@@ -148,7 +148,7 @@ Each update builds on previous context. The goal is ONE comprehensive document.
 
 CONTEXT:
 - Session ID: {session_id}
-- Entity: {entity_path}
+- Project: {entity_path}
 - Reason for handoff: {compact/resuming later}
 - Update number: {update_count + 1}
 - Retrieved from: {archive | manifest}
@@ -245,7 +245,7 @@ Return the complete handoff document content in markdown format.
 
 Example: `alive-plugin-feedback-abc12345-2026-02-02-1530.md`
 
-**Location:** `{entity}/_working/sessions/`
+**Location:** `{project}/_working/sessions/`
 
 ### Document Structure
 
@@ -255,7 +255,7 @@ created: 2026-02-02T15:30:00
 updated: 2026-02-02T16:45:00    # Added on updates
 session_id: abc12345
 status: pending
-entity: 04_Ventures/acme
+project: 04_Ventures/acme
 reason: context_compact
 update_count: 0                  # Incremented on each update
 ---
@@ -265,7 +265,7 @@ update_count: 0                  # Incremented on each update
 **Session ID:** abc12345
 **Created:** 2026-02-02 15:30
 **Updated:** 2026-02-02 16:45 (if updated)
-**Entity:** 04_Ventures/acme
+**Project:** 04_Ventures/acme
 **Reason:** Context compaction
 
 ---
@@ -346,7 +346,7 @@ Read these files in order when resuming:
 
 **This handoff will be automatically archived when resumed.**
 
-When you run `/alive:do` and select "Yes" to resume:
+When you run `/alive:work` and select "Yes" to resume:
 1. The content is loaded into the session
 2. This file is immediately moved to `01_Archive/`
 3. No manual cleanup needed
@@ -366,7 +366,7 @@ You don't need to remember to archive — it happens automatically.
 
 ## Step 5: Update Manifest
 
-Add handoff to entity's manifest.json so `/alive:do` can find it:
+Add handoff to project's manifest.json so `/alive:work` can find it:
 
 ```json
 {
@@ -402,9 +402,9 @@ Handoff is complete. Return control to save skill to continue with:
 
 ## Integration with Other Skills
 
-### /alive:do Integration
+### /alive:work Integration
 
-When `do` skill loads an entity, it checks manifest for pending handoffs:
+When `work` skill loads an project, it checks manifest for pending handoffs:
 
 ```
 ▸ checking for pending handoffs...
@@ -435,7 +435,7 @@ if reason in ["compact", "context full", "coming back", "resume later"]:
 Created (pending) → Resumed (ARCHIVED IMMEDIATELY) → Work continues
 ```
 
-**Archiving happens ON RESUME, not later.** When `/alive:do` loads a handoff:
+**Archiving happens ON RESUME, not later.** When `/alive:work` loads a handoff:
 
 1. Read handoff content into memory
 2. **Archive immediately** (move to `01_Archive/`)
@@ -447,7 +447,7 @@ Created (pending) → Resumed (ARCHIVED IMMEDIATELY) → Work continues
   └─ Reading content
 
 ▸ archiving handoff (already read)...
-  └─ Moving to 01_Archive/{entity-path}/sessions/
+  └─ Moving to 01_Archive/{project-path}/sessions/
   └─ Removing from manifest.handoffs[]
 
 ✓ Handoff archived — context loaded
@@ -489,10 +489,10 @@ If specific code patterns, implementations, or snippets are essential:
 | Missing rationale | Include WHY for every decision |
 | Assuming context | Document as if reader knows nothing |
 | Skipping files list | Always list files to read on resume |
-| Forgetting to update manifest | Handoff is useless if `do` can't find it |
+| Forgetting to update manifest | Handoff is useless if `work` can't find it |
 
 ## Related Skills
 
 - `/alive:save` — Calls this skill when appropriate
-- `/alive:do` — Checks for pending handoffs on load
+- `/alive:work` — Checks for pending handoffs on load
 

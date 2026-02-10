@@ -16,8 +16,8 @@ Universal input. Triage regularly.
 Inputs is temporary. Nothing lives here permanently.
 
 Process with `/alive:digest`:
-1. Extract tasks → route to entity
-2. Extract insights → route to entity
+1. Extract tasks → route to project
+2. Extract insights → route to project
 3. Extract decisions → route to changelog
 4. Archive or delete the rest
 

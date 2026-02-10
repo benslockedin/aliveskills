@@ -9,7 +9,7 @@
 
 ```
 05_Experiments/
-└── [name]/           # Each experiment is an entity
+└── [name]/           # Each experiment is an project
     ├── .claude/
     │   └── CLAUDE.md # Identity
     ├── _brain/
@@ -20,7 +20,7 @@
     │   └── manifest.json
     ├── _working/     # Drafts
     ├── _references/  # Reference materials
-    └── [areas]/      # Optional organizational folders
+    └── [areas]/      # Optional folders
 ```
 
 ---

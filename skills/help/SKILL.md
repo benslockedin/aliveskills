@@ -1,7 +1,7 @@
 ---
 user-invocable: true
-description: Quick reference for ALIVE commands and capabilities. Use when the user says "help", "show commands", "what can you do", "how does X work", "how do I X", or "I'm confused".
-plugin_version: "2.1.1"
+description: Quick reference for ALIVE commands, skills, and system concepts. Use when the user says "help", "show commands", "what can you do", "how does X work", or "how do I X".
+plugin_version: "3.0.1"
 ---
 
 # alive:help
@@ -48,13 +48,13 @@ ALIVE — The operating system for your context.
 
 CORE SKILLS
 ─────────────────────────────────────────────────────────────────────────
-/alive:do        Start work, load context from a subdomain
+/alive:work        Start work, load context from a project
 /alive:save      End session, log to changelog
-/alive:new       Create subdomain or area
+/alive:new       Create project or area
 
 CAPTURE & FIND
 ─────────────────────────────────────────────────────────────────────────
-/alive:capture-context   Capture context into ALIVE
+/alive:capture   Capture context into ALIVE
 /alive:recall    Search past context, decisions, sessions
 /alive:migrate   Bulk import content into ALIVE
 
@@ -95,14 +95,14 @@ E — 05_Experiments  Testing grounds, no model yet
 Life first, always.
 ```
 
-### Subdomains vs Areas
+### Projects vs Areas
 
 ```
-User: "What's the difference between subdomain and area?"
+User: "What's the difference between project and area?"
 
 SUBDOMAIN vs AREA
 ─────────────────────────────────────────────────────────────────────────
-                    Subdomain           Area
+                    Project           Area
 Has _brain/         Yes                 No
 Has .claude/        Yes                 No
 Has _working/       Yes                 No
@@ -110,8 +110,8 @@ Has _references/    Yes                 No
 Identity file       .claude/CLAUDE.md   README.md
 Example             04_Ventures/acme/      04_Ventures/acme/clients/
 
-Subdomains are projects with their own state.
-Areas are organizational folders within subdomains.
+Projects are projects with their own state.
+Areas are folders within projects.
 ```
 
 ### _brain/ Files
@@ -127,7 +127,7 @@ insights.md     Learnings worth remembering
 changelog.md    Session history + decisions
 manifest.json   Structure map with file summaries
 
-This is the subdomain's "brain" — its persistent memory.
+This is the project's "brain" — its persistent memory.
 ```
 
 ### Themes
@@ -174,7 +174,7 @@ Say things like:
 - "Find decisions about AWS"
 - "When did we discuss the launch?"
 
-I'll search across all subdomains and show what I find.
+I'll search across all projects and show what I find.
 ```
 
 ## Skill Details
@@ -212,7 +212,7 @@ New to ALIVE? Run /alive:onboarding for the setup wizard.
 
 Or start with:
 1. /alive:new — Create your first venture
-2. /alive:do — Load it and start working
+2. /alive:work — Load it and start working
 3. /alive:save — Log your progress when done
 ```
 
@@ -235,7 +235,7 @@ People info         →  02_Life/people/
 CAPTURE METHODS
 ─────────────────────────────────────────────────────────────────────────
 Quick:    "FYI we decided X" → I'll offer to capture
-Direct:   /alive:capture-context → Analyses and routes content
+Direct:   /alive:capture → Analyses and routes content
 Inline:   "capture: [content]" → Captures immediately
 Session:  /alive:save → Logs whole session
 ```
@@ -245,11 +245,11 @@ Session:  /alive:save → Logs whole session
 When something goes wrong:
 
 ```
-User: "It says subdomain not found"
+User: "It says project not found"
 
-TROUBLESHOOTING: Subdomain not found
+TROUBLESHOOTING: Project not found
 ─────────────────────────────────────────────────────────────────────────
-The subdomain you referenced doesn't exist.
+The project you referenced doesn't exist.
 
 Check:
 1. Spelling — Names are lowercase with hyphens
@@ -260,7 +260,7 @@ List available:
   04_Ventures/acme, 04_Ventures/beta
   05_Experiments/test-idea
 
-Create new subdomain with /alive:new
+Create new project with /alive:new
 ```
 
 ## Related Resources
@@ -279,5 +279,5 @@ Rules: Check .claude/rules/ for detailed behaviors
 ## Related Skills
 
 - `/alive:onboarding` — First-time setup
-- `/alive:do` — Start working (most common next step)
+- `/alive:work` — Start working (most common next step)
 

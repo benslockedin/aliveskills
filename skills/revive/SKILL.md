@@ -1,7 +1,7 @@
 ---
 user-invocable: true
-description: This skill should be used when the user says "revive", "pick up where I left off", "get me back", "resume session", "what was I working on", or when `/alive:daily` shows ongoing threads and user picks one to resume.
-plugin_version: "2.1.1"
+description: Resume a past session with full context extraction from the raw transcript. Dispatches agents to recover decisions, quotes, tasks, and continuation points. Use when the user says "revive", "pick up where I left off", "resume session", or selects an ongoing thread.
+plugin_version: "3.0.1"
 ---
 
 # alive:revive
@@ -17,7 +17,7 @@ This skill uses **Tier 3: Utility** formatting.
 **Visual elements:**
 - Compact logo (4-line ASCII art header)
 - Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
+- Version footer: `ALIVE v3.0.1` (right-aligned)
 
 See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
 
@@ -121,7 +121,7 @@ DECISIONS (with rationale)
    passive receiving to active feeding"
 
 2. **_state/ → _brain/**
-   Rationale: "Brain analogy — the entity's working memory, not just
+   Rationale: "Brain analogy — the project's working memory, not just
    state storage"
 
 3. **Save fast, revive heavy**
@@ -160,7 +160,7 @@ INSIGHTS
 • Quality-based escalation prevents save fatigue
 • AskUserQuestion makes 3 questions feel fast
 • Manifest is a semantic sitemap, not just a file list
-• Closest subdomain rule prevents saving to wrong level
+• Closest project rule prevents saving to wrong level
 
 WHERE YOU LEFT OFF
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -223,6 +223,6 @@ Can only load from _brain/ files (no full extraction).
 ## Related Skills
 
 - `/alive:daily` — Shows threads, picks one → calls revive
-- `/alive:do` — Fresh start on entity (no extraction)
+- `/alive:work` — Fresh start on project (no extraction)
 - `/alive:save` — End session, log to index
 

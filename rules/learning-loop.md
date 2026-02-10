@@ -12,8 +12,8 @@ DAILY → WORK → SAVE → REPEAT
 
 | Step | Skill | Purpose |
 |------|-------|---------|
-| **Daily** | `/alive:daily` | Morning check-in. See all entities, goals, urgent tasks, inputs. |
-| **Work** | `/alive:do` | Focus on ONE entity. Load context, start working. |
+| **Daily** | `/alive:daily` | Morning check-in. See all projects, goals, urgent tasks, inputs. |
+| **Work** | `/alive:work` | Focus on ONE project. Load context, start working. |
 | **Save** | `/alive:save` | End session. Log changes, decisions, next steps. |
 | **Repeat** | — | Come back tomorrow. Context compounds. |
 
@@ -39,9 +39,9 @@ Run the loop → context compounds.
 If you're not running `/alive:daily` regularly, you're not using the system.
 
 **What it shows:**
-- Goals across all entities
+- Goals across all projects
 - Ongoing threads (sessions marked "ongoing")
-- Urgent tasks across entities
+- Urgent tasks across projects
 - Working files that might be stale
 - Items in `03_Inputs/` awaiting triage
 
@@ -54,7 +54,7 @@ If you're not running `/alive:daily` regularly, you're not using the system.
 
 ## Work: Single Focus
 
-`/alive:do` loads ONE entity's context. This is intentional.
+`/alive:work` loads ONE project's context. This is intentional.
 
 **Why single focus:**
 - Context window is finite
@@ -70,7 +70,7 @@ If you're not running `/alive:daily` regularly, you're not using the system.
 **What it loads on demand:**
 - `insights.md` — When making decisions that past learnings could inform, or when the user asks "what did we learn about X"
 - `_references/` raw files — When deeper context on a specific reference is needed (manifest index is always loaded for awareness)
-- Other entities — Ask before cross-loading
+- Other projects — Ask before cross-loading
 
 ---
 
@@ -100,9 +100,9 @@ Every session has a thread state:
 
 | State | Meaning | Next |
 |-------|---------|------|
-| **Ongoing** | Work continues | Resume with `/alive:do` |
+| **Ongoing** | Work continues | Resume with `/alive:work` |
 | **Paused** | Intentionally on hold | Resurface when ready |
-| **Closed** | This thread is done | Archive if entity complete |
+| **Closed** | This thread is done | Archive if project complete |
 
 **Ongoing threads** surface in `/alive:daily` so you don't lose track.
 
@@ -137,7 +137,7 @@ Common failure modes:
 |---------|--------|-----|
 | Skip daily | Miss urgent tasks, stale context | Run daily every session |
 | Skip save | Lose progress, decisions | Always save before leaving |
-| Work on multiple entities | Context overflow, shallow work | Use `/alive:do` for single focus |
+| Work on multiple projects | Context overflow, shallow work | Use `/alive:work` for single focus |
 | Never close threads | Endless "ongoing" list | Review threads weekly |
 
 ---
@@ -148,7 +148,7 @@ The loop works with the full skill set:
 
 | Skill | Role in Loop |
 |-------|--------------|
-| `/alive:capture-context` | Capture context → triggers during WORK |
+| `/alive:capture` | Capture context → triggers during WORK |
 | `/alive:digest` | Process 03_Inputs/ → part of DAILY |
 | `/alive:revive` | Resume old session → alternative to DO |
 | `/alive:sweep` | Clean stale context → periodic maintenance |
@@ -159,7 +159,7 @@ The loop works with the full skill set:
 
 ```
 DAILY → See everything, pick focus
-WORK  → Load one entity, go deep
+WORK  → Load one project, go deep
 SAVE  → Preserve what happened
 REPEAT → Context compounds
 

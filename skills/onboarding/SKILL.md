@@ -1,7 +1,7 @@
 ---
 user-invocable: true
-description: This skill should be used when the user says "set up ALIVE", "get started", "initialize", "new here", "how do I start", or when `/alive:daily` detects no ALIVE structure exists. Fresh v2 setup for new users.
-plugin_version: "2.1.1"
+description: First-time setup wizard for new ALIVE users. Creates the full system from scratch — folders, rules, configuration, and first projects. Use when the user says "set up ALIVE", "get started", "initialize", or when no ALIVE structure exists.
+plugin_version: "3.0.1"
 ---
 
 # alive:onboarding
@@ -227,7 +227,7 @@ SESSION 2: Content Setup (after restart)
 11. Life Setup (areas, people, goals)
 12. Ventures Setup (name, type, goal, phase)
 13. Experiments Setup
-14. Create Entity Structure (from templates)
+14. Create Project Structure (from templates)
 15. Quick Tour of Key Concepts
 16. First Capture Exercise
 17. The Aha Moment
@@ -246,9 +246,9 @@ Claude operates with its loaded rules. When you install rules and CLAUDE.md in S
 Only a fresh session loads the new rules from `{alive-root}/.claude/rules/` and the CLAUDE.md identity.
 
 **Session 1** installs the system files (rules, CLAUDE.md, statusline, base folders).
-**Session 2** uses the loaded ALIVE knowledge to properly create entities with correct structure, conventions, and behaviours.
+**Session 2** uses the loaded ALIVE knowledge to properly create projects with correct structure, conventions, and behaviors.
 
-Without the restart, Claude would create entities without understanding ALIVE conventions — leading to incorrect folder structures, missing files, and broken patterns.
+Without the restart, Claude would create projects without understanding ALIVE conventions — leading to incorrect folder structures, missing files, and broken patterns.
 
 ---
 
@@ -344,7 +344,7 @@ With ALIVE, it works like this:
 
 The magic: a simple folder structure that I understand.
 
-You organise your world into domains (Life, Ventures, Experiments).
+You organize your world into domains (Life, Ventures, Experiments).
 Each one has a "_brain" folder where context lives.
 I read it. I update it. Context compounds over time.
 ```
@@ -400,7 +400,7 @@ HOW ALIVE WORKS
 
 ALIVE uses a simple folder structure that I read and write.
 
-Every project (we call them "entities") has a special folder called
+Every project (we call them "projects") has a special folder called
 "_brain" — this is where memory lives:
 
   your-project/
@@ -452,7 +452,7 @@ Three reasons:
    No servers. No accounts. No sync issues.
    Works offline. Works forever.
 
-The tradeoff: you need to organise a bit. But that's what this
+The tradeoff: you need to organize a bit. But that's what this
 setup is for — I'll create the structure, you just tell me about
 your world.
 ```
@@ -465,7 +465,7 @@ your world.
 THE FIVE DOMAINS
 ─────────────────────────────────────────────────────────────────────────
 
-ALIVE organises everything into five areas. Each has a specific purpose:
+ALIVE organizes everything into five areas. Each has a specific purpose:
 
 ┌─────────────────────────────────────────────────────────────────────┐
 │                                                                     │
@@ -769,7 +769,7 @@ working_style: "solo"
   └─ .claude/alive.local.yaml
 
   version: 2
-  system_version: 2.1.1
+  system_version: 3.0.1
   timezone: [selection]
   theme: [selection]
   working_style: [selection]
@@ -789,7 +789,7 @@ Example: If user chose `~/Desktop/alive/` as their ALIVE location:
 - Rules go to: `~/Desktop/alive/.claude/rules/`
 - CLAUDE.md goes to: `~/Desktop/alive/.claude/CLAUDE.md`
 
-#### 1. Rules (behaviour files)
+#### 1. Rules (behavior files)
 
 ```bash
 # Source: Plugin rules directory
@@ -845,7 +845,7 @@ cp ~/.claude/plugins/cache/aliveskills/alive/*/CLAUDE.md "$ALIVE_ROOT/.claude/CL
 ▸ installing ALIVE system files...
 
   └─ .claude/CLAUDE.md        (System identity + your preferences)
-  └─ .claude/rules/           (7 behaviour files)
+  └─ .claude/rules/           (7 behavior files)
 
 ✓ System files installed
 
@@ -917,7 +917,7 @@ status so you always know what needs attention.
 │                                                                        │
 │  Claude must RESTART to load the new ALIVE rules and identity.        │
 │                                                                        │
-│  Without restarting, I can't properly create your entities —          │
+│  Without restarting, I can't properly create your projects —          │
 │  I need to load the rules I just installed.                           │
 │                                                                        │
 │  HERE'S WHAT TO DO:                                                   │
@@ -1166,7 +1166,7 @@ Enter any goals, or skip:
 **Implementation:**
 Create `02_Life/_brain/` with status.md, tasks.md, insights.md, changelog.md, manifest.json from templates.
 Create `02_Life/people/` folder and individual person files.
-Create each life area entity with _brain/, _working/, _references/, .claude/CLAUDE.md.
+Create each life area project with _brain/, _working/, _references/, .claude/CLAUDE.md.
 
 ---
 
@@ -1402,9 +1402,9 @@ AskUserQuestion({
 
 ---
 
-### Step 14: Create Entity Structure
+### Step 14: Create Project Structure
 
-Create all entities configured in Steps 11-13.
+Create all projects configured in Steps 11-13.
 
 ```
 ╭─ CREATING YOUR ENTITIES ──────────────────────────────────────────────╮
@@ -1414,8 +1414,8 @@ Create all entities configured in Steps 11-13.
 ╰────────────────────────────────────────────────────────────────────────╯
 ```
 
-**For each entity (life area, venture, experiment), create:**
-- `.claude/CLAUDE.md` (entity identity from template)
+**For each project (life area, venture, experiment), create:**
+- `.claude/CLAUDE.md` (project identity from template)
 - `_brain/status.md` (from template, customised with user input)
 - `_brain/tasks.md` (from template)
 - `_brain/insights.md` (from template)
@@ -1432,7 +1432,7 @@ Create all entities configured in Steps 11-13.
 **Display the tree:**
 
 ```
-▸ creating entities...
+▸ creating projects...
 
 02_Life/
 ├── _brain/              (Life focus + goals)
@@ -1463,7 +1463,7 @@ Create all entities configured in Steps 11-13.
     ├── _working/
     └── _references/
 
-✓ All entities created
+✓ All projects created
 ```
 
 Use AskUserQuestion:
@@ -1487,7 +1487,7 @@ AskUserQuestion({
 INSIDE _BRAIN/
 ─────────────────────────────────────────────────────────────────────────
 
-Each entity's _brain/ folder contains:
+Each project's _brain/ folder contains:
 
 STATUS.MD — "Where are we?"
   Current phase, focus, blockers, next milestone.
@@ -1527,7 +1527,7 @@ ALIVE works best with a daily rhythm:
   /alive:daily  → Start your day. See everything across all projects.
                   Urgent tasks, inputs to process, what needs attention.
 
-  /alive:do     → Focus on ONE entity. Load its context, start working.
+  /alive:work     → Focus on ONE project. Load its context, start working.
                   "work on acme" or "focus on health"
 
   /alive:save   → End your session. Log what happened, update context.
@@ -1559,14 +1559,14 @@ AskUserQuestion({
 OTHER USEFUL COMMANDS
 ─────────────────────────────────────────────────────────────────────────
 
-/alive:capture-context  Capture context. Dump in anything — a decision,
+/alive:capture  Capture context. Dump in anything — a decision,
                         transcript, email, article — I'll extract what
                         matters and route it to the right place.
 
 /alive:recall   Search your history. "What did we decide about
                 pricing?" — I'll find it.
 
-/alive:new      Create a new entity (venture, experiment, life area).
+/alive:new      Create a new project (venture, experiment, life area).
 
 /alive:archive  Move something to the archive when it's done.
 
@@ -1603,12 +1603,12 @@ Just describe it:
 ```
 ▸ processing capture...
 
-This sounds like it belongs in [detected entity].
+This sounds like it belongs in [detected project].
 
-▸ adding to [entity]/_brain/status.md
+▸ adding to [project]/_brain/status.md
   Focus: [extracted focus]
 
-▸ adding to [entity]/_brain/tasks.md
+▸ adding to [project]/_brain/tasks.md
   - [ ] [extracted task] @active
 
 ✓ Captured
@@ -1676,7 +1676,7 @@ ENTITIES
   ✓ [experiment]/_brain/ initialised
 
 CONFIG
-  ✓ system_version: 2.1.1
+  ✓ system_version: 3.0.1
   ✓ alive_root: [path]
   ✓ timezone: [value]
   ✓ theme: [value]
@@ -1730,7 +1730,7 @@ This could be:
   - Existing project folders
   - Old notes you want to preserve
 
-ALIVE can import and organise this for you.
+ALIVE can import and organize this for you.
 ```
 
 Use AskUserQuestion:
@@ -1828,7 +1828,7 @@ ALIVE Context Import plugin:
 This is a separate plugin (not bundled with ALIVE) that handles:
   • Exporting your data from AI assistants
   • Extracting decisions, insights, and action items
-  • Routing imported context into your ALIVE entities
+  • Routing imported context into your ALIVE projects
   • Building your _references/ and _brain/ files from history
 
 I've added a task to your Life tasks so you don't forget.
@@ -1905,11 +1905,11 @@ working_style: "solo"
 ║    • [N] ventures ready to track                                                     ║
 ║    • [N] experiments ready to explore                                                ║
 ║    • All rules and system files installed                                             ║
-║    • System version: 2.1.1                                                           ║
+║    • System version: 3.0.1                                                           ║
 ║                                                                                      ║
 ║  THE LEARNING LOOP:                                                                  ║
 ║    /alive:daily   → See everything, start your day                                   ║
-║    /alive:do      → Focus on one entity                                              ║
+║    /alive:work      → Focus on one project                                              ║
 ║    /alive:save    → End session, preserve context                                    ║
 ║                                                                                      ║
 ║  REMEMBER:                                                                           ║
@@ -1976,7 +1976,7 @@ At any point during setup, if the user says "skip" or wants to jump ahead:
 Create minimal structure (domain folders + .claude/ system files) and mark complete.
 
 For Session 1: Create folders, install rules, create alive.local.yaml with `onboarding_complete: true` (skip Session 2).
-For Session 2: Create minimal entities with default _brain/ files and mark complete.
+For Session 2: Create minimal projects with default _brain/ files and mark complete.
 
 ---
 
@@ -2129,7 +2129,7 @@ See people/ for all contacts.
 ## Related Skills
 
 - `/alive:daily` — Morning entry point (most common next step)
-- `/alive:do` — Focus on one entity
+- `/alive:work` — Focus on one project
 - `/alive:help` — Quick reference
 - `/alive:upgrade` — For v1 → v2 migration (not fresh setup). Also handles version bumps.
 - `/alive:migrate` — Import existing content

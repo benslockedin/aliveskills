@@ -6,7 +6,7 @@ Ideas being validated. If it works, promote to venture.
 
 ## What Goes Here
 
-Each experiment is a subdomain:
+Each experiment is a project:
 
 ```
 05_Experiments/

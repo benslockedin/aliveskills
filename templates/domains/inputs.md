@@ -45,7 +45,7 @@
 CAPTURE  →  INPUTS  →  DIGEST  →  DESTINATION
    ↓          ↓          ↓           ↓
  Quick      Buffer    Extract    _brain/ or
- grab       zone      & route    area folder
+ grab       zone      & route    folder
 ```
 
 ---
@@ -73,8 +73,8 @@ This will:
 |------|------------|-------------|
 | Quick note | Extract action items | tasks.md, _working/ |
 | Transcript | Full extraction (agent) | changelog.md, tasks.md, people/ |
-| Document | Summarize, file | Area folder, manifest |
-| Email | Extract tasks, file | tasks.md, area folder |
+| Document | Summarize, file | Folder, manifest |
+| Email | Extract tasks, file | tasks.md, folder |
 | Idea | Capture, categorize | insights.md, _working/ |
 
 ---
@@ -99,7 +99,7 @@ Process inputs daily or every few days. Don't let it become a graveyard.
 ### Zero Inputs Goal
 
 Aim for empty inputs. Everything should move to:
-- An entity's `_brain/` or area
+- An project's `_brain/` or area
 - `01_Archive/03_Inputs/` if ephemeral
 - Deleted if worthless
 

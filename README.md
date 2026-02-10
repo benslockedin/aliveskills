@@ -36,7 +36,7 @@ Either:
 
 **6. Start working**
 ```
-/alive:do
+/alive:work
 ```
 
 That's it. Your AI now has persistent memory.
@@ -55,7 +55,7 @@ That's it. Your AI now has persistent memory.
 
 ## How It Works
 
-Every entity has `_brain/`, `_working/`, and `_references/`:
+Every project has `_brain/`, `_working/`, and `_references/`:
 
 ```
 04_Ventures/mycompany/
@@ -75,11 +75,11 @@ Claude reads these files to understand your context. Updates them as you work. E
 
 | Skill | When to Use |
 |-------|-------------|
-| `/alive:daily` | "Start my day" — morning dashboard across all entities |
-| `/alive:do` | "Let's work on X" — loads context, starts session |
+| `/alive:daily` | "Start my day" — morning dashboard across all projects |
+| `/alive:work` | "Let's work on X" — loads context, starts session |
 | `/alive:save` | "We're done" — logs progress, cleans up |
 | `/alive:new` | "Create a venture/experiment" — scaffolds structure |
-| `/alive:capture-context` | "Here's some context" — capture and route to ALIVE |
+| `/alive:capture` | "Here's some context" — capture and route to ALIVE |
 | `/alive:digest` | "Process my inputs" — triages incoming context |
 | `/alive:recall` | "What did we decide about X?" — searches history |
 | `/alive:archive` | "Done with X" — moves to archive |

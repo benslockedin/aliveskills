@@ -1,7 +1,7 @@
 ---
 user-invocable: true
-description: Use when ending a work session, wrapping up, stepping away, or preserving session context. Triggers on "save", "wrap up", "end session", "done for now", "I'm done", "brb", "stepping away", "checkpoint", "commit progress".
-plugin_version: "2.1.1"
+description: End a work session and preserve all context — changelog, status, tasks, insights, and manifest. Use when the user says "save", "wrap up", "end session", "done for now", "brb", "stepping away", or "checkpoint".
+plugin_version: "3.0.1"
 ---
 
 # alive:save
@@ -117,15 +117,15 @@ Quality drives escalating behavior (see Escalating Actions).
 
 ---
 
-## The Closest Subdomain Rule
+## The Closest Project Rule
 
-**Always save to the CLOSEST subdomain to where work happened.**
+**Always save to the CLOSEST project to where work happened.**
 
 ```
-04_Ventures/agency/                 ← Parent subdomain
+04_Ventures/agency/                 ← Parent project
 ├── _brain/                         ← Save here for agency-level work
 ├── clients/                        ← Area (no _brain/)
-│   └── acme/                       ← Nested subdomain
+│   └── acme/                       ← Nested project
 │       └── _brain/                 ← Save HERE for acme-specific work
 ```
 
@@ -141,10 +141,10 @@ Quality drives escalating behavior (see Escalating Actions).
 
 ## Cascade Logic
 
-After saving to closest subdomain, check if parent needs update:
+After saving to closest project, check if parent needs update:
 
 ```
-Changes to nested subdomain (acme)?
+Changes to nested project (acme)?
     ↓
 Save to acme/_brain/
     ↓
@@ -432,7 +432,7 @@ In `_brain/manifest.json`:
 {
   "name": "ProjectName",
   "description": "One sentence purpose",
-  "goal": "Single-sentence goal for this entity",
+  "goal": "Single-sentence goal for this project",
   "updated": "2026-01-30",
   "session_ids": ["prev123", "abc123"],
   "folders": ["_brain", "_working", "_references", "docs"],
@@ -470,7 +470,7 @@ In `_brain/manifest.json`:
   "key_files": [
     {
       "path": "CLAUDE.md",
-      "description": "Entity identity",
+      "description": "Project identity",
       "date_created": "2026-01-20",
       "date_modified": "2026-01-30"
     }
@@ -499,7 +499,7 @@ Create `_brain/memories/` folder if needed, then `[date]-[session-id].md`.
 type: memory
 date: 2026-01-30
 session: abc123
-entity: 04_Ventures/alive-llc
+project: 04_Ventures/alive-llc
 summary: One-line summary of what made this session a breakthrough
 tags: [pricing, pivot, architecture]
 ---
@@ -521,12 +521,12 @@ tags: [pricing, pivot, architecture]
 | `type` | Yes | Always `memory` |
 | `date` | Yes | Session date (ISO format: YYYY-MM-DD) |
 | `session` | Yes | Session ID from startup hook |
-| `entity` | Yes | Entity path (e.g. `04_Ventures/alive-llc`) |
+| `project` | Yes | Project path (e.g. `04_Ventures/alive-llc`) |
 | `summary` | Yes | One-line summary — what made this a breakthrough |
 | `tags` | Yes | Array of tags for searchability |
 
-Ask: "Any changes to this entity's identity or purpose?"
-If yes, offer to update entity `CLAUDE.md`.
+Ask: "Any changes to this project's identity or purpose?"
+If yes, offer to update project `CLAUDE.md`.
 
 ---
 
@@ -540,7 +540,7 @@ Use `echo '...' >> file` (double `>>`) to append, NOT overwrite. Each entry is o
 {
   "ts": "2026-01-30T14:30:00Z",
   "session_id": "abc123",
-  "entity": "04_Ventures/alive-llc",
+  "project": "04_Ventures/alive-llc",
   "save_type": "end_session",
   "status": "ongoing",
   "quality": "productive",
@@ -577,7 +577,7 @@ Manifest:
 - [ ] session_ids updated (current session appended)
 - [ ] New files added with descriptions
 - [ ] working_files accurate
-- [ ] Saving to CLOSEST subdomain
+- [ ] Saving to CLOSEST project
 
 Session Files (Productive+):
 - [ ] Checked _working/ for files to promote
@@ -617,9 +617,9 @@ Before saving, verify:
 
 ---
 
-## Multi-Entity Sessions
+## Multi-Project Sessions
 
-If session touched multiple subdomains:
+If session touched multiple projects:
 
 ```
 This session touched:
@@ -642,18 +642,18 @@ Auto-select: Why = Checkpoint, Status = Ongoing, Quality = Routine
 ```
 ▸ quick checkpoint
 
-✓ Saved to [entity]/_brain/changelog.md
+✓ Saved to [project]/_brain/changelog.md
   └─ "Work in progress: [summary]"
 
-Resume with /alive:do
+Resume with /alive:work
 ```
 
 ---
 
 ## Edge Cases
 
-**No active entity:**
-Ask which subdomain work happened in.
+**No active project:**
+Ask which project work happened in.
 
 **Nothing to save:**
 Offer to log checkpoint anyway.
@@ -665,9 +665,9 @@ Write to `.claude/state/changelog.md` for system-level changes.
 
 ## Related Skills
 
-- `/alive:do` — Load entity to work
+- `/alive:work` — Load project to work
 - `/alive:daily` — Morning dashboard
 - `/alive:revive` — Resume past session
-- `/alive:capture-context` — Capture context mid-session
+- `/alive:capture` — Capture context mid-session
 - `/alive:handoff` — Session continuity (called automatically when pre-compact or ongoing)
 

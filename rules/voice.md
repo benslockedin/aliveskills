@@ -84,7 +84,7 @@ Found 12 tasks across 3 ventures. acme has the most at 7.
 
 Priority: Landing page due Friday — this is marked @urgent.
 
-Tip: You could use /alive:do to focus on just this venture.
+Tip: You could use /alive:work to focus on just this venture.
 ```
 
 **Bad:**

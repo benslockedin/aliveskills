@@ -139,13 +139,13 @@ Only archive when work is truly done:
 
 Before archiving experiments:
 - Extract valuable insights
-- Copy to other subdomains if relevant
+- Copy to other projects if relevant
 - Document why it ended
 
 ### Regular Cleanup
 
 Use `/alive:sweep` to identify archive candidates:
-- Stale subdomains (not updated >4 weeks)
+- Stale projects (not updated >4 weeks)
 - Completed projects
 - Abandoned experiments
 

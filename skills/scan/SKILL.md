@@ -1,7 +1,7 @@
 ---
 user-invocable: false
-description: Internal skill called by onboarding when user opts in to session analysis. Scans Claude Code history to extract patterns, preferences, and past projects for personalized setup.
-plugin_version: "2.1.1"
+description: Scan Claude Code session history to extract patterns, preferences, and past projects for personalized ALIVE setup. Called by onboarding when user opts in to session analysis.
+plugin_version: "3.0.1"
 ---
 
 # Power User Install
@@ -15,7 +15,7 @@ This skill uses **Tier 3: Utility** formatting.
 **Visual elements:**
 - Compact logo (4-line ASCII art header)
 - Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
+- Version footer: `ALIVE v3.0.1` (right-aligned)
 
 See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
 
@@ -242,7 +242,7 @@ User opts in to session analysis
 → Wait for completion
 → Read .claude/state/user-profile.md
 → Use profile to personalize remaining onboarding
-→ Suggest entity structure based on discovered projects
+→ Suggest project structure based on discovered projects
 ```
 
 ---

@@ -1,12 +1,12 @@
 ---
 user-invocable: true
-description: This skill should be used when the user says "process inputs", "digest", "triage", "handle inbox", "sort these", "what's in my inbox", "what's in inputs", or "anything to process". Processes the 03_Inputs/ buffer.
-plugin_version: "2.1.1"
+description: Process and route items from the 03_Inputs/ buffer to their correct locations across ALIVE. Use when the user says "process inputs", "digest", "triage", "handle inbox", "sort these", "what's in my inbox", or "anything to process".
+plugin_version: "3.0.1"
 ---
 
 # alive:digest
 
-Process the 03_Inputs/ buffer. Survey items, triage with user, extract content, route to entities.
+Process the 03_Inputs/ buffer. Survey items, triage with user, extract content, route to projects.
 
 ## UI Treatment
 
@@ -15,7 +15,7 @@ This skill uses **Tier 3: Utility** formatting.
 **Visual elements:**
 - Compact logo (4-line ASCII art header)
 - Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
+- Version footer: `ALIVE v3.0.1` (right-aligned)
 
 See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
 
@@ -35,7 +35,7 @@ Invoke when the user:
 2. **Prioritize by importance** — Recent and urgent first
 3. **Smart extraction** — Use appropriate agents for complex content
 4. **Manifest-aware routing** — Route to existing areas when possible
-5. **Never delete, always archive** — Processed files move to `01_Archive/{relevant subdomain}/{mirrored path}/...`, never deleted
+5. **Never delete, always archive** — Processed files move to `01_Archive/{relevant project}/{mirrored path}/...`, never deleted
 
 ## Flow (4 Steps)
 
@@ -198,7 +198,7 @@ Insights (1):
 
 ### Check Manifest First
 
-Before routing, check if entity has an area for the content:
+Before routing, check if project has an area for the content:
 
 ```
 ▸ checking 04_Ventures/acme/_brain/manifest.json
@@ -223,7 +223,7 @@ Route transcript to: 04_Ventures/acme/_references/calls/2026-01-22-partner-sync.
 
 ### Source File Routing
 
-After extraction, the **source file** needs to be stored. Default is `_references/` — the same format used by `/alive:capture-context`.
+After extraction, the **source file** needs to be stored. Default is `_references/` — the same format used by `/alive:capture`.
 
 Every reference creates two files: a **summary `.md`** at the type folder root, and the **original content** in a `raw/` subfolder. The summary should be detailed enough that you rarely need the raw file.
 
@@ -302,14 +302,14 @@ Detailed enough that you rarely need to open the original.]
 `raw/2026-02-06-contract-scan.pdf`
 ```
 
-**Finished artifacts** (spreadsheets, contracts, final documents) → these aren't references, they're project files. Route to the appropriate area folder in the entity:
+**Finished artifacts** (spreadsheets, contracts, final documents) → these aren't references, they're project files. Route to the appropriate folder in the project:
 
 ```
 04_Ventures/acme/clients/globex/contract-v1.pdf
 04_Ventures/acme/financials/q1-budget.xlsx
 ```
 
-**The test:** Is this source material you might reference later? → `_references/`. Is this a finished file that belongs in a project? → Area folder.
+**The test:** Is this source material you might reference later? → `_references/`. Is this a finished file that belongs in a project? → Folder.
 
 **After routing, archive the original from inputs:**
 ```
@@ -386,7 +386,7 @@ Inputs is empty. Nothing to process.
 This transcript mentions both acme and beta projects.
 
 Route extractions to:
-[1] Both entities
+[1] Both projects
 [2] Just acme
 [3] Just beta
 [4] Let me specify for each item
@@ -419,6 +419,6 @@ Filed: 2 source files
 
 ## Related Skills
 
-- `/alive:capture-context` — Capture and route content into ALIVE
-- `/alive:do` — Work on entity after digest
+- `/alive:capture` — Capture and route content into ALIVE
+- `/alive:work` — Work on project after digest
 - `/alive:daily` — Shows inputs count, links here

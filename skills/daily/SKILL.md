@@ -1,12 +1,12 @@
 ---
 user-invocable: true
-description: Use when the user says "daily", "dashboard", "morning", "let's go", "what's happening", "what should I work on", "start my day", "overview", "show me everything", or wants to see the full system state across all entities including ongoing threads, goals, urgent tasks, and inputs status.
-plugin_version: "2.1.1"
+description: Morning dashboard showing all projects, goals, urgent tasks, ongoing threads, and pending inputs. Use when the user says "daily", "dashboard", "morning", "what's happening", "what should I work on", "start my day", or "show me everything".
+plugin_version: "3.0.1"
 ---
 
 # alive:daily
 
-Morning entry point. Surface what matters across ALL entities. The heartbeat of the learning loop.
+Morning entry point. Surface what matters across ALL projects. The heartbeat of the learning loop.
 
 ## UI Treatment
 
@@ -37,15 +37,15 @@ Compare your `plugin_version` (from frontmatter above) against the user's system
 
 ## Overview
 
-Daily aggregates context from every entity and the session index to show:
-- Goals from each entity's status.md
+Daily aggregates context from every project and the session index to show:
+- Goals from each project's status.md
 - Ongoing threads from session-index.jsonl (with quality ratings)
-- Urgent tasks across all entities
+- Urgent tasks across all projects
 - Working files in progress
 - Inputs pending triage
-- Stale entities needing attention
+- Stale projects needing attention
 
-**Different from `/alive:do`:** Daily shows EVERYTHING. Do focuses on ONE entity.
+**Different from `/alive:work`:** Daily shows EVERYTHING. Do focuses on ONE project.
 
 ## V1 Detection (REQUIRED FIRST STEP)
 
@@ -73,9 +73,9 @@ If yes → invoke `/alive:upgrade` then restart daily.
 |--------|---------|
 | `alive.local.yaml` | Sync script configuration (optional) |
 | `.claude/state/session-index.jsonl` | Ongoing threads with quality tags |
-| `{entity}/_brain/status.md` | Goal line, phase, focus |
-| `{entity}/_brain/tasks.md` | @urgent tagged items |
-| `{entity}/_brain/manifest.json` | working_files array |
+| `{project}/_brain/status.md` | Goal line, phase, focus |
+| `{project}/_brain/tasks.md` | @urgent tagged items |
+| `{project}/_brain/manifest.json` | working_files array |
 | `03_Inputs/` | Count of pending items |
 
 ## Flow
@@ -89,9 +89,9 @@ digraph daily_flow {
     "Offer upgrade" -> "Check sync config" [label="no"];
     "Run /alive:upgrade" -> "Check sync config";
     "Check sync config" -> "Run sync scripts" [label="scripts found"];
-    "Check sync config" -> "Scan entities" [label="no scripts"];
-    "Run sync scripts" -> "Scan entities";
-    "Scan entities" -> "Read session-index";
+    "Check sync config" -> "Scan projects" [label="no scripts"];
+    "Run sync scripts" -> "Scan projects";
+    "Scan projects" -> "Read session-index";
     "Read session-index" -> "Aggregate data";
     "Aggregate data" -> "Display dashboard";
     "Display dashboard" -> "Wait for selection";
@@ -100,7 +100,7 @@ digraph daily_flow {
 
 ## External Sync (Optional)
 
-**Power users can configure sync scripts** via `/alive:power-user-install` or manually.
+**Power users can configure sync scripts** via `/alive:scan` or manually.
 
 Check for `alive.local.yaml` at ALIVE root:
 
@@ -130,7 +130,7 @@ sync:
   └─ No sync scripts configured
 ```
 
-Skip to entity scanning.
+Skip to project scanning.
 
 **Script requirements:**
 - Scripts should output to `03_Inputs/`
@@ -158,12 +158,12 @@ WORKING FILES
 [5] acme/_working/v2-design.md                  1 day old
 
 ─────────────────────────────────────────────────────────────────────────
-[#] Pick number to focus    [i] Process inputs    [n] New entity
+[#] Pick number to focus    [i] Process inputs    [n] New project
 ```
 
 When user picks:
 - Thread number → `/alive:revive` with that session
-- Task/file number → `/alive:do` with that entity
+- Task/file number → `/alive:work` with that project
 - `[i]` → `/alive:digest`
 - `[n]` → `/alive:new`
 
@@ -174,7 +174,7 @@ Extract from each `_brain/status.md`:
 - Or `**Focus:**` line
 - Or first sentence after `## Current Focus`
 
-Show entity name + goal. Max 5, sorted by recency.
+Show project name + goal. Max 5, sorted by recency.
 
 ```
 YOUR GOALS
@@ -189,7 +189,7 @@ YOUR GOALS
 Read `.claude/state/session-index.jsonl`:
 - Filter: `status: "ongoing"` only
 - Sort: Most recent first
-- Show: Entity, summary, quality tag, relative time
+- Show: Project, summary, quality tag, relative time
 - Max 5
 
 Quality tags: `[routine]` `[productive]` `[important]` `[breakthrough]`
@@ -212,7 +212,7 @@ No ongoing threads. Start fresh today.
 
 Scan all `_brain/tasks.md` files:
 - Filter: Lines containing `@urgent`
-- Prefix with entity name
+- Prefix with project name
 - Max 5
 
 ```
@@ -249,9 +249,9 @@ INPUTS
 [!] 5 items pending triage
 ```
 
-## Section: Stale Entities
+## Section: Stale Projects
 
-Check each entity's `_brain/manifest.json` for `updated` date:
+Check each project's `_brain/manifest.json` for `updated` date:
 - Flag if > 7 days (configurable)
 - Show as numbered option
 
@@ -277,7 +277,7 @@ STALE ENTITIES
 Run /alive:onboarding to set up.
 ```
 
-**Empty system (structure exists but no entities):**
+**Empty system (structure exists but no projects):**
 ```
 Your ALIVE system is empty. Let's get started.
 [1] Create first venture
@@ -294,13 +294,13 @@ DAILY ────► DO ────► SAVE ────► (repeat)
 ```
 
 After showing dashboard, remind:
-- Pick a number to focus → loads that entity via `/alive:do`
+- Pick a number to focus → loads that project via `/alive:work`
 - When done → `/alive:save` to preserve context
 - Tomorrow → back to `/alive:daily`
 
 ## Related Skills
 
-- `/alive:do` — Focus on one entity
+- `/alive:work` — Focus on one project
 - `/alive:revive` — Resume past session
 - `/alive:digest` — Process inputs
 - `/alive:save` — End session

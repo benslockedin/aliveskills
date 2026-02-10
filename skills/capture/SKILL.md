@@ -1,10 +1,10 @@
 ---
 user-invocable: true
-description: Capture context into the ALIVE system. Use when user shares any content — their own thoughts, external emails, meeting transcripts, articles, Slack messages, quick notes, decisions, or anything worth preserving. Triggers on "capture this", "note this", "remember this", "FYI", "here's some context", "process this", "I got this email", "from my call", "digest this", "quick note", "btw", "I learned", "I decided".
-plugin_version: "2.1.1"
+description: Capture any context into ALIVE — notes, emails, transcripts, decisions, filepaths, or anything worth preserving. Auto-invoke when the user shares a filepath, pastes external content (emails, transcripts, articles), or says "capture this", "note this", "remember this", "FYI", "here's some context", "I decided", "I learned". If the user drops content without explicitly asking to capture, invoke this skill proactively.
+plugin_version: "3.0.1"
 ---
 
-# alive:capture-context
+# alive:capture
 
 Capture context into ALIVE. User gives you content — you understand it, confirm intent, store it properly, and identify what action comes next.
 
@@ -15,18 +15,33 @@ This skill uses **Tier 3: Utility** formatting.
 **Visual elements:**
 - Compact logo (4-line ASCII art header)
 - Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
+- Version footer: `ALIVE v3.0.1` (right-aligned)
 
 See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
 
 ---
 
+## Proactive Invocation
+
+**This skill should fire automatically when external context arrives** — not just when the user explicitly says "capture this." If the user:
+
+- Shares a filepath (`here's the transcript: /path/to/file.txt`)
+- Pastes a wall of text (email, transcript, article, Slack thread)
+- Drops content with context ("from my call with John...", "got this email...")
+- Shares a screenshot or document
+
+...invoke this skill without waiting to be asked. The two-question flow (confirm intent + confirm storage) gives the user control over what happens, so auto-invoking is safe.
+
+**Don't auto-invoke for:** Quick decisions or thoughts that belong in `_brain/` directly ("let's go with option B"), single-line notes, or content the user is clearly just discussing rather than wanting to store.
+
+---
+
 ## The Premise
 
-The user has context they want in the system. It might be a quick thought, a pasted email, a meeting transcript, a screenshot, an article — anything. Your job:
+The user has context they want in the system. It might be a quick thought, a pasted email, a meeting transcript, a screenshot, a filepath, an article — anything. Your job:
 
 1. Receive it
-2. Understand what it is and what entity it relates to
+2. Understand what it is and what project it relates to
 3. Confirm what the user wants to do with it (the action)
 4. Confirm where to store it, and whether to extract to `_brain/`
 5. Store the source material in `_references/` with YAML front matter
@@ -45,9 +60,9 @@ The user has context they want in the system. It might be a quick thought, a pas
 
 | Check | Why |
 |-------|-----|
-| Active entity (from `/alive:do`) | Default routing destination |
-| `{entity}/_brain/manifest.json` | Know what areas exist, existing references |
-| `{entity}/_brain/status.md` | Current focus — informs relevance |
+| Active project (from `/alive:work`) | Default routing destination |
+| `{project}/_brain/manifest.json` | Know what areas exist, existing references |
+| `{project}/_brain/status.md` | Current focus — informs relevance |
 | `02_Life/people/` listing | Check for existing person files before creating |
 
 ```
@@ -59,7 +74,7 @@ The user has context they want in the system. It might be a quick thought, a pas
   └─ People: 47 files in 02_Life/people/
 ```
 
-If no entity is active, scan entities for keyword matches to suggest routing.
+If no project is active, scan projects for keyword matches to suggest routing.
 
 ---
 
@@ -68,9 +83,9 @@ If no entity is active, scan entities for keyword matches to suggest routing.
 ```
 Content received
     ↓
-Context check (entity, manifest, people)
+Context check (project, manifest, people)
     ↓
-Identify (content type, entity match, people)
+Identify (content type, project match, people)
     ↓
 Question 1: Confirm what it is +
 what do you want to do with it?
@@ -93,7 +108,7 @@ Confirm done + note pending action
 
 ## Step 1: Identify
 
-Detect content type, match to entity, identify people mentioned.
+Detect content type, match to project, identify people mentioned.
 
 | Type | Signals |
 |------|---------|
@@ -109,11 +124,11 @@ Detect content type, match to entity, identify people mentioned.
 ```
 ▸ identifying...
   └─ Type: Email from Sarah Chen (Globex)
-  └─ Entity match: 04_Ventures/acme (Globex in manifest)
+  └─ Project match: 04_Ventures/acme (Globex in manifest)
   └─ Person: Sarah Chen — found in 02_Life/people/sarah-chen.md
 ```
 
-For quick thoughts ("FYI the deadline moved to Friday"), identification is instant — type is obvious, entity is the active one.
+For quick thoughts ("FYI the deadline moved to Friday"), identification is instant — type is obvious, project is the active one.
 
 ---
 
@@ -503,20 +518,20 @@ Not everything goes to `_references/`. The distinction:
 | Email, transcript, message | `_references/[type]/` (summary .md + raw/ original) | Source material — may need to re-read |
 | Screenshot, video, PDF | `_references/[type]/` (analysis .md + raw/ original) | Visual/binary evidence with companion analysis |
 | Quick thought, FYI, decision | `_brain/` only (or `_references/notes/` if substantial) | Often no source worth preserving separately |
-| Spreadsheet, contract, final doc | Area folder in entity | Finished artifact — belongs with its project |
+| Spreadsheet, contract, final doc | Folder in project | Finished artifact — belongs with its project |
 
-**The test:** Is this source material you might reference later? → `_references/`. Is this a finished file that belongs in a project? → Area folder. Is the meaning enough without the source? → `_brain/` only.
+**The test:** Is this source material you might reference later? → `_references/`. Is this a finished file that belongs in a project? → Folder. Is the meaning enough without the source? → `_brain/` only.
 
 ---
 
-## No Active Entity
+## No Active Project
 
-If no entity has been loaded with `/alive:do`:
+If no project has been loaded with `/alive:work`:
 
 ```
-[?] No active entity.
+[?] No active project.
 
-▸ scanning entities for matches...
+▸ scanning projects for matches...
   └─ 04_Ventures/acme — "Globex" mentioned in status.md
   └─ 04_Ventures/beta — no match
 
@@ -573,4 +588,4 @@ Use actual folder structure for routing suggestions.
 
 - `/alive:save` — End full session (not mid-session capture)
 - `/alive:digest` — Process items already IN `03_Inputs/`
-- `/alive:do` — Load entity context first
+- `/alive:work` — Load project context first
