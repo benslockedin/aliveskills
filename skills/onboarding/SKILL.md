@@ -6,7 +6,7 @@ plugin_version: "3.0.1"
 
 # alive:onboarding
 
-First-time setup wizard for ALIVE v2. Guides new users through complete configuration in two sessions: system setup first, then content setup after Claude reloads rules.
+First-time setup wizard for aliveOS. Guides new users through complete configuration in two sessions: system setup first, then content setup after Claude reloads rules.
 
 **Different from `/alive:upgrade`:** Onboarding is fresh setup. Upgrade migrates v1 → v2.
 
@@ -45,30 +45,43 @@ This skill uses **Tier 1: Entry Point** formatting.
 Use this exact logo for all onboarding screens:
 
 ```
-                          ▒▒▒                              ▒▒
-                                    ▒▒            ▒
-                             ▒▒     ▒▒     ▒▒    ▒▒      ▒
-       ▒▒▒                    ▒▒     ▒▒    ▒▒    ▒▒     ▒▒                    ▒▒▒
-        ▒                      ▒▒    ▒▒   ▒▒▒   ▒▒     ▒▒                     ▒▒
-           ▒▒▒         ▒▒         ▒▒  ▒ ▒▒▒▒▒▒▒ ▒▒  ▒▒        ▒▒          ▒▒▒
-                         ▒▒      ▒▒▒    ▒▒▒  ▒▒     ▒▒▒      ▒▒
-                ▒▒▒       ▒▒▒  ▒▒▒ ▒▒▒▒▒▒ ▒▒▒  ▒▒▒▒▒  ▒▒▒  ▒▒        ▒▒
-                ▒▒▒            ▒▒▒▒▒    ▒▒▒▒▒▒▒    ▒▒▒▒▒▒            ▒▒
-                     ▒▒   ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒   ▒▒▒
-                     ▒▒  ▒▒▒▒▒▒ ▒ ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ ▒▒▒▒▒▒ ▒  ▒▒
-                        ▒▒▒    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒    ▒▒▒
-                          ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+                     .. ..oooo.....ooo...
+               .odSS4PYYYSSOOXXXXXXXXXOodbgooo.
+              /SSYod$$SSOIIPXXXXXXXXXYYP.oo.*b.
+             ($Yd$$SSSOII:XXXXXXXX:IIoSSS$$b.Y,
+              \Yd$$SSSOII:XXXXXXXXXX:IIOOSSS$$b\
+               d$$SSSOOI:XP"YXXXXXXXX:IIOOSSSS$$\
+               Y$$SSSOOII:XbdXXXXXP"YX:IIOOOSS$$)
+               'Y$$SSSOI:XXXXXXXXXbodX:IIOOSS$$$/
+                "Y$$SSSOI(PoTXXXXXTo)XXIIOOOSS$$*'
+                  ""*Y$S(((PXXXXXXXY))dIIOSSS$dP'
+                     "*'()P;XXXXXXXXY)IIOSSS$P".oS,
+                     (S'(P;XXXXXXXP;Y)XXYOP".oSSSSb
+                    (S'(P;'XXXXXXX';Y).ooooSSSSSSSS)
+                    (S'(P;'XXXXXXP';Y).oSSSSSSSSSSSP
+                    (SS'Y);YXXXXX';(Y.oSSSSSSSSSSSSP
+                     YSS'Y)'YXXX".(Y.oSSP.SSSSSSSSY
+                      YSS'"" XXX""oooSSP.SSSSSSSSY
+                      SSSSSS YXXX:SSSSP.SSSSSSSSY
+                      SSSSSP  YXb:SSSP.S"SSSSSSP
+                      S(OO)S   YXb:SY    )SSSSS
+                      SSSSO    )YXb.I    ISSSSP
+                      YSSSY    I."YXXb   Y(SS)I
+                      )SSS(    dSSo.""*b  YSSSY
+                      OooSb   dSSSSP      )SSS(
+                              dSSSY       OooSS
+                              OooSP
 
-      ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-      ▒▒▒▒▒▒▒▒▒▒     ▒▒▒▒▒▒       ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-      ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒     ▒▒▒▒     ▒▒▒▒▒     ▒▒▒▒     ▒▒▒▒▒▒▒
-      ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒   ▒▒▒▒▒  ▒▒▒▒▒
-      ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒   ▒▒▒▒▒  ▒▒▒▒▒
-      ▒▒▒▒▒▒▒          ▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒          ▒▒▒▒▒
-      ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒     ▒▒▒▒▒▒   ▒▒▒▒▒▒▒▒▒▒▒▒
-      ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒          ▒▒▒▒        ▒▒▒▒▒▒▒   ▒▒▒▒▒▒▒▒         ▒▒▒▒▒
-      ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒          ▒▒▒▒        ▒▒▒▒▒▒▒   ▒▒▒▒▒▒▒▒▒        ▒▒▒▒▒
-      ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+      .o.       ooooo        ooooo oooooo     oooo oooooooooooo
+     .888.      `888'        `888'  `888.     .8'  `888'     `8
+    .8"888.      888          888    `888.   .8'    888
+   .8' `888.     888          888     `888. .8'     888oooo8
+  .88ooo8888.    888          888      `888.8'      888    "
+ .8'     `888.   888       o  888       `888'       888       o
+o88o     o8888o o888ooooood8 o888o       `8'       o888ooooood8
+──────────────────────────────────────────────────────────────────
+                    O p e r a t o r   S y s t e m
+──────────────────────────────────────────────────────────────────
 ```
 
 ### Community Footer (Tier 1)
@@ -534,7 +547,7 @@ DOMAIN DEEP DIVE
   _brain/ folder, its own context, its own history.
 
 05_EXPERIMENTS
-  Ideas you're testing. No pressure to monetise. No commitment.
+  Ideas you're testing. No pressure to monetize. No commitment.
   If they work, they graduate to Ventures. If not, they archive.
 ```
 
@@ -728,7 +741,7 @@ This file is the source of truth for ALIVE system configuration. It tracks onboa
 # Location: {alive-root}/.claude/alive.local.yaml
 
 version: 2
-system_version: "2.1.1"
+system_version: "3.0.1"
 onboarding_part: 1
 created: "[today's date]"
 
@@ -749,7 +762,7 @@ working_style: "[from Step 5]"
 # Location: ~/Desktop/alive/.claude/alive.local.yaml
 
 version: 2
-system_version: "2.1.1"
+system_version: "3.0.1"
 onboarding_part: 1
 created: "2026-02-10"
 
@@ -865,7 +878,7 @@ When you cd into this directory, Claude reads these files.
 STATUSLINE SETUP
 ─────────────────────────────────────────────────────────────────────────
 
-ALIVE customises your Claude Code status bar to show:
+ALIVE customizes your Claude Code status bar to show:
 
   session:abc123 | ctx:32% | $1.24 | 🔥 2 urgent | 📥 5 inputs
 
@@ -1342,7 +1355,7 @@ EXPERIMENTS are for exploration.
 This is where ideas live before they become ventures:
   - A newsletter you might start
   - A product concept you're validating
-  - A skill you're learning to potentially monetise
+  - A skill you're learning to potentially monetize
   - Anything with uncertainty
 
 The pressure is off. Experiments can fail. That's the point.
@@ -1407,7 +1420,7 @@ AskUserQuestion({
 Create all projects configured in Steps 11-13.
 
 ```
-╭─ CREATING YOUR ENTITIES ──────────────────────────────────────────────╮
+╭─ CREATING YOUR PROJECTS ──────────────────────────────────────────────╮
 │                                                                        │
 │  Building your personal context infrastructure...                      │
 │                                                                        │
@@ -1416,11 +1429,11 @@ Create all projects configured in Steps 11-13.
 
 **For each project (life area, venture, experiment), create:**
 - `.claude/CLAUDE.md` (project identity from template)
-- `_brain/status.md` (from template, customised with user input)
+- `_brain/status.md` (from template, customized with user input)
 - `_brain/tasks.md` (from template)
 - `_brain/insights.md` (from template)
 - `_brain/changelog.md` (from template)
-- `_brain/manifest.json` (from template, customised)
+- `_brain/manifest.json` (from template, customized)
 - `_working/` (empty)
 - `_references/` (empty)
 
@@ -1533,7 +1546,7 @@ ALIVE works best with a daily rhythm:
   /alive:save   → End your session. Log what happened, update context.
                   This is how memory persists.
 
-That's the core loop: DAILY → DO → SAVE → REPEAT
+That's the core loop: DAILY → WORK → SAVE → REPEAT
 
 Context compounds each cycle. Skip the save, lose the context.
 ```
@@ -1671,9 +1684,9 @@ SYSTEM FILES
   ✓ .claude/state/ exists
   ✓ .claude/alive.local.yaml exists
 
-ENTITIES
-  ✓ [venture]/_brain/ initialised
-  ✓ [experiment]/_brain/ initialised
+PROJECTS
+  ✓ [venture]/_brain/ initialized
+  ✓ [experiment]/_brain/ initialized
 
 CONFIG
   ✓ system_version: 3.0.1
@@ -1877,7 +1890,7 @@ Use the Edit tool to modify `{alive-root}/.claude/alive.local.yaml`:
 # Location: {alive-root}/.claude/alive.local.yaml
 
 version: 2
-system_version: "2.1.1"
+system_version: "3.0.1"
 onboarding_complete: true
 created: "2026-02-10"
 
@@ -2042,7 +2055,7 @@ The rules are already loaded. Detect `onboarding_part: 1` and proceed to Session
 # Location: {alive-root}/.claude/alive.local.yaml
 
 version: 2
-system_version: "2.1.1"
+system_version: "3.0.1"
 onboarding_part: 1
 created: "2026-02-10"
 
@@ -2063,7 +2076,7 @@ working_style: "solo"
 # Location: {alive-root}/.claude/alive.local.yaml
 
 version: 2
-system_version: "2.1.1"
+system_version: "3.0.1"
 onboarding_complete: true
 created: "2026-02-10"
 
