@@ -17,10 +17,11 @@ When working on an entity, read these files first:
 | `_brain/status.md` | Current phase, goal, focus | Know where we are |
 | `_brain/tasks.md` | Active work, urgent items | Know what needs doing |
 | `_brain/manifest.json` | Structure, folders, last session | Know what exists |
+| `_brain/changelog.md` | Recent actions, decisions, progress | What has occurred |
 
 Show retrieval: `▸ reading 04_Ventures/x/_brain/status.md`
 
-**Don't auto-read:** `insights.md` (only when relevant) or `changelog.md` (only when needed).
+**Don't auto-read:** `insights.md` (only when relevant).
 
 ### On Session End
 
