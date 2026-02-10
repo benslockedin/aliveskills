@@ -1,11 +1,12 @@
 ---
-user-invocable: true
+user-invocable: false
 description: Search past context, decisions, and sessions across ALIVE. Use when the user says "find X", "search for X", "recall X", "when did we X", "what did we decide about X", or "remember when we X".
+plugin_version: "2.1.0"
 ---
 
 # alive:recall
 
-Search past context. Find decisions, sessions, insights, or files across the ALIVE system.
+Quick context lookup. Find past decisions, sessions, insights, or files.
 
 ## UI Treatment
 
@@ -20,260 +21,108 @@ See `rules/ui-standards.md` for exact border characters, logo assets, and format
 
 ---
 
-## When to Use
+## When to Invoke
 
-Invoke when the user:
-- Wants to find something from the past
-- Asks "what did we decide about X"
-- Asks "when did we discuss X"
-- Needs to locate a file or decision
-- Wants to search across subdomains
+Trigger on past-tense recall intent:
+- "Remember when we..." / "What did we decide about..."
+- "When did we discuss..." / "Where's that thing about..."
+- "Find X" / "Search for X" / "Look up X"
 
-## Search Targets
+**This is a quick lookup, not a research project.** Search, show results, move on.
 
-| Target | Location | Contains |
-|--------|----------|----------|
-| Decisions | `_brain/changelog.md` | Choices + rationale |
-| Insights | `_brain/insights.md` | Learnings |
-| Tasks | `_brain/tasks.md` | Work items |
-| Sessions | `_brain/changelog.md` | Session summaries |
-| Files | `_brain/manifest.json` | File index with summaries |
-| People | `02_Life/people/` | Person files |
-| Transcripts | `.claude/projects/` | Session transcripts |
+## Search Order
 
-## Flow
+Always search the **current entity first**. If no entity is loaded, ask which one.
 
-```
-1. Parse search query
-2. Determine search scope (specific subdomain or all)
-3. Search relevant files
-4. Rank and present results
-5. Offer to load full context
-```
+Within the entity, check these locations in order:
 
-## Step-by-Step
+| Priority | Location | What's There |
+|----------|----------|--------------|
+| 1 | `_brain/manifest.json` | File index, reference summaries, structure |
+| 2 | `_brain/changelog.md` | Decisions, session history, what happened |
+| 3 | `_references/*.md` | Summaries of emails, calls, articles (read YAML front matter) |
+| 4 | `_brain/insights.md` | Learnings and patterns |
 
-### Step 1: Parse Query
+**Stop as soon as you find what they're looking for.** Don't search everything just because you can.
 
-```
-User: "What did we decide about pricing?"
+### Searching _references/
 
-Query: "pricing"
-Type: Decision search
-Scope: All subdomains (no specific one mentioned)
-```
+Reference files have YAML front matter that acts as a quick index. When searching `_references/`, read the front matter of each `.md` file (NOT the raw/ files). The front matter contains:
 
-### Step 2: Search
-
-Search order:
-1. `_brain/changelog.md` — Decisions section
-2. `_brain/insights.md` — Related learnings
-3. `_brain/manifest.json` — File summaries
-
-Show retrieval:
-```
-▸ searching "pricing"...
-  └─ 04_Ventures/acme/_brain/changelog.md    2 matches
-  └─ 04_Ventures/beta/_brain/changelog.md    1 match
-  └─ 04_Ventures/acme/_brain/insights.md     1 match
+```yaml
+---
+type: email | call | screenshot | document | article | message
+date: 2026-02-06
+summary: One-line description of what this reference contains
+source: Where it came from (person name, tool, etc.)
+participants: [Will, Ben, Jono]     # calls/meetings
+from: sender@email.com              # emails
+to: recipient                       # emails
+subject: Email subject line         # emails
+duration: ~27min                    # calls/meetings
+tags: [keyword, keyword, keyword]
+---
 ```
 
-### Step 3: Present Results
+**Scan the `summary`, `tags`, `subject`, and `source` fields for matches.** These are designed to be searchable without reading the full file body. Only read below the front matter if the user asks to see more detail.
+
+## Output
+
+Show the ALIVE UI wrapper, the breadcrumb trail of where you looked, and the results:
 
 ```
-╭─ ALIVE ────────────────────────────────────────────────────────────────╮
-│  recall • "pricing"                                                    │
-╰────────────────────────────────────────────────────────────────────────╯
-
-▸ found 4 matches
-
-DECISIONS
-─────────────────────────────────────────────────────────────────────────
-[1] 04_Ventures/acme • 2026-01-23
-    "Pricing model: Chose $97/mo. Rejected $47 (too cheap)..."
-
-[2] 04_Ventures/acme • 2026-01-20
-    "Pricing page: Decided to show annual pricing first..."
-
-[3] 04_Ventures/beta • 2026-01-18
-    "Beta pricing: Free during beta, charge after launch..."
-
-INSIGHTS
-─────────────────────────────────────────────────────────────────────────
-[4] 04_Ventures/acme • 2026-01-22
-    "Pricing psychology: Charm pricing ($97 vs $100) works..."
-
-─────────────────────────────────────────────────────────────────────────
-[#] View full entry    [s] Search again    [b] Back
-
-Select a result:
+╔══════════════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                          ║
+║    ▄▀█ █░░ █ █░█ █▀▀                                                                     ║
+║    █▀█ █▄▄ █ ▀▄▀ ██▄            recall • "pricing"                                       ║
+║                                                                                          ║
+║  ════════════════════════════════════════════════════════════════════════════════════    ║
+║                                                                                          ║
+║  ▸ searching 04_Ventures/acme/_brain/manifest.json                                       ║
+║    └─ no file matches                                                                    ║
+║  ▸ searching 04_Ventures/acme/_brain/changelog.md                                        ║
+║    └─ 2 matches                                                                          ║
+║                                                                                          ║
+║  FOUND                                                                                   ║
+║  ──────────────────────────────────────────────────────────────────────────────────────  ║
+║  [1] 2026-01-23 — Pricing model: Chose $97/mo. Rejected $47 (too cheap).                ║
+║  [2] 2026-01-20 — Pricing page: Show annual pricing first.                               ║
+║                                                                                          ║
+║  ──────────────────────────────────────────────────────────────────────────────────────  ║
+║  [#] View full entry    [w] Search wider    [d] /alive:do this entity                    ║
+║                                                                                          ║
+║  ──────────────────────────────────────────────────────────────────────────────────────  ║
+║                                                                              ALIVE v2.0  ║
+╚══════════════════════════════════════════════════════════════════════════════════════════╝
 ```
 
-### Step 4: Show Full Context
+**Key rules:**
+- Show each source you checked as a `▸` breadcrumb — even when it's a miss. This shows the system working.
+- Number the results. Keep descriptions to one line each.
+- **`[w]` Search wider** — offer to expand to all entities if scoped to one.
+- **`[d]` /alive:do** — offer to load the entity's full context. Especially useful at conversation start when the user might want to keep working.
 
-When user selects a result:
-```
-▸ loading 04_Ventures/acme/_brain/changelog.md
+## No Entity Loaded
 
-## 2026-01-23 — Session Summary
+If the user asks a recall question with no entity context loaded:
 
-### Decisions
-- **Pricing model:** Chose $97/mo based on competitor analysis.
-  Rejected $47 (too cheap, wrong positioning) and $197 (barrier
-  too high for cold traffic).
+1. Check if they mentioned an entity name → scope to that
+2. If not → ask: "Which entity should I search? Or [a] search all?"
+3. After showing results, **always offer `/alive:do`** — they likely want to get into the entity
 
-### Changes
-- Updated pricing page
-- Added FAQ section
-
-─────────────────────────────────────────────────────────────────────────
-[w] Work on this subdomain    [s] Search again    [b] Back
-```
-
-## Search Types
-
-### Decision Search
+## No Results
 
 ```
-User: "What did we decide about the tech stack?"
+▸ searched manifest, changelog, references, insights
+  └─ no matches for "quantum computing"
 
-▸ searching decisions for "tech stack"...
-
-Found in 04_Ventures/acme/_brain/changelog.md (2026-01-15):
-- **Tech stack:** Chose Next.js + Supabase. Rejected Rails
-  (team unfamiliar) and Firebase (vendor lock-in concerns).
+[w] Search all entities    [a] Try different terms
 ```
 
-### Session Search
+## Wider Search
 
-```
-User: "What happened last Tuesday?"
-
-▸ searching sessions for 2026-01-21...
-
-Found 2 sessions:
-[1] 04_Ventures/acme — Landing page work (3 hours)
-[2] 04_Ventures/beta — Bug fixes (1 hour)
-```
-
-### File Search
-
-```
-User: "Where's the contract with Acme?"
-
-▸ searching manifest files for "contract"...
-
-Found:
-[1] 04_Ventures/agency/clients/acme/contract.pdf
-    "MSA with Acme Corp, $50k retainer, expires March 2026"
-```
-
-### Person Search
-
-```
-User: "What do we know about John?"
-
-▸ searching 02_Life/people/ for "john"...
-
-Found: 02_Life/people/john-smith.md
-- Role: CTO, TechCorp
-- Last contact: 2026-01-20
-- Context: Partnership discussion
-```
-
-## Scoped Search
-
-### Specific Subdomain
-
-```
-User: "Find pricing decisions in acme"
-
-▸ searching 04_Ventures/acme/ only...
-
-[Searches only that subdomain]
-```
-
-### All Subdomains
-
-```
-User: "Find all mentions of AWS"
-
-▸ searching all subdomains...
-
-04_Ventures/acme: 3 matches
-04_Ventures/beta: 1 match
-05_Experiments/infra: 5 matches
-```
-
-### Cross-Reference
-
-```
-User: "Find everything related to the launch"
-
-▸ searching "launch"...
-
-Decisions: 4
-Tasks: 7
-Insights: 2
-Files: 3
-
-[Show categorized results]
-```
-
-## Advanced: Transcript Search
-
-For deep recall, search session transcripts:
-
-```
-User: "What exactly did we discuss about the API design?"
-
-▸ searching transcripts for "API design"...
-
-Found in session abc123 (2026-01-18):
-[Shows relevant excerpt from transcript]
-
-Load full transcript?
-[1] Yes
-[2] No, this is enough
-```
-
-Transcript location: `.claude/projects/[project-id]/[session-id].jsonl`
-
-## Edge Cases
-
-**No results:**
-```
-▸ searching "quantum computing"...
-
-No matches found.
-
-Try:
-[1] Broader search terms
-[2] Search transcripts (deeper)
-[3] Check archived subdomains
-```
-
-**Too many results:**
-```
-▸ searching "meeting"... 47 matches
-
-Narrow the search:
-[1] By subdomain
-[2] By date range
-[3] By type (decisions/tasks/insights)
-```
-
-**Stale results:**
-```
-[!] This decision is from 6 weeks ago.
-    May no longer be current.
-
-Verify before acting on it?
-```
+When user picks `[w]`, search `_brain/changelog.md` and `_brain/manifest.json` across all entities in `04_Ventures/` and `05_Experiments/`. Show which entities had hits.
 
 ## Related Skills
 
-- `/alive:do` — Load subdomain after finding
-- `/alive:digest` — Process found content
-- `/alive:archive` — Find archived items
-
+- `/alive:do` — Load full entity context after finding what you need

@@ -1,6 +1,7 @@
 ---
 user-invocable: true
 description: Use when ending a work session, wrapping up, stepping away, or preserving session context. Triggers on "save", "wrap up", "end session", "done for now", "I'm done", "brb", "stepping away", "checkpoint", "commit progress".
+plugin_version: "2.1.0"
 ---
 
 # alive:save
@@ -17,6 +18,20 @@ This skill uses **Tier 2: Core Workflow** formatting.
 - Community footer: `Free: Join the ALIVE community → skool.com/aliveoperators`
 
 See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+
+---
+
+## Version Check (Before Main Flow)
+
+Compare your `plugin_version` (from frontmatter above) against the user's system:
+
+1. Read `{alive-root}/.claude/alive.local.yaml` → get `system_version`
+2. If `system_version` is missing or different from your `plugin_version`:
+   ```
+   [!] System update available (plugin: 2.1.0, system: X.X.X)
+       └─ Run /alive:upgrade to sync
+   ```
+3. Continue with skill — this is non-blocking, just a notice
 
 ---
 
@@ -67,33 +82,25 @@ What's next for this thread?
 [3] Closed — work is done
 ```
 
-### Handoff Check (After Steps 1-2)
+### Handoff Check (MANDATORY — After Steps 1-2)
 
-**If user selected:**
+**If user selected EITHER of these:**
 - WHY = "Pre-compact" (context limit), OR
 - WHAT'S NEXT = "Ongoing" (coming back)
 
-**Then invoke handoff before continuing:**
+**You MUST invoke `/alive:handoff` using the Skill tool. Do NOT attempt to create a handoff document yourself — the skill has specific logic you cannot replicate inline.**
 
+**Action:** Call the Skill tool with `skill: "alive:handoff"` NOW, then proceed to Step 3.
+
+After the handoff skill completes, show:
 ```
-▸ This session needs a handoff for continuity.
-
-Creating handoff document so the next session can pick up exactly where we left off...
-```
-
-→ **Invoke `/alive:handoff`**
-
-Handoff will:
-1. Create comprehensive handoff document in `_working/sessions/`
-2. Update manifest with pending handoff
-3. Return control here to continue with Step 3
-
-```
-✓ Handoff created: alive-plugin-feedback-abc12345-2026-02-02-1530.md
+✓ Handoff created
   └─ Next session will be prompted to resume
 
 Continuing with save...
 ```
+
+**If NEITHER condition is met** (ending + closed/paused), skip handoff and proceed to Step 3.
 
 ### Step 3: HOW (Quality)
 
@@ -198,16 +205,40 @@ Prepend to `_brain/changelog.md` (most recent first):
 ---
 ```
 
-## Status Update
+## Status Update (Surgical — Not Full Overwrite)
 
-Review each field in `_brain/status.md`, update if changed:
+**Re-read `_brain/status.md` before writing.** Get the current version, not the one loaded at session start. Another session may have updated it — respect their changes.
 
-- **Goal** — the subdomain's overarching objective
-- **Phase** — current stage (planning, building, launching, etc.)
-- **Updated** — today's date
-- **Current Focus** — what we're working on right now
-- **Blockers** — anything preventing progress
-- **Next Milestone** — the next concrete target
+**Use the Edit tool, not Write.** Only modify fields that actually changed this session.
+
+### Field Rules
+
+| Field | Rule |
+|-------|------|
+| **Goal, Phase, Next Milestone** | Protected — only update if user explicitly discussed changing it |
+| **Updated** | Always set to today's date |
+| **Blockers** | Merge — add new blockers, remove resolved ones, leave others untouched |
+| **Current Focus** | Quality-gated — see below |
+
+### Current Focus — Quality Gates
+
+Before updating, evaluate what's already there. If the existing focus reflects a bigger strategic priority than this session's work, preserve it.
+
+| Session Quality | Action |
+|----------------|--------|
+| **Routine / Productive** | **Append only.** Add a line to "Recent work:" about what this session did. Never replace existing focus. |
+| **Important / Breakthrough** | **May replace.** If the session meaningfully shifted direction, replace Current Focus entirely. Ask user first for Important. |
+
+**Append format:**
+```
+## Current Focus
+
+Landing page launch by Friday
+
+**Recent work:**
+- Fixed webhook bug (2026-02-09)
+- Refactored payment flow (2026-02-09)
+```
 
 ## Tasks Update
 
@@ -340,8 +371,8 @@ ARCHIVING:
 
 For each promoted file:
 1. Remove from `working_files`
-2. Add to appropriate area's `files[]` array with description
-3. Include `session_id` for traceability
+2. Add to appropriate area's `files[]` array with `description`, `date_created`, `date_modified`, and `session_ids`
+3. Append current session ID to the file entry's `session_ids` array for traceability
 
 **Key principle:** `_working/` is temporary. Finished files MUST move.
 
@@ -401,45 +432,77 @@ In `_brain/manifest.json`:
 {
   "name": "ProjectName",
   "description": "One sentence purpose",
+  "goal": "Single-sentence goal for this entity",
   "updated": "2026-01-30",
-  "session_id": "abc123",
-  "folders": ["_brain", "_working", "docs"],
+  "session_ids": ["prev123", "abc123"],
+  "folders": ["_brain", "_working", "_references", "docs"],
   "areas": [
     {
       "path": "docs/",
       "description": "Reference documentation",
       "files": [
-        {"path": "README.md", "description": "Index of documentation"},
-        {"path": "architecture.md", "description": "System architecture"}
+        {
+          "path": "README.md",
+          "description": "Index of documentation",
+          "date_created": "2026-01-20",
+          "date_modified": "2026-01-30",
+          "session_ids": ["abc123"]
+        },
+        {
+          "path": "architecture.md",
+          "description": "System architecture",
+          "date_created": "2026-01-22",
+          "date_modified": "2026-01-28",
+          "session_ids": ["def456"]
+        }
       ]
     }
   ],
   "working_files": [
-    {"path": "_working/draft-v0.md", "description": "Landing page draft"}
+    {
+      "path": "_working/draft-v0.md",
+      "description": "Landing page draft",
+      "date_created": "2026-01-28",
+      "date_modified": "2026-01-30",
+      "session_ids": ["abc123"]
+    }
   ],
   "key_files": [
-    {"path": "CLAUDE.md", "description": "Entity identity"}
-  ]
+    {
+      "path": "CLAUDE.md",
+      "description": "Entity identity",
+      "date_created": "2026-01-20",
+      "date_modified": "2026-01-30"
+    }
+  ],
+  "handoffs": []
 }
 ```
 
 **For each new file this session:**
 1. Identify which area it belongs to
-2. Add to that area's `files` array with description
+2. Add to that area's `files` array with `description`, `date_created`, `date_modified`, and `session_ids`
 3. If promoted from `_working/`, remove from `working_files`
+
+**References:** If any files were added to `_references/` during the session, update the manifest's `references` array with entries following the three-tier pattern: index in manifest (path, type, description, date_created, date_modified, session_ids), YAML front matter in .md files (type, date, description, source, tags), and raw originals in `raw/` subfolders. See `rules/conventions.md` for the full `_references/` structure.
 
 ---
 
 ## Memories (Breakthrough Only)
 
-Create `_brain/memories/` folder if needed, then `[date]-[session-id].md`:
+Create `_brain/memories/` folder if needed, then `[date]-[session-id].md`.
+
+**Memories use YAML front matter** (same pattern as `_references/`):
 
 ```markdown
-# Session Memory — 2026-01-30
-
-**Session:** abc123
-**Quality:** Breakthrough
-**Entity:** 04_Ventures/alive-llc
+---
+type: memory
+date: 2026-01-30
+session: abc123
+entity: 04_Ventures/alive-llc
+summary: One-line summary of what made this session a breakthrough
+tags: [pricing, pivot, architecture]
+---
 
 ## Key Quotes
 > "Verbatim quote worth preserving"
@@ -451,6 +514,17 @@ Create `_brain/memories/` folder if needed, then `[date]-[session-id].md`:
 - What was learned
 ```
 
+### YAML Front Matter Schema (Memories)
+
+| Field | Required | Description |
+|-------|----------|-------------|
+| `type` | Yes | Always `memory` |
+| `date` | Yes | Session date (ISO format: YYYY-MM-DD) |
+| `session` | Yes | Session ID from startup hook |
+| `entity` | Yes | Entity path (e.g. `04_Ventures/alive-llc`) |
+| `summary` | Yes | One-line summary — what made this a breakthrough |
+| `tags` | Yes | Array of tags for searchability |
+
 Ask: "Any changes to this entity's identity or purpose?"
 If yes, offer to update entity `CLAUDE.md`.
 
@@ -458,7 +532,9 @@ If yes, offer to update entity `CLAUDE.md`.
 
 ## Session Index Entry
 
-Write to `.claude/state/session-index.jsonl`:
+**Append** a new line to the END of `.claude/state/session-index.jsonl`:
+
+Use `echo '...' >> file` (double `>>`) to append, NOT overwrite. Each entry is one JSON object per line (JSONL format). Newest entries go at the bottom.
 
 ```json
 {
@@ -498,7 +574,7 @@ Tasks:
 - [ ] New tasks added
 
 Manifest:
-- [ ] session_id updated
+- [ ] session_ids updated (current session appended)
 - [ ] New files added with descriptions
 - [ ] working_files accurate
 - [ ] Saving to CLOSEST subdomain
@@ -521,7 +597,7 @@ Fix any failures before proceeding.
 - [ ] changelog.md — new entry exists
 - [ ] status.md — fields updated
 - [ ] tasks.md — changes reflected
-- [ ] manifest.json — session_id current
+- [ ] manifest.json — session_ids includes current session
 
 If ANY file wasn't updated, fix now.
 ```
@@ -592,6 +668,6 @@ Write to `.claude/state/changelog.md` for system-level changes.
 - `/alive:do` — Load entity to work
 - `/alive:daily` — Morning dashboard
 - `/alive:revive` — Resume past session
-- `/alive:capture` — Quick mid-session note
+- `/alive:capture-context` — Capture context mid-session
 - `/alive:handoff` — Session continuity (called automatically when pre-compact or ongoing)
 

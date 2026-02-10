@@ -13,6 +13,7 @@ Each venture is a subdomain with its own `_brain/`:
 ├── mycompany/
 │   ├── _brain/       # Status, tasks, changelog
 │   ├── _working/     # WIP
+│   ├── _references/  # Reference materials
 │   └── [areas]/      # Clients, product, marketing
 └── another-venture/
 ```

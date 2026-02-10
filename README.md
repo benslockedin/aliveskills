@@ -55,15 +55,18 @@ That's it. Your AI now has persistent memory.
 
 ## How It Works
 
-Every subdomain has a `_brain/` folder:
+Every entity has `_brain/`, `_working/`, and `_references/`:
 
 ```
-04_Ventures/mycompany/_brain/
-├── status.md      # Current phase + goal
-├── tasks.md       # What needs doing
-├── changelog.md   # What happened + decisions
-├── insights.md    # Learnings
-└── manifest.json  # Structure map
+04_Ventures/mycompany/
+├── _brain/
+│   ├── status.md      # Current phase + goal
+│   ├── tasks.md       # What needs doing
+│   ├── changelog.md   # What happened + decisions
+│   ├── insights.md    # Learnings
+│   └── manifest.json  # Structure map
+├── _working/           # Drafts in progress
+└── _references/        # Reference materials and source documents
 ```
 
 Claude reads these files to understand your context. Updates them as you work. Everything persists.
@@ -72,13 +75,20 @@ Claude reads these files to understand your context. Updates them as you work. E
 
 | Skill | When to Use |
 |-------|-------------|
+| `/alive:daily` | "Start my day" — morning dashboard across all entities |
 | `/alive:do` | "Let's work on X" — loads context, starts session |
 | `/alive:save` | "We're done" — logs progress, cleans up |
 | `/alive:new` | "Create a venture/experiment" — scaffolds structure |
-| `/alive:capture` | "Remember this" — quick context grab |
-| `/alive:recall` | "What did we decide about X?" — searches history |
+| `/alive:capture-context` | "Here's some context" — capture and route to ALIVE |
 | `/alive:digest` | "Process my inputs" — triages incoming context |
-| `/alive:help` | "What should I do?" — contextual guidance |
+| `/alive:recall` | "What did we decide about X?" — searches history |
+| `/alive:archive` | "Done with X" — moves to archive |
+| `/alive:sweep` | "Clean up" — audits for stale context |
+| `/alive:migrate` | "Import these files" — bulk import into ALIVE |
+| `/alive:revive` | "Pick up where I left off" — resume a past session |
+| `/alive:upgrade` | "Update system" — sync to latest version |
+| `/alive:onboarding` | "Get started" — first-time setup wizard |
+| `/alive:help` | "How does X work?" — contextual guidance |
 
 ## Community
 

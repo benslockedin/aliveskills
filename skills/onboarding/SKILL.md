@@ -1,6 +1,7 @@
 ---
 user-invocable: true
 description: This skill should be used when the user says "set up ALIVE", "get started", "initialize", "new here", "how do I start", or when `/alive:daily` detects no ALIVE structure exists. Fresh v2 setup for new users.
+plugin_version: "2.1.0"
 ---
 
 # alive:onboarding
@@ -16,6 +17,20 @@ Invoke when:
 - User asks how to get started
 - `onboarding_complete: false` in alive.local.yaml
 - User explicitly requests setup
+
+## Version Check (Before Main Flow)
+
+Compare your `plugin_version` (from frontmatter above) against the user's system:
+
+1. Read `{alive-root}/.claude/alive.local.yaml` → get `system_version` (may not exist for new users — that's fine)
+2. If `system_version` exists and differs from your `plugin_version`:
+   ```
+   [!] System update available (plugin: 2.1.0, system: X.X.X)
+       └─ Run /alive:upgrade instead of onboarding
+   ```
+3. If `system_version` missing or file doesn't exist → continue with onboarding (new user)
+
+---
 
 ## UI Treatment
 
@@ -633,6 +648,7 @@ Each selected area gets:
 - `02_Life/[area]/.claude/CLAUDE.md` (from template)
 - `02_Life/[area]/_brain/` (status.md, tasks.md, insights.md, changelog.md)
 - `02_Life/[area]/_working/`
+- `02_Life/[area]/_references/`
 
 **For each selected area, brief follow-up:**
 
@@ -846,7 +862,7 @@ AskUserQuestion({
 - **Creator:** content/, products/, community/, funnel/
 - **E-commerce:** products/, suppliers/, marketing/, operations/
 - **Job:** projects/, docs/, meetings/, growth/
-- **Custom:** (minimal) .claude/, _brain/, _working/
+- **Custom:** (minimal) .claude/, _brain/, _working/, _references/
 
 ```
 ✓ [Venture name] configured as [Type]
@@ -944,15 +960,18 @@ ALIVE/
 │   ├── acme-agency/
 │   │   ├── _brain/       (Project memory)
 │   │   ├── _working/     (Drafts & WIP)
+│   │   ├── _references/  (Reference materials)
 │   │   └── CLAUDE.md     (Project identity)
 │   └── saas-product/
 │       ├── _brain/
 │       ├── _working/
+│       ├── _references/
 │       └── CLAUDE.md
 └── 05_Experiments/
     └── newsletter-idea/
         ├── _brain/
         ├── _working/
+        ├── _references/
         └── CLAUDE.md
 
 ✓ Structure created
@@ -999,7 +1018,7 @@ without you having to explain anything.
 2. Create 02_Life/_brain/ with status.md, tasks.md, insights.md, changelog.md
 3. Create life area subfolders based on user selections
 4. Create people/ folder and individual person files
-5. Create each venture/experiment entity with _brain/, _working/, CLAUDE.md
+5. Create each venture/experiment entity with _brain/, _working/, _references/, CLAUDE.md
 6. Create v2 system files:
    - `.claude/state/session-index.jsonl` (empty)
 7. Create `alive.local.yaml` with user preferences
@@ -1181,11 +1200,9 @@ Context compounds each cycle. Skip the save, lose the context.
 OTHER USEFUL COMMANDS
 ─────────────────────────────────────────────────────────────────────────
 
-/alive:capture  Quick capture. Grab a decision, insight, or task
-                without interrupting flow.
-
-/alive:input    Process external content. Meeting transcript?
-                Article? Dump it here, I'll extract and route it.
+/alive:capture-context  Capture context. Dump in anything — a decision,
+                        transcript, email, article — I'll extract what
+                        matters and route it to the right place.
 
 /alive:recall   Search your history. "What did we decide about
                 pricing?" — I'll find it.

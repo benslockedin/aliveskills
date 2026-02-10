@@ -1,6 +1,7 @@
 ---
 user-invocable: true
 description: This skill should be used when the user says "process inputs", "digest", "triage", "handle inbox", "sort these", "what's in my inbox", "what's in inputs", or "anything to process". Processes the 03_Inputs/ buffer.
+plugin_version: "2.1.0"
 ---
 
 # alive:digest
@@ -149,9 +150,11 @@ For simple items:
 Adding task to 04_Ventures/acme/_brain/tasks.md:
   - [ ] Send project update to client @urgent
 
-Filing email to 04_Ventures/acme/clients/emails/
+Storing email:
+  Summary → 04_Ventures/acme/_references/emails/2026-02-06-client-update-request.md
+  Raw     → 04_Ventures/acme/_references/emails/raw/2026-02-06-client-update-request.txt
 
-Moving source to: 01_Archive/03_Inputs/client-email-acme.md
+Archiving source: 03_Inputs/client-email-acme.md → 01_Archive/03_Inputs/
 
 ✓ Done
 ```
@@ -202,28 +205,116 @@ Before routing, check if entity has an area for the content:
 
 Areas found:
   - clients/ → for client content
-  - meetings/ → for transcripts
+  - _references/ → for source material
 
-Route transcript to: 04_Ventures/acme/meetings/call-2026-01-22.md
+Route transcript to: 04_Ventures/acme/_references/calls/2026-01-22-partner-sync.md
 ```
 
 ### Routing Destinations
 
-| Content Type | Destination |
-|--------------|-------------|
+**Extracted content** routes to `_brain/`:
+
+| Extraction | Destination |
+|------------|-------------|
 | Decision | `_brain/changelog.md` |
 | Task | `_brain/tasks.md` |
 | Insight | `_brain/insights.md` |
 | Person info | `02_Life/people/[name].md` |
-| Transcript | Subdomain area or `meetings/` |
-| Document | Subdomain area |
-| Reference | `_working/` or relevant area |
 
 ### Source File Routing
 
-After extraction, move source file:
-- To entity area if relevant (`04_Ventures/acme/meetings/`)
-- To `01_Archive/03_Inputs/` if ephemeral
+After extraction, the **source file** needs to be stored. Default is `_references/` — the same format used by `/alive:capture-context`.
+
+Every reference creates two files: a **summary `.md`** at the type folder root, and the **original content** in a `raw/` subfolder. The summary should be detailed enough that you rarely need the raw file.
+
+**Text-based source files** (emails, transcripts, notes, messages) → create a summary `.md` with YAML front matter + detailed AI summary + source pointer, and store the original text in `raw/`:
+
+```markdown
+---
+type: email
+date: 2026-02-06
+description: Client requests project update and asks about new feature
+source: John Smith (Acme Corp)
+tags: [client, update-request, feature]
+subject: Re: Project status
+from: john@acme.com
+to: team@company.com
+---
+
+## Summary
+
+John is requesting a project status update by end of week. He also
+raises a new feature request for bulk export functionality. He mentions
+the board meeting is next Tuesday and needs numbers to present.
+
+### Key Points
+- Status update needed by Friday
+- New feature request: bulk export
+- Board meeting Tuesday — needs metrics
+
+### Action Items
+- Send project update by Friday
+- Respond to bulk export feature request
+
+## Source
+
+`raw/2026-02-06-client-update-request.txt`
+```
+
+File naming: summary `.md` and raw file share the same base name, using `YYYY-MM-DD-descriptive-name` convention.
+Subfolder: dynamic based on content type (`emails/`, `calls/`, `meeting-transcripts/`, `messages/`, `notes/`, `articles/`)
+
+**Rename garbage filenames.** When source files have auto-generated or meaningless names (e.g. `CleanShot 2026-02-06 at 14.32.07@2x.png`, `IMG_4521.jpg`, `document (3).pdf`), rename them to the `YYYY-MM-DD-descriptive-name.ext` convention before storing.
+
+```
+_references/emails/2026-02-06-client-update-request.md        ← summary
+_references/emails/raw/2026-02-06-client-update-request.txt   ← raw original
+_references/calls/2026-01-22-partner-sync.md                  ← summary
+_references/calls/raw/2026-01-22-partner-sync.txt             ← raw original
+```
+
+**Non-text source files** (screenshots, PDFs, audio) → same pattern. Summary `.md` at type root, original in `raw/`:
+
+```
+_references/documents/2026-02-06-contract-scan.md             ← summary with analysis
+_references/documents/raw/2026-02-06-contract-scan.pdf        ← original file
+```
+
+The summary `.md` uses `## Analysis` instead of `## Summary` and points to the raw file:
+
+```markdown
+---
+type: document
+date: 2026-02-06
+description: Scanned contract with Globex, 12-month term, $50k value
+source: Legal team
+tags: [contract, globex]
+---
+
+## Analysis
+
+[AI-generated description of the document contents,
+key terms, important clauses, relevant observations.
+Detailed enough that you rarely need to open the original.]
+
+## Source
+
+`raw/2026-02-06-contract-scan.pdf`
+```
+
+**Finished artifacts** (spreadsheets, contracts, final documents) → these aren't references, they're project files. Route to the appropriate area folder in the entity:
+
+```
+04_Ventures/acme/clients/globex/contract-v1.pdf
+04_Ventures/acme/financials/q1-budget.xlsx
+```
+
+**The test:** Is this source material you might reference later? → `_references/`. Is this a finished file that belongs in a project? → Area folder.
+
+**After routing, archive the original from inputs:**
+```
+mv 03_Inputs/client-email-acme.md → 01_Archive/03_Inputs/client-email-acme.md
+```
 
 ## Multimodal Support
 
@@ -295,7 +386,7 @@ Inputs is empty. Nothing to process.
 This transcript mentions both acme and beta projects.
 
 Route extractions to:
-[1] Both entitys
+[1] Both entities
 [2] Just acme
 [3] Just beta
 [4] Let me specify for each item
@@ -328,7 +419,6 @@ Filed: 2 source files
 
 ## Related Skills
 
-- `/alive:input` — Single item capture and immediate routing
+- `/alive:capture-context` — Capture and route content into ALIVE
 - `/alive:do` — Work on entity after digest
 - `/alive:daily` — Shows inputs count, links here
-

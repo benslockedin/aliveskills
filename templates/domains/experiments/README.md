@@ -13,6 +13,7 @@ Each experiment is a subdomain:
 ├── app-idea/
 │   ├── _brain/       # Hypothesis, learnings
 │   ├── _working/     # Prototypes
+│   ├── _references/  # Reference materials
 │   └── [areas]/      # Research, designs
 └── side-project/
 ```

@@ -1,22 +1,24 @@
 ---
 user-invocable: true
 description: Bulk import existing content, transcripts, or documents into ALIVE. Use when the user says "migrate X", "import X", "bring in X", "bulk add", or "load from X".
+plugin_version: "2.1.0"
 ---
 
 # alive:migrate
 
 Bulk import content into ALIVE. Extract and route existing files, transcripts, or documents.
 
-## UI Treatment
+## Version Check (Before Main Flow)
 
-This skill uses **Tier 3: Utility** formatting.
+Compare your `plugin_version` (from frontmatter above) against the user's system:
 
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
-
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+1. Read `{alive-root}/.claude/alive.local.yaml` → get `system_version`
+2. If `system_version` is missing or different from your `plugin_version`:
+   ```
+   [!] System update available (plugin: 2.1.0, system: X.X.X)
+       └─ Run /alive:upgrade to sync before importing content
+   ```
+3. Continue with skill — this is non-blocking, just a notice
 
 ---
 
@@ -32,7 +34,7 @@ Invoke when the user:
 
 ```
 1. Identify source (file, folder, URL)
-2. Create or select destination subdomain
+2. Create or select destination entity
 3. Analyze content
 4. Extract structured data
 5. Route to appropriate locations
@@ -54,12 +56,13 @@ What are you migrating?
 
 ### Step 2: Create or Select Destination
 
-If subdomain doesn't exist:
+If entity doesn't exist:
 ```
 This content needs a home.
 
-[1] Create new subdomain (04_Ventures/05_Experiments/02_Life)
-[2] Import to existing subdomain
+[1] Create new entity
+    └─ Venture (04_Ventures/), Experiment (05_Experiments/), or Life (02_Life/)
+[2] Import to existing entity
 ```
 
 If creating, invoke `/alive:new` first to scaffold properly.
@@ -152,26 +155,33 @@ Tasks:
 Insights:
   → 04_Ventures/acme/_brain/insights.md (2 entries)
 
-Source file:
-  → 04_Ventures/acme/meetings/call-2026-01-20.md
+Source (reference):
+  → 04_Ventures/acme/_references/call-john-smith-2026-01-20.md
 ```
+
+**Reference routing:** When the source material is a reference type (email, call transcript, screenshot, article), route it to `_references/` with YAML front matter rather than a generic area folder. See the capture-context skill for front matter format.
 
 ### Step 6: Update Manifest
 
-Add imported files and summaries:
+Add imported files to the manifest. Reference materials go in the `references` array:
 
 ```json
 {
-  "files": [
+  "references": [
     {
-      "path": "meetings/call-2026-01-20.md",
-      "summary": "Call with John Smith about AWS migration, launch timeline",
-      "sessions": ["migrate-abc123"],
-      "modified": "2026-01-23"
+      "path": "_references/call-john-smith-2026-01-20.md",
+      "type": "call",
+      "description": "Call with John Smith about AWS migration, launch timeline",
+      "date_created": "2026-01-20",
+      "date_modified": "2026-01-20",
+      "people": ["john-smith"],
+      "session_ids": ["abc123"]
     }
   ]
 }
 ```
+
+Non-reference files go in the standard `files` or `areas` arrays as usual.
 
 ### Step 7: Confirm
 
@@ -198,7 +208,8 @@ For call/meeting transcripts:
 3. Extract decisions
 4. Extract insights
 5. Update person files with "last contact"
-6. File source in appropriate area
+6. Store source as reference in `_references/` with YAML front matter
+7. Add to `manifest.json` `references` array
 
 ### Document Migration
 
@@ -258,7 +269,7 @@ This decision mentions multiple ventures:
 - Timeline relates to beta
 
 Route to:
-[1] Both subdomains
+[1] Both entities
 [2] Just acme
 [3] Just beta
 [4] Let me specify
@@ -277,13 +288,12 @@ Route to:
 ## After Migration
 
 Once content is imported:
-- Use `/alive:do` to work on the subdomain
+- Use `/alive:do` to work on the entity
 - Use `/alive:digest` if items went to 03_Inputs/
 - Use `/alive:sweep` to check for cleanup needs
 
 ## Related Skills
 
-- `/alive:new` — Create subdomain first if needed
+- `/alive:new` — Create entity first if needed
 - `/alive:digest` — Process inputs
-- `/alive:capture` — Single item capture (not bulk)
-
+- `/alive:capture-context` — Single item capture (not bulk)

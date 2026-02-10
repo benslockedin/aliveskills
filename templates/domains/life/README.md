@@ -17,6 +17,7 @@ This is the foundation. Everything else flows from here.
 02_Life/
 ├── _brain/           # Your life's context
 ├── _working/         # In-progress personal stuff
+├── _references/      # Reference materials
 ├── people/           # Everyone you know
 └── [areas]/          # Health, finance, etc.
 ```

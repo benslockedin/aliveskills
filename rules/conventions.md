@@ -30,53 +30,58 @@ project/
 
 | | Entity | Area |
 |---|--------|------|
-| Has `.claude/` | Yes | No |
 | Has `_brain/` | Yes | No |
 | Has `_working/` | Yes | No |
-| Identity file | `.claude/CLAUDE.md` | `README.md` |
+| Has `_references/` | Yes | No |
+| Has `.claude/` | Optional | No |
+| Has `CLAUDE.md` | Yes (in `.claude/` or root) | No |
+| Identity file | `CLAUDE.md` | `README.md` |
 | Example | `04_Ventures/acme/` | `04_Ventures/acme/clients/` |
 
-**Entities** are projects with their own state.
-**Areas** are organizational folders within entities.
+**Entities** are projects with their own state. Every entity MUST have a `CLAUDE.md` — ideally in `.claude/CLAUDE.md`, but root-level `CLAUDE.md` is also valid.
+**Areas** are organisational folders within entities.
 
 ---
 
-## Nested Entities (Subentities)
+## Nested Entities
 
-Subentities are containers WITHIN an entity that have their own lifecycle. They get their own `_brain/` AND their own `_working/`.
+Sub-entities are containers WITHIN an entity that have their own lifecycle. They get their own `_brain/`, `_working/`, and `_references/`.
 
-**The rule:** If it can be started, paused, or completed independently — it gets `_brain/` and `_working/`.
+**The rule:** If it can be started, paused, or completed independently — it gets `_brain/`, `_working/`, and `_references/`.
 
-| Container | Gets _brain/? | Gets _working/? | Why |
-|-----------|---------------|-----------------|-----|
-| `04_Ventures/agency/` | Yes | Yes | Entity |
-| `04_Ventures/agency/clients/bigco/` | Yes | Yes | Independent lifecycle (can be "done") |
-| `04_Ventures/agency/clients/` | No | No | Organizational folder (area) |
-| `04_Ventures/agency/brand/` | No | No | Organizational folder (area) |
-| `04_Ventures/shop/campaigns/summer/` | Yes | Yes | Independent lifecycle |
-| `04_Ventures/shop/products/` | No | No | Organizational folder |
+| Container | Gets _brain/? | Gets _working/? | Gets _references/? | Why |
+|-----------|---------------|-----------------|---------------------|-----|
+| `04_Ventures/agency/` | Yes | Yes | Yes | Entity |
+| `04_Ventures/agency/clients/bigco/` | Yes | Yes | Yes | Independent lifecycle (can be "done") |
+| `04_Ventures/agency/clients/` | No | No | No | Organizational folder (area) |
+| `04_Ventures/agency/brand/` | No | No | No | Organizational folder (area) |
+| `04_Ventures/shop/campaigns/summer/` | Yes | Yes | Yes | Independent lifecycle |
+| `04_Ventures/shop/products/` | No | No | No | Organizational folder |
 
 **Nested entity structure:**
 ```
 04_Ventures/agency/clients/bigco/
-├── _brain/           ← Subentity state
+├── _brain/           ← Sub-entity state
 │   ├── status.md
 │   ├── tasks.md
 │   └── ...
-├── _working/         ← Subentity drafts (NOT in parent's _working/)
+├── _working/         ← Sub-entity drafts (NOT in parent's _working/)
 │   └── proposal-v0.md
+├── _references/      ← Sub-entity references (NOT in parent's _references/)
+└── README.md
 ```
 
 **WRONG:** `04_Ventures/agency/_working/clients/bigco/proposal.md`
 **RIGHT:** `04_Ventures/agency/clients/bigco/_working/proposal.md`
 
-**When creating subentities:**
+**When creating sub-entities:**
 1. Create `_brain/` with status.md, tasks.md, insights.md, changelog.md, manifest.json
-2. Create `_working/` for drafts (at subentity level, not parent)
-3. Log creation in parent's `_brain/changelog.md`
-4. Update parent's `_brain/manifest.json`
+2. Create `_working/` for drafts (at sub-entity level, not parent)
+3. Create `_references/` for reference material (at sub-entity level, not parent)
+4. Log creation in parent's `_brain/changelog.md`
+5. Update parent's `_brain/manifest.json`
 
-Use `/alive:new` to create subentities properly.
+Use `/alive:new` to create sub-entities properly.
 
 ---
 
@@ -177,61 +182,259 @@ Every entity has `_brain/` with these files:
 
 ```json
 {
-  "name": "Project Name",
-  "type": "entity",
+  "name": "project-name",
   "description": "One sentence description",
-  "goal": "Single sentence goal",
+  "goal": "Single-sentence goal that filters all decisions",
   "created": "2026-01-20",
   "updated": "2026-01-23",
-  "session_id": "last-session-id",
+  "session_ids": ["abc12345", "def67890"],
 
-  "folders": ["_brain", "_working", "clients", "content"],
+  "folders": ["_brain", "_working", "_references", "clients", "content"],
 
   "areas": [
     {
       "path": "clients/",
       "description": "Active client projects",
-      "has_subdomains": false
-    }
-  ],
-
-  "files": [
-    {
-      "path": "_brain/status.md",
-      "summary": "Building phase, landing page launch Friday",
-      "sessions": ["abc123", "def456"],
-      "modified": "2026-01-23"
+      "has_entities": false,
+      "files": [
+        {
+          "path": "README.md",
+          "description": "Client area overview",
+          "date_created": "2026-01-20",
+          "date_modified": "2026-01-23",
+          "session_ids": ["abc12345"]
+        }
+      ]
     },
     {
-      "path": "clients/acme/contract.pdf",
-      "summary": "MSA with Acme, $50k retainer, expires March 2026",
-      "sessions": ["xyz789"],
-      "modified": "2026-01-10",
-      "key": true
+      "path": "content/",
+      "description": "Marketing and brand content",
+      "files": [
+        {
+          "path": "landing-page.md",
+          "description": "Main landing page copy",
+          "date_created": "2026-01-22",
+          "date_modified": "2026-01-23",
+          "session_ids": ["xyz789", "abc12345"]
+        }
+      ]
     }
   ],
 
   "working_files": [
     {
       "path": "_working/landing-v0.html",
-      "summary": "Draft landing page with hero, features, pricing",
-      "sessions": ["abc123", "def456", "ghi789"],
-      "created": "2026-01-20",
-      "modified": "2026-01-23"
+      "description": "Draft landing page with hero and features",
+      "date_created": "2026-01-20",
+      "date_modified": "2026-01-23",
+      "session_ids": ["abc123"]
     }
   ],
 
-  "sessions": ["abc123", "def456", "ghi789"]
+  "key_files": [
+    {
+      "path": "CLAUDE.md",
+      "description": "Entity identity and navigation",
+      "date_created": "2026-01-20",
+      "date_modified": "2026-01-23"
+    }
+  ],
+
+  "handoffs": [],
+
+  "references": [
+    {
+      "path": "_references/emails/2026-02-06-supplier-quote.md",
+      "type": "email",
+      "description": "Supplier confirms 15% price increase, bulk order before Feb 28",
+      "date_created": "2026-02-06",
+      "date_modified": "2026-02-06",
+      "session_ids": ["xyz789"]
+    }
+  ]
 }
 ```
 
 **Key fields:**
-- `type` — Always "entity" for entities
-- `goal` — Single-sentence goal for filtering decisions
-- `sessions` — Array of all session IDs that touched this entity
-- `summary` (on files) — AI-generated one-liner
-- `sessions` (on files) — Session IDs that touched this file
-- `key: true` (on files) — Mark important files
+
+| Field | Location | Description |
+|-------|----------|-------------|
+| `goal` | Entity root | Single-sentence goal — filters decisions, enables alignment advice |
+| `session_ids` | Entity root + file entries | Array of session IDs that have touched this entity/file. Append new sessions, don't overwrite. |
+| `description` | All file entries | AI-generated one-liner describing the file. Standardised everywhere (not `summary`). |
+| `date_created` | File entries | ISO date when the file was first added to the manifest |
+| `date_modified` | File entries | ISO date when the file was last modified |
+| `key_files` | Entity root | Important reference files at entity root or cross-cutting |
+| `handoffs` | Entity root | Pending session handoffs for `/alive:do` to detect on load. Uses singular `session_id` (one handoff = one session). |
+| `areas[].has_entities` | Area entries | True if area contains nested entities (e.g. clients/) |
+| `references` | Entity root | Lightweight index of `_references/` files. Each entry has `path`, `type`, `description`, `date_created`, `date_modified`, `session_ids`. Three-tier access: manifest index → summary .md → raw/ file. |
+
+**File entry schema** (applies to `areas[].files[]`, `working_files[]`, `key_files[]`, `references[]`):
+
+```json
+{
+  "path": "relative/path/to/file.md",
+  "description": "What this file is/contains",
+  "date_created": "2026-01-20",
+  "date_modified": "2026-01-23",
+  "session_ids": ["abc12345"]
+}
+```
+
+- `date_created` and `date_modified` — ISO date format (YYYY-MM-DD)
+- `session_ids` — Array. Append the current session ID when modifying. Optional for files not created/tracked by sessions (e.g. `CLAUDE.md`).
+- `references[]` additionally has `type` (email, call, screenshot, etc.)
+
+---
+
+## _references/ Structure
+
+**ALL external context put into the ALIVE system.** Emails, messages, call transcripts, screenshots, articles, documents — any source material worth preserving.
+
+Each content TYPE gets a subfolder. Inside each type folder, `.md` summary files sit at root level and a `raw/` subfolder holds the original source files.
+
+```
+_references/
+├── meeting-transcripts/
+│   ├── 2026-02-08-content-planning.md        ← YAML front matter + detailed AI summary + source pointer
+│   ├── 2026-02-04-partner-sync.md
+│   └── raw/
+│       ├── 2026-02-08-content-planning.txt
+│       └── 2026-02-04-partner-sync.txt
+├── emails/
+│   ├── 2026-02-06-supplier-quote.md
+│   └── raw/
+│       └── 2026-02-06-supplier-quote.txt
+├── screenshots/
+│   ├── 2026-02-06-competitor-landing.md       ← front matter + analysis + source pointer
+│   └── raw/
+│       └── 2026-02-06-competitor-landing.png
+└── documents/
+    ├── 2026-02-06-contract-scan.md
+    └── raw/
+        └── 2026-02-06-contract-scan.pdf
+```
+
+### Access Pattern
+
+```
+Tier 1: manifest.json        → Quick index (always loaded)
+Tier 2: Summary .md file      → Detailed AI summary + rich metadata (on demand)
+Tier 3: raw/ file             → Original content — full text or binary (on demand)
+```
+
+The summary `.md` should be detailed enough that you rarely need the raw file.
+
+### Subfolders
+
+Dynamic — created by content type, not prescribed. Examples: `emails/`, `calls/`, `meeting-transcripts/`, `screenshots/`, `messages/`, `articles/`, `documents/`. Each type folder contains a `raw/` subfolder for original files.
+
+### File Naming
+
+Summary files and raw files share the same base name with different extensions:
+
+| File | Pattern | Example |
+|------|---------|---------|
+| Summary | `YYYY-MM-DD-descriptive-name.md` | `emails/2026-02-06-supplier-quote.md` |
+| Raw (text) | `YYYY-MM-DD-descriptive-name.txt` | `emails/raw/2026-02-06-supplier-quote.txt` |
+| Raw (binary) | `YYYY-MM-DD-descriptive-name.ext` | `screenshots/raw/2026-02-06-competitor-landing.png` |
+
+**Raw file renaming:** When incoming files have garbage names (e.g. `CleanShot 2026-02-06 at 14.32.07@2x.png`, `IMG_4521.jpg`, `document (3).pdf`), rename them to the `YYYY-MM-DD-descriptive-name.ext` convention before storing. The summary `.md` and raw file should share the same base name.
+
+### Text Content (emails, transcripts, messages)
+
+Summary `.md` with YAML front matter + `## Summary` (with subheaders for key points, action items, decisions as appropriate) + `## Source` pointer to raw file:
+
+```markdown
+---
+type: email
+date: 2026-02-06
+description: Supplier confirms 15% price increase on fabric starting March
+source: John Smith
+tags: [pricing, supplier]
+subject: Q1 pricing update
+from: john@supplier.com
+to: team@company.com
+---
+
+## Summary
+
+John confirms a 15% price increase on all fabric orders starting March 1.
+Recommends placing a bulk order before Feb 28 to lock in current pricing.
+
+### Key Points
+- 15% increase effective March 1
+- Bulk order before Feb 28 locks current rate
+- Minimum order: 500 units for bulk pricing
+
+### Action Items
+- Decide on bulk order quantity by Feb 20
+- Confirm shipping timeline with warehouse
+
+## Source
+
+`raw/2026-02-06-supplier-quote.txt`
+```
+
+### Non-Text Content (screenshots, videos, PDFs)
+
+Same pattern — summary `.md` at type root, original in `raw/`:
+
+```
+_references/screenshots/
+├── 2026-02-06-competitor-landing.md
+└── raw/
+    └── 2026-02-06-competitor-landing.png
+```
+
+Summary `.md` uses `## Analysis` instead of `## Summary`:
+
+```markdown
+---
+type: screenshot
+date: 2026-02-06
+description: Competitor landing page showing new $49/mo pricing tier
+source: competitor website
+tags: [competitor, pricing]
+---
+
+## Analysis
+
+[AI-generated detailed description — what's shown, key information,
+relevant observations. Detailed enough that you rarely need the original.]
+
+## Source
+
+`raw/2026-02-06-competitor-landing.png`
+```
+
+### Front Matter Fields
+
+| Field | Required | Notes |
+|-------|----------|-------|
+| `type` | Yes | email, call, screenshot, message, article, document, etc. |
+| `date` | Yes | ISO format |
+| `description` | Yes | One-line (mirrors manifest entry) |
+| `source` | Usually | Who/where it came from |
+| `tags` | Usually | Array for searchability |
+| `from`, `to`, `subject` | email | Email metadata |
+| `participants`, `duration` | call | Call metadata |
+| `platform` | message | Slack, iMessage, etc. |
+
+### Manifest Entry
+
+```json
+"references": [
+  {
+    "path": "_references/emails/2026-02-06-supplier-quote.md",
+    "type": "email",
+    "description": "Supplier confirms 15% price increase, bulk order before Feb 28",
+    "date_created": "2026-02-06",
+    "date_modified": "2026-02-06",
+    "session_ids": ["abc12345"]
+  }
+]
+```
 
 ---
 

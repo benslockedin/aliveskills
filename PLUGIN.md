@@ -1,6 +1,6 @@
 ---
 name: alive
-version: 2.0.0
+version: 2.1.0
 description: The operating system for your context. Persistent memory for Claude across sessions.
 author: Ben Flint
 homepage: https://skool.com/aliveoperators
@@ -33,7 +33,7 @@ Restart Claude Code, then run `/alive:onboarding` in your project folder.
 | `/alive:do` | Start a work session |
 | `/alive:save` | End session, log progress |
 | `/alive:new` | Create subdomain, area, or subentity |
-| `/alive:capture` | Quick context grab |
+| `/alive:capture-context` | Capture context into ALIVE |
 | `/alive:recall` | Search past context |
 | `/alive:migrate` | Bulk import content |
 | `/alive:archive` | Move completed items to archive |

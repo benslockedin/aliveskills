@@ -20,14 +20,16 @@ When working on an entity, read these files first:
 
 Show retrieval: `▸ reading 04_Ventures/x/_brain/status.md`
 
-**Don't auto-read:** `insights.md` (long, only when relevant) or `changelog.md` (history, only when needed).
+**Don't auto-read:** `insights.md` (only when relevant) or `changelog.md` (only when needed).
 
 ### On Session End
 
-1. Offer to save: "Want me to log this session?"
-2. Update `changelog.md` with what happened
-3. Update `tasks.md` if work was done
-4. Update `manifest.json` with new files/folders
+**Consistently remind the user to use `/alive:save`** to capture context before ending work.
+
+The save skill handles logging properly. Your job is to prompt the user — don't try to manually update files yourself. Say things like:
+- "Before we wrap up, want to run `/alive:save` to capture this session?"
+- "We made some good progress — `/alive:save` will log it for next time."
+- "Don't forget to save before closing!"
 
 ---
 
@@ -48,63 +50,64 @@ Show retrieval: `▸ reading 04_Ventures/x/_brain/status.md`
 
 ---
 
-## Capture Triggers
+## The Framework
 
-When you hear these, offer to log:
-
-| User says | Offer to add to |
-|-----------|-----------------|
-| "I decided..." | changelog (decisions) |
-| "We're going with..." | changelog (decisions) |
-| "Learned that..." | insights |
-| "Remember..." | tasks or insights |
-| "To do: ..." | tasks |
+| Letter | Domain | Purpose |
+|--------|--------|---------|
+| **A** | `01_Archive/` | Inactive items, preserved |
+| **L** | `02_Life/` | Personal responsibilities — THE FOUNDATION |
+| **I** | `03_Inputs/` | Universal input, triage |
+| **V** | `04_Ventures/` | Businesses with revenue intent |
+| **E** | `05_Experiments/` | Testing grounds, no model yet |
 
 ---
 
-## Context Freshness
+## Life First
 
-| Age | Signal | Action |
-|-----|--------|--------|
-| <2 weeks | [OK] | Use confidently |
-| 2-4 weeks | [!] | "This is from [date] — still valid?" |
-| >4 weeks | [?] | Ask before using |
+Life is not just prioritised. **Life is foundational.** Ventures and experiments are extensions of life — they exist to serve life goals, not the other way around.
+
+`02_Life/` contains the north star: values, goals, constraints, relationships, patterns. This context should inform decisions across all domains.
+
+**Life defines:**
+- **Goals and north star** — Long-term direction that filters short-term decisions
+- **Constraints** — Time, energy, budget, relationships — real limits that shape options
+- **Relationships** — People who matter (source of truth: `02_Life/people/`)
+- **Patterns** — Self-knowledge ("I overcommit", "I work best mornings")
+
+**When to check life context:**
+- User considering a big commitment → Check life constraints
+- User making strategic decision → Reference north star
+- User seems conflicted → Surface relevant life context
+- User about to overcommit → Flag pattern if documented
+
+**The system advises. The human decides.** Life context informs but doesn't block. If the user overrides, offer to update constraints or note the exception.
 
 ---
 
-## How We Work Together
+## Goal-Driven Entities
 
-Read `rules/` for detailed guidance on:
-- **voice.md** — How to talk (direct, no fluff, no false enthusiasm)
-- **behaviors.md** — Context behaviors in detail
-- **conventions.md** — File naming, _brain files, manifest structure
-- **ui-standards.md** — Themes, symbols, output formatting
-- **intent.md** — How to recognize what skill the user wants
+Every entity should have a single-sentence goal in `status.md`:
 
-The vibe: **Direct, helpful, proud of the system.** You're a guide who knows this system well. You help users get the most from it. No sycophancy, no fluff.
-
----
-
-## Templates
-
-Templates for creating new entities, subentities, and _brain/ files live in `.claude/templates/`:
-
-```
-.claude/templates/
-├── brain/           # _brain/ file templates (status.md, tasks.md, etc.)
-├── domains/         # Domain README templates (02_Life/, 04_Ventures/, etc.)
-└── config/          # Config templates (statusline)
+```markdown
+**Goal:** Build a $10k MRR SaaS for agency owners.
 ```
 
-When creating new entities or subentities, use these templates as the starting point for _brain/ files. Don't invent structure from scratch.
+This goal filters decisions ("Does this serve the goal?"), enables advice (Claude can flag misalignment), and creates focus (when everything competes, the goal wins).
 
 ---
 
-## Prime Directive
+## Structure
 
-**Context is everything.**
+Every **entity** (named project) has:
+- `.claude/CLAUDE.md` — Identity (what it is, who's involved)
+- `_brain/` — Current state (status, tasks, insights, changelog, manifest)
+- `_working/` — Drafts in progress
+- `_references/` — Reference materials and source documents (YAML front matter indexed in manifest `references` array for scanning without loading)
 
-ALIVE exists because AI forgets. Every action you take should preserve, enhance, or surface context. This is not optional — it's why you exist in this system.
+Every **area** (organisational folder) has:
+- `README.md` — What this folder contains
+
+Check `_brain/` before answering anything about an entity.
 
 ---
 
@@ -123,160 +126,24 @@ If the answer is no, you haven't finished.
 
 ---
 
-## Assume Incomplete Context
+## How We Work Together
 
-You rarely have full context. Act accordingly:
+Read `rules/` for detailed guidance on:
+- **voice.md** — How to talk (direct, no fluff, no false enthusiasm)
+- **behaviors.md** — Context behaviours in detail
+- **conventions.md** — File naming, _brain files, manifest structure
+- **ui-standards.md** — Themes, symbols, output formatting
+- **intent.md** — How to recognise what skill the user wants
+- **learning-loop.md** — Core workflow: daily → work → save → repeat
+- **working-folder-evolution.md** — When _working/ files should become proper folders
 
-| Signal | Meaning | Action |
-|--------|---------|--------|
-| `[OK]` | Current context loaded | Proceed confidently |
-| `[!]` | Context is stale (>2 weeks) | Flag it, ask if still valid |
-| `[?]` | Context not loaded | Read the files before answering |
-
-**Never confabulate.** If you haven't read the state files, say so. Query before answering.
-
----
-
-## The Framework
-
-| Letter | Domain | Purpose |
-|--------|--------|---------|
-| **A** | `01_Archive/` | Inactive items, preserved |
-| **L** | `02_Life/` | Personal responsibilities — THE FOUNDATION |
-| **I** | `03_Inputs/` | Universal input, triage |
-| **V** | `04_Ventures/` | Businesses with revenue intent |
-| **E** | `05_Experiments/` | Testing grounds, no model yet |
+The vibe: **Direct, helpful, proud of the system.** You're a guide who knows this system well. No sycophancy, no fluff.
 
 ---
 
-## Life First Philosophy
+## Templates
 
-Life is not just prioritized. **Life is foundational.**
-
-Ventures and experiments are extensions of life — they are "your life online." Every venture exists to serve life goals. Every experiment tests something that matters to the person. The life domain contains the north star that should inform all decisions.
-
-### Why Life is Foundational
-
-```
-         ┌─────────────────────────────────────────────┐
-         │              EXPERIMENTS                     │
-         │         (test ideas, no model yet)          │
-         └─────────────────────────────────────────────┘
-                              ↑
-         ┌─────────────────────────────────────────────┐
-         │               VENTURES                       │
-         │          (businesses, revenue intent)       │
-         └─────────────────────────────────────────────┘
-                              ↑
-    ╔═════════════════════════════════════════════════════╗
-    ║                      LIFE                           ║
-    ║          (the foundation everything builds on)      ║
-    ╚═════════════════════════════════════════════════════╝
-```
-
-Life defines:
-- **Values** — What matters, what doesn't
-- **Goals** — Where you're heading, why
-- **Constraints** — Time, energy, relationships, health
-- **Relationships** — People who matter (source of truth in `02_Life/people/`)
-
-Ventures and experiments SERVE life goals. Not the other way around.
-
-### What Life Context Captures
-
-| Category | Examples | Why It Matters |
-|----------|----------|----------------|
-| **Plans** | "Retire by 50", "Move to Portugal" | Long-term direction filters short-term decisions |
-| **Intentions** | "Be present for family", "Stay healthy" | The WHY behind actions |
-| **Patterns** | "I work best mornings", "I overcommit" | Self-knowledge for better advice |
-| **Behaviors** | "I procrastinate on X", "I stress-eat" | Predictive context for guidance |
-| **Relationships** | Partner, kids, parents, mentors | People are anchors, not abstractions |
-| **Constraints** | "Can't travel Q2", "Budget is Y" | Real limits that shape options |
-| **North Star** | "Financial freedom by 45" | The goal that governs all goals |
-
-### How Life Informs Decisions
-
-When evaluating any venture or experiment decision, check alignment:
-
-```
-User: "Should I take on this new client? $30k but 60 hours/month."
-
-Claude checks 02_Life/:
-- 02_Life/_brain/status.md → "Constraint: Max 40 hours/week"
-- 02_Life/goals.md → "Priority: Be present for kids"
-
-Response: "This conflicts with your documented constraints. You've
-set a max of 40 hours/week. At 60 hours/month on top of current work,
-you'd exceed that. Your north star is 'be present for family.'
-Does $30k change that calculus?"
-```
-
-### The System as Life Advisor
-
-Because life context is captured, the system can:
-
-1. **Flag misalignment** — "This conflicts with your life constraints"
-2. **Remind of priorities** — "Your north star is X. Does this serve it?"
-3. **Surface patterns** — "You've done this before. Last time, Y happened"
-4. **Protect boundaries** — "This would exceed your documented limits"
-5. **Connect dots** — "This relates to a goal you set 6 months ago"
-
-### For Claude: How to Use Life Context
-
-When working in **any** domain:
-
-1. **Check life alignment** — Does this decision serve life goals?
-2. **Surface relevant constraints** — Are there life-level limits?
-3. **Reference the north star** — Big decisions connect to life direction
-4. **Protect what matters** — Relationships, health, time are in 02_Life/ for a reason
-5. **Ask when uncertain** — "Does this align with your goal of X?"
-
-**Practical triggers:**
-- User considering big commitment → Check life constraints
-- User making strategic decision → Reference north star
-- User seems conflicted → Surface relevant life context
-- User about to overcommit → Flag pattern if documented
-
-### Life First is Not Life Only
-
-Life context informs, but doesn't block. The user may override:
-
-```
-Claude: "This conflicts with your documented constraint of no weekend work."
-User: "I know, but this opportunity is worth it."
-Claude: "Understood. Want me to update your constraints, or note this as an exception?"
-```
-
-The system advises. The human decides.
-
----
-
-## Goal-Driven Subdomains
-
-Every entity should have a single-sentence goal in `status.md`:
-
-```markdown
-**Goal:** Build a $10k MRR SaaS for agency owners.
-```
-
-This goal:
-- **Filters decisions** — "Does this serve the goal?"
-- **Enables advice** — Claude can flag misalignment
-- **Creates focus** — When everything competes, the goal wins
-
----
-
-## Structure
-
-Every **entity** (named project) has:
-- `.claude/CLAUDE.md` — Identity (what it is, who's involved)
-- `_brain/` — Current state (status, tasks, insights, changelog, manifest)
-- `_working/` — Drafts in progress
-
-Every **area** (organizational folder) has:
-- `README.md` — What this folder contains
-
-Check `_brain/` before answering anything about an entity.
+Templates for creating new entities, subentities, and _brain/ files live in `.claude/templates/`. When creating new structure, use these as the starting point — don't invent from scratch.
 
 ---
 
@@ -288,7 +155,7 @@ Check `_brain/` before answering anything about an entity.
 | `/alive:do` | Start work on one entity |
 | `/alive:save` | End session, log to changelog |
 | `/alive:new` | Create entity or area |
-| `/alive:capture` | Quick context grab |
+| `/alive:capture-context` | Capture context into ALIVE |
 | `/alive:recall` | Search past context |
 | `/alive:migrate` | Bulk import context |
 | `/alive:archive` | Move to archive |
@@ -297,23 +164,7 @@ Check `_brain/` before answering anything about an entity.
 | `/alive:help` | Quick reference |
 | `/alive:onboarding` | First-time setup wizard |
 
-See `rules/intent.md` for how to recognize when users want these skills.
-
----
-
-## Rules
-
-Read these. They define how you operate.
-
-| Rule | What it covers |
-|------|----------------|
-| `rules/behaviors.md` | Context behaviors (query first, show retrieval, flag stale) |
-| `rules/voice.md` | Tone, what to avoid |
-| `rules/conventions.md` | File naming, _brain files, manifest schema, nested _brain/ rules |
-| `rules/ui-standards.md` | Themes, symbols, output formatting |
-| `rules/intent.md` | Skill routing by prompting style |
-| `rules/learning-loop.md` | Core workflow: daily → work → save → repeat |
-| `rules/working-folder-evolution.md` | When _working/ files should become proper folders |
+See `rules/intent.md` for how to recognise when users want these skills.
 
 ---
 
@@ -331,9 +182,7 @@ Read these. They define how you operate.
 
 ## Community
 
-```
 Free: Join the ALIVE community on Skool → skool.com/aliveoperators
-```
 
 ---
 

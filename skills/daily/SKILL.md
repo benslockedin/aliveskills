@@ -1,6 +1,7 @@
 ---
 user-invocable: true
 description: Use when the user says "daily", "dashboard", "morning", "let's go", "what's happening", "what should I work on", "start my day", "overview", "show me everything", or wants to see the full system state across all entities including ongoing threads, goals, urgent tasks, and inputs status.
+plugin_version: "2.1.0"
 ---
 
 # alive:daily
@@ -17,6 +18,20 @@ This skill uses **Tier 1: Entry Point** formatting.
 - Community footer: `Free: Join the ALIVE community → skool.com/aliveoperators`
 
 See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+
+---
+
+## Version Check (Before Main Flow)
+
+Compare your `plugin_version` (from frontmatter above) against the user's system:
+
+1. Read `{alive-root}/.claude/alive.local.yaml` → get `system_version`
+2. If `system_version` is missing or different from your `plugin_version`:
+   ```
+   [!] System update available (plugin: 2.1.0, system: X.X.X)
+       └─ Run /alive:upgrade to sync
+   ```
+3. Continue with skill — this is non-blocking, just a notice
 
 ---
 
@@ -130,17 +145,17 @@ Every actionable item gets a number. User picks a number to focus.
 ```
 ONGOING THREADS
 ─────────────────────────────────────────────────────────────────────────
-[1] alive-llc — Plugin rebuild [breakthrough]        yesterday
-[2] acme-agency — Client proposal [productive]       2 days ago
+[1] acme — Plugin rebuild [breakthrough]        yesterday
+[2] side-project — Client proposal [productive]       2 days ago
 
 URGENT TASKS
 ─────────────────────────────────────────────────────────────────────────
-[3] alive-llc: Finalize daily skill @urgent
-[4] acme-agency: Send proposal to Acme @urgent
+[3] acme: Finalize daily skill @urgent
+[4] side-project: Send proposal to Acme @urgent
 
 WORKING FILES
 ─────────────────────────────────────────────────────────────────────────
-[5] alive-llc/_working/v2-design.md                  1 day old
+[5] acme/_working/v2-design.md                  1 day old
 
 ─────────────────────────────────────────────────────────────────────────
 [#] Pick number to focus    [i] Process inputs    [n] New entity
@@ -164,8 +179,8 @@ Show entity name + goal. Max 5, sorted by recency.
 ```
 YOUR GOALS
 ─────────────────────────────────────────────────────────────────────────
-• alive-llc: Ship v2 plugin by Feb 15
-• acme-agency: Close 3 new clients this month
+• acme: Ship v2 plugin by Feb 15
+• side-project: Close 3 new clients this month
 • hypha: Launch Feb 6
 ```
 
@@ -182,8 +197,8 @@ Quality tags: `[routine]` `[productive]` `[important]` `[breakthrough]`
 ```
 ONGOING THREADS
 ─────────────────────────────────────────────────────────────────────────
-[1] alive-llc — Plugin rebuild [breakthrough]        yesterday
-[2] acme-agency — Client proposal [productive]       2 days ago
+[1] acme — Plugin rebuild [breakthrough]        yesterday
+[2] side-project — Client proposal [productive]       2 days ago
 ```
 
 If no session-index.jsonl exists or empty:
@@ -203,8 +218,8 @@ Scan all `_brain/tasks.md` files:
 ```
 URGENT TASKS
 ─────────────────────────────────────────────────────────────────────────
-[3] alive-llc: Finalize daily skill @urgent
-[4] acme-agency: Send proposal to Acme @urgent
+[3] acme: Finalize daily skill @urgent
+[4] side-project: Send proposal to Acme @urgent
 ```
 
 ## Section: Working Files
@@ -217,8 +232,8 @@ Scan all `_brain/manifest.json` files:
 ```
 WORKING FILES
 ─────────────────────────────────────────────────────────────────────────
-[5] alive-llc/_working/v2-design.md                  1 day old
-[6] acme-agency/_working/acme-proposal-v0.md         3 days old
+[5] acme/_working/v2-design.md                  1 day old
+[6] side-project/_working/acme-proposal-v0.md         3 days old
 ```
 
 ## Section: Inputs

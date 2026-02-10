@@ -1,11 +1,12 @@
 ---
 user-invocable: true
-description: This skill should be used when the user says "upgrade", "migrate to v2", "convert to v2", or when `/alive:daily` or `/alive:do` detect v1 structure (`_state/` instead of `_brain/`, `inbox/` instead of `03_Inputs/`).
+description: This skill should be used when the user says "upgrade", "update system", "sync", or when another skill detects a version mismatch between plugin_version and system_version in alive.local.yaml.
+plugin_version: "2.1.0"
 ---
 
 # alive:upgrade
 
-Migrate an ALIVE system from v1 to v2 structure.
+Upgrade the user's ALIVE system to match the current plugin version. Detects what's out of date, applies changes with subagents, verifies with sweep.
 
 ## UI Treatment
 
@@ -14,460 +15,677 @@ This skill uses **Tier 3: Utility** formatting.
 **Visual elements:**
 - Compact logo (4-line ASCII art header)
 - Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
+- Version footer: `ALIVE v2.1` (right-aligned)
 
 See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
 
 ---
 
-## v1 → v2 Changes
+## How Version Tracking Works
 
-| v1 | v2 |
-|----|-----|
-| `inbox/` | `03_Inputs/` |
-| `_state/` | `_brain/` |
-| No session-index | `.claude/state/session-index.jsonl` |
-| No memories folder | `{entity}/_brain/memories/` (created on breakthrough saves) |
+**Two version numbers:**
 
-## Flow (2-Session Approach)
+| Version | Location | Updated by |
+|---------|----------|------------|
+| `plugin_version` | Frontmatter of every skill file | Plugin auto-update |
+| `system_version` | `{alive-root}/.claude/alive.local.yaml` | This upgrade skill (after success) |
 
-**Upgrade requires TWO sessions.** Claude can't reload rules mid-session.
-
-```
-SESSION 1: Update Knowledge
-─────────────────────────────────
-1. Check rules status
-2. Sync rules + CLAUDE.md from plugin
-3. Tell user to exit and restart
-4. EXIT (don't do structural changes yet)
-
-SESSION 2: Structural Migration
-─────────────────────────────────
-1. Detect rules are current (or ask if already done)
-2. Proceed with structural migration
-3. Verify
-```
-
-## CRITICAL: Why 2 Sessions?
-
-**Claude operates with its loaded mental model.** If you sync rules mid-session, Claude still has v1 knowledge. Only a fresh session loads the new rules.
-
-**Wrong approach:**
-1. Sync rules ← Claude still has v1 knowledge
-2. Do structural migration ← Using v1 mental model = errors
-
-**Correct approach:**
-1. Session 1: Sync rules → EXIT
-2. Session 2: Claude loads v2 rules → Do structural migration
+When `plugin_version > system_version` → system needs upgrading.
+When they match → system is current.
 
 ---
 
-## Step 0: Check If Already Upgraded
-
-**First, ask if user has already done Session 1:**
+## Flow
 
 ```
-Have you already updated rules and restarted Claude?
-
-[1] No — this is my first time running upgrade
-[2] Yes — I already updated rules and restarted
-[3] Not sure — check for me
+1. Detect versions (plugin vs system)
+2. If match → "You're up to date"
+3. If mismatch → identify required migrations
+4. Show migration plan, get user approval
+5. Session 1: Sync rules + CLAUDE.md → EXIT (Claude must reload)
+6. Session 2: Structural changes via subagents
+7. Run /alive:sweep to verify
+8. Update system_version in alive.local.yaml
 ```
 
-**If [2] Yes or rules are current:** Skip to Step 3 (structural migration)
-**If [1] No or rules outdated:** Start with Step 1
+---
 
-## Step 1: Scan for v1 Patterns
-
-Find all v1 artifacts, categorized:
+## Step 1: Version Detection
 
 ```
-▸ scanning for v1 patterns...
+▸ checking versions...
 
-ROOT INBOX (v1):
-  └─ inbox/ (should be 03_Inputs/)
-
-ENTITY _STATE/ FOLDERS (v1):
-  └─ 04_Ventures/acme/_state/
-  └─ 04_Ventures/beta/_state/
-  └─ 02_Life/finance/_state/
-
-NESTED inbox/ FOLDERS:
-  └─ 04_Ventures/acme/clients/foo/inbox/
-  └─ 04_Ventures/hypha/inbox/
-
-SKIP — TEMPLATES:
-  └─ _working/template/*/_state/
-
-SKIP — ARCHIVE:
-  └─ 01_Archive/*/_state/
-
-V2 FILES STATUS:
-  └─ .claude/state/session-index.jsonl [missing/exists]
-
-RULES STATUS:
-  └─ .claude/rules/ [missing/exists]
-  └─ If exists: [X files, Y outdated, Z missing]
-
-ENTITY MEMORIES FOLDERS:
-  └─ 04_Ventures/acme/_brain/memories/ [missing/exists]
-  └─ 04_Ventures/beta/_brain/memories/ [missing/exists]
-  (memories/ created automatically on breakthrough saves, missing is OK)
+Plugin version: 2.1.0 (from skill frontmatter)
+System version: [read from alive.local.yaml]
 ```
 
-## Step 2: Confirm Scope
+**Read `{alive-root}/.claude/alive.local.yaml`** and extract `system_version`.
 
-**Always ask before proceeding:**
+| Scenario | Action |
+|----------|--------|
+| `system_version` missing | Treat as `"unknown"` — run all migrations |
+| `system_version` < `plugin_version` | Run migrations for each version gap |
+| `system_version` == `plugin_version` | "You're up to date" → exit |
 
 ```
-Found 3 entities with _state/ folders and inbox/ directory.
+▸ versions detected
+  └─ Plugin: 2.1.0 | System: unknown
+  └─ Migrations needed: pre-2.1.0 → 2.1.0
+```
 
-What should be upgraded?
-[1] Everything (recommended)
-[2] Let me pick individually
+---
+
+## Step 2: Show Migration Plan
+
+List all changes that will be applied. **Get user approval before proceeding.**
+
+```
+UPGRADE PLAN: → 2.1.0
+════════════════════════════════════════════════════════════════════════════
+
+This upgrade requires TWO sessions (Claude must restart to load new rules).
+
+SESSION 1 (now):
+  [A] Rules sync — update .claude/rules/ to match plugin
+  [B] CLAUDE.md assimilation — merge new sections into your .claude/CLAUDE.md
+  → Then EXIT and restart Claude
+
+SESSION 2 (after restart):
+  [C] Folder structure — add _references/, fix old folder names
+  [D] Manifest schema — update all manifest.json files
+  [E] References audit — restructure loose context into _references/ format
+  [F] Config — set system_version in alive.local.yaml
+  → Then /alive:sweep to verify
+
+════════════════════════════════════════════════════════════════════════════
+
+Proceed?
+[1] Yes — start Session 1
+[2] I already did Session 1 — skip to Session 2
 [3] Cancel
 ```
 
-**Handle special cases explicitly:**
+---
 
-| Case | Ask |
-|------|-----|
-| Template directories | "Found _state/ in templates. Skip templates?" |
-| Archive | "Found _state/ in 01_Archive/. Upgrade archived items too?" |
-| Nested entities | "Found _state/ at client level. Treat as entities?" |
+## Why 2 Sessions?
 
-**Default recommendations:**
-- Templates → Skip (preserve as v1 templates)
-- Archive → Skip (preserve history)
-- Nested `_state/` → Ask (could be intentional entities)
-- Nested `inbox/` → Rename to `03_Inputs/` (client-level inputs are valid)
+Claude operates with its loaded rules. If you sync rules mid-session, Claude still has the old knowledge loaded. Only a fresh session loads the new rules. Session 1 updates the files, Session 2 uses the updated knowledge.
 
-## Step 2.5: Sync Rules + CLAUDE.md (SESSION 1)
+---
 
-**This step completes Session 1. Do NOT proceed to structural changes yet.**
+## Session 1: Knowledge Sync
+
+### Step A: Rules Sync (Subagent)
+
+**Launch a Task subagent with this prompt:**
 
 ```
-▸ checking rules status...
+You are upgrading ALIVE rules files. Compare the plugin's rules against the user's installed rules and sync them.
 
-Plugin rules: ~/.claude/plugins/cache/aliveskills/alive/{version}/rules/
-Plugin CLAUDE.md: ~/.claude/plugins/cache/aliveskills/alive/{version}/CLAUDE.md
-User rules:   {alive-root}/.claude/rules/
-User CLAUDE.md: {alive-root}/.claude/CLAUDE.md
+PLUGIN RULES: ~/.claude/plugins/cache/aliveskills/alive/2.0.1/rules/
+USER RULES: {alive-root}/.claude/rules/
+
+For EACH rule file in the plugin directory:
+
+1. If the file doesn't exist in the user's directory → COPY it from plugin
+2. If the file exists but differs → READ both versions, then OVERWRITE the user's file with the plugin version
+
+The rules files are system files owned by the plugin. They should match the plugin exactly. User customizations to rules are not expected — these are behavioral instructions, not user content.
+
+After processing all files, report:
+- Which files were copied (new)
+- Which files were updated (changed)
+- Which files were already current (skipped)
+- Total files processed
+
+Expected rule files: behaviors.md, conventions.md, intent.md, learning-loop.md, ui-standards.md, voice.md, working-folder-evolution.md
 ```
 
-**Compare and sync:**
-1. Check each plugin rule file against user's version
-2. If user file is missing → copy from plugin
-3. If user file differs from plugin → merge (preserve user customizations, update plugin sections)
-4. Update `.claude/CLAUDE.md` with v2 framework paths
-
+**Show results:**
 ```
-▸ syncing v2 knowledge...
+▸ syncing rules...
+  └─ behaviors.md — updated ✓
+  └─ conventions.md — updated ✓
+  └─ intent.md — current, skipped
+  └─ learning-loop.md — updated ✓
+  └─ ui-standards.md — current, skipped
+  └─ voice.md — current, skipped
+  └─ working-folder-evolution.md — current, skipped
 
-RULES:
-  └─ behaviors.md [outdated] → updated ✓
-  └─ conventions.md [outdated] → updated ✓
-  └─ intent.md [missing] → installed ✓
-  └─ learning-loop.md [current] → skipped
-  └─ ui-standards.md [outdated] → updated ✓
-  └─ voice.md [current] → skipped
-  └─ working-folder-evolution.md [missing] → installed ✓
-
-CLAUDE.MD:
-  └─ .claude/CLAUDE.md → updated with v2 paths ✓
-
-✓ v2 knowledge installed (5 files updated)
+✓ Rules synced (3 updated, 4 current)
 ```
 
-### EXIT REQUIRED
+### Step B: CLAUDE.md Assimilation (Subagent)
+
+**CRITICAL: Do NOT overwrite the user's CLAUDE.md. Merge changes in.**
+
+**Launch a Task subagent with this prompt:**
 
 ```
-╭─ IMPORTANT ────────────────────────────────────────────────────────────╮
+You are assimilating changes from the plugin's CLAUDE.md into the user's installed CLAUDE.md. The user may have added custom content to their CLAUDE.md — you MUST preserve it.
+
+PLUGIN CLAUDE.MD: ~/.claude/plugins/cache/aliveskills/alive/2.0.1/CLAUDE.md
+USER CLAUDE.MD: {alive-root}/.claude/CLAUDE.md
+
+Instructions:
+1. Read BOTH files completely
+2. Identify sections/content in the PLUGIN version that are MISSING from the USER version
+3. Identify sections in the USER version that have OUTDATED content compared to the PLUGIN version
+4. For each difference, apply this logic:
+
+   MISSING SECTION in user file:
+   → Add the section from plugin at the appropriate location (match the plugin's ordering)
+
+   OUTDATED SECTION (same heading, different content):
+   → Replace the section content with the plugin version
+   → BUT: If the user has added custom lines BELOW a section (like personal notes, extra context), preserve those custom additions
+
+   SECTION EXISTS ONLY IN USER FILE (not in plugin):
+   → KEEP IT. This is user customization. Do not remove.
+
+5. After making changes, report:
+   - Sections added (new from plugin)
+   - Sections updated (content refreshed)
+   - User sections preserved (not in plugin, kept)
+   - No changes needed (already current)
+
+IMPORTANT: Use the Edit tool for each change, not Write. Make surgical edits.
+```
+
+**Show results:**
+```
+▸ assimilating CLAUDE.md changes...
+  └─ Added: _references/ to Structure section
+  └─ Updated: Session Protocol (delegates to /alive:save)
+  └─ Preserved: [any user-custom sections]
+
+✓ CLAUDE.md assimilated (1 added, 1 updated, 0 user sections preserved)
+```
+
+### Session 1 Exit
+
+```
+╭─ RESTART REQUIRED ─────────────────────────────────────────────────────╮
 │                                                                        │
-│  Rules and CLAUDE.md have been updated to v2.                          │
+│  Rules and CLAUDE.md have been updated.                                │
 │                                                                        │
-│  Claude needs to RESTART to load the new knowledge.                    │
+│  Claude must RESTART to load the new knowledge.                        │
 │                                                                        │
-│  Please:                                                               │
-│  1. Exit this Claude Code session (Ctrl+C or close terminal)          │
+│  1. Exit this session (Ctrl+C or close terminal)                       │
 │  2. Start a new Claude Code session                                    │
 │  3. Run /alive:upgrade again                                           │
 │                                                                        │
-│  On the next run, upgrade will detect the rules are current and        │
-│  proceed directly to structural migration.                             │
+│  Next run will detect Session 1 is done and proceed to                 │
+│  structural migration.                                                 │
 │                                                                        │
 ╰────────────────────────────────────────────────────────────────────────╯
 ```
 
-**STOP HERE. Do not proceed to Step 3 in this session.**
+**STOP. Do not proceed to Session 2 steps.**
 
 ---
 
-## Step 3: Execute Renames (SESSION 2 ONLY)
+## Session 2: Structural Migration
 
-**Only run this step if:**
-- User selected [2] "Yes — I already updated rules" in Step 0, OR
-- Rules check confirms they are current
+**Only run if user selected [2] in Step 2, or if rules check confirms they are current.**
 
-**Order matters:**
+### Step C: Folder Structure (Subagent)
 
-1. Rename `inbox/` → `03_Inputs/`
-2. Rename each `_state/` → `_brain/`
-
-Show progress:
-```
-▸ renaming inbox/ → 03_Inputs/
-  ✓ done (3 files preserved)
-
-▸ renaming 04_Ventures/acme/_state/ → _brain/
-  ✓ done
-
-▸ renaming 04_Ventures/beta/_state/ → _brain/
-  ✓ done
-```
-
-## Step 4: Create/Update v2 Files
-
-### 4a: System Files (If Missing)
+**Launch a Task subagent with this prompt:**
 
 ```
-▸ checking v2 system files...
+You are upgrading the ALIVE folder structure. Scan the user's ALIVE directory and fix any structural issues.
 
-.claude/state/session-index.jsonl
-  └─ [exists] skipping
-  └─ OR [missing] creating empty file
+ALIVE ROOT: {alive-root}
+
+TASK 1 — Find all entities:
+Entities are folders that contain a _brain/ subdirectory. Search:
+- {alive-root}/04_Ventures/*/          (depth 1)
+- {alive-root}/04_Ventures/*/*/        (depth 2, nested entities)
+- {alive-root}/05_Experiments/*/       (depth 1)
+- {alive-root}/05_Experiments/*/*/     (depth 2)
+- {alive-root}/02_Life/*/              (depth 1, if any are entities)
+
+List every entity found.
+
+TASK 2 — For each entity, check:
+a) Does _references/ folder exist? If not → create it
+b) Does _state/ exist instead of _brain/? If so → rename _state/ to _brain/
+
+TASK 3 — Check root-level folders:
+a) Does inbox/ exist? If so → rename to 03_Inputs/
+b) Does archive/ exist without 01_ prefix? → rename to 01_Archive/
+c) Does life/ exist without 02_ prefix? → rename to 02_Life/
+d) Does ventures/ exist without 04_ prefix? → rename to 04_Ventures/
+e) Does experiments/ exist without 05_ prefix? → rename to 05_Experiments/
+
+TASK 4 — Check system directories:
+a) Does {alive-root}/.claude/state/ exist? If not → create it
+b) Does {alive-root}/.claude/state/session-index.jsonl exist? If not → create empty file
+
+IMPORTANT:
+- Do NOT touch anything in 01_Archive/
+- Do NOT rename folders inside templates/
+- ASK before renaming if unsure
+- Report every action taken
+
+Report format:
+- Entities found: [count]
+- _references/ created: [list]
+- Folders renamed: [list]
+- System files created: [list]
+- Already current: [list]
+- Skipped: [list with reason]
 ```
 
-**session-index.jsonl format** (if creating):
-```jsonl
-{"created":"2026-01-30","note":"Migrated from v1"}
+**Show results:**
+```
+▸ checking folder structure...
+  └─ 5 entities found
+  └─ _references/ created in: 04_Ventures/acme, 05_Experiments/beta
+  └─ No old folder names detected
+  └─ System directories present
+
+✓ Folder structure current (2 folders created)
 ```
 
-### 4b: Sync Rules (CRITICAL)
+### Step D: Manifest Schema (Subagent)
 
-**Compare user's rules to plugin's rules and sync if different:**
-
-```
-▸ checking rules...
-
-Plugin rules: ~/.claude/plugins/cache/aliveskills/alive/{version}/rules/
-User rules:   {alive-root}/.claude/rules/
-```
-
-**If user has no rules directory:**
-```
-[!] No rules installed
-
-ALIVE rules enforce system behaviour. Without them, Claude won't follow
-ALIVE conventions.
-
-Install rules now?
-[1] Yes, install rules (recommended)
-[2] Skip (system will be unreliable)
-```
-
-**If rules exist but are outdated:**
-```
-▸ comparing rules...
-
-OUTDATED:
-  └─ behaviors.md (plugin: 2026-02-01, yours: 2026-01-15)
-  └─ conventions.md (plugin: 2026-02-01, yours: 2026-01-15)
-
-MISSING:
-  └─ working-folder-evolution.md (new in this version)
-
-UP TO DATE:
-  └─ intent.md
-  └─ voice.md
-
-Sync rules to latest?
-[1] Yes, update all (recommended)
-[2] Update only outdated
-[3] Skip
-```
-
-**Implementation:**
-```bash
-# Compare checksums
-for file in ~/.claude/plugins/cache/aliveskills/alive/*/rules/*.md; do
-  filename=$(basename "$file")
-  user_file="{alive-root}/.claude/rules/$filename"
-  if [ ! -f "$user_file" ]; then
-    echo "MISSING: $filename"
-  elif ! diff -q "$file" "$user_file" > /dev/null 2>&1; then
-    echo "OUTDATED: $filename"
-  fi
-done
-```
-
-**After sync:**
-```
-▸ syncing rules...
-  └─ behaviors.md ✓
-  └─ conventions.md ✓
-  └─ working-folder-evolution.md ✓ (new)
-
-✓ Rules synced (3 files updated)
-```
-
-### 4c: Sync Statusline (If Configured)
-
-**Check if user has statusline configured, and if so, update it:**
+**Launch a Task subagent with this prompt:**
 
 ```
-▸ checking statusline...
+You are upgrading ALIVE manifest.json files to the v2 schema. Check every entity's manifest and update if needed.
 
-~/.claude/statusline-command.sh
-  └─ [not found] skipping (user hasn't configured statusline)
-  └─ OR [outdated] plugin version is newer
-  └─ OR [up to date] no action needed
+ALIVE ROOT: {alive-root}
+
+TASK 1 — Find all manifest files:
+Search for _brain/manifest.json in all entities (same entity paths as folder structure task).
+
+TASK 2 — For each manifest.json, read it and check against the TARGET SCHEMA below. Fix any deviations.
+
+TARGET SCHEMA (v2):
+
+{
+  "name": "entity-name",
+  "description": "One sentence description",
+  "goal": "Single-sentence goal that filters all decisions",
+  "created": "2026-01-20",
+  "updated": "2026-01-23",
+  "session_ids": ["abc12345", "def67890"],
+
+  "folders": ["_brain", "_working", "_references", "...other folders"],
+
+  "areas": [
+    {
+      "path": "clients/",
+      "description": "Active client projects",
+      "has_entities": false,
+      "files": [
+        {
+          "path": "README.md",
+          "description": "Client area overview",
+          "date_created": "2026-01-20",
+          "date_modified": "2026-01-23",
+          "session_ids": ["abc12345"]
+        }
+      ]
+    }
+  ],
+
+  "working_files": [
+    {
+      "path": "_working/landing-v0.html",
+      "description": "Draft landing page with hero and features",
+      "date_created": "2026-01-20",
+      "date_modified": "2026-01-23",
+      "session_ids": ["abc123"]
+    }
+  ],
+
+  "key_files": [
+    {
+      "path": "CLAUDE.md",
+      "description": "Entity identity and navigation",
+      "date_created": "2026-01-20",
+      "date_modified": "2026-01-23"
+    }
+  ],
+
+  "handoffs": [],
+
+  "references": [
+    {
+      "path": "_references/emails/2026-02-06-supplier-quote.md",
+      "type": "email",
+      "description": "Supplier confirms 15% price increase, bulk order before Feb 28",
+      "date_created": "2026-02-06",
+      "date_modified": "2026-02-06",
+      "session_ids": ["xyz789"]
+    }
+  ]
+}
+
+MIGRATION CHECKS — compare each manifest against the target schema:
+
+a) ROOT FIELDS:
+   - "goal" missing → add "goal": "" (empty, user will fill in)
+   - "session_id" (string) exists → convert to "session_ids" (array): ["old-value"]
+   - "session_ids" missing entirely → add "session_ids": []
+
+b) FOLDERS ARRAY:
+   - "_references" not in "folders" → add it
+
+c) REQUIRED TOP-LEVEL ARRAYS:
+   - "references" missing → add "references": []
+   - "key_files" missing → add "key_files": [{"path": "CLAUDE.md", "description": "Entity identity"}]
+   - "handoffs" missing → add "handoffs": []
+
+d) DEPRECATED FIELDS — remove if found:
+   - "type" (top-level)
+   - "sessions" (top-level array)
+   - Top-level "files" array with old "summary"/"modified"/"key" fields
+
+e) FILE ENTRY FORMAT — check ALL entries in areas[].files[], working_files[], key_files[], references[]:
+   - "summary" field → rename to "description"
+   - "session_id" (string) → convert to "session_ids" (array)
+   - "date_created" missing → add with today's date
+   - "date_modified" missing → add with today's date
+
+f) REFERENCES ENTRIES — each must have "type" field (email, call, screenshot, etc.)
+
+g) Update "updated" field to today's date and append current session ID to "session_ids".
+
+IMPORTANT:
+- Use Edit tool, not Write — preserve existing data
+- Do NOT remove areas, working_files, or other valid content
+- Only add missing fields and remove deprecated ones
+- Report every change made per manifest
+
+Report format per entity:
+- Entity: [path]
+- Fields added: [list]
+- Fields removed: [list]
+- Fields renamed: [list]
+- Already current: true/false
 ```
 
-**If statusline exists but is outdated:**
+**Show results:**
 ```
-[!] Statusline script outdated
+▸ updating manifest schemas...
+  └─ 04_Ventures/acme — added goal, references[], converted session_id → session_ids
+  └─ 04_Ventures/beta — already current
+  └─ 05_Experiments/test — added handoffs[], key_files[], date fields on 3 entries
 
-Your statusline was installed on 2026-01-28.
-Plugin has newer version with fixes for:
-  • 03_Inputs/ path detection (was inbox/)
-  • ALIVE root indicator
-  • Smart path detection
-
-Update statusline?
-[1] Yes, update (recommended)
-[2] No, keep current
+✓ Manifests updated (2 changed, 1 current)
 ```
 
-**Implementation:**
-```bash
-# Compare statusline if it exists
-user_statusline="$HOME/.claude/statusline-command.sh"
-plugin_statusline="$HOME/.claude/plugins/cache/aliveskills/alive/*/templates/config/statusline-command.sh"
+### Step E: References Content Audit (Subagent)
 
-if [ -f "$user_statusline" ]; then
-  if ! diff -q $plugin_statusline "$user_statusline" > /dev/null 2>&1; then
-    echo "OUTDATED: statusline-command.sh"
-  fi
-fi
-```
+**This step audits each entity's `_references/` folder and restructures any loose or non-conforming context files into the correct format.**
 
-**After sync:**
-```
-▸ updating statusline...
-  └─ ~/.claude/statusline-command.sh ✓
+Step C creates the `_references/` folder. This step ensures what's INSIDE it is correct — and finds context files elsewhere in the entity that should be moved into `_references/`.
 
-✓ Statusline updated
-```
-
-**Note on memories/:** The `_brain/memories/` folder is created automatically by `/alive:save` when a session is marked as a breakthrough. Don't create it during upgrade — it appears organically when needed.
-
-## Step 5: Verify
+**Launch a Task subagent with this prompt:**
 
 ```
-▸ verifying migration...
+You are auditing and restructuring _references/ content across all ALIVE entities. Your job is to ensure every entity's reference material follows the correct structure.
 
-STRUCTURE
-  ✓ No inbox/ found (now 03_Inputs/)
-  ✓ No _state/ found in upgraded entities
-  ✓ session-index.jsonl exists
-  ✓ All _brain/ folders have required files
+ALIVE ROOT: {alive-root}
 
-RULES
-  ✓ .claude/rules/ exists
-  ✓ All 7 rule files present and up to date
+WHAT _references/ SHOULD LOOK LIKE:
 
-STATUSLINE (if configured)
-  ✓ ~/.claude/statusline-command.sh up to date
-  └─ OR [skipped] not configured
+_references/
+├── meeting-transcripts/
+│   ├── 2026-02-08-content-planning.md        ← YAML front matter + AI summary
+│   └── raw/
+│       └── 2026-02-08-content-planning.txt   ← Original source file
+├── emails/
+│   ├── 2026-02-06-supplier-quote.md
+│   └── raw/
+│       └── 2026-02-06-supplier-quote.txt
+├── screenshots/
+│   ├── 2026-02-06-competitor-landing.md
+│   └── raw/
+│       └── 2026-02-06-competitor-landing.png
+└── documents/
+    ├── 2026-02-06-contract-scan.md
+    └── raw/
+        └── 2026-02-06-contract-scan.pdf
 
-Migration complete.
+REQUIRED YAML FRONT MATTER on every summary .md file:
+
+---
+type: email | call | screenshot | document | article | message
+date: 2026-02-06
+description: One-line description of what this reference contains
+source: Where it came from (person name, tool, etc.)
+tags: [keyword, keyword, keyword]
+# Additional fields by type:
+# emails: from, to, subject
+# calls/meetings: participants, duration
+# messages: platform
+---
+
+FIND ALL ENTITIES:
+Search for _brain/ folders in:
+- {alive-root}/04_Ventures/*/
+- {alive-root}/04_Ventures/*/*/
+- {alive-root}/05_Experiments/*/
+- {alive-root}/05_Experiments/*/*/
+- {alive-root}/02_Life/*/
+
+FOR EACH ENTITY, run these 6 audits:
+
+AUDIT 1 — Find loose context files that should be in _references/:
+Search the entire entity (excluding _brain/, _working/, .claude/, 01_Archive/) for files that look like reference material:
+- Transcript files (.txt files with meeting/call content)
+- Email exports
+- Screenshot images with no summary .md
+- PDFs, documents that are source material (not working drafts)
+- Files in folders named "context/", "notes/", "research/", "docs/" that are external source material
+- Any file that is clearly captured external content, not something the user created
+
+For each found: report the file path and what type of reference it appears to be.
+Do NOT move anything — just report. The user will approve moves.
+
+AUDIT 2 — Check _references/ subfolder structure:
+For each subfolder in _references/:
+a) Does a raw/ subfolder exist? If not → flag as needing one
+b) Are there files directly in _references/ root that should be in a type subfolder? → flag
+
+AUDIT 3 — Validate YAML front matter on all summary .md files in _references/:
+For each .md file (NOT in raw/ subfolders):
+a) Does it have YAML front matter (--- delimiters)? If not → flag as MISSING FRONT MATTER
+b) Does front matter have ALL required fields?
+   Required always: type, date, description, source, tags
+   Required for emails: from, to, subject
+   Required for calls/meetings: participants, duration (if known)
+c) Does "description" use the correct field name? (not "summary") → flag if wrong
+d) Is the front matter well-formed YAML? → flag if malformed
+
+For each issue: report the file, what's missing/wrong, and suggest the fix.
+
+AUDIT 4 — Check raw/ file pairing:
+For each summary .md in _references/:
+a) Does a corresponding raw file exist in the raw/ subfolder? → flag if missing
+b) Does the summary .md have a ## Source section pointing to the raw file? → flag if missing
+c) Do the summary .md and raw file share the same base name? → flag if mismatched
+
+For each found raw file:
+a) Does a corresponding summary .md exist? → flag orphaned raw files that have no summary
+
+AUDIT 5 — Check file naming convention:
+For all files in _references/ (both summary and raw):
+a) Does the filename follow YYYY-MM-DD-descriptive-name pattern? → flag if not
+b) Are there garbage filenames (CleanShot, IMG_xxxx, document (3), etc.)? → flag with suggested rename
+
+AUDIT 6 — Check manifest references[] entries:
+Read _brain/manifest.json and compare against actual _references/ contents:
+a) Files in _references/ that have NO manifest entry → flag as untracked
+b) Manifest entries that point to files that DON'T EXIST → flag as stale
+c) Manifest entries missing required fields (type, description, date_created, date_modified, session_ids) → flag
+
+AFTER ALL AUDITS, produce a structured report:
+
+ENTITY: [path]
+  Loose context files found: [count]
+    - [path] → suggest move to _references/[type]/
+  Missing raw/ subfolders: [count]
+    - [subfolder]
+  Front matter issues: [count]
+    - [file]: missing [fields]
+  Orphaned raw files: [count]
+    - [file]: no summary .md
+  Naming issues: [count]
+    - [file] → suggested rename: [new name]
+  Manifest sync issues: [count]
+    - [file]: untracked / stale / missing fields
+
+THEN: For each issue category, ask the user:
+  "Fix [category] issues? [y/n]"
+
+When fixing:
+- Create missing raw/ subfolders
+- Add missing YAML front matter fields to existing .md files (use Edit, not Write)
+- Rename garbage filenames
+- Add ## Source sections pointing to raw files
+- Add missing manifest references[] entries
+- Remove stale manifest entries
+- Do NOT move loose context files without explicit user approval per file
+
+IMPORTANT:
+- Use Edit tool for all file modifications — never Write (which overwrites)
+- Do NOT touch files in 01_Archive/
+- Do NOT modify raw/ file contents — only rename if naming convention is wrong
+- Report everything before fixing — user approves each category
+- If an entity's _references/ is empty, just report "No references yet" and move on
 ```
 
-**If verification fails, do NOT mark complete:**
+**Show results:**
 ```
-✗ VERIFICATION FAILED
+▸ auditing _references/ content...
+  └─ 04_Ventures/acme — 3 front matter issues, 1 orphaned raw file
+  └─ 04_Ventures/beta — clean ✓
+  └─ 05_Experiments/test — 2 loose context files found, 1 naming issue
 
-Missing:
-  ✗ .claude/rules/ — rules not synced
-
-[1] Fix now
-[2] Cancel upgrade
+Fix front matter issues in acme? [y/n]
+Fix loose files in test? [y/n]
 ```
+
+### Step F: Config Update
+
+**Update `{alive-root}/.claude/alive.local.yaml`:**
+
+Read the current file. Add or update `system_version` field:
+
+```yaml
+theme: vibrant
+onboarding_complete: true
+system_version: "2.1.0"
+```
+
+Use Edit if the file exists (preserve other fields). Use Write only if the file doesn't exist.
+
+```
+▸ updating config...
+  └─ alive.local.yaml — set system_version: "2.1.0"
+
+✓ Config updated
+```
+
+---
+
+## Step 3: Post-Upgrade Sweep
+
+**Invoke `/alive:sweep` using the Skill tool** to verify everything is aligned.
+
+```
+▸ running post-upgrade sweep...
+```
+
+The sweep will catch any issues the subagents missed. If sweep finds problems, fix them before marking upgrade complete.
+
+---
+
+## Step 4: Final Verification
+
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║                                                                        ║
+║    ▄▀█ █░░ █ █░█ █▀▀                                                   ║
+║    █▀█ █▄▄ █ ▀▄▀ ██▄            upgrade complete                      ║
+║                                                                        ║
+║  ══════════════════════════════════════════════════════════════════    ║
+║                                                                        ║
+║  UPGRADE SUMMARY                                                       ║
+║  ──────────────────────────────────────────────────────────────────    ║
+║  Plugin: 2.1.0 → System: 2.1.0 ✓                                      ║
+║                                                                        ║
+║  [A] Rules: X updated, Y current                                       ║
+║  [B] CLAUDE.md: X sections added, Y updated                            ║
+║  [C] Folders: X _references/ created, Y renames                        ║
+║  [D] Manifests: X updated, Y current                                   ║
+║  [E] References: X issues fixed, Y entities clean                      ║
+║  [F] Config: system_version set to 2.1.0                               ║
+║  [G] Sweep: ✓ passed                                                   ║
+║                                                                        ║
+║  ──────────────────────────────────────────────────────────────────    ║
+║                                                                ALIVE v2.1║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+
+---
 
 ## Edge Cases
 
+**Already up to date:**
+```
+✓ System is current (2.1.0)
+  └─ No upgrade needed.
+```
+
+**No alive.local.yaml:**
+```
+[!] No alive.local.yaml found at {alive-root}/.claude/
+
+This file tracks your system version. Creating it now.
+```
+Create the file with `system_version: "2.1.0"` and `onboarding_complete: true`.
+
 **Single entity upgrade (from /alive:do):**
-
-When called from `do` with a specific entity:
 ```
-Upgrading 04_Ventures/acme only.
-
-[1] Upgrade this entity
-[2] Upgrade entire system
-[3] Cancel
+This skill upgrades the ENTIRE system, not individual entities.
+Proceeding with full system upgrade.
 ```
 
-**Already v2:**
-```
-✓ System is already v2 structure.
-  └─ 03_Inputs/ exists
-  └─ All entities use _brain/
+**Partial upgrade (Session 1 done, Session 2 pending):**
+Detect by checking: rules are current but `system_version` < `plugin_version`.
+Skip directly to Session 2 steps.
 
-Nothing to upgrade.
-```
+---
 
-**Mixed state:**
-```
-[!] Partial v2 detected
+## Migration Registry
 
-Already v2:
-  └─ 04_Ventures/acme/_brain/
+### pre-2.1.0 → 2.1.0
 
-Still v1:
-  └─ 04_Ventures/beta/_state/
-  └─ inbox/
+| Category | Changes |
+|----------|---------|
+| **Folders** | Add `_references/` to all entities. Rename `inbox/`→`03_Inputs/`, `archive/`→`01_Archive/`, `life/`→`02_Life/`, `ventures/`→`04_Ventures/`, `experiments/`→`05_Experiments/`, `_state/`→`_brain/`. |
+| **Rules** | Sync all 7 rule files. Key changes: `_references/` system in conventions.md and behaviors.md, folder renames in all files, visual identity system in ui-standards.md. |
+| **CLAUDE.md** | Add `_references/` to structure, update session protocol to delegate to `/alive:save`, remove duplicated sections (Capture Triggers, Context Freshness, etc.), condense Life First. |
+| **Manifests** | Add `references[]`, `key_files[]`, `handoffs[]`, `goal`. Add `_references` to folders. Convert `session_id` (string) → `session_ids` (array). Add `date_created`, `date_modified`, `session_ids` to file entries. Rename `summary` → `description`. Remove deprecated `type`, old `files[]` format. |
+| **References** | Audit all `_references/` content: validate YAML front matter, ensure `raw/` subfolders exist, check summary/raw file pairing, fix garbage filenames, sync manifest `references[]` entries, find loose context files that should be in `_references/`. |
+| **Config** | Add `system_version: "2.1.0"` to alive.local.yaml. |
+| **Statusline** | Update statusline-command.sh if configured (numbered folder detection, ALIVE root indicator). |
 
-Upgrade remaining v1 items?
-```
+**Future migrations will be added as new sections here.**
 
-## Step 6: Update References (Optional)
-
-After renames, offer to update documentation:
-
-```
-[!] Found references to v1 paths in:
-  └─ .claude/CLAUDE.md (12 mentions of _state/)
-  └─ .claude/rules/navigation.md (5 mentions)
-  └─ .claude/rules/state-files.md (8 mentions)
-
-Update these to v2 paths?
-[1] Yes, update all
-[2] No, I'll do it manually
-```
-
-If yes, replace:
-- `_state/` → `_brain/`
-- `inbox/` → `03_Inputs/`
-- `subdomain` → `entity` (terminology)
-
-## After Upgrade
-
-```
-✓ Migration complete.
-
-Summary:
-• Renamed inbox/ → 03_Inputs/
-• Renamed X entities from _state/ → _brain/
-• Created/verified v2 system files
-• [Updated/Skipped] documentation references
-
-Next: Run /alive:daily to see your v2 dashboard.
-```
+---
 
 ## Related Skills
 
-- `/alive:daily` — Detects v1, calls this skill
-- `/alive:do` — Detects v1, calls this skill
-- `/alive:onboarding` — Fresh v2 setup (no migration)
-
+- `/alive:daily` — Checks version mismatch, suggests upgrade
+- `/alive:do` — Checks version mismatch, suggests upgrade
+- `/alive:save` — Checks version mismatch, suggests upgrade
+- `/alive:sweep` — Called post-upgrade for verification
+- `/alive:onboarding` — Fresh setup (no migration needed)

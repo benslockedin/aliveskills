@@ -223,7 +223,7 @@ Use columns where it improves information density. The vertical pipe `│` separ
 ╚══════════════════════════════════════════════════════════════════════════════════════════╝
 ```
 
-### Tier 3 Example: `/alive:capture`
+### Tier 3 Example: `/alive:capture-context`
 
 ```
 ╔══════════════════════════════════════════════════════════════════════════════════════════╗

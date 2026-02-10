@@ -1,14 +1,14 @@
 {
-  "name": "[SUBDOMAIN_NAME]",
-  "type": "subdomain",
+  "name": "[ENTITY_NAME]",
   "description": "[One sentence description]",
-  "goal": "[Single sentence goal]",
+  "goal": "[Single-sentence goal that filters all decisions]",
   "created": "[DATE]",
   "updated": "[DATE]",
-  "session_id": "[current-session]",
-  "folders": ["_brain", "_working"],
+  "session_ids": ["[current-session]"],
+  "folders": ["_brain", "_working", "_references"],
   "areas": [],
-  "files": [],
   "working_files": [],
-  "sessions": []
+  "references": [],
+  "key_files": [],
+  "handoffs": []
 }

@@ -17,6 +17,19 @@ Route user intent to skills. Match INTENT, not keywords. People phrase things di
 
 ## Skill Triggers by Prompting Style
 
+### /alive:daily — Morning Dashboard
+
+See everything across all entities. The heartbeat.
+
+| Style | Examples |
+|-------|----------|
+| **Command** | "daily", "dashboard", "morning", "overview", "show me everything" |
+| **Question** | "what's happening?", "what should I work on?", "what's the state of things?" |
+| **Statement** | "let's go", "start my day", "time to work" |
+| **Casual** | "morning", "let's see", "what's up" |
+
+---
+
 ### /alive:do — Start Work
 
 Load context, check what's in progress, begin working.
@@ -56,16 +69,17 @@ Scaffold a new venture, experiment, life area, or organizational folder.
 
 ---
 
-### /alive:capture — Quick Context Grab
+### /alive:capture-context — Capture Context
 
-Capture context from conversation, notes, or quick input.
+Capture any content into ALIVE — quick notes, emails, transcripts, articles, decisions, anything worth preserving.
 
 | Style | Examples |
 |-------|----------|
-| **Command** | "capture this", "grab that", "note this", "save this context", "remember this" |
-| **Question** | "can you capture that?", "should we note this?", "want me to log that?" |
-| **Statement** | "I learned something", "had a call with X", "just decided X", "FYI", "for context" |
-| **Casual** | "note", "fyi", "btw", "oh also", "quick note" |
+| **Command** | "capture this", "note this", "remember this", "process this", "digest this" |
+| **Question** | "can you capture that?", "should we note this?", "what should I do with this?" |
+| **Statement** | "I learned something", "had a call with X", "just decided X", "FYI", "here's an email", "from my call" |
+| **Casual** | "note", "fyi", "btw", "oh also", "quick note", "here's some context" |
+| **Paste** | User pastes external content (email, transcript, article, Slack messages) |
 
 ---
 
@@ -162,18 +176,46 @@ Guide new users through initial setup.
 
 ---
 
+### /alive:revive — Resume Old Session
+
+Pick up a specific past session with full context.
+
+| Style | Examples |
+|-------|----------|
+| **Command** | "revive", "resume session X", "pick up where I left off on X" |
+| **Question** | "can I resume that session?", "where did we leave off?" |
+| **Statement** | "I want to continue that work", "back to the session from yesterday" |
+| **Casual** | "pick up", "get me back", "that thing from last time" |
+
+---
+
+### /alive:upgrade — Update System
+
+Sync rules, structure, and skills to latest version.
+
+| Style | Examples |
+|-------|----------|
+| **Command** | "upgrade", "update", "sync", "update system" |
+| **Question** | "is there an update?", "am I on the latest version?" |
+| **Statement** | "need to upgrade", "system seems outdated" |
+| **Casual** | "update", "sync up" |
+
+**Note:** Also triggers automatically when version mismatch is detected by other skills.
+
+---
+
 ## Disambiguation
 
 When intent is unclear between skills:
 
-### do vs capture
+### do vs capture-context
 ```
 User: "about acme..."
 
 Ask: "Are you wanting to start working on acme, or capture some context about it?"
 ```
 
-### save vs capture
+### save vs capture-context
 ```
 User: "log this"
 
@@ -195,11 +237,14 @@ Proactively suggest skills based on system state:
 
 | Condition | Suggest |
 |-----------|---------|
+| Session start (first message) | "Welcome back. `/alive:daily` to see everything, or `/alive:do` to jump into an entity?" |
 | 03_Inputs/ has items | "You have X items in 03_Inputs/. `/alive:digest`?" |
-| _brain/ is stale (>2 weeks) | "X hasn't been updated in Y days. Refresh?" |
+| _brain/ is stale (>2 weeks) | "X hasn't been updated in Y days. `/alive:sweep`?" |
 | No recent save | "You haven't saved in a while. `/alive:save`?" |
-| User shares decision/insight | "Want me to capture that? `/alive:capture`" |
-| Session start | "Welcome back. `/alive:do` to load context?" |
+| User shares decision/insight | "Want me to capture that? `/alive:capture-context`" |
+| Version mismatch detected | "[!] System update available. `/alive:upgrade`?" |
+| Ongoing thread from previous session | "You have an ongoing thread from yesterday. `/alive:revive`?" |
+| Entity work is done / completed | "Looks like X is complete. `/alive:archive`?" |
 
 ---
 

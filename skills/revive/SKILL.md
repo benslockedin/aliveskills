@@ -1,6 +1,7 @@
 ---
 user-invocable: true
 description: This skill should be used when the user says "revive", "pick up where I left off", "get me back", "resume session", "what was I working on", or when `/alive:daily` shows ongoing threads and user picks one to resume.
+plugin_version: "2.1.0"
 ---
 
 # alive:revive
@@ -147,7 +148,7 @@ TASKS IDENTIFIED
 Completed:
 - [x] Build daily skill
 - [x] Build save skill with Will's feedback
-- [x] Build input skill
+- [x] Build capture-context skill
 
 Remaining:
 - [ ] Polish do skill @urgent

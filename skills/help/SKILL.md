@@ -1,6 +1,7 @@
 ---
 user-invocable: true
 description: Quick reference for ALIVE commands and capabilities. Use when the user says "help", "show commands", "what can you do", "how does X work", "how do I X", or "I'm confused".
+plugin_version: "2.1.0"
 ---
 
 # alive:help
@@ -53,7 +54,7 @@ CORE SKILLS
 
 CAPTURE & FIND
 ─────────────────────────────────────────────────────────────────────────
-/alive:capture   Quick context grab from conversation
+/alive:capture-context   Capture context into ALIVE
 /alive:recall    Search past context, decisions, sessions
 /alive:migrate   Bulk import content into ALIVE
 
@@ -105,6 +106,7 @@ SUBDOMAIN vs AREA
 Has _brain/         Yes                 No
 Has .claude/        Yes                 No
 Has _working/       Yes                 No
+Has _references/    Yes                 No
 Identity file       .claude/CLAUDE.md   README.md
 Example             04_Ventures/acme/      04_Ventures/acme/clients/
 
@@ -221,6 +223,7 @@ FILE ROUTING
 ─────────────────────────────────────────────────────────────────────────
 Drafts              →  _working/
 Final files         →  Area folders (clients/, content/, etc.)
+Reference materials →  _references/ (emails, calls, screenshots)
 Context to process  →  03_Inputs/
 Completed projects  →  01_Archive/
 People info         →  02_Life/people/
@@ -232,7 +235,7 @@ People info         →  02_Life/people/
 CAPTURE METHODS
 ─────────────────────────────────────────────────────────────────────────
 Quick:    "FYI we decided X" → I'll offer to capture
-Direct:   /alive:capture → Prompts for content
+Direct:   /alive:capture-context → Analyses and routes content
 Inline:   "capture: [content]" → Captures immediately
 Session:  /alive:save → Logs whole session
 ```

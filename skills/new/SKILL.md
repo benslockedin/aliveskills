@@ -1,6 +1,7 @@
 ---
 user-invocable: true
 description: This skill should be used when the user says "create X", "new venture", "new experiment", "new project", "set up X", "start something new", or wants to scaffold a new entity with full structure.
+plugin_version: "2.1.0"
 ---
 
 # alive:new
@@ -24,17 +25,17 @@ See `rules/ui-standards.md` for exact border characters, logo assets, and format
 
 Invoke when the user wants to:
 - Create a new venture, experiment, or life area (entity)
-- Create an organizational folder within a entity (area)
+- Create an organizational folder within an entity (area)
 - Set up project structure from scratch
 
 ## Entity vs Area
 
-| Type | Has _brain/ | Has .claude/ | Has _working/ | Identity |
-|------|-------------|--------------|---------------|----------|
-| **Entity** | Yes | Yes | Yes | `.claude/CLAUDE.md` |
-| **Area** | No | No | No | `README.md` |
+| Type | Has _brain/ | Has .claude/ | Has _working/ | Has _references/ | Identity |
+|------|-------------|--------------|---------------|------------------|----------|
+| **Entity** | Yes | Yes | Yes | Yes | `.claude/CLAUDE.md` |
+| **Area** | No | No | No | No | `README.md` |
 
-**Entitys** are projects with their own state.
+**Entities** are projects with their own state.
 **Areas** are organizational folders within entities.
 
 ## Flow
@@ -94,7 +95,16 @@ What type of venture?
 │   ├── insights.md        # Learnings
 │   ├── changelog.md       # History
 │   └── manifest.json      # Structure map
-└── _working/              # Drafts
+├── _working/              # Drafts
+└── _references/           # Reference material (summary .md files + raw/ subfolders)
+    ├── emails/
+    │   ├── 2026-02-06-client-update.md   # YAML front matter + AI summary + source pointer
+    │   └── raw/
+    │       └── 2026-02-06-client-update.txt
+    └── screenshots/
+        ├── 2026-02-06-competitor.md
+        └── raw/
+            └── 2026-02-06-competitor.png
 ```
 
 ### Step 4: Initialize Files
@@ -132,6 +142,7 @@ Everything current lives in `_brain/`:
 - `manifest.json` — Structure map
 
 Drafts live in `_working/`.
+Reference material lives in `_references/` (summary .md files with raw originals in `raw/` subfolders).
 ```
 
 **status.md:**
@@ -172,12 +183,16 @@ None yet.
 {
   "name": "[Name]",
   "description": "[One sentence]",
+  "goal": "[Single-sentence goal]",
+  "created": "[DATE]",
   "updated": "[DATE]",
-  "session_id": "[current-session]",
-  "folders": ["_brain", "_working"],
+  "session_ids": ["[current-session]"],
+  "folders": ["_brain", "_working", "_references"],
   "areas": [],
-  "files": [],
-  "working_files": []
+  "working_files": [],
+  "references": [],
+  "key_files": [],
+  "handoffs": []
 }
 ```
 
@@ -194,7 +209,8 @@ Structure:
 │   ├── insights.md
 │   ├── changelog.md
 │   └── manifest.json
-└── _working/
+├── _working/
+└── _references/           # Summary .md files + raw/ subfolders per type
 
 Next: /alive:do acme-corp to start working.
 ```
@@ -335,13 +351,13 @@ Names must be:
 Try again:
 ```
 
-## Creating a Subentity
+## Creating a Sub-Entity
 
-Subentitys are containers WITHIN a entity that have their own lifecycle (and therefore their own `_brain/`).
+Sub-entities are containers WITHIN an entity that have their own lifecycle (and therefore their own `_brain/`).
 
-### When to Create a Subentity
+### When to Create a Sub-Entity
 
-| Parent Type | Subentity Examples |
+| Parent Type | Sub-Entity Examples |
 |-------------|---------------------|
 | Agency venture | Clients, retainers |
 | E-commerce venture | Campaigns, product lines |
@@ -353,14 +369,14 @@ Subentitys are containers WITHIN a entity that have their own lifecycle (and the
 ### Step 1: Identify Context
 
 ```
-Creating a subentity.
+Creating a sub-entity.
 
 You're working in: 04_Ventures/acme-agency/
 
 What are you creating?
 [1] Client (for agency ventures)
 [2] Campaign (for ecommerce/marketing)
-[3] Project (generic subentity)
+[3] Project (generic sub-entity)
 [4] Custom
 ```
 
@@ -376,7 +392,7 @@ One-line description?
 
 ### Step 3: Create Structure
 
-**Subentity structure:**
+**Sub-entity structure:**
 ```
 04_Ventures/acme-agency/clients/bigco/
 ├── _brain/
@@ -385,17 +401,18 @@ One-line description?
 │   ├── insights.md
 │   ├── changelog.md
 │   └── manifest.json
-├── _working/         ← Subentity gets its OWN _working/
+├── _working/         ← Sub-entity gets its OWN _working/
+├── _references/      ← Sub-entity gets its OWN _references/
 └── README.md
 ```
 
-**IMPORTANT:** Each subentity gets its own `_working/` folder. Working files for this subentity go here, NOT in the parent's `_working/`.
+**IMPORTANT:** Each sub-entity gets its own `_working/` and `_references/` folders. Working files for this sub-entity go here, NOT in the parent's folders.
 
 ```
 # WRONG - using parent's _working/
 04_Ventures/acme-agency/_working/clients/bigco/proposal.md
 
-# RIGHT - subentity has its own _working/
+# RIGHT - sub-entity has its own _working/
 04_Ventures/acme-agency/clients/bigco/_working/proposal.md
 ```
 
@@ -429,7 +446,7 @@ None yet.
 - [ ] Identify key contacts
 
 ## Done (Recent)
-- [x] Created subentity ([DATE])
+- [x] Created sub-entity ([DATE])
 ```
 
 **changelog.md:**
@@ -438,7 +455,7 @@ None yet.
 
 ## [DATE] — Created
 
-Subentity created within 04_Ventures/acme-agency/clients/.
+Sub-entity created within 04_Ventures/acme-agency/clients/.
 
 **Type:** Client
 **Description:** Enterprise client, $10k/mo retainer
@@ -450,14 +467,17 @@ Subentity created within 04_Ventures/acme-agency/clients/.
 ```json
 {
   "name": "bigco",
-  "type": "client",
-  "parent": "04_Ventures/acme-agency",
   "description": "Enterprise client, $10k/mo retainer",
+  "goal": "[Single-sentence goal]",
   "created": "[DATE]",
   "updated": "[DATE]",
-  "session_id": "[current-session]",
-  "folders": ["_brain", "_working"],
-  "files": []
+  "session_ids": ["[current-session]"],
+  "folders": ["_brain", "_working", "_references"],
+  "areas": [],
+  "working_files": [],
+  "references": [],
+  "key_files": [],
+  "handoffs": []
 }
 ```
 
@@ -480,7 +500,7 @@ Add to `04_Ventures/acme-agency/_brain/changelog.md`:
 ```markdown
 ## [DATE] — Created client: bigco
 
-Added new client subentity: bigco (Enterprise client, $10k/mo retainer)
+Added new client sub-entity: bigco (Enterprise client, $10k/mo retainer)
 ```
 
 ### Step 6: Confirm
@@ -496,6 +516,7 @@ Structure:
 │   ├── changelog.md
 │   └── manifest.json
 ├── _working/
+├── _references/
 └── README.md
 
 Parent changelog updated.
@@ -504,19 +525,21 @@ Parent manifest updated.
 Next: /alive:do bigco to start working.
 ```
 
-## Subentity vs Area
+## Sub-Entity vs Area
 
-| Question | Subentity | Area |
+| Question | Sub-Entity | Area |
 |----------|-------------|------|
 | Has its own lifecycle? | Yes | No |
 | Can be "done"? | Yes | No |
 | Needs status tracking? | Yes | No |
 | Gets `_brain/`? | Yes | No |
+| Gets `_working/`? | Yes | No |
+| Gets `_references/`? | Yes | No |
 
 **Examples:**
-- `clients/bigco/` → Subentity (has lifecycle)
+- `clients/bigco/` → Sub-entity (has lifecycle)
 - `templates/` → Area (organizational only)
-- `campaigns/summer-sale/` → Subentity (has lifecycle)
+- `campaigns/summer-sale/` → Sub-entity (has lifecycle)
 - `brand/` → Area (organizational only)
 
 ## Related Skills
@@ -524,4 +547,3 @@ Next: /alive:do bigco to start working.
 - `/alive:do` — Start working on the new entity
 - `/alive:onboarding` — Full system setup (not just one entity)
 - `/alive:daily` — See all entities after creating
-

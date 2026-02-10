@@ -11,7 +11,7 @@
 02_Life/
 ├── people/           # Source of truth for all people
 │   └── [name].md     # Person files
-└── [area]/           # Life areas (health, finance, etc.)
+└── [entity]/         # Life entities (health, finance, etc.)
     ├── .claude/
     │   └── CLAUDE.md
     ├── _brain/
@@ -20,7 +20,8 @@
     │   ├── insights.md
     │   ├── changelog.md
     │   └── manifest.json
-    └── _working/
+    ├── _working/
+    └── _references/
 ```
 
 ---
@@ -61,9 +62,9 @@ The `people/` folder is the source of truth for all people across ALIVE. Other d
 
 ---
 
-## Life Area Template
+## Life Entity Template
 
-For health, finance, relationships, etc.
+Life entities (health, finance, relationships, etc.) are full entities — they have `_brain/`, `_working/`, and `_references/` just like ventures and experiments.
 
 ### CLAUDE.md
 
@@ -118,20 +119,22 @@ None.
 
 ---
 
-## Common Life Areas
+## Common Life Entities
 
-| Area | Purpose |
-|------|---------|
+| Entity | Purpose |
+|--------|---------|
 | health/ | Physical and mental health |
 | finance/ | Money, investments, budgets |
 | relationships/ | Family, friends, community |
 | growth/ | Learning, skills, development |
 | home/ | Living space, maintenance |
 
+These are full entities — each gets `_brain/`, `_working/`, and `_references/`.
+
 ---
 
 ## Notes
 
-- Life areas are optional — create only what you need
+- Life entities are optional — create only what you need
 - people/ is always present (source of truth for all people)
 - Life first, always — this domain takes priority

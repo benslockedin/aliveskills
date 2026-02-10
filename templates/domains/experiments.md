@@ -9,7 +9,7 @@
 
 ```
 05_Experiments/
-└── [name]/           # Each experiment is a subdomain
+└── [name]/           # Each experiment is an entity
     ├── .claude/
     │   └── CLAUDE.md # Identity
     ├── _brain/
@@ -19,6 +19,7 @@
     │   ├── changelog.md
     │   └── manifest.json
     ├── _working/     # Drafts
+    ├── _references/  # Reference materials
     └── [areas]/      # Optional organizational folders
 ```
 
