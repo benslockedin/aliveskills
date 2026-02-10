@@ -33,47 +33,102 @@ Standard width: **90 characters** (fits most terminals)
 
 ---
 
-## Logo Assets
+## Logo & Mascot Assets
 
-### Full Logo (Tier 1 Only)
+### Release: Unlimited Elephant
 
-Used by: `onboarding`, `daily`
+**Codename:** Unlimited Elephant — "Elephants never forget"
+**Version:** 3.0.1
+
+### Large Elephant (Tier 1 — Onboarding, Boot Screen, First Daily)
+
+Used by: `onboarding` (boot screen), first-ever `/alive:daily`
+Source: Beate Schwichtenberg
 
 ```
-                          ▒▒▒                              ▒▒
-                                    ▒▒            ▒
-                             ▒▒     ▒▒     ▒▒    ▒▒      ▒
-       ▒▒▒                    ▒▒     ▒▒    ▒▒    ▒▒     ▒▒                    ▒▒▒
-        ▒                      ▒▒    ▒▒   ▒▒▒   ▒▒     ▒▒                     ▒▒
-           ▒▒▒         ▒▒         ▒▒  ▒ ▒▒▒▒▒▒▒ ▒▒  ▒▒        ▒▒          ▒▒▒
-                         ▒▒      ▒▒▒    ▒▒▒  ▒▒     ▒▒▒      ▒▒
-                ▒▒▒       ▒▒▒  ▒▒▒ ▒▒▒▒▒▒ ▒▒▒  ▒▒▒▒▒  ▒▒▒  ▒▒        ▒▒
-                ▒▒▒            ▒▒▒▒▒    ▒▒▒▒▒▒▒    ▒▒▒▒▒▒            ▒▒
-                     ▒▒   ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒   ▒▒▒
-                     ▒▒  ▒▒▒▒▒▒ ▒ ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ ▒▒▒▒▒▒ ▒  ▒▒
-                        ▒▒▒    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒    ▒▒▒
-                          ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-
-      ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-      ▒▒▒▒▒▒▒▒▒▒     ▒▒▒▒▒▒       ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-      ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒     ▒▒▒▒     ▒▒▒▒▒     ▒▒▒▒     ▒▒▒▒▒▒▒
-      ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒   ▒▒▒▒▒  ▒▒▒▒▒
-      ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒   ▒▒▒▒▒  ▒▒▒▒▒
-      ▒▒▒▒▒▒▒          ▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒          ▒▒▒▒▒
-      ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒     ▒▒▒▒▒▒   ▒▒▒▒▒▒▒▒▒▒▒▒
-      ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒          ▒▒▒▒        ▒▒▒▒▒▒▒   ▒▒▒▒▒▒▒▒         ▒▒▒▒▒
-      ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒          ▒▒▒▒        ▒▒▒▒▒▒▒   ▒▒▒▒▒▒▒▒▒        ▒▒▒▒▒
-      ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+                     .. ..oooo.....ooo...
+               .odSS4PYYYSSOOXXXXXXXXXOodbgooo.
+              /SSYod$$SSOIIPXXXXXXXXXYYP.oo.*b.
+             ($Yd$$SSSOII:XXXXXXXX:IIoSSS$$b.Y,
+              \Yd$$SSSOII:XXXXXXXXXX:IIOOSSS$$b\
+               d$$SSSOOI:XP"YXXXXXXXX:IIOOSSSS$$\
+               Y$$SSSOOII:XbdXXXXXP"YX:IIOOOSS$$)
+               'Y$$SSSOI:XXXXXXXXXbodX:IIOOSS$$$/
+                "Y$$SSSOI(PoTXXXXXTo)XXIIOOOSS$$*'
+                  ""*Y$S(((PXXXXXXXY))dIIOSSS$dP'
+                     "*'()P;XXXXXXXXY)IIOSSS$P".oS,
+                     (S'(P;XXXXXXXP;Y)XXYOP".oSSSSb
+                    (S'(P;'XXXXXXX';Y).ooooSSSSSSSS)
+                    (S'(P;'XXXXXXP';Y).oSSSSSSSSSSSP
+                    (SS'Y);YXXXXX';(Y.oSSSSSSSSSSSSP
+                     YSS'Y)'YXXX".(Y.oSSP.SSSSSSSSY
+                      YSS'"" XXX""oooSSP.SSSSSSSSY
+                      SSSSSS YXXX:SSSSP.SSSSSSSSY
+                      SSSSSP  YXb:SSSP.S"SSSSSSP
+                      S(OO)S   YXb:SY    )SSSSS
+                      SSSSO    )YXb.I    ISSSSP
+                      YSSSY    I."YXXb   Y(SS)I
+                      )SSS(    dSSo.""*b  YSSSY
+                      OooSb   dSSSSP      )SSS(
+                              dSSSY       OooSS
+                              OooSP
 ```
 
-### Compact Logo (Tier 2 & 3)
+### ALIVE Wordmark (Roman FIGlet)
 
-Used by: All skills except `onboarding` and `daily`
+Used with: Large elephant (below it), boot screen
+Font: `roman` via FIGlet — 64 chars wide
+
+```
+      .o.       ooooo        ooooo oooooo     oooo oooooooooooo
+     .888.      `888'        `888'  `888.     .8'  `888'     `8
+    .8"888.      888          888    `888.   .8'    888
+   .8' `888.     888          888     `888. .8'     888oooo8
+  .88ooo8888.    888          888      `888.8'      888    "
+ .8'     `888.   888       o  888       `888'       888       o
+o88o     o8888o o888ooooood8 o888o       `8'       o888ooooood8
+──────────────────────────────────────────────────────────────────
+                    O p e r a t o r   S y s t e m
+──────────────────────────────────────────────────────────────────
+```
+
+### Small Elephant (Tier 2 & 3 — All Regular Skills)
+
+Used by: All skill responses alongside the compact ALIVE text
+Source: jrei
+
+```
+               _,-';
+          ,---(    .`-',-'
+        /(     `--'_,'
+       (  \ |__| |'
+          |_|  |_|
+```
+
+### Compact Logo Text (Tier 2 & 3)
+
+Used alongside small elephant for regular skill headers.
 
 ```
     ▄▀█ █░░ █ █░█ █▀▀
     █▀█ █▄▄ █ ▀▄▀ ██▄
 ```
+
+### Usage Guidelines
+
+| Asset | When to use |
+|-------|-------------|
+| Large elephant + wordmark | Onboarding boot screen, first-ever `/alive:daily` |
+| Small elephant + compact text | All regular skill responses (Tier 2 & 3 headers) |
+| Compact text only | Minimal theme, or when space is tight |
+| Boot screen (full) | First run of onboarding only — see `branding/alive-os-boot-screen.txt` |
+
+### Embellishment Characters
+
+| Character | Usage |
+|-----------|-------|
+| `◊` (lozenge) | Section divider in boot screen / splash |
+| `·` (middle dot) | Lighter separator within sections |
 
 ---
 
@@ -138,30 +193,43 @@ Use columns where it improves information density. The vertical pipe `│` separ
 ```
 ╔══════════════════════════════════════════════════════════════════════════════════════════╗
 ║                                                                                          ║
-║                            ▒▒▒                              ▒▒                           ║
-║                                      ▒▒            ▒                                     ║
-║                               ▒▒     ▒▒     ▒▒    ▒▒      ▒                              ║
-║         ▒▒▒                    ▒▒     ▒▒    ▒▒    ▒▒     ▒▒                    ▒▒▒       ║
-║          ▒                      ▒▒    ▒▒   ▒▒▒   ▒▒     ▒▒                     ▒▒        ║
-║             ▒▒▒         ▒▒         ▒▒  ▒ ▒▒▒▒▒▒▒ ▒▒  ▒▒        ▒▒          ▒▒▒           ║
-║                           ▒▒      ▒▒▒    ▒▒▒  ▒▒     ▒▒▒      ▒▒                         ║
-║                  ▒▒▒       ▒▒▒  ▒▒▒ ▒▒▒▒▒▒ ▒▒▒  ▒▒▒▒▒  ▒▒▒  ▒▒        ▒▒                 ║
-║                  ▒▒▒            ▒▒▒▒▒    ▒▒▒▒▒▒▒    ▒▒▒▒▒▒            ▒▒                 ║
-║                       ▒▒   ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒   ▒▒▒                     ║
-║                       ▒▒  ▒▒▒▒▒▒ ▒ ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ ▒▒▒▒▒▒ ▒  ▒▒                     ║
-║                          ▒▒▒    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒    ▒▒▒                        ║
-║                            ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒                           ║
+║                          .. ..oooo.....ooo...                                            ║
+║                    .odSS4PYYYSSOOXXXXXXXXXOodbgooo.                                      ║
+║                   /SSYod$$SSOIIPXXXXXXXXXYYP.oo.*b.                                      ║
+║                  ($Yd$$SSSOII:XXXXXXXX:IIoSSS$$b.Y,                                     ║
+║                   \Yd$$SSSOII:XXXXXXXXXX:IIOOSSS$$b\                                     ║
+║                    d$$SSSOOI:XP"YXXXXXXXX:IIOOSSSS$$\                                    ║
+║                    Y$$SSSOOII:XbdXXXXXP"YX:IIOOOSS$$)                                   ║
+║                    'Y$$SSSOI:XXXXXXXXXbodX:IIOOSS$$$/                                   ║
+║                     "Y$$SSSOI(PoTXXXXXTo)XXIIOOOSS$$*'                                   ║
+║                       ""*Y$S(((PXXXXXXXY))dIIOSSS$dP'                                    ║
+║                          "*'()P;XXXXXXXXY)IIOSSS$P".oS,                                  ║
+║                          (S'(P;XXXXXXXP;Y)XXYOP".oSSSSb                                  ║
+║                         (S'(P;'XXXXXXX';Y).ooooSSSSSSSS)                                 ║
+║                         (S'(P;'XXXXXXP';Y).oSSSSSSSSSSSP                                 ║
+║                         (SS'Y);YXXXXX';(Y.oSSSSSSSSSSSSP                                 ║
+║                          YSS'Y)'YXXX".(Y.oSSP.SSSSSSSSY                                  ║
+║                           YSS'"" XXX""oooSSP.SSSSSSSSY                                   ║
+║                           SSSSSS YXXX:SSSSP.SSSSSSSSY                                    ║
+║                           SSSSSP  YXb:SSSP.S"SSSSSSP                                    ║
+║                           S(OO)S   YXb:SY    )SSSSS                                     ║
+║                           SSSSO    )YXb.I    ISSSSP                                      ║
+║                           YSSSY    I."YXXb   Y(SS)I                                      ║
+║                           )SSS(    dSSo.""*b  YSSSY                                      ║
+║                           OooSb   dSSSSP      )SSS(                                      ║
+║                                   dSSSY       OooSS                                      ║
+║                                   OooSP                                                  ║
 ║                                                                                          ║
-║        ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒       ║
-║        ▒▒▒▒▒▒▒▒▒▒     ▒▒▒▒▒▒       ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒       ║
-║        ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒     ▒▒▒▒     ▒▒▒▒▒     ▒▒▒▒     ▒▒▒▒▒▒▒       ║
-║        ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒   ▒▒▒▒▒  ▒▒▒▒▒       ║
-║        ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒   ▒▒▒▒▒  ▒▒▒▒▒       ║
-║        ▒▒▒▒▒▒▒          ▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒          ▒▒▒▒▒       ║
-║        ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒     ▒▒▒▒▒▒   ▒▒▒▒▒▒▒▒▒▒▒▒       ║
-║        ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒          ▒▒▒▒        ▒▒▒▒▒▒▒   ▒▒▒▒▒▒▒▒         ▒▒▒▒▒       ║
-║        ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒          ▒▒▒▒        ▒▒▒▒▒▒▒   ▒▒▒▒▒▒▒▒▒        ▒▒▒▒▒       ║
-║        ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒       ║
+║        .o.       ooooo        ooooo oooooo     oooo oooooooooooo                          ║
+║       .888.      `888'        `888'  `888.     .8'  `888'     `8                          ║
+║      .8"888.      888          888    `888.   .8'    888                                  ║
+║     .8' `888.     888          888     `888. .8'     888oooo8                             ║
+║    .88ooo8888.    888          888      `888.8'      888    "                             ║
+║   .8'     `888.   888       o  888       `888'       888       o                          ║
+║  o88o     o8888o o888ooooood8 o888o       `8'       o888ooooood8                          ║
+║  ──────────────────────────────────────────────────────────────────                       ║
+║                      O p e r a t o r   S y s t e m                                       ║
+║  ──────────────────────────────────────────────────────────────────                       ║
 ║                                                                                          ║
 ║    daily                                                                                 ║
 ║  ════════════════════════════════════════════════════════════════════════════════════    ║
@@ -195,7 +263,7 @@ Use columns where it improves information density. The vertical pipe `│` separ
 ╔══════════════════════════════════════════════════════════════════════════════════════════╗
 ║                                                                                          ║
 ║    ▄▀█ █░░ █ █░█ █▀▀                                                                     ║
-║    █▀█ █▄▄ █ ▀▄▀ ██▄            do • ventures/acme-agency                                ║
+║    █▀█ █▄▄ █ ▀▄▀ ██▄            work • ventures/acme-agency                              ║
 ║                                                                                          ║
 ║  ════════════════════════════════════════════════════════════════════════════════════    ║
 ║                                                                                          ║
