@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Use when ending a work session, wrapping up, stepping away, or preserving session context. Triggers on "save", "wrap up", "end session", "done for now", "I'm done", "brb", "stepping away", "checkpoint", "commit progress".
-plugin_version: "2.1.0"
+plugin_version: "2.1.1"
 ---
 
 # alive:save

@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Move completed or inactive items to the archive. Use when the user says "archive X", "shelve X", "close X", "deactivate X", "done with X", "X is complete", or "finished with X".
-plugin_version: "2.1.0"
+plugin_version: "2.1.1"
 ---
 
 # alive:archive

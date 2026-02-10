@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: This skill should be used when the user says "work on X", "focus on X", "open X", "status of X", "let's do X", "continue", "resume", "keep going", or "pick up where I left off". Focuses on one specific venture, experiment, or life area.
-plugin_version: "2.1.0"
+plugin_version: "2.1.1"
 ---
 
 # alive:do
