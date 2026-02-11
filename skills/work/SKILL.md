@@ -8,7 +8,33 @@ plugin_version: "3.0.1"
 
 Focus on ONE project. Load context from its `_brain/` folder and show current state.
 
-**Different from `/alive:daily`:** Do focuses on ONE project. Daily shows EVERYTHING.
+**Different from `/alive:daily`:** Work focuses on ONE project. Daily shows EVERYTHING.
+
+## UI Treatment
+
+Uses the **ALIVE Shell** — one rounded box, three zones.
+
+```
+╭──────────────────────────────────────────────────────────╮
+│  ALIVE · work                            [date]          │
+│  [project-name]                                          │
+│  ──────────────────────────────────────────────────────  │
+│  [Goal + current focus]                                  │
+│  [! urgent items]                                        │
+│  [tasks list]                                            │
+│  ──────────────────────────────────────────────────────  │
+│  [ACTIONS]                                               │
+│  [FINE PRINT — aggregate stats]                          │
+╰──────────────────────────────────────────────────────────╯
+```
+
+**Rules:**
+- `╭╮╰╯` rounded corners — outer frame only
+- NO double-line borders, NO internal boxes
+- NO `*` marker (everything is read from state files, not generated)
+- `)` on selectable items
+- `~` in progress, `✓` done with date, unmarked = to do
+- Lowercase section labels
 
 ## Version Check (Before Main Flow)
 
@@ -218,30 +244,36 @@ Each entry represents an unfinished session with context that would otherwise be
 ### Summary Display
 
 ```
-╭─ ALIVE ────────────────────────────────────────────────────────────────╮
-│  do • 04_Ventures/acme                                                 │
-╰────────────────────────────────────────────────────────────────────────╯
-
-▸ loaded context
-
-STATUS
-Phase: Building
-Focus: Landing page launch by Friday
-
-[!] HANDOFFS (2 pending — previous sessions left unfinished work)
-[r1] Plugin feedback session — 2026-02-02 (context compact)
-     "Fixed 6 PR review comments, redesigned _references/ structure"
-[r2] Landing page wireframes — 2026-02-03 (resuming later)
-     "Hero section done, pricing table in progress"
-
-TASKS (7 total)
-@urgent:
-- [ ] Finalize pricing page
-- [ ] Fix payment webhook
-
-To Do:
-- [ ] Write launch email
-- [ ] Update docs
+╭──────────────────────────────────────────────────────────╮
+│                                                          │
+│  ALIVE · work                            2026-02-09      │
+│  acme-agency                                             │
+│                                                          │
+│  ──────────────────────────────────────────────────────  │
+│                                                          │
+│  Ship client portal by end of month                      │
+│  Focus: Landing page launch by Friday                    │
+│                                                          │
+│  ! Finalize pricing page                         Feb 12  │
+│                                                          │
+│                                                          │
+│  tasks                                                   │
+│     ~  Build pricing page layout                         │
+│     ~  Fix payment webhook integration                   │
+│        Write launch email                                │
+│        Update documentation                              │
+│        Set up analytics tracking                         │
+│     ✓  Hero section design                       Feb 07  │
+│     ✓  Database schema migration                 Feb 06  │
+│                                                          │
+│  ──────────────────────────────────────────────────────  │
+│                                                          │
+│  1) continue current task  +) add a new task             │
+│  s) save and exit session  w) open a working file        │
+│                                                          │
+│  7 total · 2 done · 3 working files · last: yesterday    │
+│                                                          │
+╰──────────────────────────────────────────────────────────╯
 ```
 
 **Key details:**
@@ -265,20 +297,14 @@ To Do:
 
 Every actionable item gets a number. Handoffs appear alongside tasks:
 
-```
-─────────────────────────────────────────────────────────────────────────
-[1] Finalize pricing page @urgent
-[2] Fix payment webhook @urgent
-[3] Write launch email
-[r1] Resume: Plugin feedback session (Feb 2)
-[r2] Resume: Landing page wireframes (Feb 3)
-[c] View changelog
-[s] Save when done
+Tasks and handoffs appear in the main content zone (see Summary Display above). Handoffs are surfaced inline:
 
-What's first?
+```
+│  [!] Handoff from Feb 2 — Landing page wireframes        │
+│      r) resume this session                              │
 ```
 
-**If no handoffs:** Omit the `[r#]` lines.
+**If no handoffs:** Omit the handoff section.
 
 ## Resuming a Handoff
 

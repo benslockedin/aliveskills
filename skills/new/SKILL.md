@@ -10,14 +10,26 @@ Create a new project or area. Scaffold the v2 structure with proper templates.
 
 ## UI Treatment
 
-This skill uses **Tier 3: Utility** formatting.
+Uses the **ALIVE Shell** — one rounded box, three zones.
 
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v3.0.1` (right-aligned)
+```
+╭──────────────────────────────────────────────────────────╮
+│  ALIVE · new                             [date]          │
+│  ──────────────────────────────────────────────────────  │
+│  [Type selection prompt]                                 │
+│  [Project summary after creation]                        │
+│  ──────────────────────────────────────────────────────  │
+│  [ACTIONS]                                               │
+│  [✓ file creation confirmations]                         │
+╰──────────────────────────────────────────────────────────╯
+```
 
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+**Rules:**
+- `╭╮╰╯` rounded corners — outer frame only
+- NO double-line borders, NO internal boxes
+- NO `*` marker (user provided all inputs)
+- `)` on selectable options
+- `key  value` format for project metadata
 
 ---
 
@@ -55,12 +67,21 @@ Invoke when the user wants to:
 ### Step 1: Gather Information
 
 ```
-Creating a new project.
-
-What type?
-[1] Venture (business with revenue intent)
-[2] Experiment (testing grounds, no model yet)
-[3] Life area (personal responsibility)
+╭──────────────────────────────────────────────────────────╮
+│                                                          │
+│  ALIVE · new                              2026-02-09     │
+│                                                          │
+│  ──────────────────────────────────────────────────────  │
+│                                                          │
+│  What are you creating?                                  │
+│                                                          │
+│   1) Venture         Revenue intent, business model      │
+│   2) Experiment      Testing ground, no model yet        │
+│   3) Life area       Personal domain                     │
+│   4) Sub-project     Nested within existing project      │
+│   5) Area folder     Organizational only                 │
+│                                                          │
+╰──────────────────────────────────────────────────────────╯
 ```
 
 Then:
@@ -75,11 +96,11 @@ For ventures, offer relevant templates:
 
 ```
 What type of venture?
-[1] Agency — Client work, deliverables
-[2] E-commerce — Products, inventory
-[3] Creator — Content, courses, community
-[4] Job — Employment, bringing work into ALIVE
-[5] Custom — Start with generic template
+ 1) Agency — Client work, deliverables
+ 2) E-commerce — Products, inventory
+ 3) Creator — Content, courses, community
+ 4) Job — Employment, bringing work into ALIVE
+ 5) Custom — Start with generic template
 ```
 
 ### Step 3: Create Structure
@@ -199,20 +220,28 @@ None yet.
 ### Step 5: Confirm Creation
 
 ```
-✓ Created 04_Ventures/acme-corp/
-
-Structure:
-├── .claude/CLAUDE.md
-├── _brain/
-│   ├── status.md
-│   ├── tasks.md
-│   ├── insights.md
-│   ├── changelog.md
-│   └── manifest.json
-├── _working/
-└── _references/           # Summary .md files + raw/ subfolders per type
-
-Next: /alive:work acme-corp to start working.
+╭──────────────────────────────────────────────────────────╮
+│                                                          │
+│  ALIVE · new                              2026-02-09     │
+│                                                          │
+│  ──────────────────────────────────────────────────────  │
+│                                                          │
+│  acme-corp                                               │
+│  Client services agency for digital transformation       │
+│                                                          │
+│  type    Venture (Agency)                                │
+│  phase   Starting                                        │
+│  goal    Ship client portal by end of quarter            │
+│  path    04_Ventures/acme-corp/                          │
+│                                                          │
+│  ──────────────────────────────────────────────────────  │
+│                                                          │
+│  1) start working on it    2) add initial context        │
+│  3) add initial tasks                                    │
+│                                                          │
+│  ✓ _brain/ · _working/ · CLAUDE.md · manifest            │
+│                                                          │
+╰──────────────────────────────────────────────────────────╯
 ```
 
 ## Creating an Area

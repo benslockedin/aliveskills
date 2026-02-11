@@ -10,14 +10,30 @@ End session. Preserve context. Complete the loop by updating ALL state files.
 
 ## UI Treatment
 
-This skill uses **Tier 2: Core Workflow** formatting.
+Uses the **ALIVE Shell** — one rounded box, three zones.
 
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Community footer: `Free: Join the ALIVE community → skool.com/aliveoperators`
+```
+╭──────────────────────────────────────────────────────────╮
+│  ALIVE · save                            [date]          │
+│  [project-name]                      ● [session-id]      │
+│  ──────────────────────────────────────────────────────  │
+│  [Generated changelog summary with * marker]             │
+│  [Changes, decisions, next steps]                        │
+│  [↳ thread status]                                       │
+│  ──────────────────────────────────────────────────────  │
+│  [ACTIONS]                                               │
+│  [* generated entry — verify before confirming]          │
+│  [✓ file update confirmations · progress sparkline]      │
+╰──────────────────────────────────────────────────────────╯
+```
 
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+**Rules:**
+- `╭╮╰╯` rounded corners — outer frame only
+- NO double-line borders, NO internal boxes
+- `*` on generated changelog entry (right-aligned), explained in fine print
+- `·` bullet points for changes
+- `↳` thread status indicator
+- `)` on selectable actions
 
 ---
 

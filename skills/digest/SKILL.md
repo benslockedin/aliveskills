@@ -10,14 +10,28 @@ Process the 03_Inputs/ buffer. Survey items, triage with user, extract content, 
 
 ## UI Treatment
 
-This skill uses **Tier 3: Utility** formatting.
+Uses the **ALIVE Shell** — one rounded box, three zones.
 
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v3.0.1` (right-aligned)
+```
+╭──────────────────────────────────────────────────────────╮
+│  ALIVE · digest                          [date]          │
+│  [N] inputs  →  [N] extractions                      *   │
+│  ──────────────────────────────────────────────────────  │
+│  [Numbered extractions with icons and routing]           │
+│  ──────────────────────────────────────────────────────  │
+│  [ACTIONS]                                               │
+│  [* extractions are generated — review before routing]   │
+│  [routing distribution stats]                            │
+╰──────────────────────────────────────────────────────────╯
+```
 
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+**Rules:**
+- `╭╮╰╯` rounded corners — outer frame only
+- NO double-line borders, NO internal boxes
+- `*` on generated extractions (explained in fine print)
+- Icon vocabulary: `◆` task, `◇` decision, `●` person, `◎` insight, `↳` plan
+- `→` routes to destination project
+- `)` on selectable actions
 
 ---
 
@@ -51,24 +65,25 @@ STEP 4: Execute         → Route and extract
 Scan `03_Inputs/` and present prioritized list:
 
 ```
-╭─ ALIVE ────────────────────────────────────────────────────────────────╮
-│  digest                                                                │
-╰────────────────────────────────────────────────────────────────────────╯
-
-▸ scanning 03_Inputs/
-
-INPUTS (5 items)
-─────────────────────────────────────────────────────────────────────────
-[1] client-email-acme.md       Email       Today         🔥 urgent
-[2] call-transcript-01-22.md   Transcript  2 days ago    ~45 min
-[3] quick-note.md              Note        3 days ago
-[4] meeting-recording.m4a      Audio       1 week ago
-[5] random-thoughts.md         Note        1 week ago
-
-─────────────────────────────────────────────────────────────────────────
-[a] Digest all    [1-5] Select items    [q] Quit
-
-Which items to digest?
+╭──────────────────────────────────────────────────────────╮
+│                                                          │
+│  ALIVE · digest                           2026-02-09     │
+│  5 inputs  →  scanning...                             *  │
+│                                                          │
+│  ──────────────────────────────────────────────────────  │
+│                                                          │
+│   1) client-email.md         Email       Today       !   │
+│   2) call-transcript.md      Transcript  2 days ago      │
+│   3) quick-note.md           Note        3 days ago      │
+│   4) meeting-recording.m4a   Audio       1 week ago      │
+│   5) random-thoughts.md      Note        1 week ago      │
+│                                                          │
+│  ──────────────────────────────────────────────────────  │
+│                                                          │
+│  a) digest all              #) select items              │
+│  q) quit                                                 │
+│                                                          │
+╰──────────────────────────────────────────────────────────╯
 ```
 
 ### Priority Signals
@@ -163,36 +178,7 @@ Archiving source: 03_Inputs/client-email-acme.md → 01_Archive/03_Inputs/
 
 For complex items, spawn specialized agent:
 
-```
-▸ spawning transcript extraction agent...
-
-Analyzing call-transcript-01-22.md...
-
-EXTRACTION RESULTS
-─────────────────────────────────────────────────────────────────────────
-People (3):
-  - John Smith (client) → 02_Life/people/john-smith.md [update]
-  - Sarah Chen → exists
-  - New: Mike from TechCorp → create?
-
-Decisions (2):
-  - Use AWS over GCP → 04_Ventures/acme/_brain/changelog.md
-  - Launch date March 15 → 04_Ventures/acme/_brain/changelog.md
-
-Tasks (4):
-  - [ ] Send proposal by Friday
-  - [ ] Schedule follow-up
-  - [ ] Review AWS pricing
-  - [ ] Update timeline
-
-Insights (1):
-  - Client prefers weekly updates → 04_Ventures/acme/_brain/insights.md
-
-─────────────────────────────────────────────────────────────────────────
-[1] Apply all extractions
-[2] Review and select
-[3] Edit before applying
-```
+Spawn a transcript extraction agent. Results are presented in the vibrant shell format with icon vocabulary (see Reference Output in UI Treatment). User confirms routing before any changes are made.
 
 ## Routing Logic
 

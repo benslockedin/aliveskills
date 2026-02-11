@@ -10,14 +10,31 @@ Morning entry point. Surface what matters across ALL projects. The heartbeat of 
 
 ## UI Treatment
 
-This skill uses **Tier 1: Entry Point** formatting.
+Uses the **ALIVE Shell** — one rounded box, three zones (header / content / footer).
 
-**Visual elements:**
-- Full logo (24-line ASCII art header)
-- Double-line border wrap (entire response)
-- Community footer: `Free: Join the ALIVE community → skool.com/aliveoperators`
+```
+╭──────────────────────────────────────────────────────────╮
+│  ALIVE · daily                            [date]         │
+│  [aggregate stats]                                       │
+│  ──────────────────────────────────────────────────────  │
+│  [THE ANSWER — AI-recommended focus with * marker]       │
+│  [THE MAP — entity grid]                                 │
+│  ──────────────────────────────────────────────────────  │
+│  [ACTIONS — paired with context stats]                   │
+│  [FINE PRINT — * explanation, sparkline]                 │
+╰──────────────────────────────────────────────────────────╯
+```
 
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+**Rules:**
+- `╭╮╰╯` rounded corners — outer frame only
+- NO double-line borders (`╔╗╚╝`), NO internal boxes
+- Two thin `──────────` lines separate zones
+- `*` on AI-generated focus recommendation (explained in fine print)
+- `)` on every selectable option
+- `·` as delimiter in stats
+- Lowercase section labels (ventures, experiments, life)
+- `●○` five-day activity dots
+- `!` attention indicator (urgent tasks or stale >14 days)
 
 ---
 
@@ -138,34 +155,56 @@ Skip to project scanning.
 - Scripts should return exit code 0 on success
 - Output format: one line per item added (for counting)
 
+## Reference Output
+
+The full daily output in vibrant format:
+
+```
+╭──────────────────────────────────────────────────────────╮
+│                                                          │
+│  ALIVE · daily                            2026-02-09     │
+│                                                          │
+│  ──────────────────────────────────────────────────────  │
+│                                                          │
+│  acme-agency — Client portal deployment due Wednesday *  │
+│  Also requiring attention: side-project, health          │
+│                                                          │
+│                                      5 days  tasks       │
+│  ventures                                                │
+│   1) acme-agency        Building     ○●●●○     9    !    │
+│   2) freelance-dev      Growing      ○○○●○     2         │
+│   3) side-project       Pre-Launch   ○○○○○     4    !    │
+│                                                          │
+│  experiments                                             │
+│   4) newsletter         Building     ○○●●○     6    !    │
+│   5) saas-idea          Starting     ○●○●○     3         │
+│   6) course-platform    Planning     ○○○○○     1         │
+│                                                          │
+│  life                                                    │
+│   7) health             Active       ○○●○○     3    !    │
+│   8) finance            Active       ○○○○○     1         │
+│                                                          │
+│  ──────────────────────────────────────────────────────  │
+│                                                          │
+│  #) pick an entity         d) digest 3 inputs            │
+│  s) sweep 2 stale          r) search across system       │
+│                                                          │
+│  * suggested focus                                       │
+│  ▁▂▃▅▇█▇▅▃▁▁▂▅▇█▇▅▃▂▁                   4-day streak   │
+│                                                          │
+╰──────────────────────────────────────────────────────────╯
+```
+
 ## Numbered Actions (REQUIRED)
 
-Every actionable item gets a number. User picks a number to focus.
-
-```
-ONGOING THREADS
-─────────────────────────────────────────────────────────────────────────
-[1] acme — Plugin rebuild [breakthrough]        yesterday
-[2] side-project — Client proposal [productive]       2 days ago
-
-URGENT TASKS
-─────────────────────────────────────────────────────────────────────────
-[3] acme: Finalize daily skill @urgent
-[4] side-project: Send proposal to Acme @urgent
-
-WORKING FILES
-─────────────────────────────────────────────────────────────────────────
-[5] acme/_working/v2-design.md                  1 day old
-
-─────────────────────────────────────────────────────────────────────────
-[#] Pick number to focus    [i] Process inputs    [n] New project
-```
+Every actionable item gets `)` to indicate selectability. User picks a number to focus.
 
 When user picks:
-- Thread number → `/alive:revive` with that session
-- Task/file number → `/alive:work` with that project
-- `[i]` → `/alive:digest`
-- `[n]` → `/alive:new`
+- Entity number → `/alive:work` with that project
+- `d)` → `/alive:digest`
+- `s)` → `/alive:sweep`
+- `r)` → `/alive:recall`
+- `#)` → pick an entity by number
 
 ## Section: Goals
 
@@ -176,13 +215,7 @@ Extract from each `_brain/status.md`:
 
 Show project name + goal. Max 5, sorted by recency.
 
-```
-YOUR GOALS
-─────────────────────────────────────────────────────────────────────────
-• acme: Ship v2 plugin by Feb 15
-• side-project: Close 3 new clients this month
-• hypha: Launch Feb 6
-```
+Goals appear as part of each entity row in the grid — extracted from `status.md` goal line. The Answer zone surfaces the most urgent one as the AI-recommended focus.
 
 ## Section: Ongoing Threads
 
@@ -194,19 +227,7 @@ Read `.claude/state/session-index.jsonl`:
 
 Quality tags: `[routine]` `[productive]` `[important]` `[breakthrough]`
 
-```
-ONGOING THREADS
-─────────────────────────────────────────────────────────────────────────
-[1] acme — Plugin rebuild [breakthrough]        yesterday
-[2] side-project — Client proposal [productive]       2 days ago
-```
-
-If no session-index.jsonl exists or empty:
-```
-ONGOING THREADS
-─────────────────────────────────────────────────────────────────────────
-No ongoing threads. Start fresh today.
-```
+Ongoing threads inform the AI-recommended focus in The Answer zone. If a thread is ongoing from yesterday, it becomes the suggested focus. If no ongoing threads, the recommendation falls back to the entity with the most urgent tasks or open work.
 
 ## Section: Urgent Tasks
 
@@ -215,12 +236,7 @@ Scan all `_brain/tasks.md` files:
 - Prefix with project name
 - Max 5
 
-```
-URGENT TASKS
-─────────────────────────────────────────────────────────────────────────
-[3] acme: Finalize daily skill @urgent
-[4] side-project: Send proposal to Acme @urgent
-```
+Urgent tasks trigger the `!` attention indicator on their entity row in the grid. The most urgent surfaces in The Answer zone.
 
 ## Section: Working Files
 
@@ -229,12 +245,7 @@ Scan all `_brain/manifest.json` files:
 - Show path + age
 - Max 5
 
-```
-WORKING FILES
-─────────────────────────────────────────────────────────────────────────
-[5] acme/_working/v2-design.md                  1 day old
-[6] side-project/_working/acme-proposal-v0.md         3 days old
-```
+Working files count appears in the fine print stats. Individual working files are surfaced in `/alive:work` when focused on a single project.
 
 ## Section: Inputs
 
@@ -243,11 +254,7 @@ Check `03_Inputs/` folder:
 - Flag if count > 0
 - Flag if no captures in 3+ days
 
-```
-INPUTS
-─────────────────────────────────────────────────────────────────────────
-[!] 5 items pending triage
-```
+Input count appears in the action bar: `d) digest 3 inputs`. If zero inputs, the `d)` action line disappears.
 
 ## Section: Stale Projects
 
@@ -255,11 +262,7 @@ Check each project's `_brain/manifest.json` for `updated` date:
 - Flag if > 7 days (configurable)
 - Show as numbered option
 
-```
-STALE ENTITIES
-─────────────────────────────────────────────────────────────────────────
-[7] 05_Experiments/cricket-grid — 3 weeks stale
-```
+Stale entities get the `!` attention indicator in the grid. Count appears in the action bar: `s) sweep 2 stale`. If zero stale, the `s)` action line disappears.
 
 ## Freshness Flags
 
@@ -290,7 +293,7 @@ Your ALIVE system is empty. Let's get started.
 Daily is the START:
 
 ```
-DAILY ────► DO ────► SAVE ────► (repeat)
+DAILY ────► WORK ────► SAVE ────► (repeat)
 ```
 
 After showing dashboard, remind:
