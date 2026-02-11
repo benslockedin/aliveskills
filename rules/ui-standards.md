@@ -95,23 +95,29 @@ o88o     o8888o o888ooooood8 o888o       `8'       o888ooooood8
 ### Small Elephant (Tier 2 & 3 — All Regular Skills)
 
 Used by: All skill responses alongside the compact ALIVE text
-Source: jrei
 
 ```
-               _,-';
-          ,---(    .`-',-'
-        /(     `--'_,'
-       (  \ |__| |'
-          |_|  |_|
+   ______/ \-.   _
+.-/     (    o\_//
+ |  ___  \_/\---'
+ |_||  |_||
 ```
 
-### Compact Logo Text (Tier 2 & 3)
+### Large Elephant Pair (Help Screen)
 
-Used alongside small elephant for regular skill headers.
+Used by: `/alive:help` only
 
 ```
-    ▄▀█ █░░ █ █░█ █▀▀
-    █▀█ █▄▄ █ ▀▄▀ ██▄
+  {\{\       ,                                             /}/}
+  { \ \.--.  \\                                 ,         / / }
+  {  /` , "\_//                                 \\   .-=.( (   }
+  {  \__\ ,--'                                   \'--"   `\\_.---,='
+   {_/   _ ;-.                                    '-,  \__/       \___
+    /  '.___/                                      .-'.-.'      \___.'
+    |  __ /                                       / // /-..___,-`--'
+  `=\    \`\                                      `" `"
+     `/  / /
+      '././
 ```
 
 ### Usage Guidelines
@@ -119,9 +125,121 @@ Used alongside small elephant for regular skill headers.
 | Asset | When to use |
 |-------|-------------|
 | Large elephant + wordmark | Onboarding boot screen, first-ever `/alive:daily` |
-| Small elephant + compact text | All regular skill responses (Tier 2 & 3 headers) |
+| Small elephant + big skill name | All regular skill responses (Tier 2 & 3 headers) |
 | Compact text only | Minimal theme, or when space is tight |
+| Elephant pair | `/alive:help` only |
 | Boot screen (full) | First run of onboarding only — see `branding/alive-os-boot-screen.txt` |
+
+### Skill Name Font (FIGlet `small`)
+
+Render skill names using FIGlet `small` font. 4 lines tall — matches elephant height. Pre-rendered for all skills:
+
+```
+WORK:
+__      _____  ___ _  __
+\ \    / / _ \| _ \ |/ /
+ \ \/\/ / (_) |   / ' <
+  \_/\_/ \___/|_|_\_|\_\
+
+SAVE:
+ ___   ___   _____
+/ __| /_\ \ / / __|
+\__ \/ _ \ V /| _|
+|___/_/ \_\_/ |___|
+
+DAILY:
+ ___   _   ___ _ __   __
+|   \ /_\ |_ _| |\ \ / /
+| |) / _ \ | || |_\ V /
+|___/_/ \_\___|____|_|
+
+CAPTURE:
+  ___   _   ___ _____ _   _ ___ ___
+ / __| /_\ | _ \_   _| | | | _ \ __|
+| (__ / _ \|  _/ | | | |_| |   / _|
+ \___/_/ \_\_|   |_|  \___/|_|_\___|
+
+RECALL:
+ ___ ___ ___   _   _    _
+| _ \ __/ __| /_\ | |  | |
+|   / _| (__ / _ \| |__| |__
+|_|_\___\___/_/ \_\____|____|
+
+MIGRATE:
+ __  __ ___ ___ ___    _ _____ ___
+|  \/  |_ _/ __| _ \  /_\_   _| __|
+| |\/| || | (_ |   / / _ \| | | _|
+|_|  |_|___\___|_|_\/_/ \_\_| |___|
+
+ARCHIVE:
+   _   ___  ___ _  _ _____   _____
+  /_\ | _ \/ __| || |_ _\ \ / / __|
+ / _ \|   / (__| __ || | \ V /| _|
+/_/ \_\_|_\\___|_||_|___| \_/ |___|
+
+DIGEST:
+ ___ ___ ___ ___ ___ _____
+|   \_ _/ __| __/ __|_   _|
+| |) | | (_ | _|\__ \ | |
+|___/___\___|___|___/ |_|
+
+SWEEP:
+ _____      _____ ___ ___
+/ __\ \    / / __| __| _ \
+\__ \\ \/\/ /| _|| _||  _/
+|___/ \_/\_/ |___|___|_|
+
+HELP:
+ _  _ ___ _    ___
+| || | __| |  | _ \
+| __ | _|| |__|  _/
+|_||_|___|____|_|
+
+NEW:
+ _  _ _____      __
+| \| | __\ \    / /
+| .` | _| \ \/\/ /
+|_|\_|___| \_/\_/
+
+REVIVE:
+ ___ _____   _______   _____
+| _ \ __\ \ / /_ _\ \ / / __|
+|   / _| \ V / | | \ V /| _|
+|_|_\___| \_/ |___| \_/ |___|
+
+SCAN:
+ ___  ___   _   _  _
+/ __|/ __| /_\ | \| |
+\__ \ (__ / _ \| .` |
+|___/\___/_/ \_\_|\_|
+
+UPGRADE:
+ _   _ ___  ___ ___    _   ___  ___
+| | | | _ \/ __| _ \  /_\ |   \| __|
+| |_| |  _/ (_ |   / / _ \| |) | _|
+ \___/|_|  \___|_|_\/_/ \_\___/|___|
+
+HANDOFF:
+ _  _   _   _  _ ___   ___  ___ ___
+| || | /_\ | \| |   \ / _ \| __| __|
+| __ |/ _ \| .` | |) | (_) | _|| _|
+|_||_/_/ \_\_|\_|___/ \___/|_| |_|
+```
+
+### Tier 2/3 Header Layout
+
+Elephant (4 lines) sits left. FIGlet skill name (4 lines) sits right. Version and project path below.
+
+```
+║    ______/ \-.   _     __      _____  ___ _  __                                          ║
+║ .-/     (    o\_//     \ \    / / _ \| _ \ |/ /                                          ║
+║  |  ___  \_/\---'       \ \/\/ / (_) |   / ' <                                          ║
+║  |_||  |_||              \_/\_/ \___/|_|_\_|\_\                                          ║
+║                          aliveOS [Unlimited Elephant 3.0.1]                              ║
+║                          ventures/acme-agency                                            ║
+```
+
+Elephant on left, skill name big on right. Version and project path below, aligned with skill name start column.
 
 ### Embellishment Characters
 
@@ -262,8 +380,12 @@ Use columns where it improves information density. The vertical pipe `│` separ
 ```
 ╔══════════════════════════════════════════════════════════════════════════════════════════╗
 ║                                                                                          ║
-║    ▄▀█ █░░ █ █░█ █▀▀                                                                     ║
-║    █▀█ █▄▄ █ ▀▄▀ ██▄            work • ventures/acme-agency                              ║
+║    ______/ \-.   _     __      _____  ___ _  __                                          ║
+║ .-/     (    o\_//     \ \    / / _ \| _ \ |/ /                                          ║
+║  |  ___  \_/\---'       \ \/\/ / (_) |   / ' <                                          ║
+║  |_||  |_||              \_/\_/ \___/|_|_\_|\_\                                          ║
+║                          aliveOS [Unlimited Elephant 3.0.1]                              ║
+║                          ventures/acme-agency                                            ║
 ║                                                                                          ║
 ║  ════════════════════════════════════════════════════════════════════════════════════    ║
 ║                                                                                          ║
@@ -296,8 +418,12 @@ Use columns where it improves information density. The vertical pipe `│` separ
 ```
 ╔══════════════════════════════════════════════════════════════════════════════════════════╗
 ║                                                                                          ║
-║    ▄▀█ █░░ █ █░█ █▀▀                                                                     ║
-║    █▀█ █▄▄ █ ▀▄▀ ██▄            capture                                                  ║
+║    ______/ \-.   _       ___   _   ___ _____ _   _ ___ ___                                ║
+║ .-/     (    o\_//      / __| /_\ | _ \_   _| | | | _ \ __|                               ║
+║  |  ___  \_/\---'      | (__ / _ \|  _/ | | | |_| |   / _|                               ║
+║  |_||  |_||             \___/_/ \_\_|   |_|  \___/|_|_\___|                               ║
+║                         aliveOS [Unlimited Elephant 3.0.1]                                ║
+║                         ventures/acme-agency                                              ║
 ║                                                                                          ║
 ║  ════════════════════════════════════════════════════════════════════════════════════    ║
 ║                                                                                          ║

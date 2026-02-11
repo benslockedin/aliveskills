@@ -109,7 +109,7 @@ Merge agent outputs into comprehensive context:
 
 SESSION: Plugin rebuild v2
 DATE: 2026-01-30
-ENTITY: 04_Ventures/alive-llc
+PROJECT: 04_Ventures/acme-agency
 QUALITY: Breakthrough
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

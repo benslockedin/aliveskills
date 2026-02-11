@@ -10,27 +10,16 @@ End session. Preserve context. Complete the loop by updating ALL state files.
 
 ## UI Treatment
 
-Uses the **ALIVE Shell** — one rounded box, three zones.
+This skill uses **Tier 2: Core Workflow** formatting.
 
-```
-╭──────────────────────────────────────────────────────────╮
-│  ALIVE · save                            [date]          │
-│  [project-name]                      ● [session-id]      │
-│  ──────────────────────────────────────────────────────  │
-│  [Generated changelog summary with * marker]             │
-│  [Changes, decisions, next steps]                        │
-│  [↳ thread status]                                       │
-│  ──────────────────────────────────────────────────────  │
-│  [ACTIONS]                                               │
-│  [* generated entry — verify before confirming]          │
-│  [✓ file update confirmations · progress sparkline]      │
-╰──────────────────────────────────────────────────────────╯
-```
+**Header:** Small elephant + FIGlet `small` SAVE + version + project path.
+**Border:** Double-line wrap (entire response).
+**Footer:** Community footer.
 
-**Rules:**
-- `╭╮╰╯` rounded corners — outer frame only
-- NO double-line borders, NO internal boxes
-- `*` on generated changelog entry (right-aligned), explained in fine print
+See `rules/ui-standards.md` for the Tier 2/3 header layout, pre-rendered skill names, and border characters.
+
+**Body conventions:**
+- `*` on generated changelog entry (right-aligned) — marks AI-generated content
 - `·` bullet points for changes
 - `↳` thread status indicator
 - `)` on selectable actions

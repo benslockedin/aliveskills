@@ -160,7 +160,7 @@ Sub-agents run in parallel where possible. Each sub-agent receives:
 ```
 You are auditing an ALIVE project for structural compliance and health.
 
-ENTITY: {entity_path}
+PROJECT: {entity_path}
 
 Run ALL of the following checks and return your findings as a structured report.
 Be thorough — read actual files, check actual timestamps, compare actual disk contents against manifest.
@@ -400,7 +400,7 @@ Root structure:     ✓ Clean
 03_Inputs/:         [!] 5 items (oldest 2 weeks) → /alive:digest
 Projects scanned:   4
 
-ENTITY RESULTS
+PROJECT RESULTS
 ─────────────────────────────────────────────────────────────────────────
 [Project Name]          Critical  Warnings  Info
 ─────────────────────────────────────────────────────────────────────────

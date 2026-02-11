@@ -156,7 +156,7 @@ Claude operates with its loaded rules. If you sync rules mid-session, Claude sti
 ```
 You are upgrading ALIVE rules files. Compare the plugin's rules against the user's installed rules and sync them.
 
-PLUGIN RULES: ~/.claude/plugins/cache/aliveskills/alive/2.0.1/rules/
+PLUGIN RULES: ~/.claude/plugins/cache/aliveskills/alive/3.0.1/rules/
 USER RULES: {alive-root}/.claude/rules/
 
 For EACH rule file in the plugin directory:
@@ -198,7 +198,7 @@ Expected rule files: behaviors.md, conventions.md, intent.md, learning-loop.md, 
 ```
 You are assimilating changes from the plugin's CLAUDE.md into the user's installed CLAUDE.md. The user may have added custom content to their CLAUDE.md — you MUST preserve it.
 
-PLUGIN CLAUDE.MD: ~/.claude/plugins/cache/aliveskills/alive/2.0.1/CLAUDE.md
+PLUGIN CLAUDE.MD: ~/.claude/plugins/cache/aliveskills/alive/3.0.1/CLAUDE.md
 USER CLAUDE.MD: {alive-root}/.claude/CLAUDE.md
 
 Instructions:

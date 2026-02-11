@@ -404,7 +404,7 @@ Handoff is complete. Return control to save skill to continue with:
 
 ### /alive:work Integration
 
-When `work` skill loads an project, it checks manifest for pending handoffs:
+When `work` skill loads a project, it checks manifest for pending handoffs:
 
 ```
 ▸ checking for pending handoffs...
