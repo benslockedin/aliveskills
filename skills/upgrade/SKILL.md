@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Update ALIVE system files to the latest plugin version — rules, CLAUDE.md, and configuration. Use when the user says "upgrade", "update system", or when a version mismatch is detected.
-plugin_version: "3.0.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:upgrade

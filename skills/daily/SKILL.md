@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Morning dashboard showing all ventures, experiments, life areas — goals, urgent tasks, ongoing threads, and pending inputs. Use when the user says "daily", "dashboard", "morning", "what's happening", "what should I work on", "start my day", or "show me everything".
-plugin_version: "3.0.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:daily

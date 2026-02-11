@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Bulk import existing content, transcripts, or documents into ALIVE structure. Use when the user says "migrate X", "import X", "bring in X", "bulk add", or "load from X".
-plugin_version: "3.0.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:migrate

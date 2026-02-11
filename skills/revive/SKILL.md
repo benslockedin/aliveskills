@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Resume a past session with full context extraction from the raw transcript. Dispatches agents to recover decisions, quotes, tasks, and continuation points. Use when the user says "revive", "pick up where I left off", "resume session", or selects an ongoing thread.
-plugin_version: "3.0.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:revive

@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Audit the system for stale content, orphan files, and cleanup opportunities. Use when the user says "sweep", "clean up", "audit", "check for stale", "maintenance", or "spring cleaning".
-plugin_version: "3.0.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:sweep

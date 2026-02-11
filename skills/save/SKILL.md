@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: End a work session and preserve all context — changelog, status, tasks, insights, and manifest. Use when the user says "save", "wrap up", "end session", "done for now", "brb", "stepping away", or "checkpoint".
-plugin_version: "3.0.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:save
