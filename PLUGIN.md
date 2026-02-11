@@ -24,7 +24,7 @@ claude plugin marketplace add SuperSystemsAdmin/alive-context
 claude plugin install alive@alive-local
 ```
 
-Restart Claude Code, then run `/alive:onboarding` in your project folder.
+Restart Claude Code, then run `/alive:onboarding` in your ALIVE folder.
 
 ## Skills Included
 
@@ -32,7 +32,7 @@ Restart Claude Code, then run `/alive:onboarding` in your project folder.
 |-------|---------|
 | `/alive:work` | Start a work session |
 | `/alive:save` | End session, log progress |
-| `/alive:new` | Create project, area, or sub-project |
+| `/alive:new` | Create venture, experiment, life area, or nested unit |
 | `/alive:capture` | Capture context into ALIVE |
 | `/alive:recall` | Search past context |
 | `/alive:migrate` | Bulk import content |

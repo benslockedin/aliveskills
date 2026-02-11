@@ -99,7 +99,7 @@ Process inputs daily or every few days. Don't let it become a graveyard.
 ### Zero Inputs Goal
 
 Aim for empty inputs. Everything should move to:
-- An project's `_brain/` or area
+- A unit's `_brain/` or area
 - `01_Archive/03_Inputs/` if ephemeral
 - Deleted if worthless
 

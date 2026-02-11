@@ -12,14 +12,19 @@ Resume a past session with full context extraction from the raw transcript.
 
 ## UI Treatment
 
-This skill uses **Tier 3: Utility** formatting.
+Uses the **ALIVE Shell** — Tier 3: Utility.
 
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v3.0.1` (right-aligned)
+```
+╭──────────────────────────────────────────────────────────╮
+│  ALIVE · revive                         [session-id]      │
+│  ──────────────────────────────────────────────────────── │
+│  [Session context loaded + summary]                       │
+│  ──────────────────────────────────────────────────────── │
+│  [Ready to continue]                                      │
+╰──────────────────────────────────────────────────────────╯
+```
 
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+See `rules/ui-standards.md` for shell format, logo assets, and tier specifications.
 
 ---
 
@@ -109,7 +114,7 @@ Merge agent outputs into comprehensive context:
 
 SESSION: Plugin rebuild v2
 DATE: 2026-01-30
-PROJECT: 04_Ventures/acme-agency
+VENTURE: 04_Ventures/acme-agency
 QUALITY: Breakthrough
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -160,7 +165,7 @@ INSIGHTS
 • Quality-based escalation prevents save fatigue
 • AskUserQuestion makes 3 questions feel fast
 • Manifest is a semantic sitemap, not just a file list
-• Closest project rule prevents saving to wrong level
+• Closest unit rule prevents saving to wrong level
 
 WHERE YOU LEFT OFF
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -223,6 +228,6 @@ Can only load from _brain/ files (no full extraction).
 ## Related Skills
 
 - `/alive:daily` — Shows threads, picks one → calls revive
-- `/alive:work` — Fresh start on project (no extraction)
+- `/alive:work` — Fresh start on unit (no extraction)
 - `/alive:save` — End session, log to index
 

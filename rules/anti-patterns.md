@@ -10,7 +10,7 @@ Every file belongs in a folder with a README or `_brain/`. If you create a file,
 
 ## 2. No Work in 03_Inputs/
 
-`03_Inputs/` is a buffer. Content arrives, gets triaged, gets routed OUT. Never create files, extract content, or do work inside `03_Inputs/`. Route to the correct project first.
+`03_Inputs/` is a buffer. Content arrives, gets triaged, gets routed OUT. Never create files, extract content, or do work inside `03_Inputs/`. Route to the correct unit first.
 
 ## 3. Always Archive, Never Delete
 
@@ -18,10 +18,10 @@ Move to `01_Archive/` mirroring the original path. No exceptions.
 
 ```
 # Wrong
-rm -rf 04_Ventures/old-project/
+rm -rf 04_Ventures/old-venture/
 
 # Right
-mv 04_Ventures/old-project/ 01_Archive/04_Ventures/old-project/
+mv 04_Ventures/old-venture/ 01_Archive/04_Ventures/old-venture/
 ```
 
 ## 4. Manifest After Create
@@ -38,13 +38,15 @@ Never put handoffs in `_brain/`, root, or random folders.
 
 Shared specs live in `rules/conventions.md`. Skills reference the spec — they don't duplicate it. If you find the same pattern described in 4 skills, extract it to conventions and point to it.
 
-## 7. Don't Rename User Files
+## 7. Don't Rename User's Files
 
-When processing external content (emails, transcripts, screenshots), keep the original in `raw/`. Create a summary `.md` alongside it. Never rename or modify the original file.
+Don't rename files the user has intentionally created and named — their documents, working drafts, content files.
+
+**Exception:** When importing content to `_references/`, rename garbage filenames to the `YYYY-MM-DD-descriptive-name.ext` convention (e.g. `CleanShot 2026-02-06 at 14.32.07@2x.png` → `2026-02-06-competitor-landing.png`). See `rules/conventions.md` under "_references/ Structure" for the renaming convention. The original goes in `raw/` with the clean name.
 
 ## 8. Working Files Have Context in Name
 
-Pattern: `[project]_[context]_[name].ext`
+Pattern: `[unit]_[context]_[name].ext`
 
 Anyone reading the filename should know where it belongs without opening it.
 

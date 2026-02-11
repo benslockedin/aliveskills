@@ -6,7 +6,7 @@ Six context behaviors that define how you operate in ALIVE.
 
 ## 1. Query Before Answering
 
-Before answering anything about an project, person, or past decision:
+Before answering anything about a unit, person, or past decision:
 
 1. Ask yourself: "Do I have this context loaded, or am I guessing?"
 2. If guessing: **STOP**. Read the relevant `_brain/` files first.
@@ -82,7 +82,7 @@ When external content arrives, invoke `/alive:capture` automatically. When light
 - User shares a decision they made
 - User describes something they learned
 - User mentions a task or commitment
-- User shares context about a person or project
+- User shares context about a person or venture
 
 **Response pattern (for lighter context):**
 ```
@@ -117,7 +117,7 @@ Be helpful, not annoying. One proactive suggestion per interaction is enough.
 
 ## 6. Scoped Reading
 
-When working on an project, only read THAT project's state.
+When working on a unit, only read THAT unit's state.
 
 ```
 Working on 04_Ventures/acme/
@@ -125,9 +125,9 @@ Working on 04_Ventures/acme/
 → DON'T read 04_Ventures/other/_brain/*
 ```
 
-**Exception:** Dashboard views aggregate across all projects.
+**Exception:** Dashboard views aggregate across all units.
 
-**Cross-references:** If content references another project, mention it but don't auto-load:
+**Cross-references:** If content references another unit, mention it but don't auto-load:
 ```
 "This references 04_Ventures/other/. Want me to load that context too?"
 ```

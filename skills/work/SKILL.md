@@ -1,14 +1,14 @@
 ---
 user-invocable: true
-description: Load one project's full context and start working — reads _brain/, surfaces tasks, and picks up where you left off. Use when the user says "work on X", "focus on X", "open X", "status of X", "continue", "resume", or "pick up where I left off".
+description: Load one venture, experiment, life area, or project's full context and start working — reads _brain/, surfaces tasks, and picks up where you left off. Use when the user says "work on X", "focus on X", "open X", "status of X", "continue", "resume", or "pick up where I left off".
 plugin_version: "3.0.1"
 ---
 
 # alive:work
 
-Focus on ONE project. Load context from its `_brain/` folder and show current state.
+Focus on ONE venture, experiment, life area, or project. Load context from its `_brain/` folder and show current state.
 
-**Different from `/alive:daily`:** Work focuses on ONE project. Daily shows EVERYTHING.
+**Different from `/alive:daily`:** Work focuses on ONE unit. Daily shows EVERYTHING.
 
 ## UI Treatment
 
@@ -17,7 +17,7 @@ Uses the **ALIVE Shell** — one rounded box, three zones.
 ```
 ╭──────────────────────────────────────────────────────────╮
 │  ALIVE · work                            [date]          │
-│  [project-name]                                          │
+│  [unit-name]                                             │
 │  ──────────────────────────────────────────────────────  │
 │  [Goal + current focus]                                  │
 │  [! urgent items]                                        │
@@ -28,13 +28,7 @@ Uses the **ALIVE Shell** — one rounded box, three zones.
 ╰──────────────────────────────────────────────────────────╯
 ```
 
-**Rules:**
-- `╭╮╰╯` rounded corners — outer frame only
-- NO double-line borders, NO internal boxes
-- NO `*` marker (everything is read from state files, not generated)
-- `)` on selectable items
-- `~` in progress, `✓` done with date, unmarked = to do
-- Lowercase section labels
+See `rules/ui-standards.md` for shell format, logo assets, and tier specifications.
 
 ## Version Check (Before Main Flow)
 
@@ -54,18 +48,18 @@ Compare your `plugin_version` (from frontmatter above) against the user's system
 
 ```dot
 digraph do_flow {
-    "Start" -> "User specified project?";
-    "User specified project?" -> "Find project" [label="yes"];
-    "User specified project?" -> "Check session-index" [label="no"];
-    "Check session-index" -> "Offer recent project" [label="found"];
-    "Check session-index" -> "Ask which project" [label="empty"];
-    "Find project" -> "Check structure";
-    "Offer recent project" -> "Check structure";
-    "Ask which project" -> "Check structure";
+    "Start" -> "User specified unit?";
+    "User specified unit?" -> "Find unit" [label="yes"];
+    "User specified unit?" -> "Check session-index" [label="no"];
+    "Check session-index" -> "Offer recent unit" [label="found"];
+    "Check session-index" -> "Ask which one" [label="empty"];
+    "Find unit" -> "Check structure";
+    "Offer recent unit" -> "Check structure";
+    "Ask which one" -> "Check structure";
     "Check structure" -> "Offer upgrade" [label="_state/ found"];
-    "Check structure" -> "cd into project" [label="_brain/ OK"];
-    "Offer upgrade" -> "cd into project" [label="after upgrade"];
-    "cd into project" -> "Load _brain/";
+    "Check structure" -> "cd into unit" [label="_brain/ OK"];
+    "Offer upgrade" -> "cd into unit" [label="after upgrade"];
+    "cd into unit" -> "Load _brain/";
     "Load _brain/" -> "Check freshness";
     "Check freshness" -> "Flag stale" [label="> 2 weeks"];
     "Check freshness" -> "Show summary" [label="fresh"];
@@ -74,32 +68,32 @@ digraph do_flow {
 }
 ```
 
-## Step 1: Identify Project
+## Step 1: Identify Unit
 
-**User specifies project:**
+**User specifies unit:**
 ```
 "work on acme" → 04_Ventures/acme/
 "focus on health" → 02_Life/health/
 ```
 
-**User says "continue" or "resume" (no project):**
+**User says "continue" or "resume" (no unit specified):**
 1. Read `.claude/state/session-index.jsonl`
 2. Find most recent `status: "ongoing"` entry
-3. Offer that project:
+3. Offer that:
 ```
 ▸ checking session-index...
   └─ Last session: 04_Ventures/alive-llc (yesterday, [breakthrough])
 
 Continue with alive-llc?
 [1] Yes
-[2] Pick different project
+[2] Pick different one
 ```
 
 **No session-index or no ongoing threads:**
 ```
 No recent session found.
 
-Which project?
+Which one?
 [1] 04_Ventures/acme-agency
 [2] 04_Ventures/side-project
 [3] 05_Experiments/new-idea
@@ -116,10 +110,10 @@ Which one?
 
 ## Step 2: Check Structure (v1 Detection)
 
-Before loading, check if project uses v1 structure:
+Before loading, check if unit uses v1 structure:
 
 ```
-Check: Does {project}/_state/ exist? (should be _brain/)
+Check: Does {unit}/_state/ exist? (should be _brain/)
 ```
 
 If v1 detected:
@@ -131,15 +125,15 @@ Upgrade to v2?
 [2] No, continue with v1
 ```
 
-If yes → invoke `/alive:upgrade` with this project, then continue.
+If yes → invoke `/alive:upgrade` with this unit, then continue.
 If no → use `_state/` paths for this session.
 
-## Step 2.5: Change to Project Directory (MANDATORY)
+## Step 2.5: Change to Unit Directory (MANDATORY)
 
-**Before loading context, `cd` into the project directory:**
+**Before loading context, `cd` into the unit directory:**
 
 ```bash
-cd {alive-root}/{project}/
+cd {alive-root}/{unit}/
 ```
 
 For example:
@@ -151,7 +145,7 @@ cd ~/Desktop/alive/04_Ventures/acme-agency/
 - Claude's system context automatically reads `.claude/CLAUDE.md` from the working directory
 - Local `CLAUDE.md` files get picked up
 - All relative paths in the session work correctly
-- The project becomes the "home base" for the session
+- The unit becomes the "home base" for the session
 
 **Show the change:**
 ```
@@ -164,10 +158,10 @@ cd ~/Desktop/alive/04_Ventures/acme-agency/
 **You MUST read all 4 files. Do not skip any.**
 
 Read in order:
-1. `{project}/_brain/status.md` — Phase and focus
-2. `{project}/_brain/tasks.md` — Work queue
-3. `{project}/_brain/manifest.json` — Structure map
-4. `{project}/_brain/changelog.md` — **First 200 lines** (recent session history)
+1. `{unit}/_brain/status.md` — Phase and focus
+2. `{unit}/_brain/tasks.md` — Work queue
+3. `{unit}/_brain/manifest.json` — Structure map
+4. `{unit}/_brain/changelog.md` — **First 200 lines** (recent session history)
 
 **The changelog is CRITICAL.** It contains:
 - What happened in recent sessions
@@ -194,7 +188,7 @@ Read in order:
 
 **Implementation:**
 ```
-Read(file_path: "{project}/_brain/changelog.md", limit: 200)
+Read(file_path: "{unit}/_brain/changelog.md", limit: 200)
 ```
 
 **References:** If the manifest has a `references` array, mention the count to the user (e.g. "3 reference docs available"). Don't load the files — just surface awareness. Users can ask to read specific references on demand.
@@ -311,13 +305,13 @@ Tasks and handoffs appear in the main content zone (see Summary Display above). 
 When the user picks a handoff (e.g. `r1` or "resume the plugin feedback session"):
 
 1. **Read the handoff document** into memory
-2. **Archive immediately** — move file to `01_Archive/{project-path}/sessions/` and remove from `manifest.handoffs[]`:
+2. **Archive immediately** — move file to `01_Archive/{unit-path}/sessions/` and remove from `manifest.handoffs[]`:
    ```
    ▸ loading handoff...
      └─ Reading _working/sessions/plugin-feedback-abc12345-2026-02-02.md
 
    ▸ archiving handoff (already read)...
-     └─ Moving to 01_Archive/{project-path}/sessions/
+     └─ Moving to 01_Archive/{unit-path}/sessions/
      └─ Removing from manifest.handoffs[]
 
    ✓ Handoff archived — context loaded
@@ -331,12 +325,12 @@ When the user picks a handoff (e.g. `r1` or "resume the plugin feedback session"
 
 ## Edge Cases
 
-**Project doesn't exist:**
+**Unit doesn't exist:**
 ```
 ✗ 04_Ventures/acme/ not found
 
 [1] Create 04_Ventures/acme/ (→ /alive:new)
-[2] Show available projects
+[2] Show available ventures and experiments
 ```
 
 **No _brain/ or _state/ folder:**
@@ -350,14 +344,14 @@ Initialize _brain/ now?
 
 ## After Loading
 
-- Stay scoped to this project (don't read other projects)
+- Stay scoped to this unit (don't read other units)
 - Track changes for session
 - When done → `/alive:save`
 
 ## Related Skills
 
-- `/alive:daily` — See ALL projects
+- `/alive:daily` — See ALL ventures and experiments
 - `/alive:save` — End session
-- `/alive:new` — Create project
+- `/alive:new` — Create venture, experiment, life area, or project
 - `/alive:upgrade` — Migrate v1 → v2
 - `/alive:handoff` — Session continuity (creates handoff docs for resumption)

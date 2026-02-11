@@ -10,21 +10,26 @@ Move completed or inactive items to archive. Preserve full path structure.
 
 ## UI Treatment
 
-This skill uses **Tier 3: Utility** formatting.
+Uses the **ALIVE Shell** — Tier 3: Utility.
 
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v3.0.1` (right-aligned)
+```
+╭──────────────────────────────────────────────────────────╮
+│  ALIVE · archive                          [unit-name]    │
+│  ──────────────────────────────────────────────────────── │
+│  [Confirmation of what was archived + destination]        │
+│  ──────────────────────────────────────────────────────── │
+│  [✓ files moved + manifest updated]                       │
+╰──────────────────────────────────────────────────────────╯
+```
 
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+See `rules/ui-standards.md` for shell format, logo assets, and tier specifications.
 
 ---
 
 ## When to Use
 
 Invoke when the user:
-- Has completed a project/client/venture
+- Has completed a venture, experiment, life area, or project
 - Wants to shelve something inactive
 - Needs to clean up active areas
 - Is closing out work
@@ -63,7 +68,7 @@ The archive mirrors the working structure exactly.
 ```
 What are you archiving?
 
-[1] A project (04_Ventures/acme)
+[1] A venture (04_Ventures/acme)
 [2] An area (04_Ventures/acme/clients/globex)
 [3] A file (specific document)
 ```
@@ -77,7 +82,7 @@ Before archiving, verify:
 
 Status: No _brain/ (this is an area)
 Files: 5 documents
-Related tasks: 2 found in parent project
+Related tasks: 2 found in parent unit
 
 ─────────────────────────────────────────────────────────────────────────
 [!] Found 2 related tasks in 04_Ventures/acme/_brain/tasks.md:
@@ -139,21 +144,21 @@ Parent manifest updated.
 This content is preserved and searchable via /alive:recall.
 ```
 
-## Archiving Projects
+## Archiving Units
 
-When archiving a full project (with _brain/):
+When archiving a full unit (with _brain/):
 
 ```
 ▸ archiving 04_Ventures/old-project/
 
-This is a full project with state.
+This is a full unit with state.
 
 Current status: Completed
 Last updated: 2026-01-15 (8 days ago)
 Open tasks: 0
 
 Archive everything including _brain/?
-[1] Yes, archive full project
+[1] Yes, archive full unit
 [2] No, just archive specific areas
 [3] Cancel
 ```
@@ -224,7 +229,7 @@ Restore to original location?
 
 | Action | When to use |
 |--------|-------------|
-| Archive | Project complete, client done, experiment concluded |
+| Archive | Venture complete, client done, experiment concluded |
 | Delete | Never (use archive) |
 
 Exception: Temporary files in `_working/` can be deleted after promotion.
@@ -280,5 +285,5 @@ Archived: 2026-01-23
 
 - `/alive:recall` — Find archived content
 - `/alive:sweep` — Identify archive candidates
-- `/alive:new` — Create new project (opposite of archive)
+- `/alive:new` — Create new venture, experiment, life area, or project (opposite of archive)
 

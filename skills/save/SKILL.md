@@ -12,7 +12,7 @@ End session. Preserve context. Complete the loop by updating ALL state files.
 
 This skill uses **Tier 2: Core Workflow** formatting.
 
-**Header:** Small elephant + FIGlet `small` SAVE + version + project path.
+**Header:** Small elephant + FIGlet `small` SAVE + version + unit path.
 **Border:** Double-line wrap (entire response).
 **Footer:** Community footer.
 
@@ -122,15 +122,15 @@ Quality drives escalating behavior (see Escalating Actions).
 
 ---
 
-## The Closest Project Rule
+## The Closest Unit Rule
 
-**Always save to the CLOSEST project to where work happened.**
+**Always save to the CLOSEST unit to where work happened.**
 
 ```
-04_Ventures/agency/                 ← Parent project
+04_Ventures/agency/                 ← Parent venture
 ├── _brain/                         ← Save here for agency-level work
 ├── clients/                        ← Area (no _brain/)
-│   └── acme/                       ← Nested project
+│   └── acme/                       ← Project
 │       └── _brain/                 ← Save HERE for acme-specific work
 ```
 
@@ -146,10 +146,10 @@ Quality drives escalating behavior (see Escalating Actions).
 
 ## Cascade Logic
 
-After saving to closest project, check if parent needs update:
+After saving to closest unit, check if parent needs update:
 
 ```
-Changes to nested project (acme)?
+Changes to project (acme)?
     ↓
 Save to acme/_brain/
     ↓
@@ -437,7 +437,7 @@ In `_brain/manifest.json`:
 {
   "name": "ProjectName",
   "description": "One sentence purpose",
-  "goal": "Single-sentence goal for this project",
+  "goal": "Single-sentence goal",
   "updated": "2026-01-30",
   "session_ids": ["prev123", "abc123"],
   "folders": ["_brain", "_working", "_references", "docs"],
@@ -475,7 +475,7 @@ In `_brain/manifest.json`:
   "key_files": [
     {
       "path": "CLAUDE.md",
-      "description": "Project identity",
+      "description": "Identity",
       "date_created": "2026-01-20",
       "date_modified": "2026-01-30"
     }
@@ -504,7 +504,7 @@ Create `_brain/memories/` folder if needed, then `[date]-[session-id].md`.
 type: memory
 date: 2026-01-30
 session: abc123
-project: 04_Ventures/alive-llc
+unit: 04_Ventures/alive-llc
 summary: One-line summary of what made this session a breakthrough
 tags: [pricing, pivot, architecture]
 ---
@@ -526,12 +526,12 @@ tags: [pricing, pivot, architecture]
 | `type` | Yes | Always `memory` |
 | `date` | Yes | Session date (ISO format: YYYY-MM-DD) |
 | `session` | Yes | Session ID from startup hook |
-| `project` | Yes | Project path (e.g. `04_Ventures/alive-llc`) |
+| `unit` | Yes | Unit path (e.g. `04_Ventures/alive-llc`) |
 | `summary` | Yes | One-line summary — what made this a breakthrough |
 | `tags` | Yes | Array of tags for searchability |
 
-Ask: "Any changes to this project's identity or purpose?"
-If yes, offer to update project `CLAUDE.md`.
+Ask: "Any changes to this unit's identity or purpose?"
+If yes, offer to update `CLAUDE.md`.
 
 ---
 
@@ -545,13 +545,15 @@ Use `echo '...' >> file` (double `>>`) to append, NOT overwrite. Each entry is o
 {
   "ts": "2026-01-30T14:30:00Z",
   "session_id": "abc123",
-  "project": "04_Ventures/alive-llc",
+  "unit": "04_Ventures/alive-llc",
   "save_type": "end_session",
   "status": "ongoing",
   "quality": "productive",
   "summary": "Brief description of session"
 }
 ```
+
+**Backwards compatibility:** Older entries may use `"project"` instead of `"unit"`. When reading session-index.jsonl, accept both field names (`entry.unit || entry.project`).
 
 ---
 
@@ -582,7 +584,7 @@ Manifest:
 - [ ] session_ids updated (current session appended)
 - [ ] New files added with descriptions
 - [ ] working_files accurate
-- [ ] Saving to CLOSEST project
+- [ ] Saving to CLOSEST unit
 
 Session Files (Productive+):
 - [ ] Checked _working/ for files to promote
@@ -613,7 +615,7 @@ If ANY file wasn't updated, fix now.
 
 Before saving, verify:
 
-> "If I came to this project with no memory, would this entry tell me what happened and why?"
+> "If I came to this with no memory, would this entry tell me what happened and why?"
 
 **Check:**
 - Decisions include rationale
@@ -622,9 +624,9 @@ Before saving, verify:
 
 ---
 
-## Multi-Project Sessions
+## Multi-Unit Sessions
 
-If session touched multiple projects:
+If session touched multiple units:
 
 ```
 This session touched:
@@ -647,7 +649,7 @@ Auto-select: Why = Checkpoint, Status = Ongoing, Quality = Routine
 ```
 ▸ quick checkpoint
 
-✓ Saved to [project]/_brain/changelog.md
+✓ Saved to [unit]/_brain/changelog.md
   └─ "Work in progress: [summary]"
 
 Resume with /alive:work
@@ -657,8 +659,8 @@ Resume with /alive:work
 
 ## Edge Cases
 
-**No active project:**
-Ask which project work happened in.
+**No active unit:**
+Ask which venture, experiment, or life area work happened in.
 
 **Nothing to save:**
 Offer to log checkpoint anyway.
@@ -670,7 +672,7 @@ Write to `.claude/state/changelog.md` for system-level changes.
 
 ## Related Skills
 
-- `/alive:work` — Load project to work
+- `/alive:work` — Load venture, experiment, or life area to work
 - `/alive:daily` — Morning dashboard
 - `/alive:revive` — Resume past session
 - `/alive:capture` — Capture context mid-session

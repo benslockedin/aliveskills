@@ -9,7 +9,7 @@
 
 ```
 05_Experiments/
-└── [name]/           # Each experiment is an project
+└── [name]/           # Each experiment is a unit
     ├── .claude/
     │   └── CLAUDE.md # Identity
     ├── _brain/
@@ -29,7 +29,7 @@
 
 Experiments are:
 - Ideas being tested
-- Projects without a clear revenue model
+- Ideas without a clear revenue model
 - Explorations that might become ventures
 - Learning exercises
 

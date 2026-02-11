@@ -55,7 +55,7 @@ That's it. Your AI now has persistent memory.
 
 ## How It Works
 
-Every project has `_brain/`, `_working/`, and `_references/`:
+Every venture, experiment, and life area has `_brain/`, `_working/`, and `_references/`:
 
 ```
 04_Ventures/mycompany/
@@ -75,7 +75,7 @@ Claude reads these files to understand your context. Updates them as you work. E
 
 | Skill | When to Use |
 |-------|-------------|
-| `/alive:daily` | "Start my day" — morning dashboard across all projects |
+| `/alive:daily` | "Start my day" — morning dashboard across everything |
 | `/alive:work` | "Let's work on X" — loads context, starts session |
 | `/alive:save` | "We're done" — logs progress, cleans up |
 | `/alive:new` | "Create a venture/experiment" — scaffolds structure |

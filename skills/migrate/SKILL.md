@@ -8,6 +8,26 @@ plugin_version: "3.0.1"
 
 Bulk import content into ALIVE. Extract and route existing files, transcripts, or documents.
 
+## UI Treatment
+
+Uses the **ALIVE Shell** — Tier 3: Utility.
+
+```
+╭──────────────────────────────────────────────────────────╮
+│  ALIVE · migrate                        [source-type]     │
+│  [N] items  ·  [N] categorised  ·  [N] remaining         │
+│  ──────────────────────────────────────────────────────── │
+│  [Progress + categorisation + routing]                    │
+│  ──────────────────────────────────────────────────────── │
+│  [ACTIONS]                                                │
+│  [progress stats]                                         │
+╰──────────────────────────────────────────────────────────╯
+```
+
+See `rules/ui-standards.md` for shell format, logo assets, and tier specifications.
+
+---
+
 ## Version Check (Before Main Flow)
 
 Compare your `plugin_version` (from frontmatter above) against the user's system:
@@ -34,7 +54,7 @@ Invoke when the user:
 
 ```
 1. Identify source (file, folder, URL)
-2. Create or select destination project
+2. Create or select destination unit
 3. Analyze content
 4. Extract structured data
 5. Route to appropriate locations
@@ -56,13 +76,13 @@ What are you migrating?
 
 ### Step 2: Create or Select Destination
 
-If project doesn't exist:
+If unit doesn't exist:
 ```
 This content needs a home.
 
-[1] Create new project
+[1] Create new venture, experiment, or life area
     └─ Venture (04_Ventures/), Experiment (05_Experiments/), or Life (02_Life/)
-[2] Import to existing project
+[2] Import to existing unit
 ```
 
 If creating, invoke `/alive:new` first to scaffold properly.
@@ -269,7 +289,7 @@ This decision mentions multiple ventures:
 - Timeline relates to beta
 
 Route to:
-[1] Both projects
+[1] Both units
 [2] Just acme
 [3] Just beta
 [4] Let me specify
@@ -288,12 +308,12 @@ Route to:
 ## After Migration
 
 Once content is imported:
-- Use `/alive:work` to work on the project
+- Use `/alive:work` to work on the unit
 - Use `/alive:digest` if items went to 03_Inputs/
 - Use `/alive:sweep` to check for cleanup needs
 
 ## Related Skills
 
-- `/alive:new` — Create project first if needed
+- `/alive:new` — Create unit first if needed
 - `/alive:digest` — Process inputs
 - `/alive:capture` — Single item capture (not bulk)

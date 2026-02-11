@@ -11,14 +11,19 @@ Create a comprehensive handoff document that enables a zero-context future sessi
 
 ## UI Treatment
 
-This skill uses **Tier 3: Utility** formatting.
+Uses the **ALIVE Shell** — Tier 3: Utility.
 
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v3.0.1` (right-aligned)
+```
+╭──────────────────────────────────────────────────────────╮
+│  ALIVE · handoff                        [session-id]      │
+│  ──────────────────────────────────────────────────────── │
+│  [Handoff document created]                               │
+│  ──────────────────────────────────────────────────────── │
+│  [✓ saved to _working/sessions/]                          │
+╰──────────────────────────────────────────────────────────╯
+```
 
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+See `rules/ui-standards.md` for shell format, logo assets, and tier specifications.
 
 ---
 
@@ -34,8 +39,8 @@ Called by `/alive:save` when save reason is:
 
 ```dot
 digraph handoff_flow {
-    "Save skill calls handoff" -> "Identify project";
-    "Identify project" -> "Check _working/sessions/";
+    "Save skill calls handoff" -> "Identify unit";
+    "Identify unit" -> "Check _working/sessions/";
     "Check _working/sessions/" -> "Create if missing";
     "Create if missing" -> "Dispatch deep-dive subagent";
     "Dispatch deep-dive subagent" -> "Write handoff document";
@@ -44,9 +49,9 @@ digraph handoff_flow {
 }
 ```
 
-## Step 1: Identify Project
+## Step 1: Identify Unit
 
-Determine which project this handoff belongs to based on:
+Determine which unit this handoff belongs to based on:
 - Current working directory
 - What was being worked on in the session
 
@@ -56,11 +61,11 @@ Determine which project this handoff belongs to based on:
 
 ## Step 2: Ensure Sessions Folder Exists
 
-Check for `{project}/_working/sessions/` folder:
+Check for `{unit}/_working/sessions/` folder:
 
 ```bash
 # If missing, create it
-mkdir -p {project}/_working/sessions/
+mkdir -p {unit}/_working/sessions/
 ```
 
 ```
@@ -76,7 +81,7 @@ mkdir -p {project}/_working/sessions/
 Check TWO locations (since handoffs are archived immediately on resume):
 
 1. `manifest.handoffs[]` — for pending handoffs not yet resumed
-2. `01_Archive/{project-path}/sessions/` — for previously resumed handoffs
+2. `01_Archive/{unit-path}/sessions/` — for previously resumed handoffs
 
 ```
 ▸ checking for existing handoff...
@@ -132,7 +137,7 @@ You are creating a handoff document for session continuity.
 
 CONTEXT:
 - Session ID: {session_id}
-- Project: {entity_path}
+- Unit: {unit_path}
 - Reason for handoff: {compact/resuming later}
 
 YOUR TASK:
@@ -148,7 +153,7 @@ Each update builds on previous context. The goal is ONE comprehensive document.
 
 CONTEXT:
 - Session ID: {session_id}
-- Project: {entity_path}
+- Unit: {unit_path}
 - Reason for handoff: {compact/resuming later}
 - Update number: {update_count + 1}
 - Retrieved from: {archive | manifest}
@@ -245,7 +250,7 @@ Return the complete handoff document content in markdown format.
 
 Example: `alive-plugin-feedback-abc12345-2026-02-02-1530.md`
 
-**Location:** `{project}/_working/sessions/`
+**Location:** `{unit}/_working/sessions/`
 
 ### Document Structure
 
@@ -255,7 +260,7 @@ created: 2026-02-02T15:30:00
 updated: 2026-02-02T16:45:00    # Added on updates
 session_id: abc12345
 status: pending
-project: 04_Ventures/acme
+unit: 04_Ventures/acme
 reason: context_compact
 update_count: 0                  # Incremented on each update
 ---
@@ -265,7 +270,7 @@ update_count: 0                  # Incremented on each update
 **Session ID:** abc12345
 **Created:** 2026-02-02 15:30
 **Updated:** 2026-02-02 16:45 (if updated)
-**Project:** 04_Ventures/acme
+**Unit:** 04_Ventures/acme
 **Reason:** Context compaction
 
 ---
@@ -366,7 +371,7 @@ You don't need to remember to archive — it happens automatically.
 
 ## Step 5: Update Manifest
 
-Add handoff to project's manifest.json so `/alive:work` can find it:
+Add handoff to unit's manifest.json so `/alive:work` can find it:
 
 ```json
 {
@@ -404,7 +409,7 @@ Handoff is complete. Return control to save skill to continue with:
 
 ### /alive:work Integration
 
-When `work` skill loads a project, it checks manifest for pending handoffs:
+When `work` skill loads a unit, it checks manifest for pending handoffs:
 
 ```
 ▸ checking for pending handoffs...
@@ -447,7 +452,7 @@ Created (pending) → Resumed (ARCHIVED IMMEDIATELY) → Work continues
   └─ Reading content
 
 ▸ archiving handoff (already read)...
-  └─ Moving to 01_Archive/{project-path}/sessions/
+  └─ Moving to 01_Archive/{unit-path}/sessions/
   └─ Removing from manifest.handoffs[]
 
 ✓ Handoff archived — context loaded

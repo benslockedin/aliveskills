@@ -10,14 +10,19 @@ Quick context lookup. Find past decisions, sessions, insights, or files.
 
 ## UI Treatment
 
-This skill uses **Tier 3: Utility** formatting.
+Uses the **ALIVE Shell** — Tier 3: Utility.
 
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v3.0.1` (right-aligned)
+```
+╭──────────────────────────────────────────────────────────╮
+│  ALIVE · recall                         [search-query]    │
+│  ──────────────────────────────────────────────────────── │
+│  [Search results with sources]                            │
+│  ──────────────────────────────────────────────────────── │
+│  [Result count + search path]                             │
+╰──────────────────────────────────────────────────────────╯
+```
 
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+See `rules/ui-standards.md` for shell format, logo assets, and tier specifications.
 
 ---
 
@@ -32,9 +37,9 @@ Trigger on past-tense recall intent:
 
 ## Search Order
 
-Always search the **current project first**. If no project is loaded, ask which one.
+Always search the **current unit first**. If no unit is loaded, ask which one.
 
-Within the project, check these locations in order:
+Within the unit, check these locations in order:
 
 | Priority | Location | What's There |
 |----------|----------|--------------|
@@ -71,44 +76,44 @@ tags: [keyword, keyword, keyword]
 Show the ALIVE UI wrapper, the breadcrumb trail of where you looked, and the results:
 
 ```
-╔══════════════════════════════════════════════════════════════════════════════════════════╗
-║                                                                                          ║
-║    ▄▀█ █░░ █ █░█ █▀▀                                                                     ║
-║    █▀█ █▄▄ █ ▀▄▀ ██▄            recall • "pricing"                                       ║
-║                                                                                          ║
-║  ════════════════════════════════════════════════════════════════════════════════════    ║
-║                                                                                          ║
-║  ▸ searching 04_Ventures/acme/_brain/manifest.json                                       ║
-║    └─ no file matches                                                                    ║
-║  ▸ searching 04_Ventures/acme/_brain/changelog.md                                        ║
-║    └─ 2 matches                                                                          ║
-║                                                                                          ║
-║  FOUND                                                                                   ║
-║  ──────────────────────────────────────────────────────────────────────────────────────  ║
-║  [1] 2026-01-23 — Pricing model: Chose $97/mo. Rejected $47 (too cheap).                ║
-║  [2] 2026-01-20 — Pricing page: Show annual pricing first.                               ║
-║                                                                                          ║
-║  ──────────────────────────────────────────────────────────────────────────────────────  ║
-║  [#] View full entry    [w] Search wider    [d] /alive:work this project                    ║
-║                                                                                          ║
-║  ──────────────────────────────────────────────────────────────────────────────────────  ║
-║                                                                              ALIVE v3.0.1  ║
-╚══════════════════════════════════════════════════════════════════════════════════════════╝
+╭──────────────────────────────────────────────────────────────────────────────────────────╮
+│                                                                                          │
+│    ▄▀█ █░░ █ █░█ █▀▀                                                                     │
+│    █▀█ █▄▄ █ ▀▄▀ ██▄            recall • "pricing"                                       │
+│                                                                                          │
+│  ──────────────────────────────────────────────────────────────────────────────────────  │
+│                                                                                          │
+│  ▸ searching 04_Ventures/acme/_brain/manifest.json                                       │
+│    └─ no file matches                                                                    │
+│  ▸ searching 04_Ventures/acme/_brain/changelog.md                                        │
+│    └─ 2 matches                                                                          │
+│                                                                                          │
+│  FOUND                                                                                   │
+│  ──────────────────────────────────────────────────────────────────────────────────────  │
+│  [1] 2026-01-23 — Pricing model: Chose $97/mo. Rejected $47 (too cheap).                │
+│  [2] 2026-01-20 — Pricing page: Show annual pricing first.                               │
+│                                                                                          │
+│  ──────────────────────────────────────────────────────────────────────────────────────  │
+│  [#] View full entry    [w] Search wider    [d] /alive:work                              │
+│                                                                                          │
+│  ──────────────────────────────────────────────────────────────────────────────────────  │
+│                                                                              ALIVE v3.0.1│
+╰──────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
 **Key rules:**
 - Show each source you checked as a `▸` breadcrumb — even when it's a miss. This shows the system working.
 - Number the results. Keep descriptions to one line each.
-- **`[w]` Search wider** — offer to expand to all projects if scoped to one.
-- **`[d]` /alive:work** — offer to load the project's full context. Especially useful at conversation start when the user might want to keep working.
+- **`[w]` Search wider** — offer to expand to all units if scoped to one.
+- **`[d]` /alive:work** — offer to load the full context. Especially useful at conversation start when the user might want to keep working.
 
-## No Project Loaded
+## No Unit Loaded
 
-If the user asks a recall question with no project context loaded:
+If the user asks a recall question with no unit context loaded:
 
-1. Check if they mentioned an project name → scope to that
-2. If not → ask: "Which project should I search? Or [a] search all?"
-3. After showing results, **always offer `/alive:work`** — they likely want to get into the project
+1. Check if they mentioned a name → scope to that
+2. If not → ask: "Which venture, experiment, or life area should I search? Or [a] search all?"
+3. After showing results, **always offer `/alive:work`** — they likely want to get into it
 
 ## No Results
 
@@ -116,13 +121,13 @@ If the user asks a recall question with no project context loaded:
 ▸ searched manifest, changelog, references, insights
   └─ no matches for "quantum computing"
 
-[w] Search all projects    [a] Try different terms
+[w] Search all units    [a] Try different terms
 ```
 
 ## Wider Search
 
-When user picks `[w]`, search `_brain/changelog.md` and `_brain/manifest.json` across all projects in `04_Ventures/` and `05_Experiments/`. Show which projects had hits.
+When user picks `[w]`, search `_brain/changelog.md` and `_brain/manifest.json` across all units in `04_Ventures/` and `05_Experiments/`. Show which ones had hits.
 
 ## Related Skills
 
-- `/alive:work` — Load full project context after finding what you need
+- `/alive:work` — Load full context after finding what you need

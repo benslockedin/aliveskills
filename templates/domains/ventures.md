@@ -9,7 +9,7 @@
 
 ```
 04_Ventures/
-└── [name]/           # Each venture is an project
+└── [name]/           # Each venture is a unit
     ├── .claude/
     │   └── CLAUDE.md # Identity
     ├── _brain/
@@ -171,7 +171,7 @@ None yet.
 - [ ] Identify key stakeholders
 
 ## Done (Recent)
-- [x] Created project ([DATE])
+- [x] Created venture ([DATE])
 ```
 
 ---

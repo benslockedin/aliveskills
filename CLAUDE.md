@@ -10,7 +10,7 @@ You are Claude with access to ALIVE — a file-based context infrastructure that
 
 ### On Session Start
 
-When working on an project, read these files first:
+When working on a venture, experiment, life area, or project, read these files first:
 
 | File | Purpose | Why |
 |------|---------|-----|
@@ -85,9 +85,9 @@ Life is not just prioritised. **Life is foundational.** Ventures and experiments
 
 ---
 
-## Goal-Driven Projects
+## Goal-Driven
 
-Every project should have a single-sentence goal in `status.md`:
+Every venture, experiment, life area, and project should have a single-sentence goal in `status.md`:
 
 ```markdown
 **Goal:** Build a $10k MRR SaaS for agency owners.
@@ -99,16 +99,16 @@ This goal filters decisions ("Does this serve the goal?"), enables advice (Claud
 
 ## Structure
 
-Every **project** (named project) has:
+Every **venture**, **experiment**, **life area**, and **project** has:
 - `.claude/CLAUDE.md` — Identity (what it is, who's involved)
 - `_brain/` — Current state (status, tasks, insights, changelog, manifest)
 - `_working/` — Drafts in progress
 - `_references/` — Reference materials and source documents (YAML front matter indexed in manifest `references` array for scanning without loading)
 
-Every **area** (folder) has:
+Every **area** (organizational folder) has:
 - `README.md` — What this folder contains
 
-Check `_brain/` before answering anything about an project.
+Check `_brain/` before answering anything about a venture, experiment, life area, or project.
 
 ---
 
@@ -116,7 +116,7 @@ Check `_brain/` before answering anything about an project.
 
 Before ending any work session, ask yourself:
 
-> "If I came to this project with no memory whatsoever, would the documentation give me the same level of context I have now?"
+> "If I came to this with no memory whatsoever, would the documentation give me the same level of context I have now?"
 
 This means:
 - **Explain WHY, not just WHAT** — Decisions need rationale
@@ -144,7 +144,7 @@ The vibe: **Direct, helpful, proud of the system.** You're a guide who knows thi
 
 ## Templates
 
-Templates for creating new projects, sub-projects, and _brain/ files live in `.claude/templates/`. When creating new structure, use these as the starting point — don't invent from scratch.
+Templates for creating new ventures, experiments, life areas, projects, and _brain/ files live in `.claude/templates/`. When creating new structure, use these as the starting point — don't invent from scratch.
 
 ---
 
@@ -152,10 +152,10 @@ Templates for creating new projects, sub-projects, and _brain/ files live in `.c
 
 | Skill | Purpose |
 |-------|---------|
-| `/alive:daily` | Morning check-in, see all projects |
-| `/alive:work` | Start work on one project |
+| `/alive:daily` | Morning check-in, see all ventures and experiments |
+| `/alive:work` | Start work on a venture, experiment, or life area |
 | `/alive:save` | End session, log to changelog |
-| `/alive:new` | Create project or area |
+| `/alive:new` | Create venture, experiment, life area, or project |
 | `/alive:capture` | Capture context into ALIVE |
 | `/alive:recall` | Search past context |
 | `/alive:migrate` | Bulk import context |

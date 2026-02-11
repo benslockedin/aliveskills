@@ -14,22 +14,40 @@ Every skill belongs to a tier that determines its visual treatment:
 
 | Tier | Skills | Logo | Border | Footer |
 |------|--------|------|--------|--------|
-| **1: Entry Points** | `onboarding`, `daily` | Full (24-line) | Double-line wrap | Community |
-| **2: Core Workflow** | `work`, `save`, `help` | Compact (4-line) | Double-line wrap | Community |
-| **3: Utility** | All others | Compact (4-line) | Double-line wrap | Version |
+| **1: Entry Points** | `onboarding`, `daily` | Full (24-line) | Rounded shell | Community |
+| **2: Core Workflow** | `work`, `save`, `help` | Compact (4-line) | Rounded shell | Community |
+| **3: Utility** | All others | Compact (4-line) | Rounded shell | Version |
 
-### Border Characters (Double-Line)
+### The ALIVE Shell
+
+Every skill output is wrapped in a single rounded box with three zones:
 
 ```
-╔  Top-left corner
-═  Horizontal line
-╗  Top-right corner
-║  Vertical line
-╚  Bottom-left corner
-╝  Bottom-right corner
+╭──────────────────────────────────────────────────────────╮
+│  HEADER — skill name, date, aggregate stats               │
+│  ──────────────────────────────────────────────────────── │
+│  CONTENT — the main skill output                          │
+│  ──────────────────────────────────────────────────────── │
+│  FOOTER — actions, fine print, community/version          │
+╰──────────────────────────────────────────────────────────╯
 ```
 
-Standard width: **90 characters** (fits most terminals)
+**Characters:**
+- `╭╮╰╯` rounded corners — outer frame only
+- `│` vertical sides
+- `─` horizontal separators (thin lines between zones)
+- NO double-line borders (`╔╗╚╝═║`) — these are **deprecated**
+- NO internal boxes or nested borders
+
+**Width:** Fits terminal naturally — no fixed 90-char target.
+
+**Conventions inside the shell:**
+- `*` on AI-generated content (explained in fine print)
+- `)` on every selectable option (e.g. `1)`, `a)`)
+- `·` as delimiter in stats
+- `●○` five-day activity dots
+- `!` attention indicator
+- Lowercase section labels
 
 ---
 
@@ -228,18 +246,18 @@ HANDOFF:
 
 ### Tier 2/3 Header Layout
 
-Elephant (4 lines) sits left. FIGlet skill name (4 lines) sits right. Version and project path below.
+Elephant (4 lines) sits left. FIGlet skill name (4 lines) sits right. Version and unit path below.
 
 ```
-║    ______/ \-.   _     __      _____  ___ _  __                                          ║
-║ .-/     (    o\_//     \ \    / / _ \| _ \ |/ /                                          ║
-║  |  ___  \_/\---'       \ \/\/ / (_) |   / ' <                                          ║
-║  |_||  |_||              \_/\_/ \___/|_|_\_|\_\                                          ║
-║                          aliveOS [Unlimited Elephant 3.0.1]                              ║
-║                          ventures/acme-agency                                            ║
+│    ______/ \-.   _     __      _____  ___ _  __              │
+│ .-/     (    o\_//     \ \    / / _ \| _ \ |/ /              │
+│  |  ___  \_/\---'       \ \/\/ / (_) |   / ' <              │
+│  |_||  |_||              \_/\_/ \___/|_|_\_|\_\              │
+│                          aliveOS [Unlimited Elephant 3.0.1]   │
+│                          ventures/acme-agency                 │
 ```
 
-Elephant on left, skill name big on right. Version and project path below, aligned with skill name start column.
+Elephant on left, skill name big on right. Version and unit path below, aligned with skill name start column.
 
 ### Embellishment Characters
 
@@ -257,10 +275,9 @@ Elephant on left, skill name big on right. Version and project path below, align
 Used by: `onboarding`, `daily`, `work`, `save`, `help`
 
 ```
-║  ──────────────────────────────────────────────────────────────────────────────────    ║
-║  Free: Join the ALIVE community → skool.com/aliveoperators                             ║
-║                                                                                        ║
-╚════════════════════════════════════════════════════════════════════════════════════════╝
+│  ──────────────────────────────────────────────────────────────────── │
+│  Free: Join the ALIVE community → skool.com/aliveoperators            │
+╰──────────────────────────────────────────────────────────────────────╯
 ```
 
 ### Version Footer (Tier 3)
@@ -268,9 +285,9 @@ Used by: `onboarding`, `daily`, `work`, `save`, `help`
 Used by: All other skills
 
 ```
-║  ──────────────────────────────────────────────────────────────────────────────────    ║
-║                                                                              ALIVE v3.0.1║
-╚════════════════════════════════════════════════════════════════════════════════════════╝
+│  ──────────────────────────────────────────────────────────────────── │
+│                                                        ALIVE v3.0.1   │
+╰──────────────────────────────────────────────────────────────────────╯
 ```
 
 ---
@@ -282,24 +299,24 @@ Use columns where it improves information density. The vertical pipe `│` separ
 ### Status + Tasks (for `/alive:work`)
 
 ```
-║  STATUS                          │  TASKS                                              ║
-║  ────────────────────────────────│──────────────────────────────────────────────────   ║
-║  Phase: Plugin Development       │  [1] Test fresh install flow                        ║
-║  Focus: v2 feedback complete     │  [2] Create PR staging → main                       ║
-║                                  │  [3] Create alive:brainstorm skill                  ║
-║  Blockers: None                  │  [4] ALIVE for developers/codebases                 ║
-║                                  │  [5] Improve /alive:sweep                           ║
-║  Next: PR to main                │  [6] Review all rules in plugin                     ║
+│  STATUS                          │  TASKS                                │
+│  ────────────────────────────────│────────────────────────────────────── │
+│  Phase: Plugin Development       │  1) Test fresh install flow           │
+│  Focus: v2 feedback complete     │  2) Create PR staging → main          │
+│                                  │  3) Create alive:brainstorm skill     │
+│  Blockers: None                  │  4) ALIVE for developers/codebases    │
+│                                  │  5) Improve /alive:sweep              │
+│  Next: PR to main                │  6) Review all rules in plugin        │
 ```
 
-### Project Grid (for `/alive:daily`)
+### Unit Grid (for `/alive:daily`)
 
 ```
-║  VENTURES                        │  EXPERIMENTS                                        ║
-║  ────────────────────────────────│──────────────────────────────────────────────────   ║
-║  [1] acme-agency    Building     │  [4] cricket-grid    Paused [!]                     ║
-║  [2] apex           Growing      │  [5] new-idea        Starting                       ║
-║  [3] side-project   Ready        │                                                     ║
+│  ventures                        │  experiments                          │
+│  ────────────────────────────────│────────────────────────────────────── │
+│  1) acme-agency    Building      │  4) cricket-grid    Paused !          │
+│  2) apex           Growing       │  5) new-idea        Starting          │
+│  3) side-hustle     Ready         │                                       │
 ```
 
 ---
@@ -308,132 +325,97 @@ Use columns where it improves information density. The vertical pipe `│` separ
 
 ### Tier 1 Example: `/alive:daily`
 
+The elephant + ROMAN wordmark render as raw text ABOVE the shell (not inside borders):
+
 ```
-╔══════════════════════════════════════════════════════════════════════════════════════════╗
-║                                                                                          ║
-║                          .. ..oooo.....ooo...                                            ║
-║                    .odSS4PYYYSSOOXXXXXXXXXOodbgooo.                                      ║
-║                   /SSYod$$SSOIIPXXXXXXXXXYYP.oo.*b.                                      ║
-║                  ($Yd$$SSSOII:XXXXXXXX:IIoSSS$$b.Y,                                     ║
-║                   \Yd$$SSSOII:XXXXXXXXXX:IIOOSSS$$b\                                     ║
-║                    d$$SSSOOI:XP"YXXXXXXXX:IIOOSSSS$$\                                    ║
-║                    Y$$SSSOOII:XbdXXXXXP"YX:IIOOOSS$$)                                   ║
-║                    'Y$$SSSOI:XXXXXXXXXbodX:IIOOSS$$$/                                   ║
-║                     "Y$$SSSOI(PoTXXXXXTo)XXIIOOOSS$$*'                                   ║
-║                       ""*Y$S(((PXXXXXXXY))dIIOSSS$dP'                                    ║
-║                          "*'()P;XXXXXXXXY)IIOSSS$P".oS,                                  ║
-║                          (S'(P;XXXXXXXP;Y)XXYOP".oSSSSb                                  ║
-║                         (S'(P;'XXXXXXX';Y).ooooSSSSSSSS)                                 ║
-║                         (S'(P;'XXXXXXP';Y).oSSSSSSSSSSSP                                 ║
-║                         (SS'Y);YXXXXX';(Y.oSSSSSSSSSSSSP                                 ║
-║                          YSS'Y)'YXXX".(Y.oSSP.SSSSSSSSY                                  ║
-║                           YSS'"" XXX""oooSSP.SSSSSSSSY                                   ║
-║                           SSSSSS YXXX:SSSSP.SSSSSSSSY                                    ║
-║                           SSSSSP  YXb:SSSP.S"SSSSSSP                                    ║
-║                           S(OO)S   YXb:SY    )SSSSS                                     ║
-║                           SSSSO    )YXb.I    ISSSSP                                      ║
-║                           YSSSY    I."YXXb   Y(SS)I                                      ║
-║                           )SSS(    dSSo.""*b  YSSSY                                      ║
-║                           OooSb   dSSSSP      )SSS(                                      ║
-║                                   dSSSY       OooSS                                      ║
-║                                   OooSP                                                  ║
-║                                                                                          ║
-║        .o.       ooooo        ooooo oooooo     oooo oooooooooooo                          ║
-║       .888.      `888'        `888'  `888.     .8'  `888'     `8                          ║
-║      .8"888.      888          888    `888.   .8'    888                                  ║
-║     .8' `888.     888          888     `888. .8'     888oooo8                             ║
-║    .88ooo8888.    888          888      `888.8'      888    "                             ║
-║   .8'     `888.   888       o  888       `888'       888       o                          ║
-║  o88o     o8888o o888ooooood8 o888o       `8'       o888ooooood8                          ║
-║  ──────────────────────────────────────────────────────────────────                       ║
-║                      O p e r a t o r   S y s t e m                                       ║
-║  ──────────────────────────────────────────────────────────────────                       ║
-║                                                                                          ║
-║    daily                                                                                 ║
-║  ════════════════════════════════════════════════════════════════════════════════════    ║
-║                                                                                          ║
-║  YOUR GOALS                                                                              ║
-║  ──────────────────────────────────────────────────────────────────────────────────────  ║
-║  • acme-agency: Ship client portal by Feb 15                                             ║
-║  • apex: 6 products, profitable monthly                                                  ║
-║                                                                                          ║
-║  VENTURES                        │  EXPERIMENTS                                          ║
-║  ────────────────────────────────│────────────────────────────────────────────────────   ║
-║  [1] acme-agency    Building     │  [3] cricket-grid    Paused [!]                       ║
-║  [2] apex           Growing      │                                                       ║
-║                                                                                          ║
-║  INPUTS                                                                                  ║
-║  ──────────────────────────────────────────────────────────────────────────────────────  ║
-║  [!] 2 items pending triage                                                              ║
-║                                                                                          ║
-║  ──────────────────────────────────────────────────────────────────────────────────────  ║
-║  [#] Pick number    [i] Process inputs    [n] New project                                 ║
-║                                                                                          ║
-║  ──────────────────────────────────────────────────────────────────────────────────────  ║
-║  Free: Join the ALIVE community → skool.com/aliveoperators                               ║
-║                                                                                          ║
-╚══════════════════════════════════════════════════════════════════════════════════════════╝
+                     .. ..oooo.....ooo...
+               .odSS4PYYYSSOOXXXXXXXXXOodbgooo.
+              /SSYod$$SSOIIPXXXXXXXXXYYP.oo.*b.
+             ...
+              OooSP
+
+      .o.       ooooo        ooooo oooooo     oooo oooooooooooo
+     .888.      `888'        `888'  `888.     .8'  `888'     `8
+    ...
+o88o     o8888o o888ooooood8 o888o       `8'       o888ooooood8
+──────────────────────────────────────────────────────────────────
+                    O p e r a t o r   S y s t e m
+──────────────────────────────────────────────────────────────────
+
+╭──────────────────────────────────────────────────────────────────────╮
+│  ALIVE · daily                                     tue 11 feb 2026   │
+│  3 ventures · 2 experiments · 7 inputs                               │
+│  ──────────────────────────────────────────────────────────────────── │
+│                                                                       │
+│  * Focus on skeyndor — 3 urgent tasks, highest revenue potential      │
+│                                                                       │
+│  ventures                        │  experiments                       │
+│  ────────────────────────────────│─────────────────────────────────── │
+│  1) acme-agency    Building      │  3) cricket-grid    Paused !       │
+│  2) apex           Growing       │                                    │
+│                                                                       │
+│  inputs                                                               │
+│  ! 2 items pending triage                                             │
+│                                                                       │
+│  ──────────────────────────────────────────────────────────────────── │
+│  #) pick number    i) process inputs    n) new                        │
+│  * generated recommendation — verify before acting                    │
+│  Free: Join the ALIVE community → skool.com/aliveoperators            │
+╰──────────────────────────────────────────────────────────────────────╯
 ```
 
 ### Tier 2 Example: `/alive:work`
 
 ```
-╔══════════════════════════════════════════════════════════════════════════════════════════╗
-║                                                                                          ║
-║    ______/ \-.   _     __      _____  ___ _  __                                          ║
-║ .-/     (    o\_//     \ \    / / _ \| _ \ |/ /                                          ║
-║  |  ___  \_/\---'       \ \/\/ / (_) |   / ' <                                          ║
-║  |_||  |_||              \_/\_/ \___/|_|_\_|\_\                                          ║
-║                          aliveOS [Unlimited Elephant 3.0.1]                              ║
-║                          ventures/acme-agency                                            ║
-║                                                                                          ║
-║  ════════════════════════════════════════════════════════════════════════════════════    ║
-║                                                                                          ║
-║  ▸ reading _brain/status.md                                                              ║
-║    └─ Phase: Plugin Development (updated yesterday)                                      ║
-║                                                                                          ║
-║  ▸ reading _brain/tasks.md                                                               ║
-║    └─ 33 tasks, ~26 open                                                                 ║
-║                                                                                          ║
-║  STATUS                          │  TASKS                                                ║
-║  ────────────────────────────────│────────────────────────────────────────────────────   ║
-║  Phase: Plugin Development       │  [1] Test fresh install flow                          ║
-║  Focus: v2 feedback complete     │  [2] Create PR staging → main                         ║
-║                                  │  [3] Create alive:brainstorm skill                    ║
-║  Blockers: None                  │  [4] ALIVE for developers/codebases                   ║
-║                                  │  [5] Improve /alive:sweep                             ║
-║  Next: PR to main                │  [6] Review all rules in plugin                       ║
-║                                                                                          ║
-║  ──────────────────────────────────────────────────────────────────────────────────────  ║
-║  [#] Pick task    [c] changelog    [s] save                                              ║
-║                                                                                          ║
-║  ──────────────────────────────────────────────────────────────────────────────────────  ║
-║  Free: Join the ALIVE community → skool.com/aliveoperators                               ║
-║                                                                                          ║
-╚══════════════════════════════════════════════════════════════════════════════════════════╝
+╭──────────────────────────────────────────────────────────────────────╮
+│    ______/ \-.   _     __      _____  ___ _  __                       │
+│ .-/     (    o\_//     \ \    / / _ \| _ \ |/ /                       │
+│  |  ___  \_/\---'       \ \/\/ / (_) |   / ' <                       │
+│  |_||  |_||              \_/\_/ \___/|_|_\_|\_\                       │
+│                          aliveOS [Unlimited Elephant 3.0.1]            │
+│                          ventures/acme-agency                          │
+│  ──────────────────────────────────────────────────────────────────── │
+│                                                                       │
+│  ▸ reading _brain/status.md                                           │
+│    └─ Phase: Plugin Development (updated yesterday)                   │
+│                                                                       │
+│  ▸ reading _brain/tasks.md                                            │
+│    └─ 33 tasks, ~26 open                                              │
+│                                                                       │
+│  STATUS                          │  TASKS                             │
+│  ────────────────────────────────│─────────────────────────────────── │
+│  Phase: Plugin Development       │  1) Test fresh install flow        │
+│  Focus: v2 feedback complete     │  2) Create PR staging → main       │
+│                                  │  3) Create alive:brainstorm skill  │
+│  Blockers: None                  │  4) ALIVE for developers/codebases │
+│                                  │  5) Improve /alive:sweep           │
+│  Next: PR to main                │  6) Review all rules in plugin     │
+│                                                                       │
+│  ──────────────────────────────────────────────────────────────────── │
+│  #) pick task    c) changelog    s) save                              │
+│  Free: Join the ALIVE community → skool.com/aliveoperators            │
+╰──────────────────────────────────────────────────────────────────────╯
 ```
 
 ### Tier 3 Example: `/alive:capture`
 
 ```
-╔══════════════════════════════════════════════════════════════════════════════════════════╗
-║                                                                                          ║
-║    ______/ \-.   _       ___   _   ___ _____ _   _ ___ ___                                ║
-║ .-/     (    o\_//      / __| /_\ | _ \_   _| | | | _ \ __|                               ║
-║  |  ___  \_/\---'      | (__ / _ \|  _/ | | | |_| |   / _|                               ║
-║  |_||  |_||             \___/_/ \_\_|   |_|  \___/|_|_\___|                               ║
-║                         aliveOS [Unlimited Elephant 3.0.1]                                ║
-║                         ventures/acme-agency                                              ║
-║                                                                                          ║
-║  ════════════════════════════════════════════════════════════════════════════════════    ║
-║                                                                                          ║
-║  ▸ capturing to ventures/acme-agency/_brain/changelog.md                                 ║
-║                                                                                          ║
-║  ✓ Captured: "Decided to use double-line borders for all skill outputs"                  ║
-║                                                                                          ║
-║  ──────────────────────────────────────────────────────────────────────────────────────  ║
-║                                                                              ALIVE v3.0.1  ║
-╚══════════════════════════════════════════════════════════════════════════════════════════╝
+╭──────────────────────────────────────────────────────────────────────╮
+│    ______/ \-.   _       ___   _   ___ _____ _   _ ___ ___            │
+│ .-/     (    o\_//      / __| /_\ | _ \_   _| | | | _ \ __|           │
+│  |  ___  \_/\---'      | (__ / _ \|  _/ | | | |_| |   / _|           │
+│  |_||  |_||             \___/_/ \_\_|   |_|  \___/|_|_\___|           │
+│                         aliveOS [Unlimited Elephant 3.0.1]             │
+│                         ventures/acme-agency                           │
+│  ──────────────────────────────────────────────────────────────────── │
+│                                                                       │
+│  ▸ capturing to ventures/acme-agency/_brain/changelog.md              │
+│                                                                       │
+│  ✓ Captured: "Decided to use rounded borders for all skill outputs"   │
+│                                                                       │
+│  ──────────────────────────────────────────────────────────────────── │
+│                                                        ALIVE v3.0.1   │
+╰──────────────────────────────────────────────────────────────────────╯
 ```
 
 ---
@@ -581,9 +563,9 @@ Fixed-width columns for alignment (vibrant theme):
 
 ---
 
-## Box Drawing (Legacy - Single Line)
+## Box Drawing
 
-Characters for structure (vibrant theme):
+Characters for the ALIVE Shell (vibrant theme):
 
 ```
 ╭─────────────────────────────────────────────────────────────╮

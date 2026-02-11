@@ -1,12 +1,12 @@
 ---
 user-invocable: true
-description: Scaffold a new project with full structure — _brain/, _working/, CLAUDE.md, and all required files. Use when the user says "create X", "new venture", "new experiment", "new project", "set up X", or "start something new".
+description: Scaffold a new venture, experiment, life area, project, or area with full structure — _brain/, _working/, CLAUDE.md, and all required files. Use when the user says "create X", "new venture", "new experiment", "new project", "set up X", or "start something new".
 plugin_version: "3.0.1"
 ---
 
 # alive:new
 
-Create a new project or area. Scaffold the v2 structure with proper templates.
+Create a new venture, experiment, life area, project, or area. Scaffold the v2 structure with proper templates.
 
 ## UI Treatment
 
@@ -17,52 +17,53 @@ Uses the **ALIVE Shell** — one rounded box, three zones.
 │  ALIVE · new                             [date]          │
 │  ──────────────────────────────────────────────────────  │
 │  [Type selection prompt]                                 │
-│  [Project summary after creation]                        │
+│  [Summary after creation]                                │
 │  ──────────────────────────────────────────────────────  │
 │  [ACTIONS]                                               │
 │  [✓ file creation confirmations]                         │
 ╰──────────────────────────────────────────────────────────╯
 ```
 
-**Rules:**
-- `╭╮╰╯` rounded corners — outer frame only
-- NO double-line borders, NO internal boxes
-- NO `*` marker (user provided all inputs)
-- `)` on selectable options
-- `key  value` format for project metadata
+See `rules/ui-standards.md` for shell format, logo assets, and tier specifications.
 
 ---
 
 ## When to Use
 
 Invoke when the user wants to:
-- Create a new venture, experiment, or life area (project)
-- Create an folder within an project (area)
-- Set up project structure from scratch
+- Create a new venture, experiment, or life area (top-level unit)
+- Create a project nested within an existing venture, experiment, or life area
+- Create an area folder within an existing unit
+- Set up structure from scratch
 
-## Project vs Area
+## Venture / Experiment / Life Area vs Project vs Area
 
-| Type | Has _brain/ | Has .claude/ | Has _working/ | Has _references/ | Identity |
-|------|-------------|--------------|---------------|------------------|----------|
-| **Project** | Yes | Yes | Yes | Yes | `.claude/CLAUDE.md` |
-| **Area** | No | No | No | No | `README.md` |
+| Type | Has _brain/ | Has .claude/ | Has _working/ | Has _references/ | Identity | Location |
+|------|-------------|--------------|---------------|------------------|----------|----------|
+| **Venture** | Yes | Yes | Yes | Yes | `.claude/CLAUDE.md` | Top-level in `04_Ventures/` |
+| **Experiment** | Yes | Yes | Yes | Yes | `.claude/CLAUDE.md` | Top-level in `05_Experiments/` |
+| **Life Area** | Yes | Yes | Yes | Yes | `.claude/CLAUDE.md` | Top-level in `02_Life/` |
+| **Project** | Yes | No | Yes | Yes | `README.md` | Nested within a venture, experiment, or life area |
+| **Area** | No | No | No | No | `README.md` | Organizational folder within any unit |
 
-**Projects** are projects with their own state.
-**Areas** are folders within projects.
+**Ventures, experiments, and life areas** are top-level units with their own state and identity.
+**Projects** are nested containers within a venture, experiment, or life area that have their own lifecycle and `_brain/`.
+**Areas** are organizational folders within any unit.
 
 ## Flow
 
 ```
-1. Ask: Project or Area?
-2. If Project: Ask for type (venture/experiment/life) and name
-3. If Area: Ask which project and area name
-4. If Project: Offer ICP template (if applicable)
-5. Create structure
-6. Initialize files
-7. Confirm creation
+1. Ask: What type? (venture / experiment / life area / project / area)
+2. If venture/experiment/life area: Ask for name and details
+3. If project: Ask which parent unit and name
+4. If area: Ask which parent unit and area name
+5. If venture: Offer ICP template
+6. Create structure
+7. Initialize files
+8. Confirm creation
 ```
 
-## Creating a Project
+## Creating a Venture, Experiment, or Life Area
 
 ### Step 1: Gather Information
 
@@ -78,7 +79,7 @@ Invoke when the user wants to:
 │   1) Venture         Revenue intent, business model      │
 │   2) Experiment      Testing ground, no model yet        │
 │   3) Life area       Personal domain                     │
-│   4) Sub-project     Nested within existing project      │
+│   4) Project         Nested within existing unit         │
 │   5) Area folder     Organizational only                 │
 │                                                          │
 ╰──────────────────────────────────────────────────────────╯
@@ -105,7 +106,7 @@ What type of venture?
 
 ### Step 3: Create Structure
 
-**Project structure:**
+**Venture/experiment/life area structure:**
 ```
 04_Ventures/acme-corp/
 ├── .claude/
@@ -196,7 +197,7 @@ None yet.
 - [ ] Identify key stakeholders
 
 ## Done (Recent)
-- [x] Created project ([DATE])
+- [x] Created venture ([DATE])
 ```
 
 **manifest.json:**
@@ -246,12 +247,12 @@ None yet.
 
 ## Creating an Area
 
-### Step 1: Identify Project
+### Step 1: Identify Parent
 
 ```
 Creating an area (folder).
 
-Which project?
+Where?
 [1] 04_Ventures/acme-corp
 [2] 04_Ventures/beta
 [3] Other (specify)
@@ -364,7 +365,7 @@ When creating ventures, offer relevant templates:
 ```
 ✗ 04_Ventures/acme already exists
 
-[1] Open existing project
+[1] Open existing venture
 [2] Choose different name
 ```
 
@@ -380,14 +381,14 @@ Names must be:
 Try again:
 ```
 
-## Creating a Sub-Project
+## Creating a Project
 
-Sub-projects are containers WITHIN an project that have their own lifecycle (and therefore their own `_brain/`).
+Projects are containers within a venture, experiment, or life area (or within another project) that have their own lifecycle (and therefore their own `_brain/`).
 
-### When to Create a Sub-Project
+### When to Create a Project
 
-| Parent Type | Sub-Project Examples |
-|-------------|---------------------|
+| Parent Type | Project Examples |
+|-------------|-----------------|
 | Agency venture | Clients, retainers |
 | E-commerce venture | Campaigns, product lines |
 | Creator venture | Courses, launches |
@@ -398,14 +399,14 @@ Sub-projects are containers WITHIN an project that have their own lifecycle (and
 ### Step 1: Identify Context
 
 ```
-Creating a sub-project.
+Creating a project.
 
 You're working in: 04_Ventures/acme-agency/
 
 What are you creating?
 [1] Client (for agency ventures)
 [2] Campaign (for ecommerce/marketing)
-[3] Project (generic sub-project)
+[3] Project (generic)
 [4] Custom
 ```
 
@@ -421,7 +422,7 @@ One-line description?
 
 ### Step 3: Create Structure
 
-**Sub-project structure:**
+**Project structure:**
 ```
 04_Ventures/acme-agency/clients/bigco/
 ├── _brain/
@@ -430,18 +431,18 @@ One-line description?
 │   ├── insights.md
 │   ├── changelog.md
 │   └── manifest.json
-├── _working/         ← Sub-project gets its OWN _working/
-├── _references/      ← Sub-project gets its OWN _references/
+├── _working/         ← Project gets its OWN _working/
+├── _references/      ← Project gets its OWN _references/
 └── README.md
 ```
 
-**IMPORTANT:** Each sub-project gets its own `_working/` and `_references/` folders. Working files for this sub-project go here, NOT in the parent's folders.
+**IMPORTANT:** Each project gets its own `_working/` and `_references/` folders. Working files for this project go here, NOT in the parent's folders.
 
 ```
 # WRONG - using parent's _working/
 04_Ventures/acme-agency/_working/clients/bigco/proposal.md
 
-# RIGHT - sub-project has its own _working/
+# RIGHT - project has its own _working/
 04_Ventures/acme-agency/clients/bigco/_working/proposal.md
 ```
 
@@ -475,7 +476,7 @@ None yet.
 - [ ] Identify key contacts
 
 ## Done (Recent)
-- [x] Created sub-project ([DATE])
+- [x] Created project ([DATE])
 ```
 
 **changelog.md:**
@@ -484,7 +485,7 @@ None yet.
 
 ## [DATE] — Created
 
-Sub-project created within 04_Ventures/acme-agency/clients/.
+Project created within 04_Ventures/acme-agency/clients/.
 
 **Type:** Client
 **Description:** Enterprise client, $10k/mo retainer
@@ -529,7 +530,7 @@ Add to `04_Ventures/acme-agency/_brain/changelog.md`:
 ```markdown
 ## [DATE] — Created client: bigco
 
-Added new client sub-project: bigco (Enterprise client, $10k/mo retainer)
+Added new client project: bigco (Enterprise client, $10k/mo retainer)
 ```
 
 ### Step 6: Confirm
@@ -554,10 +555,10 @@ Parent manifest updated.
 Next: /alive:work bigco to start working.
 ```
 
-## Sub-Project vs Area
+## Project vs Area
 
-| Question | Sub-Project | Area |
-|----------|-------------|------|
+| Question | Project | Area |
+|----------|---------|------|
 | Has its own lifecycle? | Yes | No |
 | Can be "done"? | Yes | No |
 | Needs status tracking? | Yes | No |
@@ -566,13 +567,13 @@ Next: /alive:work bigco to start working.
 | Gets `_references/`? | Yes | No |
 
 **Examples:**
-- `clients/bigco/` → Sub-project (has lifecycle)
+- `clients/bigco/` → Project (has lifecycle)
 - `templates/` → Area (organizational only)
-- `campaigns/summer-sale/` → Sub-project (has lifecycle)
+- `campaigns/summer-sale/` → Project (has lifecycle)
 - `brand/` → Area (organizational only)
 
 ## Related Skills
 
-- `/alive:work` — Start working on the new project
-- `/alive:onboarding` — Full system setup (not just one project)
-- `/alive:daily` — See all projects after creating
+- `/alive:work` — Start working on the new venture, experiment, life area, or project
+- `/alive:onboarding` — Full system setup (not just one unit)
+- `/alive:daily` — See all ventures and experiments after creating

@@ -11,7 +11,7 @@
 02_Life/
 ├── people/           # Source of truth for all people
 │   └── [name].md     # Person files
-└── [project]/         # Life projects (health, finance, etc.)
+└── [area]/            # Life areas (health, finance, etc.)
     ├── .claude/
     │   └── CLAUDE.md
     ├── _brain/
@@ -56,15 +56,15 @@ The `people/` folder is the source of truth for all people across ALIVE. Other d
 
 ## Links
 
-- 04_Ventures/[project]/clients/[company] — Client relationship
-- 04_Ventures/[project]/partners/[company] — Partnership
+- 04_Ventures/[venture]/clients/[company] — Client relationship
+- 04_Ventures/[venture]/partners/[company] — Partnership
 ```
 
 ---
 
-## Life Project Template
+## Life Area Template
 
-Life projects (health, finance, relationships, etc.) are full projects — they have `_brain/`, `_working/`, and `_references/` just like ventures and experiments.
+Life areas (health, finance, relationships, etc.) are full units — they have `_brain/`, `_working/`, and `_references/` just like ventures and experiments.
 
 ### CLAUDE.md
 
@@ -119,9 +119,9 @@ None.
 
 ---
 
-## Common Life Projects
+## Common Life Areas
 
-| Project | Purpose |
+| Area | Purpose |
 |--------|---------|
 | health/ | Physical and mental health |
 | finance/ | Money, investments, budgets |
@@ -129,12 +129,12 @@ None.
 | growth/ | Learning, skills, development |
 | home/ | Living space, maintenance |
 
-These are full projects — each gets `_brain/`, `_working/`, and `_references/`.
+These are full units — each gets `_brain/`, `_working/`, and `_references/`.
 
 ---
 
 ## Notes
 
-- Life projects are optional — create only what you need
+- Life areas are optional — create only what you need
 - people/ is always present (source of truth for all people)
 - Life first, always — this domain takes priority

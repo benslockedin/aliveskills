@@ -10,14 +10,7 @@ Capture context into ALIVE. User gives you content — you understand it, confir
 
 ## UI Treatment
 
-This skill uses **Tier 3: Utility** formatting.
-
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v3.0.1` (right-aligned)
-
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+Uses the **ALIVE Shell** — Tier 3: Utility. See `rules/ui-standards.md` for shell format and logo assets.
 
 ---
 
@@ -41,7 +34,7 @@ See `rules/ui-standards.md` for exact border characters, logo assets, and format
 The user has context they want in the system. It might be a quick thought, a pasted email, a meeting transcript, a screenshot, a filepath, an article — anything. Your job:
 
 1. Receive it
-2. Understand what it is and what project it relates to
+2. Understand what it is and what unit it relates to
 3. Confirm what the user wants to do with it (the action)
 4. Confirm where to store it, and whether to extract to `_brain/`
 5. Store the source material in `_references/` with YAML front matter
@@ -60,9 +53,9 @@ The user has context they want in the system. It might be a quick thought, a pas
 
 | Check | Why |
 |-------|-----|
-| Active project (from `/alive:work`) | Default routing destination |
-| `{project}/_brain/manifest.json` | Know what areas exist, existing references |
-| `{project}/_brain/status.md` | Current focus — informs relevance |
+| Active unit (from `/alive:work`) | Default routing destination |
+| `{unit}/_brain/manifest.json` | Know what areas exist, existing references |
+| `{unit}/_brain/status.md` | Current focus — informs relevance |
 | `02_Life/people/` listing | Check for existing person files before creating |
 
 ```
@@ -74,7 +67,7 @@ The user has context they want in the system. It might be a quick thought, a pas
   └─ People: 47 files in 02_Life/people/
 ```
 
-If no project is active, scan projects for keyword matches to suggest routing.
+If no unit is active, scan units for keyword matches to suggest routing.
 
 ---
 
@@ -83,9 +76,9 @@ If no project is active, scan projects for keyword matches to suggest routing.
 ```
 Content received
     ↓
-Context check (project, manifest, people)
+Context check (unit, manifest, people)
     ↓
-Identify (content type, project match, people)
+Identify (content type, unit match, people)
     ↓
 Question 1: Confirm what it is +
 what do you want to do with it?
@@ -108,7 +101,7 @@ Confirm done + note pending action
 
 ## Step 1: Identify
 
-Detect content type, match to project, identify people mentioned.
+Detect content type, match to unit, identify people mentioned.
 
 | Type | Signals |
 |------|---------|
@@ -124,11 +117,11 @@ Detect content type, match to project, identify people mentioned.
 ```
 ▸ identifying...
   └─ Type: Email from Sarah Chen (Globex)
-  └─ Project match: 04_Ventures/acme (Globex in manifest)
+  └─ Unit match: 04_Ventures/acme (Globex in manifest)
   └─ Person: Sarah Chen — found in 02_Life/people/sarah-chen.md
 ```
 
-For quick thoughts ("FYI the deadline moved to Friday"), identification is instant — type is obvious, project is the active one.
+For quick thoughts ("FYI the deadline moved to Friday"), identification is instant — type is obvious, unit is the active one.
 
 ---
 
@@ -518,20 +511,20 @@ Not everything goes to `_references/`. The distinction:
 | Email, transcript, message | `_references/[type]/` (summary .md + raw/ original) | Source material — may need to re-read |
 | Screenshot, video, PDF | `_references/[type]/` (analysis .md + raw/ original) | Visual/binary evidence with companion analysis |
 | Quick thought, FYI, decision | `_brain/` only (or `_references/notes/` if substantial) | Often no source worth preserving separately |
-| Spreadsheet, contract, final doc | Folder in project | Finished artifact — belongs with its project |
+| Spreadsheet, contract, final doc | Folder in unit | Finished artifact — belongs with its unit |
 
-**The test:** Is this source material you might reference later? → `_references/`. Is this a finished file that belongs in a project? → Folder. Is the meaning enough without the source? → `_brain/` only.
+**The test:** Is this source material you might reference later? → `_references/`. Is this a finished file that belongs in the unit? → Folder. Is the meaning enough without the source? → `_brain/` only.
 
 ---
 
-## No Active Project
+## No Active Unit
 
-If no project has been loaded with `/alive:work`:
+If no unit has been loaded with `/alive:work`:
 
 ```
-[?] No active project.
+[?] No active unit.
 
-▸ scanning projects for matches...
+▸ scanning units for matches...
   └─ 04_Ventures/acme — "Globex" mentioned in status.md
   └─ 04_Ventures/beta — no match
 
@@ -588,4 +581,4 @@ Use actual folder structure for routing suggestions.
 
 - `/alive:save` — End full session (not mid-session capture)
 - `/alive:digest` — Process items already IN `03_Inputs/`
-- `/alive:work` — Load project context first
+- `/alive:work` — Load unit context first

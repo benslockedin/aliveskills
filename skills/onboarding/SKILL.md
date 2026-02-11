@@ -1,6 +1,6 @@
 ---
 user-invocable: true
-description: First-time setup wizard for new ALIVE users. Creates the full system from scratch — folders, rules, configuration, and first projects. Use when the user says "set up ALIVE", "get started", "initialize", or when no ALIVE structure exists.
+description: First-time setup wizard for new ALIVE users. Creates the full system from scratch — folders, rules, configuration, and first ventures, experiments, and life areas. Use when the user says "set up ALIVE", "get started", "initialize", or when no ALIVE structure exists.
 plugin_version: "3.0.1"
 ---
 
@@ -27,22 +27,18 @@ This skill uses **Tier 1: Entry Point** formatting.
 
 **IMPORTANT:** Since rules aren't installed until Session 1, this skill must contain the full UI assets inline. Do not reference `rules/ui-standards.md` — use the assets below.
 
-### Border Characters (Double-Line)
+### Shell Format
 
-```
-╔  Top-left corner
-═  Horizontal line
-╗  Top-right corner
-║  Vertical line
-╚  Bottom-left corner
-╝  Bottom-right corner
-```
+Use the ALIVE Shell — one rounded box, three zones (header / content / footer):
 
-**Standard width: 90 characters**
+- `╭╮╰╯` rounded corners — outer frame only
+- `│` vertical sides
+- `─` horizontal separators between zones
+- NO double-line borders (`╔╗╚╝═║`) — these are deprecated
 
-### Full Logo (Tier 1)
+### Full Boot Screen
 
-Use this exact logo for all onboarding screens:
+Render this exactly on the first onboarding screen. The elephant and ROMAN wordmark sit OUTSIDE the shell — they are the splash, not boxed content.
 
 ```
                      .. ..oooo.....ooo...
@@ -84,34 +80,24 @@ o88o     o8888o o888ooooood8 o888o       `8'       o888ooooood8
 ──────────────────────────────────────────────────────────────────
 ```
 
-### Community Footer (Tier 1)
+After the splash, content goes in the shell:
+
+### Screen Template
 
 ```
-║  ──────────────────────────────────────────────────────────────────────────────────  ║
-║  Free: Join the ALIVE community → skool.com/aliveoperators                           ║
-║                                                                                      ║
-╚══════════════════════════════════════════════════════════════════════════════════════╝
+╭──────────────────────────────────────────────────────────────────────╮
+│                                                                       │
+│    onboarding — [session name]                                        │
+│  ──────────────────────────────────────────────────────────────────── │
+│                                                                       │
+│  [CONTENT HERE]                                                       │
+│                                                                       │
+│  ──────────────────────────────────────────────────────────────────── │
+│  Free: Join the ALIVE community → skool.com/aliveoperators            │
+╰──────────────────────────────────────────────────────────────────────╯
 ```
 
-### Full Screen Template
-
-Every onboarding screen should follow this structure:
-
-```
-╔══════════════════════════════════════════════════════════════════════════════════════╗
-║                                                                                      ║
-║  [FULL LOGO FROM ABOVE]                                                              ║
-║                                                                                      ║
-║    onboarding                                                                        ║
-║  ════════════════════════════════════════════════════════════════════════════════    ║
-║                                                                                      ║
-║  [CONTENT HERE]                                                                      ║
-║                                                                                      ║
-║  ──────────────────────────────────────────────────────────────────────────────────  ║
-║  Free: Join the ALIVE community → skool.com/aliveoperators                           ║
-║                                                                                      ║
-╚══════════════════════════════════════════════════════════════════════════════════════╝
-```
+**Key rule:** The elephant + ROMAN wordmark render as raw text ABOVE the shell on the boot screen only. On subsequent screens, just use the shell with the `onboarding` label. Do NOT put the elephant or wordmark inside `│` borders.
 
 ---
 
@@ -171,7 +157,7 @@ Then immediately return to the current onboarding step.
 1. **Experience before explanation** — They feel it work before they understand how
 2. **Create the impasse** — "Will it remember?" is the question they carry into Session 2
 3. **Socratic, not didactic** — Ask about their life, don't lecture about ALIVE
-4. **Build alongside them** — Their real project, populated from their real words
+4. **Build alongside them** — Their real venture or experiment, populated from their real words
 5. **Let them discover readability** — When they see _brain/ files, the structure clicks
 6. **The save-and-return proof** — Session 2 opens by proving persistence
 7. **Explain mechanism AFTER experience** — How it works comes after they've felt it work
@@ -236,7 +222,7 @@ SESSION 1: THE EXPERIENCE
 ────────────────────────────────────────
 1.  Boot Screen (manifesto + elephant — the emotional setup)
 2.  The Question ("What takes up the most mental space?")
-3.  The Build (create their project live from their words)
+3.  The Build (create their first venture or experiment live from their words)
 4.  Quick Config (location, timezone, theme, yaml)
 5.  System Install (rules, CLAUDE.md, statusline)
 6.  The Challenge ("Close terminal. Come back. Ask what you're working on.")
@@ -247,7 +233,7 @@ SESSION 2: THE PROOF + EXPANSION
 7.  The Proof (read _brain/, show them everything back)
 8.  The Mechanism (NOW explain how it works — domains, _brain/, the loop)
 9.  Life Setup (areas, people, goals — the foundation)
-10. More Projects (ventures + experiments)
+10. More Ventures + Experiments
 11. Create Remaining Structure (from templates)
 12. Verify Installation
 13. Import (existing content + AI conversation history)
@@ -262,11 +248,11 @@ Claude operates with its loaded rules. When you install rules and CLAUDE.md in S
 
 Only a fresh session loads the new rules from `{alive-root}/.claude/rules/` and the CLAUDE.md identity.
 
-**Session 1** creates the experience — their first project built from a real conversation, plus system files installed. The user leaves with an open question: "Will it remember?"
+**Session 1** creates the experience — their first venture or experiment built from a real conversation, plus system files installed. The user leaves with an open question: "Will it remember?"
 
-**Session 2** opens with the proof — Claude reads their _brain/ files and recites back everything they shared. THEN explains how it works. Then expands their world with Life, more projects, and the full system.
+**Session 2** opens with the proof — Claude reads their _brain/ files and recites back everything they shared. THEN explains how it works. Then expands their world with Life, more ventures and experiments, and the full system.
 
-Without the restart, Claude would create projects without understanding ALIVE conventions — leading to incorrect folder structures, missing files, and broken patterns.
+Without the restart, Claude would create ventures and experiments without understanding ALIVE conventions — leading to incorrect folder structures, missing files, and broken patterns.
 
 ---
 
@@ -358,7 +344,7 @@ Just tell me about it. What is it, and where are you with it?
 
 **Wait for their response. Listen.**
 
-Then follow up conversationally — draw out the context that will populate their first project:
+Then follow up conversationally — draw out the context that will populate their first venture or experiment:
 
 ```
 Tell me more:
@@ -371,11 +357,11 @@ Tell me more:
 **You're not just collecting information — you're having a conversation.** The user should feel heard, not interrogated. Use their language back to them. Ask follow-up questions that show you understand.
 
 **Capture mentally (or in working memory) the following from their responses:**
-- **Project name** (ask if not clear: "What do you call this?")
+- **Name** (ask if not clear: "What do you call this?")
 - **Status/phase** → will populate `status.md`
 - **Tasks/to-dos** → will populate `tasks.md`
 - **Insights/learnings** → will populate `insights.md`
-- **Whether this is a Venture (revenue intent) or Experiment (exploring)**
+- **Whether this is a venture (revenue intent) or experiment (exploring)**
 
 **Once you have a clear picture (2-4 exchanges), move to The Build.**
 
@@ -383,7 +369,7 @@ Tell me more:
 
 ### Step 3: The Build
 
-**Now show them the magic. Build their project live while they watch.**
+**Now show them the magic. Build their first venture or experiment live while they watch.**
 
 ```
 Watch this.
@@ -414,7 +400,7 @@ AskUserQuestion({
 
 #### 3b: Create Structure
 
-Create the full ALIVE structure AND their first project in one go:
+Create the full ALIVE structure AND their first venture or experiment in one go:
 
 ```bash
 ALIVE_ROOT="{user-chosen-location}"
@@ -428,13 +414,13 @@ mkdir -p "$ALIVE_ROOT/05_Experiments"
 mkdir -p "$ALIVE_ROOT/.claude/rules"
 mkdir -p "$ALIVE_ROOT/.claude/state"
 
-# Create their first project
-PROJECT_DOMAIN="04_Ventures"  # or 05_Experiments based on Step 2
-PROJECT_NAME="{kebab-case-name}"
-mkdir -p "$ALIVE_ROOT/$PROJECT_DOMAIN/$PROJECT_NAME/.claude"
-mkdir -p "$ALIVE_ROOT/$PROJECT_DOMAIN/$PROJECT_NAME/_brain"
-mkdir -p "$ALIVE_ROOT/$PROJECT_DOMAIN/$PROJECT_NAME/_working"
-mkdir -p "$ALIVE_ROOT/$PROJECT_DOMAIN/$PROJECT_NAME/_references"
+# Create their first venture or experiment
+DOMAIN="04_Ventures"  # or 05_Experiments based on Step 2
+NAME="{kebab-case-name}"
+mkdir -p "$ALIVE_ROOT/$DOMAIN/$NAME/.claude"
+mkdir -p "$ALIVE_ROOT/$DOMAIN/$NAME/_brain"
+mkdir -p "$ALIVE_ROOT/$DOMAIN/$NAME/_working"
+mkdir -p "$ALIVE_ROOT/$DOMAIN/$NAME/_references"
 
 # Open in Finder
 open "$ALIVE_ROOT"
@@ -496,29 +482,29 @@ Write `insights.md`:
 **Category:** [market/product/process/people/technical]
 **Learning:** [Any insights or learnings they shared]
 **Evidence:** Shared during onboarding setup
-**Applies to:** [project name]
+**Applies to:** [venture/experiment name]
 ```
 
 Write `changelog.md`:
 ```markdown
 # Changelog
 
-## [today's date] — Project Created (Onboarding)
+## [today's date] — Created (Onboarding)
 **Session:** [session-id]
 
 ### Context
-- Project created during ALIVE onboarding
-- [1-2 sentences summarizing what user shared about the project]
+- Created during ALIVE onboarding
+- [1-2 sentences summarizing what user shared]
 
 ### Next
 - [The immediate next step they described]
 ```
 
-Write `manifest.json` from template, customized with project details.
+Write `manifest.json` from template, customized with venture/experiment details.
 
-Write `.claude/CLAUDE.md` (project identity):
+Write `.claude/CLAUDE.md` (unit identity):
 ```markdown
-# [Project Name]
+# [Name]
 
 [One-sentence description based on what user shared]
 
@@ -535,7 +521,7 @@ ALIVE/
 ├── 02_Life/              ← We'll set this up in Session 2
 ├── 03_Inputs/
 ├── 04_Ventures/
-│   └── [project-name]/
+│   └── [name]/
 │       ├── .claude/CLAUDE.md   ← "[goal sentence]"
 │       ├── _brain/
 │       │   ├── status.md       ← Phase: [phase]. Focus: [their words]
@@ -549,7 +535,7 @@ ALIVE/
 
 ▸ opening folder — check your file manager.
 
-✓ Your first project is live.
+✓ Your first venture is live.
   Everything you just told me is now in files I can read.
 ```
 
@@ -700,14 +686,68 @@ status so you always know what needs attention.
    }
    ```
 
+**After installing, display this directly to the user as visible conversation output.** This is a critical explanation moment — do NOT skip or abbreviate it. Output the installation confirmation, then the explanation below it:
+
 ```
 ▸ installing system files...
-  └─ .claude/CLAUDE.md     (System identity + preferences)
-  └─ .claude/rules/        (8 behavior files)
-  └─ Statusline configured
+  └─ .claude/CLAUDE.md     ✓
+  └─ .claude/rules/        ✓ (8 files)
+  └─ Statusline             ✓
 
 ✓ System installed
 ```
+
+Then explain what just happened and how ALIVE works. **This must be output as regular text the user can read, not hidden in implementation details:**
+
+```
+HOW THIS WORKS
+─────────────────────────────────────────────────────────────────────────
+
+Those files I just installed? They're what makes ALIVE work.
+
+Every time you start a Claude Code session in this folder, Claude
+automatically reads those files before you say anything. They teach
+Claude how to use ALIVE — how to read your venture/experiment state, show you
+what it's looking at, flag when things are stale, offer to capture
+decisions. You don't need to update them. You don't need to think
+about them. They just work.
+
+WHAT ARE _brain/ FILES?
+─────────────────────────────────────────────────────────────────────────
+
+Every venture, experiment, or life area you create in ALIVE gets a
+_brain/ folder. That's where everything about it lives:
+
+  status.md    → Where you're at right now (phase, focus, blockers)
+  tasks.md     → What needs doing
+  insights.md  → What you've learned
+  changelog.md → History of every session
+  manifest.json → Map of everything in the venture/experiment
+
+When you say "work on [name]", Claude reads those files and knows
+exactly where you left off. That's the whole trick — no database, no
+app, no subscription. Just files.
+
+WHY MARKDOWN?
+─────────────────────────────────────────────────────────────────────────
+
+You're going to see a lot of .md files. Markdown is just plain text
+with simple formatting — headings, bullet points, bold text. Nothing
+fancy.
+
+The reason ALIVE uses markdown for everything:
+  • YOU can read it. Open any file and it makes sense immediately.
+  • AI can read it. Claude understands markdown perfectly.
+  • It's just files. They live on your computer (or iCloud, Dropbox,
+    wherever you put this folder). No vendor lock-in. No proprietary
+    format. No app that might shut down next year.
+  • It's searchable. Spotlight, grep, whatever you use — it just works.
+
+Your entire system is files you own, on hardware you control, readable
+by any text editor or AI. That's the point.
+```
+
+**Important:** This explanation is the first time the user understands what ALIVE actually is. Do NOT condense it. Do NOT skip sections. Output all of it. If the user seems engaged, pause briefly to let it land before continuing to the next step.
 
 ---
 
@@ -718,7 +758,7 @@ status so you always know what needs attention.
 ```
 ╭─ NOW FOR THE REAL TEST ───────────────────────────────────────────────╮
 │                                                                        │
-│  Everything you told me about [project-name] is saved to files.       │
+│  Everything you told me about [name] is saved to files.       │
 │  But right now, I'm running from the plugin — I haven't loaded       │
 │  the rules I just installed. I need a restart to become the           │
 │  full ALIVE system.                                                   │
@@ -759,34 +799,44 @@ status so you always know what needs attention.
 
 **This is the aha moment. Don't blow it.**
 
-Read `{alive-root}/.claude/alive.local.yaml` and confirm Session 1 was completed. Then immediately read the _brain/ files from the project created in Session 1.
+**First: Verify Session 1 actually completed.** Read `{alive-root}/.claude/alive.local.yaml` and check for `onboarding_part: 1`. Then scan for the venture or experiment that should have been created in Session 1.
 
-**Find the project:** Scan `04_Ventures/` and `05_Experiments/` for any folder with a `_brain/` directory. Read its `status.md`, `tasks.md`, `insights.md`.
+**Guard check — find the venture/experiment:** Scan `04_Ventures/` and `05_Experiments/` for any folder with a `_brain/` directory.
+
+**If NO venture or experiment with `_brain/` is found:**
+```
+Hmm — it looks like Session 1 didn't finish creating your first venture.
+
+That's fine. Let me pick up where we left off.
+```
+Then jump back to the creation step from Session 1 (Step 4). Do NOT show the "You're back" proof screen — there's nothing to prove yet.
+
+**If a venture or experiment IS found:** Read its `status.md`, `tasks.md`, `insights.md`. Then proceed with the proof display below.
 
 **Display inside the full Tier 1 border with elephant + wordmark:**
 
 ```
-╔══════════════════════════════════════════════════════════════════════════════════════╗
-║                                                                                      ║
-║  [FULL LOGO]                                                                         ║
-║                                                                                      ║
-║    onboarding — session 2                                                            ║
-║  ════════════════════════════════════════════════════════════════════════════════    ║
-║                                                                                      ║
-║  You're back. Let me show you something.                                             ║
-║                                                                                      ║
-║  ▸ reading [project-name]/_brain/status.md                                           ║
-║    └─ Phase: [phase]. Focus: [their words from Session 1]                            ║
-║                                                                                      ║
-║  ▸ reading [project-name]/_brain/tasks.md                                            ║
-║    └─ [N] tasks: [list the urgent/active ones by name]                               ║
-║                                                                                      ║
-║  ▸ reading [project-name]/_brain/insights.md                                         ║
-║    └─ "[the insight they shared]"                                                    ║
-║                                                                                      ║
-║  I remember everything. You didn't have to re-explain a thing.                       ║
-║                                                                                      ║
-╚══════════════════════════════════════════════════════════════════════════════════════╝
+╭──────────────────────────────────────────────────────────────────────────────────────╮
+│                                                                                      │
+│  [FULL LOGO]                                                                         │
+│                                                                                      │
+│    onboarding — session 2                                                            │
+│  ──────────────────────────────────────────────────────────────────────────────────  │
+│                                                                                      │
+│  You're back. Let me show you something.                                             │
+│                                                                                      │
+│  ▸ reading [name]/_brain/status.md                                                   │
+│    └─ Phase: [phase]. Focus: [their words from Session 1]                            │
+│                                                                                      │
+│  ▸ reading [name]/_brain/tasks.md                                                    │
+│    └─ [N] tasks: [list the urgent/active ones by name]                               │
+│                                                                                      │
+│  ▸ reading [name]/_brain/insights.md                                                 │
+│    └─ "[the insight they shared]"                                                    │
+│                                                                                      │
+│  I remember everything. You didn't have to re-explain a thing.                       │
+│                                                                                      │
+╰──────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
 **Pause. Let this land.** This is the moment the user understands what ALIVE does — not because you explained it, but because they FELT it.
@@ -812,7 +862,7 @@ HOW IT WORKS
 
 What just happened:
 
-1. In Session 1, you told me about [project-name]
+1. In Session 1, you told me about [name]
 2. I wrote your words into files — structured markdown in _brain/
 3. You closed the terminal. I "forgot" everything.
 4. You came back. I read the files. Context restored.
@@ -820,7 +870,7 @@ What just happened:
 The key: your context lives in FILES, not in my memory.
 Files persist. My memory doesn't.
 
-  [project-name]/
+  [name]/
   └── _brain/
       ├── status.md     ← Where are we? What's the current focus?
       ├── tasks.md      ← What needs doing?
@@ -874,7 +924,7 @@ Three reasons:
 THE FIVE DOMAINS
 ─────────────────────────────────────────────────────────────────────────
 
-Your [project-name] lives in [04_Ventures or 05_Experiments].
+Your [name] lives in [04_Ventures or 05_Experiments].
 But ALIVE organizes ALL of your context into five areas:
 
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -888,7 +938,7 @@ But ALIVE organizes ALL of your context into five areas:
 │  03_Inputs       The inbox — stuff to process                       │
 │                  (Meeting notes, ideas, links to sort)              │
 │                                                                     │
-│  04_Ventures     Revenue-generating projects                        │
+│  04_Ventures     Revenue-generating ventures                        │
 │                  (Businesses, freelance, products)                  │
 │                                                                     │
 │  05_Experiments  Ideas you're testing                               │
@@ -922,7 +972,7 @@ DOMAIN DEEP DIVE
 ─────────────────────────────────────────────────────────────────────────
 
 01_ARCHIVE
-  Things that are done. Completed projects, old experiments, closed
+  Things that are done. Completed ventures, old experiments, closed
   chapters. We move things here instead of deleting — nothing is lost.
 
 02_LIFE (Most Important)
@@ -931,7 +981,7 @@ DOMAIN DEEP DIVE
   ignore this. ALIVE doesn't.
 
   Life includes a special folder: people/
-  Everyone you know lives here — linked across all your projects.
+  Everyone you know lives here — linked across all your ventures and experiments.
   Your cofounder? They're in people/, referenced from ventures.
 
 03_INPUTS
@@ -956,11 +1006,13 @@ THE LEARNING LOOP
 
 ALIVE works best with a daily rhythm:
 
-  /alive:daily  → Start your day. See everything across all projects.
-                  Urgent tasks, inputs to process, what needs attention.
+  /alive:daily  → Start your day. See everything across all ventures,
+                  experiments, and life areas. Urgent tasks, inputs to
+                  process, what needs attention.
 
-  /alive:work   → Focus on ONE project. Load its context, start working.
-                  "work on [project-name]" or "focus on health"
+  /alive:work   → Focus on ONE venture, experiment, or life area. Load
+                  its context, start working. "work on [name]" or
+                  "focus on health"
 
   /alive:save   → End your session. Log what happened, update context.
                   This is how memory persists.
@@ -977,7 +1029,7 @@ AskUserQuestion({
     question: "Ready to set up the rest of your world?",
     header: "Continue",
     options: [
-      { label: "Let's go", description: "Set up Life, add more projects" },
+      { label: "Let's go", description: "Set up Life, add more ventures and experiments" },
       { label: "Other commands", description: "What else can ALIVE do?" }
     ],
     multiSelect: false
@@ -998,7 +1050,7 @@ OTHER USEFUL COMMANDS
 /alive:recall   Search your history. "What did we decide about
                 pricing?" — I'll find it.
 
-/alive:new      Create a new project (venture, experiment, life area).
+/alive:new      Create a new venture, experiment, or life area.
 
 /alive:archive  Move something to the archive when it's done.
 
@@ -1052,7 +1104,7 @@ Are you sure?
 Without Life setup, ALIVE becomes just another project tracker.
 You'll miss:
   - Personal context that compounds over time
-  - Relationship tracking across projects
+  - Relationship tracking across ventures and experiments
   - Health/energy patterns that affect productivity
   - The foundation that makes everything else work
 ```
@@ -1137,7 +1189,7 @@ KEY PEOPLE
 ALIVE has a central place for all the people in your life: people/
 
 This is powerful because:
-  - One file per person, linked across all projects
+  - One file per person, linked across all your ventures and experiments
   - I remember context about relationships over time
   - Your cofounder appears in Ventures AND in People
   - Family members have their own context that compounds
@@ -1198,16 +1250,16 @@ Enter any goals, or skip:
 **Implementation:**
 Create `02_Life/_brain/` with status.md, tasks.md, insights.md, changelog.md, manifest.json from templates.
 Create `02_Life/people/` folder and individual person files.
-Create each life area project with _brain/, _working/, _references/, .claude/CLAUDE.md.
+Create each life area with _brain/, _working/, _references/, .claude/CLAUDE.md.
 
 ---
 
-### Step 10: More Projects
+### Step 10: More Ventures + Experiments
 
 ```
-╭─ MORE PROJECTS ───────────────────────────────────────────────────────╮
+╭─ MORE VENTURES + EXPERIMENTS ─────────────────────────────────────────╮
 │                                                                        │
-│  You already have [project-name]. Let's add more.                     │
+│  You already have [name]. Let's add more.                             │
 │                                                                        │
 ╰────────────────────────────────────────────────────────────────────────╯
 ```
@@ -1215,7 +1267,7 @@ Create each life area project with _brain/, _working/, _references/, .claude/CLA
 #### Ventures
 
 ```
-VENTURES are projects with revenue intent.
+VENTURES are work with revenue intent.
 
 This could be:
   - A business you run
@@ -1223,7 +1275,7 @@ This could be:
   - A product you're building to sell
   - A side project that could make money
 
-Do you have any OTHER active ventures? (Besides [project-name])
+Do you have any OTHER active ventures? (Besides [name])
 ```
 
 Use AskUserQuestion:
@@ -1234,7 +1286,7 @@ AskUserQuestion({
     header: "Ventures",
     options: [
       { label: "Yes", description: "I have more ventures to set up" },
-      { label: "No", description: "Just [project-name] for now" },
+      { label: "No", description: "Just [name] for now" },
       { label: "Not sure", description: "Help me figure out what counts" }
     ],
     multiSelect: false
@@ -1365,18 +1417,18 @@ Use AskUserQuestion to ask about more experiments, then continue.
 
 ### Step 11: Create Remaining Structure
 
-Create all projects configured in Steps 9-10. (The first project from Session 1 already exists.)
+Create all ventures, experiments, and life areas configured in Steps 9-10. (The first venture or experiment from Session 1 already exists.)
 
 ```
-╭─ CREATING YOUR PROJECTS ─────────────────────────────────────────────╮
+╭─ CREATING YOUR WORLD ────────────────────────────────────────────────╮
 │                                                                        │
 │  Building your personal context infrastructure...                      │
 │                                                                        │
 ╰────────────────────────────────────────────────────────────────────────╯
 ```
 
-**For each NEW project (life area, venture, experiment), create:**
-- `.claude/CLAUDE.md` (project identity from template)
+**For each NEW venture, experiment, or life area, create:**
+- `.claude/CLAUDE.md` (unit identity from template)
 - `_brain/status.md` (from template, customized with user input)
 - `_brain/tasks.md` (from template)
 - `_brain/insights.md` (from template)
@@ -1393,7 +1445,7 @@ Create all projects configured in Steps 9-10. (The first project from Session 1 
 **Display the tree:**
 
 ```
-▸ creating projects...
+▸ creating structure...
 
 02_Life/
 ├── _brain/              (Life focus + goals)
@@ -1410,7 +1462,7 @@ Create all projects configured in Steps 9-10. (The first project from Session 1 
     └── ben.md
 
 04_Ventures/
-├── [first-project]/     ← Already created in Session 1
+├── [first-venture]/     ← Already created in Session 1
 └── [new-venture]/
     ├── .claude/CLAUDE.md
     ├── _brain/
@@ -1425,7 +1477,7 @@ Create all projects configured in Steps 9-10. (The first project from Session 1 
     ├── _working/
     └── _references/
 
-✓ All projects created
+✓ All ventures, experiments, and life areas created
 ```
 
 ---
@@ -1453,8 +1505,8 @@ SYSTEM FILES
   ✓ .claude/state/ exists
   ✓ .claude/alive.local.yaml exists
 
-PROJECTS
-  ✓ [first-project]/_brain/ initialized
+VENTURES / EXPERIMENTS
+  ✓ [first-venture]/_brain/ initialized
   ✓ [venture]/_brain/ initialized
   ✓ [experiment]/_brain/ initialized
 
@@ -1609,7 +1661,7 @@ ALIVE Context Import plugin:
 This is a separate plugin (not bundled with ALIVE) that handles:
   • Exporting your data from AI assistants
   • Extracting decisions, insights, and action items
-  • Routing imported context into your ALIVE projects
+  • Routing imported context into your ALIVE ventures, experiments, and life areas
   • Building your _references/ and _brain/ files from history
 
 I've added a task to your Life tasks so you don't forget.
@@ -1643,45 +1695,68 @@ You can install it any time.
 
 ### Step 14: Complete + What's Next
 
-**Update `alive.local.yaml`** — remove `onboarding_part`, add `onboarding_complete`:
+**First: Verify `alive.local.yaml` has all required fields.** Read `{alive-root}/.claude/alive.local.yaml` and check:
 
-Use the Edit tool to modify `{alive-root}/.claude/alive.local.yaml`:
+| Field | Required | Fix if missing |
+|-------|----------|----------------|
+| `version` | Yes | Add `version: 2` |
+| `system_version` | Yes | Add `system_version: "3.0.1"` |
+| `alive_root` | Yes | Add with the current working directory path |
+| `timezone` | Yes | Ask the user |
+| `theme` | Yes | Default to `vibrant` |
+| `working_style` | Yes | Default to `solo` |
+| `created` | Yes | Add with today's date |
+
+If any fields are missing, add them silently (don't interrupt the flow — just fix it). Then update the file:
 - Remove the line `onboarding_part: 1`
 - Add `onboarding_complete: true`
 
 **Display:**
 
 ```
-╔══════════════════════════════════════════════════════════════════════════════════════╗
-║                                                                                      ║
-║  [FULL LOGO]                                                                         ║
-║                                                                                      ║
-║    ✓ SETUP COMPLETE                                                                  ║
-║  ════════════════════════════════════════════════════════════════════════════════    ║
-║                                                                                      ║
-║  WHAT YOU HAVE NOW:                                                                  ║
-║    • [project-name] with full context from our conversation                         ║
-║    • 02_Life/ with [X] areas + [Y] people configured                                ║
-║    • [N] ventures ready to track                                                     ║
-║    • [N] experiments ready to explore                                                ║
-║    • All rules and system files installed                                             ║
-║    • System version: 3.0.1                                                           ║
-║                                                                                      ║
-║  THE LEARNING LOOP:                                                                  ║
-║    /alive:daily   → See everything, start your day                                   ║
-║    /alive:work    → Focus on one project                                             ║
-║    /alive:save    → End session, preserve context                                    ║
-║                                                                                      ║
-║  REMEMBER:                                                                           ║
-║    • Save before closing (or context is lost)                                        ║
-║    • Dump stuff in 03_Inputs/ when unsure where it goes                              ║
-║    • Context compounds — the more you use it, the better it gets                     ║
-║                                                                                      ║
-║  ──────────────────────────────────────────────────────────────────────────────────  ║
-║  Free: Join the ALIVE community → skool.com/aliveoperators                           ║
-║  (Templates, guides, Q&A with other operators)                                       ║
-║                                                                                      ║
-╚══════════════════════════════════════════════════════════════════════════════════════╝
+╭──────────────────────────────────────────────────────────────────────────────────────╮
+│                                                                                      │
+│  [FULL LOGO]                                                                         │
+│                                                                                      │
+│    ✓ SETUP COMPLETE                                                                  │
+│  ──────────────────────────────────────────────────────────────────────────────────  │
+│                                                                                      │
+│  WHAT YOU HAVE NOW:                                                                  │
+│    • [name] with full context from our conversation                                  │
+│    • 02_Life/ with [X] areas + [Y] people configured                                 │
+│    • [N] ventures ready to track                                                     │
+│    • [N] experiments ready to explore                                                │
+│    • All rules and system files installed                                             │
+│    • System version: 3.0.1                                                           │
+│                                                                                      │
+│  SKILLS — HOW YOU TALK TO ALIVE:                                                     │
+│                                                                                      │
+│    Skills are slash commands. Type them in the chat to tell ALIVE                     │
+│    what you want to do. You've already used one: /alive:onboarding                   │
+│                                                                                      │
+│    The three you'll use most:                                                        │
+│      /alive:daily   → See everything, start your day                                 │
+│      /alive:work    → Focus on one venture, experiment, or life area                 │
+│      /alive:save    → End session, preserve context                                  │
+│                                                                                      │
+│    Other useful ones:                                                                │
+│      /alive:capture  → Save a decision, note, or email                               │
+│      /alive:digest   → Process your 03_Inputs/ inbox                                 │
+│      /alive:help     → See all available skills                                      │
+│                                                                                      │
+│    You can also just talk naturally — "work on acme", "what's in                     │
+│    my inbox", "save" — and ALIVE will figure out which skill to use.                 │
+│                                                                                      │
+│  REMEMBER:                                                                           │
+│    • Save before closing (or context is lost)                                        │
+│    • Dump stuff in 03_Inputs/ when unsure where it goes                              │
+│    • Context compounds — the more you use it, the better it gets                     │
+│                                                                                      │
+│  ──────────────────────────────────────────────────────────────────────────────────  │
+│  Free: Join the ALIVE community → skool.com/aliveoperators                           │
+│  (Templates, guides, Q&A with other operators)                                       │
+│                                                                                      │
+╰──────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
 Use AskUserQuestion:
@@ -1692,7 +1767,7 @@ AskUserQuestion({
     header: "Next",
     options: [
       { label: "/alive:daily", description: "See my full dashboard" },
-      { label: "Work on a venture", description: "Start with my main project" },
+      { label: "Work on a venture", description: "Start with my main venture" },
       { label: "/alive:migrate", description: "Import my existing content" },
       { label: "Explore", description: "Let me look around first" }
     ],
@@ -1736,7 +1811,7 @@ At any point during setup, if the user says "skip" or wants to jump ahead:
 Create minimal structure (domain folders + .claude/ system files) and mark complete.
 
 For Session 1: Create folders, install rules, create alive.local.yaml with `onboarding_complete: true` (skip Session 2).
-For Session 2: Create minimal projects with default _brain/ files and mark complete.
+For Session 2: Create minimal ventures/experiments with default _brain/ files and mark complete.
 
 ---
 
@@ -1790,8 +1865,8 @@ Treat as new user. Run Session 1 from Step 1 but preserve existing yaml fields.
 **User runs onboarding while already in Session 2 location (cd'd into alive root):**
 The rules are already loaded. Detect `onboarding_part: 1` and proceed to Session 2.
 
-**First project was an Experiment but user described it as a Venture in Session 1:**
-In Session 2, after the Proof, offer to move it: "Should [project] be in Ventures or Experiments?"
+**First venture was actually an Experiment (user described it as a Venture in Session 1):**
+In Session 2, after the Proof, offer to move it: "Should [name] be in Ventures or Experiments?"
 
 ---
 
@@ -1892,7 +1967,7 @@ See people/ for all contacts.
 ## Related Skills
 
 - `/alive:daily` — Morning entry point (most common next step)
-- `/alive:work` — Focus on one project
+- `/alive:work` — Focus on one venture, experiment, or life area
 - `/alive:help` — Quick reference
 - `/alive:upgrade` — For v1 → v2 migration (not fresh setup). Also handles version bumps.
 - `/alive:migrate` — Import existing content

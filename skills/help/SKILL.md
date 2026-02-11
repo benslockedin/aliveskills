@@ -10,14 +10,20 @@ Quick reference for ALIVE. Show available skills, explain concepts, guide usage.
 
 ## UI Treatment
 
-This skill uses **Tier 2: Core Workflow** formatting.
+Uses the **ALIVE Shell** — Tier 2: Core Workflow.
 
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Community footer: `Free: Join the ALIVE community → skool.com/aliveoperators`
+```
+╭──────────────────────────────────────────────────────────╮
+│  ALIVE · help                                             │
+│  ──────────────────────────────────────────────────────── │
+│  [Skills reference / specific help content]               │
+│  ──────────────────────────────────────────────────────── │
+│  [Tip or suggestion]                                      │
+│  Free: Join the ALIVE community → skool.com/aliveoperators│
+╰──────────────────────────────────────────────────────────╯
+```
 
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+See `rules/ui-standards.md` for shell format, logo assets, and tier specifications.
 
 ---
 
@@ -40,30 +46,30 @@ Invoke when the user:
 ## Quick Reference
 
 ```
-╔══════════════════════════════════════════════════════════════════════════════════════════╗
-║                                                                                          ║
-║  {\{\       ,                                             /}/}                            ║
-║  { \ \.--.  \\                                 ,         / / }                            ║
-║  {  /` , "\_//                                 \\   .-=.( (   }                           ║
-║  {  \__\ ,--'                                   \'--"   `\\_.---,='                       ║
-║   {_/   _ ;-.                                    '-,  \__/       \___                     ║
-║    /  '.___/       _  _ ___ _    ___              .-'.-.'      \___.'                     ║
-║    |  __ /        | || | __| |  | _ \            / // /-..___,-`--'                       ║
-║  `=\    \`\       | __ | _|| |__|  _/           `" `"                                    ║
-║     `/  / /       |_||_|___|____|_|                                                      ║
-║      '././                                                                               ║
-║                   aliveOS [Unlimited Elephant 3.0.1]                                     ║
-║                                                                                          ║
-║  ════════════════════════════════════════════════════════════════════════════════════    ║
-║                                                                                          ║
+╭──────────────────────────────────────────────────────────────────────────────────────────╮
+│                                                                                          │
+│  {\{\       ,                                             /}/}                            │
+│  { \ \.--.  \\                                 ,         / / }                            │
+│  {  /` , "\_//                                 \\   .-=.( (   }                           │
+│  {  \__\ ,--'                                   \'--"   `\\_.---,='                       │
+│   {_/   _ ;-.                                    '-,  \__/       \___                     │
+│    /  '.___/       _  _ ___ _    ___              .-'.-.'      \___.'                     │
+│    |  __ /        | || | __| |  | _ \            / // /-..___,-`--'                       │
+│  `=\    \`\       | __ | _|| |__|  _/           `" `"                                    │
+│     `/  / /       |_||_|___|____|_|                                                      │
+│      '././                                                                               │
+│                   aliveOS [Unlimited Elephant 3.0.1]                                     │
+│                                                                                          │
+│  ──────────────────────────────────────────────────────────────────────────────────────  │
+│                                                                                          │
 
 ALIVE — The operating system for your context.
 
 CORE SKILLS
 ─────────────────────────────────────────────────────────────────────────
-/alive:work        Start work, load context from a project
+/alive:work        Start work, load context from a unit
 /alive:save      End session, log to changelog
-/alive:new       Create project or area
+/alive:new       Create venture, experiment, life area, project, or area
 
 CAPTURE & FIND
 ─────────────────────────────────────────────────────────────────────────
@@ -108,23 +114,24 @@ E — 05_Experiments  Testing grounds, no model yet
 Life first, always.
 ```
 
-### Projects vs Areas
+### Ventures, Experiments, Life Areas vs Areas
 
 ```
-User: "What's the difference between project and area?"
+User: "What's the difference between a venture and an area?"
 
-SUBDOMAIN vs AREA
+VENTURE / EXPERIMENT / LIFE AREA vs AREA
 ─────────────────────────────────────────────────────────────────────────
-                    Project           Area
-Has _brain/         Yes                 No
-Has .claude/        Yes                 No
-Has _working/       Yes                 No
-Has _references/    Yes                 No
-Identity file       .claude/CLAUDE.md   README.md
-Example             04_Ventures/acme/      04_Ventures/acme/clients/
+                    Venture/Experiment/   Area
+                    Life Area
+Has _brain/         Yes                   No
+Has .claude/        Yes                   No
+Has _working/       Yes                   No
+Has _references/    Yes                   No
+Identity file       .claude/CLAUDE.md     README.md
+Example             04_Ventures/acme/     04_Ventures/acme/clients/
 
-Projects are projects with their own state.
-Areas are folders within projects.
+Ventures, experiments, and life areas have their own state.
+Areas are organizational folders within ventures, experiments, or life areas.
 ```
 
 ### _brain/ Files
@@ -140,7 +147,7 @@ insights.md     Learnings worth remembering
 changelog.md    Session history + decisions
 manifest.json   Structure map with file summaries
 
-This is the project's "brain" — its persistent memory.
+This is the unit's "brain" — its persistent memory.
 ```
 
 ### Themes
@@ -187,7 +194,7 @@ Say things like:
 - "Find decisions about AWS"
 - "When did we discuss the launch?"
 
-I'll search across all projects and show what I find.
+I'll search across all ventures, experiments, and life areas and show what I find.
 ```
 
 ## Skill Details
@@ -258,11 +265,11 @@ Session:  /alive:save → Logs whole session
 When something goes wrong:
 
 ```
-User: "It says project not found"
+User: "It says not found"
 
-TROUBLESHOOTING: Project not found
+TROUBLESHOOTING: Not found
 ─────────────────────────────────────────────────────────────────────────
-The project you referenced doesn't exist.
+The venture, experiment, or life area you referenced doesn't exist.
 
 Check:
 1. Spelling — Names are lowercase with hyphens
@@ -273,7 +280,7 @@ List available:
   04_Ventures/acme, 04_Ventures/beta
   05_Experiments/test-idea
 
-Create new project with /alive:new
+Create new one with /alive:new
 ```
 
 ## Related Resources

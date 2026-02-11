@@ -2,7 +2,7 @@
 
 > Rest. Preserved but inactive.
 
-Completed ventures, graduated experiments, old projects.
+Completed ventures, graduated experiments, old life areas.
 
 ## What Goes Here
 
