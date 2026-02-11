@@ -6,7 +6,7 @@ If it makes money (or intends to), it's a venture.
 
 ## What Goes Here
 
-Each venture is a subdomain with its own `_brain/`:
+Each venture has its own `_brain/`:
 
 ```
 04_Ventures/

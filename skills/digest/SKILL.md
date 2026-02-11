@@ -1,23 +1,33 @@
 ---
 user-invocable: true
-description: This skill should be used when the user says "process inputs", "digest", "triage", "handle inbox", "sort these", "what's in my inbox", "what's in inputs", or "anything to process". Processes the 03_Inputs/ buffer.
-plugin_version: "2.1.1"
+description: Process and route items from the 03_Inputs/ buffer to their correct locations across ALIVE. Use when the user says "process inputs", "digest", "triage", "handle inbox", "sort these", "what's in my inbox", or "anything to process".
+plugin_version: "3.0.1"
 ---
 
 # alive:digest
 
-Process the 03_Inputs/ buffer. Survey items, triage with user, extract content, route to entities.
+Process the 03_Inputs/ buffer. Survey items, triage with user, extract content, route to units.
 
 ## UI Treatment
 
-This skill uses **Tier 3: Utility** formatting.
+Uses the **ALIVE Shell** — one rounded box, three zones.
 
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
+```
+╭──────────────────────────────────────────────────────────╮
+│  ALIVE · digest                          [date]          │
+│  [N] inputs  →  [N] extractions                      *   │
+│  ──────────────────────────────────────────────────────  │
+│  [Numbered extractions with icons and routing]           │
+│  ──────────────────────────────────────────────────────  │
+│  [ACTIONS]                                               │
+│  [* extractions are generated — review before routing]   │
+│  [routing distribution stats]                            │
+╰──────────────────────────────────────────────────────────╯
+```
 
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+**Skill-specific icons:** `◆` task, `◇` decision, `●` person, `◎` insight, `↳` plan, `→` routes to destination.
+
+See `rules/ui-standards.md` for shell format, logo assets, and tier specifications.
 
 ---
 
@@ -35,7 +45,7 @@ Invoke when the user:
 2. **Prioritize by importance** — Recent and urgent first
 3. **Smart extraction** — Use appropriate agents for complex content
 4. **Manifest-aware routing** — Route to existing areas when possible
-5. **Never delete, always archive** — Processed files move to `01_Archive/{relevant subdomain}/{mirrored path}/...`, never deleted
+5. **Never delete, always archive** — Processed files move to `01_Archive/{relevant unit}/{mirrored path}/...`, never deleted
 
 ## Flow (4 Steps)
 
@@ -51,24 +61,25 @@ STEP 4: Execute         → Route and extract
 Scan `03_Inputs/` and present prioritized list:
 
 ```
-╭─ ALIVE ────────────────────────────────────────────────────────────────╮
-│  digest                                                                │
-╰────────────────────────────────────────────────────────────────────────╯
-
-▸ scanning 03_Inputs/
-
-INPUTS (5 items)
-─────────────────────────────────────────────────────────────────────────
-[1] client-email-acme.md       Email       Today         🔥 urgent
-[2] call-transcript-01-22.md   Transcript  2 days ago    ~45 min
-[3] quick-note.md              Note        3 days ago
-[4] meeting-recording.m4a      Audio       1 week ago
-[5] random-thoughts.md         Note        1 week ago
-
-─────────────────────────────────────────────────────────────────────────
-[a] Digest all    [1-5] Select items    [q] Quit
-
-Which items to digest?
+╭──────────────────────────────────────────────────────────╮
+│                                                          │
+│  ALIVE · digest                           2026-02-09     │
+│  5 inputs  →  scanning...                             *  │
+│                                                          │
+│  ──────────────────────────────────────────────────────  │
+│                                                          │
+│   1) client-email.md         Email       Today       !   │
+│   2) call-transcript.md      Transcript  2 days ago      │
+│   3) quick-note.md           Note        3 days ago      │
+│   4) meeting-recording.m4a   Audio       1 week ago      │
+│   5) random-thoughts.md      Note        1 week ago      │
+│                                                          │
+│  ──────────────────────────────────────────────────────  │
+│                                                          │
+│  a) digest all              #) select items              │
+│  q) quit                                                 │
+│                                                          │
+╰──────────────────────────────────────────────────────────╯
 ```
 
 ### Priority Signals
@@ -159,46 +170,81 @@ Archiving source: 03_Inputs/client-email-acme.md → 01_Archive/03_Inputs/
 ✓ Done
 ```
 
-### Full Extraction (Transcript Agent)
+### Full Extraction (Complex Item Analyser)
 
-For complex items, spawn specialized agent:
+For complex items, first determine the content type, then spawn a specialised agent with type-appropriate extraction instructions.
 
+**Step 1: Identify the content type.** Read the file (or check extension for binary). Classify as one of:
+
+| Type | Signals | Example |
+|------|---------|---------|
+| `transcript` | Long text, multiple speakers, timestamps | Meeting recordings, call notes |
+| `email-thread` | Multiple replies, forwarded chains, headers | Long email conversations |
+| `screenshot` | Image file (.png, .jpg, .webp) | UI captures, competitor pages, whiteboard photos |
+| `document` | PDF, structured text, formal sections | Contracts, reports, specs |
+| `voice-note` | Audio file or voice-to-text dump | Quick captures, rambling thoughts |
+| `video` | Video file or video transcript | Loom recordings, screen captures |
+| `mixed` | Multiple content types in one file | Email with attachments, doc with screenshots |
+
+**Step 2: Build the agent prompt based on type.**
+
+Each type needs different extraction priorities:
+
+**Transcript / Call / Meeting:**
 ```
-▸ spawning transcript extraction agent...
-
-Analyzing call-transcript-01-22.md...
-
-EXTRACTION RESULTS
-─────────────────────────────────────────────────────────────────────────
-People (3):
-  - John Smith (client) → 02_Life/people/john-smith.md [update]
-  - Sarah Chen → exists
-  - New: Mike from TechCorp → create?
-
-Decisions (2):
-  - Use AWS over GCP → 04_Ventures/acme/_brain/changelog.md
-  - Launch date March 15 → 04_Ventures/acme/_brain/changelog.md
-
-Tasks (4):
-  - [ ] Send proposal by Friday
-  - [ ] Schedule follow-up
-  - [ ] Review AWS pricing
-  - [ ] Update timeline
-
-Insights (1):
-  - Client prefers weekly updates → 04_Ventures/acme/_brain/insights.md
-
-─────────────────────────────────────────────────────────────────────────
-[1] Apply all extractions
-[2] Review and select
-[3] Edit before applying
+Focus on: decisions made, action items with owners, disagreements/tensions,
+commitments with deadlines, who said what (attribute quotes), topics discussed
+(in order), follow-up meetings mentioned, anything someone said they'd "send"
+or "share" or "check on."
 ```
+
+**Email Thread:**
+```
+Focus on: the latest request/question (not the full history), any decisions
+confirmed via email, attachments mentioned (what are they, where should they
+go), deadlines or dates mentioned, tone/urgency level, whether a reply is
+expected and by when.
+```
+
+**Screenshot / Image:**
+```
+Focus on: what is shown (describe in detail), any text visible in the image,
+UI state or data displayed, what the user likely wanted to capture and why,
+competitive intelligence if it's a competitor screenshot, any numbers/metrics
+visible.
+```
+
+**Document / PDF:**
+```
+Focus on: key terms and conditions, important dates/deadlines, financial
+figures, obligations or commitments, who the parties are, what action is
+required from the user, anything that contradicts or updates existing context.
+```
+
+**Voice Note:**
+```
+Focus on: the core idea (voice notes often ramble — find the signal), any
+decisions or commitments stated, emotional tone (frustrated? excited? worried?),
+tasks the speaker assigned to themselves ("I need to..." / "I should..."),
+references to other projects or people.
+```
+
+**Video:**
+```
+Focus on: what was demonstrated or shown, key timestamps for important moments,
+any spoken decisions or action items, screen content visible (URLs, data,
+UI states), the purpose of the recording.
+```
+
+**Step 3: Launch the agent.** Include the type-specific extraction focus above PLUS the target unit path and standard ALIVE extraction categories (decisions, tasks, insights, people, key quotes, references).
+
+**Step 4: Present results** in the ALIVE shell format (see `rules/ui-standards.md`). User confirms routing before any changes are made.
 
 ## Routing Logic
 
 ### Check Manifest First
 
-Before routing, check if entity has an area for the content:
+Before routing, check if unit has an area for the content:
 
 ```
 ▸ checking 04_Ventures/acme/_brain/manifest.json
@@ -223,7 +269,7 @@ Route transcript to: 04_Ventures/acme/_references/calls/2026-01-22-partner-sync.
 
 ### Source File Routing
 
-After extraction, the **source file** needs to be stored. Default is `_references/` — the same format used by `/alive:capture-context`.
+After extraction, the **source file** needs to be stored. Default is `_references/` — the same format used by `/alive:capture`.
 
 Every reference creates two files: a **summary `.md`** at the type folder root, and the **original content** in a `raw/` subfolder. The summary should be detailed enough that you rarely need the raw file.
 
@@ -302,14 +348,14 @@ Detailed enough that you rarely need to open the original.]
 `raw/2026-02-06-contract-scan.pdf`
 ```
 
-**Finished artifacts** (spreadsheets, contracts, final documents) → these aren't references, they're project files. Route to the appropriate area folder in the entity:
+**Finished artifacts** (spreadsheets, contracts, final documents) → these aren't references, they're unit files. Route to the appropriate folder in the unit:
 
 ```
 04_Ventures/acme/clients/globex/contract-v1.pdf
 04_Ventures/acme/financials/q1-budget.xlsx
 ```
 
-**The test:** Is this source material you might reference later? → `_references/`. Is this a finished file that belongs in a project? → Area folder.
+**The test:** Is this source material you might reference later? → `_references/`. Is this a finished file that belongs in a unit? → Folder.
 
 **After routing, archive the original from inputs:**
 ```
@@ -386,7 +432,7 @@ Inputs is empty. Nothing to process.
 This transcript mentions both acme and beta projects.
 
 Route extractions to:
-[1] Both entities
+[1] Both units
 [2] Just acme
 [3] Just beta
 [4] Let me specify for each item
@@ -419,6 +465,6 @@ Filed: 2 source files
 
 ## Related Skills
 
-- `/alive:capture-context` — Capture and route content into ALIVE
-- `/alive:do` — Work on entity after digest
+- `/alive:capture` — Capture and route content into ALIVE
+- `/alive:work` — Work on unit after digest
 - `/alive:daily` — Shows inputs count, links here

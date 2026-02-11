@@ -9,7 +9,7 @@
 
 ```
 05_Experiments/
-└── [name]/           # Each experiment is an entity
+└── [name]/           # Each experiment is a unit
     ├── .claude/
     │   └── CLAUDE.md # Identity
     ├── _brain/
@@ -20,7 +20,7 @@
     │   └── manifest.json
     ├── _working/     # Drafts
     ├── _references/  # Reference materials
-    └── [areas]/      # Optional organizational folders
+    └── [areas]/      # Optional folders
 ```
 
 ---
@@ -29,7 +29,7 @@
 
 Experiments are:
 - Ideas being tested
-- Projects without a clear revenue model
+- Ideas without a clear revenue model
 - Explorations that might become ventures
 - Learning exercises
 

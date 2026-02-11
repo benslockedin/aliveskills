@@ -1,5 +1,5 @@
 {
-  "name": "[ENTITY_NAME]",
+  "name": "[UNIT_NAME]",
   "description": "[One sentence description]",
   "goal": "[Single-sentence goal that filters all decisions]",
   "created": "[DATE]",

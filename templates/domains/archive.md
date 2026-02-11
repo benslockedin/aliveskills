@@ -47,10 +47,10 @@ This makes restoration straightforward and keeps context intact.
 
 | Content | When to Archive |
 |---------|-----------------|
-| Venture | Project complete or abandoned |
+| Venture | Complete or abandoned |
 | Experiment | Graduated to venture or abandoned |
 | Life area | No longer relevant |
-| Client project | Work complete |
+| Client work | Work complete |
 | Area | Contents obsolete |
 | Inputs item | Processed, ephemeral but worth keeping |
 
@@ -103,7 +103,7 @@ Restoration moves content back to active location and updates manifests.
 
 | Action | When to Use |
 |--------|-------------|
-| **Archive** | Project complete, client done, experiment concluded |
+| **Archive** | Venture complete, client done, experiment concluded |
 | **Delete** | Never (use archive instead) |
 
 **Exception:** Temporary files in `_working/` can be deleted after promotion.
@@ -139,14 +139,14 @@ Only archive when work is truly done:
 
 Before archiving experiments:
 - Extract valuable insights
-- Copy to other subdomains if relevant
+- Copy to other units if relevant
 - Document why it ended
 
 ### Regular Cleanup
 
 Use `/alive:sweep` to identify archive candidates:
-- Stale subdomains (not updated >4 weeks)
-- Completed projects
+- Stale units (not updated >4 weeks)
+- Completed ventures
 - Abandoned experiments
 
 ---

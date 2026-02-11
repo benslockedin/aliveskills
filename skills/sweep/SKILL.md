@@ -1,7 +1,7 @@
 ---
 user-invocable: true
-description: Audit the system for stale content and cleanup opportunities. Use when the user says "sweep", "clean up", "audit", "check for stale", "maintenance", or "spring cleaning".
-plugin_version: "2.1.1"
+description: Audit the system for stale content, orphan files, and cleanup opportunities. Use when the user says "sweep", "clean up", "audit", "check for stale", "maintenance", or "spring cleaning".
+plugin_version: "3.0.1"
 ---
 
 # alive:sweep
@@ -10,14 +10,20 @@ Audit the ALIVE system for structural compliance, stale content, and cleanup opp
 
 ## UI Treatment
 
-This skill uses **Tier 3: Utility** formatting.
+Uses the **ALIVE Shell** — Tier 3: Utility.
 
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
+```
+╭──────────────────────────────────────────────────────────╮
+│  ALIVE · sweep                          [date]            │
+│  [N] stale  ·  [N] actionable                             │
+│  ──────────────────────────────────────────────────────── │
+│  [Stale items with recommendations]                       │
+│  ──────────────────────────────────────────────────────── │
+│  [ACTIONS]                                                │
+╰──────────────────────────────────────────────────────────╯
+```
 
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+See `rules/ui-standards.md` for shell format, logo assets, and tier specifications.
 
 ---
 
@@ -26,7 +32,7 @@ See `rules/ui-standards.md` for exact border characters, logo assets, and format
 Invoke when the user:
 - Wants to check system health
 - Asks about stale content
-- Needs to clean up or organise
+- Needs to clean up or organize
 - Says "sweep", "audit", "maintenance", "spring cleaning"
 
 ---
@@ -47,13 +53,13 @@ What do you want to sweep?
 
 | Option | Description |
 |--------|-------------|
-| Everything | Full system audit — root, all domains, all entities |
+| Everything | Full system audit — root, all domains, all units |
 | One domain | Pick a domain (Ventures, Experiments, Life) |
-| One entity | Pick a specific entity to deep-audit |
+| One unit | Pick a specific unit to deep-audit |
 | Quick overview | Fast health summary, no cleanup actions |
 
 If user picks "One domain" → follow up asking which domain.
-If user picks "One entity" → follow up asking which entity.
+If user picks "One unit" → follow up asking which unit.
 
 ---
 
@@ -87,16 +93,16 @@ These are things Claude or third-party skills frequently create in the wrong pla
 
 | Pitfall | What It Looks Like | Why It's Wrong | Suggested Fix |
 |---------|--------------------|----------------|---------------|
-| **Plans folder at root** | `docs/plans/` or `plans/` at ALIVE root | Superpowers skill default — should be `{entity}/_working/plans/` | Move into relevant entity's `_working/plans/` |
-| **Docs folder at root** | `docs/` at ALIVE root | Generic folder, not part of ALIVE structure | Move contents into relevant entity |
+| **Plans folder at root** | `docs/plans/` or `plans/` at ALIVE root | Superpowers skill default — should be `{unit}/_working/plans/` | Move into relevant unit's `_working/plans/` |
+| **Docs folder at root** | `docs/` at ALIVE root | Generic folder, not part of ALIVE structure | Move contents into relevant unit |
 | **Inbox at root** | `inbox/` at ALIVE root | Old v1 naming — should be `03_Inputs/` | Rename or merge into `03_Inputs/` |
-| **_state at root or in entities** | `_state/` anywhere | Old v1 naming — should be `_brain/` | Run `/alive:upgrade` |
-| **Random markdown files** | `TODO.md`, `NOTES.md`, `TASKS.md` at root | Loose files — should be in an entity's `_brain/` or `_working/` | Move to relevant entity |
-| **FUTURE-TODO.md** | Anywhere | Claude sometimes creates this instead of using `tasks.md` | Merge contents into entity's `_brain/tasks.md`, archive file |
+| **_state at root or in units** | `_state/` anywhere | Old v1 naming — should be `_brain/` | Run `/alive:upgrade` |
+| **Random markdown files** | `TODO.md`, `NOTES.md`, `TASKS.md` at root | Loose files — should be in a unit's `_brain/` or `_working/` | Move to relevant unit |
+| **FUTURE-TODO.md** | Anywhere | Claude sometimes creates this instead of using `tasks.md` | Merge contents into unit's `_brain/tasks.md`, archive file |
 | **Numbered domain without underscore** | `01Archive/` or `04Ventures/` | Incorrect naming — needs underscore | Rename to `01_Archive/`, `04_Ventures/`, etc. |
 | **Un-numbered domains** | `archive/`, `life/`, `ventures/` | Old v1 naming | Run `/alive:upgrade` or rename |
-| **Tmp or scratchpad files** | `temp/`, `scratch/`, `test.md` | Doesn't belong in ALIVE | Move to entity `_working/` or delete |
-| **Git artifacts** | Unexpected `.git/` directories inside entities | Nested git repos cause issues | Flag for user review |
+| **Tmp or scratchpad files** | `temp/`, `scratch/`, `test.md` | Doesn't belong in ALIVE | Move to unit's `_working/` or delete |
+| **Git artifacts** | Unexpected `.git/` directories inside units | Nested git repos cause issues | Flag for user review |
 
 ### Root Audit Output
 
@@ -114,9 +120,9 @@ ROOT STRUCTURE
 
 VIOLATIONS:
 [1] ✗ docs/plans/feature-spec.md — Plans folder at root
-      → Move to relevant entity's _working/plans/
+      → Move to relevant unit's _working/plans/
 [2] ✗ TODO.md — Loose file at root
-      → Move to relevant entity's _brain/tasks.md
+      → Move to relevant unit's _brain/tasks.md
 [3] ✗ inbox/ — Old v1 naming
       → Merge into 03_Inputs/ and archive
 ```
@@ -127,40 +133,40 @@ If no violations: `✓ Root structure clean`
 
 ## Step 3: Domain Scan
 
-**Scan each domain in scope to discover entities.**
+**Scan each domain in scope to discover units.**
 
 ```
 ▸ scanning 04_Ventures/
-  └─ acme/ (entity)
-  └─ side-hustle/ (entity)
+  └─ acme/ (venture)
+  └─ side-hustle/ (venture)
 
 ▸ scanning 05_Experiments/
-  └─ new-idea/ (entity)
+  └─ new-idea/ (experiment)
 
 ▸ scanning 02_Life/
   └─ people/ (area — always expected)
-  └─ fitness/ (area or entity — check for _brain/)
+  └─ fitness/ (area or life area — check for _brain/)
 ```
 
-Build the list of entities to audit. Each entity gets a sub-agent.
+Build the list of units to audit. Each unit gets a sub-agent.
 
 ---
 
-## Step 4: Dispatch Sub-Agents (One Per Entity)
+## Step 4: Dispatch Sub-Agents (One Per Unit)
 
-**For each entity in scope, dispatch a sub-agent using the Task tool.**
+**For each unit in scope, dispatch a sub-agent using the Task tool.**
 
 Sub-agents run in parallel where possible. Each sub-agent receives:
-1. The entity path
+1. The unit path
 2. The full audit checklist (below)
 3. Instructions to return structured findings
 
 ### Sub-Agent Prompt Template
 
 ```
-You are auditing an ALIVE entity for structural compliance and health.
+You are auditing an ALIVE unit for structural compliance and health.
 
-ENTITY: {entity_path}
+UNIT: {unit_path}
 
 Run ALL of the following checks and return your findings as a structured report.
 Be thorough — read actual files, check actual timestamps, compare actual disk contents against manifest.
@@ -172,7 +178,7 @@ AUDIT CHECKLIST:
 ## A. Required Structure
 
 Check that these exist:
-- [ ] .claude/CLAUDE.md (entity identity file)
+- [ ] .claude/CLAUDE.md (unit identity file)
 - [ ] _brain/status.md
 - [ ] _brain/tasks.md
 - [ ] _brain/insights.md
@@ -194,14 +200,14 @@ Read _brain/manifest.json and do a FULL reconciliation against what actually exi
    - Report: GHOST: {path} listed in manifest but missing from disk
 
 2. **Untracked files (the big one):** Files on disk NOT listed in manifest
-   - List ALL files in the entity recursively (excluding .claude/, _brain/, .DS_Store, Icon files)
+   - List ALL files in the unit recursively (excluding .claude/, _brain/, .DS_Store, Icon files)
    - Compare against ALL manifest entries (areas[].files[], working_files[], key_files[])
    - For each untracked file:
      a. Read the file to understand its contents
      b. Determine where it belongs in the manifest:
         - In _working/ → should be in working_files[]
-        - In an area folder → should be in that area's files[]
-        - At entity root → should be in key_files[] or flagged as orphan
+        - In an folder → should be in that area's files[]
+        - At unit root → should be in key_files[] or flagged as orphan
      c. Generate a proposed manifest entry with description, date_created, date_modified, session_ids
    - Report: UNTRACKED: {path} — proposed entry: {"path": "{path}", "description": "{generated description}", "date_created": "{date}", "date_modified": "{date}", "session_ids": []}
 
@@ -220,7 +226,7 @@ Read _brain/manifest.json and do a FULL reconciliation against what actually exi
 6. **Missing file metadata:** Check all file entries in manifest for required fields
    - Every file entry (in areas[].files[], working_files[], key_files[]) must have: `date_created`, `date_modified`, `session_ids` (array)
    - Report: MISSING_METADATA: {path} — missing {field(s)} (e.g. "missing date_created, date_modified")
-   - Also check entity root manifest fields: must have `goal`, `session_ids` (array, not singular `session_id`)
+   - Also check unit root manifest fields: must have `goal`, `session_ids` (array, not singular `session_id`)
    - Report: LEGACY_FIELD: manifest root has `session_id` (singular) — should be `session_ids` (array)
    - Report: MISSING_GOAL: manifest root is missing `goal` field
 
@@ -254,8 +260,8 @@ Read _brain/tasks.md and check:
 
 List all files in _working/ and check:
 
-1. **File naming:** Do files follow [entity]_[context]_[name].ext pattern?
-   - Report: BAD_NAME: {filename} — missing entity prefix or context
+1. **File naming:** Do files follow [unit]_[context]_[name].ext pattern?
+   - Report: BAD_NAME: {filename} — missing unit prefix or context
 
 2. **File age:** Check modification dates
    - > 14 days old → STALE_DRAFT
@@ -272,12 +278,12 @@ List all files in _working/ and check:
 
 Check for files that shouldn't be where they are:
 
-1. **Files in entity root** (should be in an area or _working/)
+1. **Files in unit root** (should be in an area or _working/)
    - Allowed in root: CLAUDE.md (if no .claude/ folder), README.md
    - Everything else is orphaned
-   - Report: ORPHAN: {filename} in entity root
+   - Report: ORPHAN: {filename} in unit root
 
-2. **Common pitfalls inside entities:**
+2. **Common pitfalls inside units:**
    - plans/ folder → should be _working/plans/
    - docs/plans/ → should be _working/plans/
    - inbox/ → old naming, should be in 03_Inputs/ at ALIVE root
@@ -287,14 +293,14 @@ Check for files that shouldn't be where they are:
    - decisions/ without being listed as an area → flag for review
 
 3. **Areas without README.md**
-   - Every area folder should have a README.md
+   - Every folder should have a README.md
    - Report: NO_README: {area_path}
 
-## G. Nested Entity Check
+## G. Nested Project Check
 
-For any area with has_entities: true in manifest:
-- Check that each nested entity has its own _brain/, _working/, and _references/
-- Check that nested entities DON'T use the parent's _working/
+For any area with has_projects: true in manifest:
+- Check that each nested project has its own _brain/, _working/, and _references/
+- Check that nested projects DON'T use the parent's _working/
 
 ## H. _references/ Folder Audit
 
@@ -351,22 +357,22 @@ Return findings grouped by severity:
 ### CLEAN (checks that passed)
 - {check}: OK
 
-If everything passes: "Entity {name} is fully compliant. No issues found."
+If everything passes: "Unit {name} is fully compliant. No issues found."
 ```
 
 ### Dispatch Pattern
 
 ```python
-# Parallel dispatch — one sub-agent per entity
-for entity in entities_to_audit:
+# Parallel dispatch — one sub-agent per unit
+for unit in units_to_audit:
     Task(
         subagent_type="general-purpose",
-        prompt=sub_agent_prompt.format(entity_path=entity),
-        description=f"Audit {entity}"
+        prompt=sub_agent_prompt.format(unit_path=unit),
+        description=f"Audit {unit}"
     )
 ```
 
-**For "Quick overview" scope:** Skip sub-agents. Just read each entity's `_brain/status.md` and `_brain/manifest.json` updated dates, count `_working/` files, count tasks. Present summary table only.
+**For "Quick overview" scope:** Skip sub-agents. Just read each unit's `_brain/status.md` and `_brain/manifest.json` updated dates, count `_working/` files, count tasks. Present summary table only.
 
 ---
 
@@ -398,11 +404,11 @@ SYSTEM HEALTH SUMMARY
 ─────────────────────────────────────────────────────────────────────────
 Root structure:     ✓ Clean
 03_Inputs/:         [!] 5 items (oldest 2 weeks) → /alive:digest
-Entities scanned:   4
+Units scanned:      4
 
-ENTITY RESULTS
+UNIT RESULTS
 ─────────────────────────────────────────────────────────────────────────
-[Entity Name]          Critical  Warnings  Info
+[Unit Name]             Critical  Warnings  Info
 ─────────────────────────────────────────────────────────────────────────
 acme/webapp               0        3        2
 side-hustle               1        1        0
@@ -412,7 +418,7 @@ fitness                   0        2        0
 TOTAL                     1        6        3
 ```
 
-Then expand each entity's findings:
+Then expand each unit's findings:
 
 ```
 SIDE-HUSTLE — 1 critical, 1 warning
@@ -470,16 +476,16 @@ What to address?
 | **Manifest reconciliation** (batch) | Add ALL untracked files to manifest at once — uses sub-agent generated descriptions and metadata |
 | **MISSING_METADATA** | Add missing `date_created`, `date_modified`, `session_ids` fields to manifest file entries |
 | **LEGACY_FIELD** | Convert manifest root `session_id` (singular) to `session_ids` (array) |
-| **MISSING_GOAL** | Prompt user for entity goal, add `goal` field to manifest root |
-| **STALE _brain/** | Open entity with `/alive:do` to refresh |
+| **MISSING_GOAL** | Prompt user for unit goal, add `goal` field to manifest root |
+| **STALE _brain/** | Open unit with `/alive:work` to refresh |
 | **STUCK task** | Mark done / Reset to To Do / Update |
 | **STALE_DRAFT** | Archive / Promote / Keep |
 | **EVOLVE candidate** | Run working folder evolution (create folder + README, move files) |
 | **ORPHAN file** | Move to `_working/` / Move to area / Archive |
 | **Common pitfall** (plans/, inbox/, etc.) | Move to correct ALIVE location |
 | **NO_README** | Create README.md from template |
-| **ORPHAN_HANDOFF** | Archive to `01_Archive/{entity}/sessions/` |
-| **BAD_NAME** | Suggest rename following `[entity]_[context]_[name].ext` |
+| **ORPHAN_HANDOFF** | Archive to `01_Archive/{unit}/sessions/` |
+| **BAD_NAME** | Suggest rename following `[unit]_[context]_[name].ext` |
 | **BAD_FRONTMATTER / NO_FRONTMATTER** | Add or fix YAML front matter with required fields (`type`, `date`, `summary`) |
 | **ORPHAN_REF** | Add to manifest references[] / Archive |
 | **GHOST_REF** | Remove from manifest references[] |
@@ -505,7 +511,7 @@ For each selected action:
 4 issues resolved.
 ```
 
-After execution, update the entity's `_brain/manifest.json` if any files were moved/created/removed.
+After execution, update the unit's `_brain/manifest.json` if any files were moved/created/removed.
 
 ---
 
@@ -543,12 +549,12 @@ HEALTH SUMMARY
 Root:        ✓ Clean (6 allowed folders, 0 violations)
 Inputs:      3 items (oldest 5 days)
 
-Entities:
+Units:
   acme/webapp          Building    Updated 2 days ago     7 _working/ files
   side-hustle          Growing     Updated 18 days ago    3 _working/ files  [!]
   new-idea             Starting    Updated 1 day ago      0 _working/ files
 
-Status: [!] 1 entity stale
+Status: [!] 1 unit stale
 
 ─────────────────────────────────────────────────────────────────────────
 [1] Full sweep (deep audit)
@@ -569,7 +575,7 @@ Which domain?
 [3] 02_Life/
 ```
 
-Then run root audit + sub-agents for entities in that domain only.
+Then run root audit + sub-agents for units in that domain only.
 
 ---
 
@@ -596,7 +602,7 @@ Then run root audit + sub-agents for entities in that domain only.
 
 System is healthy:
 - Root structure compliant
-- All entities have complete _brain/
+- All units have complete _brain/
 - Manifests accurate
 - No stale content
 - Inputs clear
@@ -606,20 +612,20 @@ System is healthy:
 
 **Massive cleanup needed (>20 issues):**
 ```
-Found 47 issues across 5 entities.
+Found 47 issues across 5 units.
 
 This is a big cleanup. How to proceed?
 [1] Critical only (12 items)
-[2] One entity at a time
+[2] One unit at a time
 [3] All at once (will take time)
 [4] Export report to _working/sweep-report.md for manual review
 ```
 
-**Entity has no _brain/ at all:**
+**Unit has no _brain/ at all:**
 ```
 [!] 04_Ventures/mystery-project/ has no _brain/ folder
 
-This doesn't look like a properly initialised entity.
+This doesn't look like a properly initialised unit.
 
 Options:
 [1] Initialise _brain/ now (create all 5 files from template)
@@ -633,6 +639,6 @@ Options:
 
 - `/alive:archive` — Move items to archive
 - `/alive:digest` — Process inputs backlog
-- `/alive:do` — Refresh stale entity
+- `/alive:work` — Refresh stale unit
 - `/alive:new` — Create missing structure
 - `/alive:upgrade` — Fix v1 → v2 naming issues

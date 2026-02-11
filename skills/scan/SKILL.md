@@ -1,7 +1,7 @@
 ---
 user-invocable: false
-description: Internal skill called by onboarding when user opts in to session analysis. Scans Claude Code history to extract patterns, preferences, and past projects for personalized setup.
-plugin_version: "2.1.1"
+description: Scan Claude Code session history to extract patterns, preferences, and past ventures/experiments for personalized ALIVE setup. Called by onboarding when user opts in to session analysis.
+plugin_version: "3.0.1"
 ---
 
 # Power User Install
@@ -10,14 +10,19 @@ Scan existing Claude Code session history to build a user profile. Called by `/a
 
 ## UI Treatment
 
-This skill uses **Tier 3: Utility** formatting.
+Uses the **ALIVE Shell** — Tier 3: Utility.
 
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
+```
+╭──────────────────────────────────────────────────────────╮
+│  ALIVE · scan                           [unit-name]       │
+│  ──────────────────────────────────────────────────────── │
+│  [Scan results + structure overview]                      │
+│  ──────────────────────────────────────────────────────── │
+│  [Stats]                                                  │
+╰──────────────────────────────────────────────────────────╯
+```
 
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+See `rules/ui-standards.md` for shell format, logo assets, and tier specifications.
 
 ---
 
@@ -75,13 +80,13 @@ Don't analyze everything — sample strategically:
 
 Run 3 parallel agents over the sampled sessions:
 
-### Agent 1: Projects & Domains
+### Agent 1: Ventures, Experiments & Life Areas
 
 ```
 Read the session transcripts at [PATHS]
 
-Extract all projects and domains the user works on:
-- Project names and types (web app, CLI tool, content, etc.)
+Extract all ventures, experiments, and life areas the user works on:
+- Names and types (web app, CLI tool, content, etc.)
 - Technologies used (languages, frameworks, tools)
 - Recurring themes or domains
 - Any named ventures, experiments, or areas
@@ -131,9 +136,9 @@ Combine agent outputs into a user profile:
 **Generated:** [DATE]
 **Sessions analyzed:** [COUNT]
 
-## Projects Discovered
+## Ventures & Experiments Discovered
 
-| Project | Type | Technologies | Frequency |
+| Name | Type | Technologies | Frequency |
 |---------|------|--------------|-----------|
 | [name] | [type] | [tech] | [count] sessions |
 
@@ -151,8 +156,8 @@ Combine agent outputs into a user profile:
 ## Suggested ALIVE Structure
 
 Based on your history, consider:
-- 04_Ventures/[project1]/ — [reason]
-- 04_Ventures/[project2]/ — [reason]
+- 04_Ventures/[venture1]/ — [reason]
+- 04_Ventures/[venture2]/ — [reason]
 - 05_Experiments/[experiment]/ — [reason]
 
 ## Notes for Claude
@@ -173,7 +178,7 @@ Write to `.claude/state/user-profile.md`:
   └─ .claude/state/user-profile.md
 
 ✓ Profile saved. Found:
-  - [X] projects across [Y] domains
+  - [X] ventures/experiments across [Y] domains
   - Work style: [summary]
   - Suggested structure: [summary]
 ```
@@ -187,10 +192,10 @@ Return control to onboarding with summary:
 ```
 Analysis complete.
 
-Found [X] projects in your history:
-- [project1] ([type])
-- [project2] ([type])
-- [project3] ([type])
+Found [X] ventures/experiments in your history:
+- [name1] ([type])
+- [name2] ([type])
+- [name3] ([type])
 
 Work style: [brief summary]
 
@@ -238,11 +243,11 @@ Onboarding calls this skill like:
 
 ```
 User opts in to session analysis
-→ Invoke power-user-install
+→ Invoke scan
 → Wait for completion
 → Read .claude/state/user-profile.md
 → Use profile to personalize remaining onboarding
-→ Suggest entity structure based on discovered projects
+→ Suggest ALIVE structure based on discovered ventures and experiments
 ```
 
 ---

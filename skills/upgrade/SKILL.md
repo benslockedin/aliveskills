@@ -1,7 +1,7 @@
 ---
 user-invocable: true
-description: This skill should be used when the user says "upgrade", "update system", "sync", or when another skill detects a version mismatch between plugin_version and system_version in alive.local.yaml.
-plugin_version: "2.1.1"
+description: Update ALIVE system files to the latest plugin version — rules, CLAUDE.md, and configuration. Use when the user says "upgrade", "update system", or when a version mismatch is detected.
+plugin_version: "3.0.1"
 ---
 
 # alive:upgrade
@@ -10,14 +10,20 @@ Upgrade the user's ALIVE system to match the current plugin version. Detects wha
 
 ## UI Treatment
 
-This skill uses **Tier 3: Utility** formatting.
+Uses the **ALIVE Shell** — Tier 3: Utility.
 
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.1` (right-aligned)
+```
+╭──────────────────────────────────────────────────────────╮
+│  ALIVE · upgrade                                          │
+│  [current] → [target]                                     │
+│  ──────────────────────────────────────────────────────── │
+│  [Changes applied]                                        │
+│  ──────────────────────────────────────────────────────── │
+│  [✓ upgrade complete]                                     │
+╰──────────────────────────────────────────────────────────╯
+```
 
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+See `rules/ui-standards.md` for shell format, logo assets, and tier specifications.
 
 ---
 
@@ -56,7 +62,7 @@ When they match → system is current.
 ```
 ▸ checking versions...
 
-Plugin version: 2.1.1 (from skill frontmatter)
+Plugin version: 3.0.1 (from skill frontmatter)
 System version: [read from alive.local.yaml]
 ```
 
@@ -70,8 +76,8 @@ System version: [read from alive.local.yaml]
 
 ```
 ▸ versions detected
-  └─ Plugin: 2.1.1 | System: unknown
-  └─ Migrations needed: pre-2.1.1 → 2.1.1
+  └─ Plugin: 3.0.1 | System: unknown
+  └─ Migrations needed: pre-2.1.1 → 3.0.1
 ```
 
 ---
@@ -82,18 +88,25 @@ After detecting a version mismatch, check the Migration Registry (at the bottom 
 
 **If NO structural migration entry exists for the version gap** (e.g. the gap is a skill-only update), take the fast path:
 
+**Fast path example (skill-only update):**
 ```
 ▸ checking versions...
-  └─ Plugin: 2.1.1 | System: 2.1.0
+  └─ Plugin: 3.0.1 | System: 2.1.1
 
 ▸ checking migration registry...
-  └─ No structural migrations needed for 2.1.0 → 2.1.1
-  └─ This update contained skill improvements only (auto-applied by plugin)
+  └─ No structural migrations for 2.1.1 → 3.0.1
 
-▸ updating config...
-  └─ system_version: "2.1.1"
+✓ System version synced to 3.0.1. No migration needed.
+```
 
-✓ System version synced. No migration needed.
+**Structural migration example:**
+```
+▸ checking versions...
+  └─ Plugin: 3.0.1 | System: 2.1.1
+
+▸ checking migration registry...
+  └─ Structural migrations needed for 2.1.1 → 3.0.1
+  └─ See migration plan below
 ```
 
 **Implementation:**
@@ -117,7 +130,7 @@ After detecting a version mismatch, check the Migration Registry (at the bottom 
 List all changes that will be applied. **Get user approval before proceeding.**
 
 ```
-UPGRADE PLAN: → 2.1.1
+UPGRADE PLAN: [current] → [target]
 ════════════════════════════════════════════════════════════════════════════
 
 This upgrade requires TWO sessions (Claude must restart to load new rules).
@@ -131,7 +144,8 @@ SESSION 2 (after restart):
   [C] Folder structure — add _references/, fix old folder names
   [D] Manifest schema — update all manifest.json files
   [E] References audit — restructure loose context into _references/ format
-  [F] Config — set system_version in alive.local.yaml
+  [F] Terminology migration — scan _brain/ files for outdated terms
+  [G] Config — set system_version in alive.local.yaml
   → Then /alive:sweep to verify
 
 ════════════════════════════════════════════════════════════════════════════
@@ -159,7 +173,7 @@ Claude operates with its loaded rules. If you sync rules mid-session, Claude sti
 ```
 You are upgrading ALIVE rules files. Compare the plugin's rules against the user's installed rules and sync them.
 
-PLUGIN RULES: ~/.claude/plugins/cache/aliveskills/alive/2.0.1/rules/
+PLUGIN RULES: ~/.claude/plugins/cache/aliveskills/alive/3.0.1/rules/
 USER RULES: {alive-root}/.claude/rules/
 
 For EACH rule file in the plugin directory:
@@ -201,7 +215,7 @@ Expected rule files: behaviors.md, conventions.md, intent.md, learning-loop.md, 
 ```
 You are assimilating changes from the plugin's CLAUDE.md into the user's installed CLAUDE.md. The user may have added custom content to their CLAUDE.md — you MUST preserve it.
 
-PLUGIN CLAUDE.MD: ~/.claude/plugins/cache/aliveskills/alive/2.0.1/CLAUDE.md
+PLUGIN CLAUDE.MD: ~/.claude/plugins/cache/aliveskills/alive/3.0.1/CLAUDE.md
 USER CLAUDE.MD: {alive-root}/.claude/CLAUDE.md
 
 Instructions:
@@ -275,17 +289,17 @@ You are upgrading the ALIVE folder structure. Scan the user's ALIVE directory an
 
 ALIVE ROOT: {alive-root}
 
-TASK 1 — Find all entities:
-Entities are folders that contain a _brain/ subdirectory. Search:
+TASK 1 — Find all units:
+Units are folders that contain a _brain/ subdirectory (ventures, experiments, life areas, and nested projects). Search:
 - {alive-root}/04_Ventures/*/          (depth 1)
-- {alive-root}/04_Ventures/*/*/        (depth 2, nested entities)
+- {alive-root}/04_Ventures/*/*/        (depth 2, nested projects)
 - {alive-root}/05_Experiments/*/       (depth 1)
 - {alive-root}/05_Experiments/*/*/     (depth 2)
-- {alive-root}/02_Life/*/              (depth 1, if any are entities)
+- {alive-root}/02_Life/*/              (depth 1, if any are life areas)
 
-List every entity found.
+List every unit found.
 
-TASK 2 — For each entity, check:
+TASK 2 — For each unit, check:
 a) Does _references/ folder exist? If not → create it
 b) Does _state/ exist instead of _brain/? If so → rename _state/ to _brain/
 
@@ -307,7 +321,7 @@ IMPORTANT:
 - Report every action taken
 
 Report format:
-- Entities found: [count]
+- Units found: [count]
 - _references/ created: [list]
 - Folders renamed: [list]
 - System files created: [list]
@@ -318,7 +332,7 @@ Report format:
 **Show results:**
 ```
 ▸ checking folder structure...
-  └─ 5 entities found
+  └─ 5 units found
   └─ _references/ created in: 04_Ventures/acme, 05_Experiments/beta
   └─ No old folder names detected
   └─ System directories present
@@ -331,19 +345,19 @@ Report format:
 **Launch a Task subagent with this prompt:**
 
 ```
-You are upgrading ALIVE manifest.json files to the v2 schema. Check every entity's manifest and update if needed.
+You are upgrading ALIVE manifest.json files to the v2 schema. Check every unit's manifest and update if needed.
 
 ALIVE ROOT: {alive-root}
 
 TASK 1 — Find all manifest files:
-Search for _brain/manifest.json in all entities (same entity paths as folder structure task).
+Search for _brain/manifest.json in all units (same unit paths as folder structure task).
 
 TASK 2 — For each manifest.json, read it and check against the TARGET SCHEMA below. Fix any deviations.
 
 TARGET SCHEMA (v2):
 
 {
-  "name": "entity-name",
+  "name": "unit-name",
   "description": "One sentence description",
   "goal": "Single-sentence goal that filters all decisions",
   "created": "2026-01-20",
@@ -356,7 +370,7 @@ TARGET SCHEMA (v2):
     {
       "path": "clients/",
       "description": "Active client projects",
-      "has_entities": false,
+      "has_projects": false,
       "files": [
         {
           "path": "README.md",
@@ -382,7 +396,7 @@ TARGET SCHEMA (v2):
   "key_files": [
     {
       "path": "CLAUDE.md",
-      "description": "Entity identity and navigation",
+      "description": "Unit identity and navigation",
       "date_created": "2026-01-20",
       "date_modified": "2026-01-23"
     }
@@ -414,7 +428,7 @@ b) FOLDERS ARRAY:
 
 c) REQUIRED TOP-LEVEL ARRAYS:
    - "references" missing → add "references": []
-   - "key_files" missing → add "key_files": [{"path": "CLAUDE.md", "description": "Entity identity"}]
+   - "key_files" missing → add "key_files": [{"path": "CLAUDE.md", "description": "Unit identity"}]
    - "handoffs" missing → add "handoffs": []
 
 d) DEPRECATED FIELDS — remove if found:
@@ -438,8 +452,8 @@ IMPORTANT:
 - Only add missing fields and remove deprecated ones
 - Report every change made per manifest
 
-Report format per entity:
-- Entity: [path]
+Report format per unit:
+- Unit: [path]
 - Fields added: [list]
 - Fields removed: [list]
 - Fields renamed: [list]
@@ -458,14 +472,14 @@ Report format per entity:
 
 ### Step E: References Content Audit (Subagent)
 
-**This step audits each entity's `_references/` folder and restructures any loose or non-conforming context files into the correct format.**
+**This step audits each unit's `_references/` folder and restructures any loose or non-conforming context files into the correct format.**
 
-Step C creates the `_references/` folder. This step ensures what's INSIDE it is correct — and finds context files elsewhere in the entity that should be moved into `_references/`.
+Step C creates the `_references/` folder. This step ensures what's INSIDE it is correct — and finds context files elsewhere in the unit that should be moved into `_references/`.
 
 **Launch a Task subagent with this prompt:**
 
 ```
-You are auditing and restructuring _references/ content across all ALIVE entities. Your job is to ensure every entity's reference material follows the correct structure.
+You are auditing and restructuring _references/ content across all ALIVE units. Your job is to ensure every unit's reference material follows the correct structure.
 
 ALIVE ROOT: {alive-root}
 
@@ -503,7 +517,7 @@ tags: [keyword, keyword, keyword]
 # messages: platform
 ---
 
-FIND ALL ENTITIES:
+FIND ALL UNITS:
 Search for _brain/ folders in:
 - {alive-root}/04_Ventures/*/
 - {alive-root}/04_Ventures/*/*/
@@ -511,10 +525,10 @@ Search for _brain/ folders in:
 - {alive-root}/05_Experiments/*/*/
 - {alive-root}/02_Life/*/
 
-FOR EACH ENTITY, run these 6 audits:
+FOR EACH UNIT, run these 6 audits:
 
 AUDIT 1 — Find loose context files that should be in _references/:
-Search the entire entity (excluding _brain/, _working/, .claude/, 01_Archive/) for files that look like reference material:
+Search the entire unit (excluding _brain/, _working/, .claude/, 01_Archive/) for files that look like reference material:
 - Transcript files (.txt files with meeting/call content)
 - Email exports
 - Screenshot images with no summary .md
@@ -564,7 +578,7 @@ c) Manifest entries missing required fields (type, description, date_created, da
 
 AFTER ALL AUDITS, produce a structured report:
 
-ENTITY: [path]
+UNIT: [path]
   Loose context files found: [count]
     - [path] → suggest move to _references/[type]/
   Missing raw/ subfolders: [count]
@@ -595,7 +609,7 @@ IMPORTANT:
 - Do NOT touch files in 01_Archive/
 - Do NOT modify raw/ file contents — only rename if naming convention is wrong
 - Report everything before fixing — user approves each category
-- If an entity's _references/ is empty, just report "No references yet" and move on
+- If a unit's _references/ is empty, just report "No references yet" and move on
 ```
 
 **Show results:**
@@ -609,7 +623,75 @@ Fix front matter issues in acme? [y/n]
 Fix loose files in test? [y/n]
 ```
 
-### Step F: Config Update
+### Step F: Terminology Migration (Subagent)
+
+**Scan all user-created _brain/ files and CLAUDE.md files for outdated terminology and update them.**
+
+This step only applies when the Migration Registry entry includes terminology changes (e.g. 2.1.1 → 3.0.1: "entity" → context-specific term). Skip this step if the registry entry has no terminology changes.
+
+**Launch a Task subagent with this prompt:**
+
+```
+You are migrating outdated terminology across all ALIVE user content files. The plugin's rules and skills have already been updated — this step updates the USER'S own files (manifests, _brain/ files, CLAUDE.md files inside units).
+
+ALIVE ROOT: {alive-root}
+
+CURRENT TERMINOLOGY (target state):
+  - Top-level under 04_Ventures/ = "venture"
+  - Top-level under 05_Experiments/ = "experiment"
+  - Top-level under 02_Life/ = "life area"
+  - Nested with _brain/ = "project"
+  - Organizational folder = "area"
+  - Generic for "anything with _brain/" in user-facing text = "venture, experiment, or life area"
+  - Generic for "anything with _brain/" in dev/internal text = "unit"
+
+TERMINOLOGY CHANGES (from Migration Registry):
+  "entity" → context-specific: "venture", "experiment", "life area", "project", or "unit"
+  "entities" → context-specific: "ventures", "experiments", "life areas", "projects", or "units"
+  "sub-entity" → "project"
+  "sub-entities" → "projects"
+  "subdomain" → context-specific term
+  "has_entities" → "has_projects" (in manifest.json files)
+
+IMPORTANT EXCEPTIONS — do NOT rename:
+  - Filenames or folder names — only rename content inside files
+  - Anything in 01_Archive/ — leave archived content as-is
+
+FILES TO SCAN:
+1. All _brain/manifest.json files — look for "has_entities" field, rename to "has_projects"
+2. All _brain/status.md, tasks.md, insights.md, changelog.md — look for terminology in prose
+3. All .claude/CLAUDE.md files inside units (NOT the root .claude/CLAUDE.md, which is handled by Step B)
+4. All README.md files inside units
+
+FOR EACH FILE:
+- Read the file
+- Check for any of the terminology terms above
+- If found, use Edit tool to replace (use replace_all: true for each term)
+- Choose the correct replacement based on context (venture/experiment/life area/project/unit)
+- Report what was changed
+
+Report format:
+- Files scanned: [count]
+- Files with changes: [list with what was replaced]
+- Files already current: [count]
+- Skipped (archive): [count]
+```
+
+**Show results:**
+```
+▸ migrating terminology...
+  └─ Scanned 23 files across 5 units
+  └─ 04_Ventures/acme/_brain/manifest.json — "has_entities" → "has_projects"
+  └─ 04_Ventures/acme/.claude/CLAUDE.md — 3 replacements
+  └─ 05_Experiments/beta/_brain/changelog.md — 1 replacement
+  └─ 18 files already current
+
+✓ Terminology migrated (3 files updated)
+```
+
+---
+
+### Step G: Config Update
 
 **Update `{alive-root}/.claude/alive.local.yaml`:**
 
@@ -618,14 +700,14 @@ Read the current file. Add or update `system_version` field:
 ```yaml
 theme: vibrant
 onboarding_complete: true
-system_version: "2.1.1"
+system_version: "3.0.1"
 ```
 
 Use Edit if the file exists (preserve other fields). Use Write only if the file doesn't exist.
 
 ```
 ▸ updating config...
-  └─ alive.local.yaml — set system_version: "2.1.1"
+  └─ alive.local.yaml — set system_version: "3.0.1"
 
 ✓ Config updated
 ```
@@ -647,28 +729,29 @@ The sweep will catch any issues the subagents missed. If sweep finds problems, f
 ## Step 4: Final Verification
 
 ```
-╔══════════════════════════════════════════════════════════════════════════╗
-║                                                                        ║
-║    ▄▀█ █░░ █ █░█ █▀▀                                                   ║
-║    █▀█ █▄▄ █ ▀▄▀ ██▄            upgrade complete                      ║
-║                                                                        ║
-║  ══════════════════════════════════════════════════════════════════    ║
-║                                                                        ║
-║  UPGRADE SUMMARY                                                       ║
-║  ──────────────────────────────────────────────────────────────────    ║
-║  Plugin: 2.1.1 → System: 2.1.1 ✓                                      ║
-║                                                                        ║
-║  [A] Rules: X updated, Y current                                       ║
-║  [B] CLAUDE.md: X sections added, Y updated                            ║
-║  [C] Folders: X _references/ created, Y renames                        ║
-║  [D] Manifests: X updated, Y current                                   ║
-║  [E] References: X issues fixed, Y entities clean                      ║
-║  [F] Config: system_version set to 2.1.1                               ║
-║  [G] Sweep: ✓ passed                                                   ║
-║                                                                        ║
-║  ──────────────────────────────────────────────────────────────────    ║
-║                                                                ALIVE v2.1║
-╚══════════════════════════════════════════════════════════════════════════╝
+╭──────────────────────────────────────────────────────────────────────────╮
+│                                                                        │
+│    ▄▀█ █░░ █ █░█ █▀▀                                                   │
+│    █▀█ █▄▄ █ ▀▄▀ ██▄            upgrade complete                      │
+│                                                                        │
+│  ──────────────────────────────────────────────────────────────────    │
+│                                                                        │
+│  UPGRADE SUMMARY                                                       │
+│  ──────────────────────────────────────────────────────────────────    │
+│  Plugin: 3.0.1 → System: 3.0.1 ✓                                      │
+│                                                                        │
+│  [A] Rules: X updated, Y current                                       │
+│  [B] CLAUDE.md: X sections added, Y updated                            │
+│  [C] Folders: X _references/ created, Y renames                        │
+│  [D] Manifests: X updated, Y current                                   │
+│  [E] References: X issues fixed, Y projects clean                      │
+│  [F] Terminology: X files updated, Y current                           │
+│  [G] Config: system_version set to 3.0.1                               │
+│  [H] Sweep: ✓ passed                                                   │
+│                                                                        │
+│  ──────────────────────────────────────────────────────────────────    │
+│                                                            ALIVE v3.0.1│
+╰──────────────────────────────────────────────────────────────────────────╯
 ```
 
 ---
@@ -677,7 +760,7 @@ The sweep will catch any issues the subagents missed. If sweep finds problems, f
 
 **Already up to date:**
 ```
-✓ System is current (2.1.1)
+✓ System is current (3.0.1)
   └─ No upgrade needed.
 ```
 
@@ -687,11 +770,11 @@ The sweep will catch any issues the subagents missed. If sweep finds problems, f
 
 This file tracks your system version. Creating it now.
 ```
-Create the file with `system_version: "2.1.1"` and `onboarding_complete: true`.
+Create the file with `system_version: "3.0.1"` and `onboarding_complete: true`.
 
-**Single entity upgrade (from /alive:do):**
+**Single unit upgrade (from /alive:work):**
 ```
-This skill upgrades the ENTIRE system, not individual entities.
+This skill upgrades the ENTIRE system, not individual units.
 Proceeding with full system upgrade.
 ```
 
@@ -707,7 +790,7 @@ Skip directly to Session 2 steps.
 
 | Category | Changes |
 |----------|---------|
-| **Folders** | Add `_references/` to all entities. Rename `inbox/`→`03_Inputs/`, `archive/`→`01_Archive/`, `life/`→`02_Life/`, `ventures/`→`04_Ventures/`, `experiments/`→`05_Experiments/`, `_state/`→`_brain/`. |
+| **Folders** | Add `_references/` to all projects. Rename `inbox/`→`03_Inputs/`, `archive/`→`01_Archive/`, `life/`→`02_Life/`, `ventures/`→`04_Ventures/`, `experiments/`→`05_Experiments/`, `_state/`→`_brain/`. |
 | **Rules** | Sync all 7 rule files. Key changes: `_references/` system in conventions.md and behaviors.md, folder renames in all files, visual identity system in ui-standards.md. |
 | **CLAUDE.md** | Add `_references/` to structure, update session protocol to delegate to `/alive:save`, remove duplicated sections (Capture Triggers, Context Freshness, etc.), condense Life First. |
 | **Manifests** | Add `references[]`, `key_files[]`, `handoffs[]`, `goal`. Add `_references` to folders. Convert `session_id` (string) → `session_ids` (array). Add `date_created`, `date_modified`, `session_ids` to file entries. Rename `summary` → `description`. Remove deprecated `type`, old `files[]` format. |
@@ -728,6 +811,17 @@ Skip directly to Session 2 steps.
 
 No structural changes. Plugin auto-update delivers the new skill files. Users just need `system_version` bumped.
 
+### 2.1.1 → 3.0.1
+
+| Category | Changes |
+|----------|---------|
+| **Product** | Rebranded to aliveOS Unlimited Elephant. Version jump from 2.1.1 to 3.0.1. |
+| **Terminology** | "entity" → context-specific (venture/experiment/life area/project/unit), "sub-entity" → "project", "has_entities" → "has_projects" across all rules, templates, skills, and CLAUDE.md. Dead terms: entity, sub-entity, sub-project, subdomain. |
+| **Skills** | `do` renamed to `work`. `capture-context` renamed to `capture`. `power-user-install` renamed to `scan`. Skill descriptions rewritten (what-it-does first, triggers second). |
+| **Rules** | New `anti-patterns.md` (9 rules). `capture` skill now proactively invokes on external content. All rules updated for terminology changes. |
+| **UI** | Elephant mascot (Beate Schwichtenberg large, jrei small). Roman FIGlet "ALIVE" wordmark. Boot screen with manifesto. |
+| **Config** | Update `system_version: "3.0.1"` in alive.local.yaml. |
+
 ---
 
 **Future migrations will be added as new sections here.**
@@ -737,7 +831,7 @@ No structural changes. Plugin auto-update delivers the new skill files. Users ju
 ## Related Skills
 
 - `/alive:daily` — Checks version mismatch, suggests upgrade
-- `/alive:do` — Checks version mismatch, suggests upgrade
+- `/alive:work` — Checks version mismatch, suggests upgrade
 - `/alive:save` — Checks version mismatch, suggests upgrade
 - `/alive:sweep` — Called post-upgrade for verification
 - `/alive:onboarding` — Fresh setup (no migration needed)

@@ -19,7 +19,7 @@ Route user intent to skills. Match INTENT, not keywords. People phrase things di
 
 ### /alive:daily — Morning Dashboard
 
-See everything across all entities. The heartbeat.
+See everything across all units. The heartbeat.
 
 | Style | Examples |
 |-------|----------|
@@ -30,7 +30,7 @@ See everything across all entities. The heartbeat.
 
 ---
 
-### /alive:do — Start Work
+### /alive:work — Start Work
 
 Load context, check what's in progress, begin working.
 
@@ -56,20 +56,20 @@ Log session to changelog, update state, wrap up.
 
 ---
 
-### /alive:new — Create Subdomain or Area
+### /alive:new — Create Venture, Experiment, or Life Area
 
-Scaffold a new venture, experiment, life area, or organizational folder.
+Scaffold a new venture, experiment, life area, or folder.
 
 | Style | Examples |
 |-------|----------|
-| **Command** | "create X", "new venture", "new experiment", "add a project", "set up X" |
+| **Command** | "create X", "new venture", "new experiment", "add a venture", "set up X" |
 | **Question** | "can you create X?", "how do I add a new venture?", "can we set up X?" |
-| **Statement** | "I'm starting something new", "need a new project", "want to add X" |
+| **Statement** | "I'm starting something new", "need a new venture", "want to add X" |
 | **Casual** | "new thing", "add X", "spin up X" |
 
 ---
 
-### /alive:capture-context — Capture Context
+### /alive:capture — Capture Context
 
 Capture any content into ALIVE — quick notes, emails, transcripts, articles, decisions, anything worth preserving.
 
@@ -224,7 +224,7 @@ Ask: "Do you want to capture this specific context, or wrap up the whole session
 
 ### recall vs do
 ```
-User: "the acme project"
+User: "the acme venture"
 
 Ask: "Are you looking for past context about acme, or wanting to work on it now?"
 ```
@@ -237,14 +237,14 @@ Proactively suggest skills based on system state:
 
 | Condition | Suggest |
 |-----------|---------|
-| Session start (first message) | "Welcome back. `/alive:daily` to see everything, or `/alive:do` to jump into an entity?" |
+| Session start (first message) | "Welcome back. `/alive:daily` to see everything, or `/alive:work` to jump in?" |
 | 03_Inputs/ has items | "You have X items in 03_Inputs/. `/alive:digest`?" |
 | _brain/ is stale (>2 weeks) | "X hasn't been updated in Y days. `/alive:sweep`?" |
 | No recent save | "You haven't saved in a while. `/alive:save`?" |
-| User shares decision/insight | "Want me to capture that? `/alive:capture-context`" |
+| User shares decision/insight | "Want me to capture that? `/alive:capture`" |
 | Version mismatch detected | "[!] System update available. `/alive:upgrade`?" |
 | Ongoing thread from previous session | "You have an ongoing thread from yesterday. `/alive:revive`?" |
-| Entity work is done / completed | "Looks like X is complete. `/alive:archive`?" |
+| Work is done / completed | "Looks like X is complete. `/alive:archive`?" |
 
 ---
 

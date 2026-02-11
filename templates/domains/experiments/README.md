@@ -6,7 +6,7 @@ Ideas being validated. If it works, promote to venture.
 
 ## What Goes Here
 
-Each experiment is a subdomain:
+Each experiment is its own unit:
 
 ```
 05_Experiments/
@@ -15,7 +15,7 @@ Each experiment is a subdomain:
 │   ├── _working/     # Prototypes
 │   ├── _references/  # Reference materials
 │   └── [areas]/      # Research, designs
-└── side-project/
+└── side-hustle/
 ```
 
 ## Experiment vs Venture

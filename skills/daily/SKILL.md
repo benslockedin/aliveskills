@@ -1,23 +1,31 @@
 ---
 user-invocable: true
-description: Use when the user says "daily", "dashboard", "morning", "let's go", "what's happening", "what should I work on", "start my day", "overview", "show me everything", or wants to see the full system state across all entities including ongoing threads, goals, urgent tasks, and inputs status.
-plugin_version: "2.1.1"
+description: Morning dashboard showing all ventures, experiments, life areas — goals, urgent tasks, ongoing threads, and pending inputs. Use when the user says "daily", "dashboard", "morning", "what's happening", "what should I work on", "start my day", or "show me everything".
+plugin_version: "3.0.1"
 ---
 
 # alive:daily
 
-Morning entry point. Surface what matters across ALL entities. The heartbeat of the learning loop.
+Morning entry point. Surface what matters across ALL ventures, experiments, and life areas. The heartbeat of the learning loop.
 
 ## UI Treatment
 
-This skill uses **Tier 1: Entry Point** formatting.
+Uses the **ALIVE Shell** — one rounded box, three zones (header / content / footer).
 
-**Visual elements:**
-- Full logo (24-line ASCII art header)
-- Double-line border wrap (entire response)
-- Community footer: `Free: Join the ALIVE community → skool.com/aliveoperators`
+```
+╭──────────────────────────────────────────────────────────╮
+│  ALIVE · daily                            [date]         │
+│  [aggregate stats]                                       │
+│  ──────────────────────────────────────────────────────  │
+│  [THE ANSWER — AI-recommended focus with * marker]       │
+│  [THE MAP — venture/experiment/life grid]                 │
+│  ──────────────────────────────────────────────────────  │
+│  [ACTIONS — paired with context stats]                   │
+│  [FINE PRINT — * explanation, sparkline]                 │
+╰──────────────────────────────────────────────────────────╯
+```
 
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+See `rules/ui-standards.md` for shell format, logo assets, and tier specifications.
 
 ---
 
@@ -37,15 +45,15 @@ Compare your `plugin_version` (from frontmatter above) against the user's system
 
 ## Overview
 
-Daily aggregates context from every entity and the session index to show:
-- Goals from each entity's status.md
+Daily aggregates context from every venture, experiment, and life area (plus the session index) to show:
+- Goals from each unit's status.md
 - Ongoing threads from session-index.jsonl (with quality ratings)
-- Urgent tasks across all entities
+- Urgent tasks across all units
 - Working files in progress
 - Inputs pending triage
-- Stale entities needing attention
+- Stale units needing attention
 
-**Different from `/alive:do`:** Daily shows EVERYTHING. Do focuses on ONE entity.
+**Different from `/alive:work`:** Daily shows EVERYTHING. Work focuses on ONE venture, experiment, or life area.
 
 ## V1 Detection (REQUIRED FIRST STEP)
 
@@ -73,9 +81,9 @@ If yes → invoke `/alive:upgrade` then restart daily.
 |--------|---------|
 | `alive.local.yaml` | Sync script configuration (optional) |
 | `.claude/state/session-index.jsonl` | Ongoing threads with quality tags |
-| `{entity}/_brain/status.md` | Goal line, phase, focus |
-| `{entity}/_brain/tasks.md` | @urgent tagged items |
-| `{entity}/_brain/manifest.json` | working_files array |
+| `{unit}/_brain/status.md` | Goal line, phase, focus |
+| `{unit}/_brain/tasks.md` | @urgent tagged items |
+| `{unit}/_brain/manifest.json` | working_files array |
 | `03_Inputs/` | Count of pending items |
 
 ## Flow
@@ -89,9 +97,9 @@ digraph daily_flow {
     "Offer upgrade" -> "Check sync config" [label="no"];
     "Run /alive:upgrade" -> "Check sync config";
     "Check sync config" -> "Run sync scripts" [label="scripts found"];
-    "Check sync config" -> "Scan entities" [label="no scripts"];
-    "Run sync scripts" -> "Scan entities";
-    "Scan entities" -> "Read session-index";
+    "Check sync config" -> "Scan units" [label="no scripts"];
+    "Run sync scripts" -> "Scan units";
+    "Scan units" -> "Read session-index";
     "Read session-index" -> "Aggregate data";
     "Aggregate data" -> "Display dashboard";
     "Display dashboard" -> "Wait for selection";
@@ -100,7 +108,7 @@ digraph daily_flow {
 
 ## External Sync (Optional)
 
-**Power users can configure sync scripts** via `/alive:power-user-install` or manually.
+**Power users can configure sync scripts** via `/alive:scan` or manually.
 
 Check for `alive.local.yaml` at ALIVE root:
 
@@ -130,7 +138,7 @@ sync:
   └─ No sync scripts configured
 ```
 
-Skip to entity scanning.
+Skip to scanning.
 
 **Script requirements:**
 - Scripts should output to `03_Inputs/`
@@ -138,34 +146,56 @@ Skip to entity scanning.
 - Scripts should return exit code 0 on success
 - Output format: one line per item added (for counting)
 
+## Reference Output
+
+The full daily output in vibrant format:
+
+```
+╭──────────────────────────────────────────────────────────╮
+│                                                          │
+│  ALIVE · daily                            2026-02-09     │
+│                                                          │
+│  ──────────────────────────────────────────────────────  │
+│                                                          │
+│  acme-agency — Client portal deployment due Wednesday *  │
+│  Also requiring attention: side-project, health          │
+│                                                          │
+│                                      5 days  tasks       │
+│  ventures                                                │
+│   1) acme-agency        Building     ○●●●○     9    !    │
+│   2) freelance-dev      Growing      ○○○●○     2         │
+│   3) side-project       Pre-Launch   ○○○○○     4    !    │
+│                                                          │
+│  experiments                                             │
+│   4) newsletter         Building     ○○●●○     6    !    │
+│   5) saas-idea          Starting     ○●○●○     3         │
+│   6) course-platform    Planning     ○○○○○     1         │
+│                                                          │
+│  life                                                    │
+│   7) health             Active       ○○●○○     3    !    │
+│   8) finance            Active       ○○○○○     1         │
+│                                                          │
+│  ──────────────────────────────────────────────────────  │
+│                                                          │
+│  #) pick a number          d) digest 3 inputs             │
+│  s) sweep 2 stale          r) search across system       │
+│                                                          │
+│  * suggested focus                                       │
+│  ▁▂▃▅▇█▇▅▃▁▁▂▅▇█▇▅▃▂▁                   4-day streak   │
+│                                                          │
+╰──────────────────────────────────────────────────────────╯
+```
+
 ## Numbered Actions (REQUIRED)
 
-Every actionable item gets a number. User picks a number to focus.
-
-```
-ONGOING THREADS
-─────────────────────────────────────────────────────────────────────────
-[1] acme — Plugin rebuild [breakthrough]        yesterday
-[2] side-project — Client proposal [productive]       2 days ago
-
-URGENT TASKS
-─────────────────────────────────────────────────────────────────────────
-[3] acme: Finalize daily skill @urgent
-[4] side-project: Send proposal to Acme @urgent
-
-WORKING FILES
-─────────────────────────────────────────────────────────────────────────
-[5] acme/_working/v2-design.md                  1 day old
-
-─────────────────────────────────────────────────────────────────────────
-[#] Pick number to focus    [i] Process inputs    [n] New entity
-```
+Every actionable item gets `)` to indicate selectability. User picks a number to focus.
 
 When user picks:
-- Thread number → `/alive:revive` with that session
-- Task/file number → `/alive:do` with that entity
-- `[i]` → `/alive:digest`
-- `[n]` → `/alive:new`
+- Number → `/alive:work` with that venture, experiment, or life area
+- `d)` → `/alive:digest`
+- `s)` → `/alive:sweep`
+- `r)` → `/alive:recall`
+- `#)` → pick by number
 
 ## Section: Goals
 
@@ -174,53 +204,30 @@ Extract from each `_brain/status.md`:
 - Or `**Focus:**` line
 - Or first sentence after `## Current Focus`
 
-Show entity name + goal. Max 5, sorted by recency.
+Show name + goal. Max 5, sorted by recency.
 
-```
-YOUR GOALS
-─────────────────────────────────────────────────────────────────────────
-• acme: Ship v2 plugin by Feb 15
-• side-project: Close 3 new clients this month
-• hypha: Launch Feb 6
-```
+Goals appear as part of each row in the grid — extracted from `status.md` goal line. The Answer zone surfaces the most urgent one as the AI-recommended focus.
 
 ## Section: Ongoing Threads
 
 Read `.claude/state/session-index.jsonl`:
 - Filter: `status: "ongoing"` only
 - Sort: Most recent first
-- Show: Entity, summary, quality tag, relative time
+- Show: Name, summary, quality tag, relative time
 - Max 5
 
 Quality tags: `[routine]` `[productive]` `[important]` `[breakthrough]`
 
-```
-ONGOING THREADS
-─────────────────────────────────────────────────────────────────────────
-[1] acme — Plugin rebuild [breakthrough]        yesterday
-[2] side-project — Client proposal [productive]       2 days ago
-```
-
-If no session-index.jsonl exists or empty:
-```
-ONGOING THREADS
-─────────────────────────────────────────────────────────────────────────
-No ongoing threads. Start fresh today.
-```
+Ongoing threads inform the AI-recommended focus in The Answer zone. If a thread is ongoing from yesterday, it becomes the suggested focus. If no ongoing threads, the recommendation falls back to the unit with the most urgent tasks or open work.
 
 ## Section: Urgent Tasks
 
 Scan all `_brain/tasks.md` files:
 - Filter: Lines containing `@urgent`
-- Prefix with entity name
+- Prefix with unit name
 - Max 5
 
-```
-URGENT TASKS
-─────────────────────────────────────────────────────────────────────────
-[3] acme: Finalize daily skill @urgent
-[4] side-project: Send proposal to Acme @urgent
-```
+Urgent tasks trigger the `!` attention indicator on their row in the grid. The most urgent surfaces in The Answer zone.
 
 ## Section: Working Files
 
@@ -229,12 +236,7 @@ Scan all `_brain/manifest.json` files:
 - Show path + age
 - Max 5
 
-```
-WORKING FILES
-─────────────────────────────────────────────────────────────────────────
-[5] acme/_working/v2-design.md                  1 day old
-[6] side-project/_working/acme-proposal-v0.md         3 days old
-```
+Working files count appears in the fine print stats. Individual working files are surfaced in `/alive:work` when focused on a single venture, experiment, or life area.
 
 ## Section: Inputs
 
@@ -243,23 +245,15 @@ Check `03_Inputs/` folder:
 - Flag if count > 0
 - Flag if no captures in 3+ days
 
-```
-INPUTS
-─────────────────────────────────────────────────────────────────────────
-[!] 5 items pending triage
-```
+Input count appears in the action bar: `d) digest 3 inputs`. If zero inputs, the `d)` action line disappears.
 
-## Section: Stale Entities
+## Section: Stale Units
 
-Check each entity's `_brain/manifest.json` for `updated` date:
+Check each unit's `_brain/manifest.json` for `updated` date:
 - Flag if > 7 days (configurable)
 - Show as numbered option
 
-```
-STALE ENTITIES
-─────────────────────────────────────────────────────────────────────────
-[7] 05_Experiments/cricket-grid — 3 weeks stale
-```
+Stale units get the `!` attention indicator in the grid. Count appears in the action bar: `s) sweep 2 stale`. If zero stale, the `s)` action line disappears.
 
 ## Freshness Flags
 
@@ -277,7 +271,7 @@ STALE ENTITIES
 Run /alive:onboarding to set up.
 ```
 
-**Empty system (structure exists but no entities):**
+**Empty system (structure exists but no ventures or experiments):**
 ```
 Your ALIVE system is empty. Let's get started.
 [1] Create first venture
@@ -290,17 +284,17 @@ Your ALIVE system is empty. Let's get started.
 Daily is the START:
 
 ```
-DAILY ────► DO ────► SAVE ────► (repeat)
+DAILY ────► WORK ────► SAVE ────► (repeat)
 ```
 
 After showing dashboard, remind:
-- Pick a number to focus → loads that entity via `/alive:do`
+- Pick a number to focus → loads it via `/alive:work`
 - When done → `/alive:save` to preserve context
 - Tomorrow → back to `/alive:daily`
 
 ## Related Skills
 
-- `/alive:do` — Focus on one entity
+- `/alive:work` — Focus on one venture, experiment, or life area
 - `/alive:revive` — Resume past session
 - `/alive:digest` — Process inputs
 - `/alive:save` — End session

@@ -1,12 +1,12 @@
 ---
 user-invocable: true
-description: This skill should be used when the user says "set up ALIVE", "get started", "initialize", "new here", "how do I start", or when `/alive:daily` detects no ALIVE structure exists. Fresh v2 setup for new users.
-plugin_version: "2.1.1"
+description: First-time setup wizard for new ALIVE users. Creates the full system from scratch — folders, rules, configuration, and first ventures, experiments, and life areas. Use when the user says "set up ALIVE", "get started", "initialize", or when no ALIVE structure exists.
+plugin_version: "3.0.1"
 ---
 
 # alive:onboarding
 
-First-time setup wizard for ALIVE v2. Guides new users through complete configuration in two sessions: system setup first, then content setup after Claude reloads rules.
+First-time setup wizard for aliveOS. Guides new users through complete configuration in two sessions: system setup first, then content setup after Claude reloads rules.
 
 **Different from `/alive:upgrade`:** Onboarding is fresh setup. Upgrade migrates v1 → v2.
 
@@ -27,78 +27,77 @@ This skill uses **Tier 1: Entry Point** formatting.
 
 **IMPORTANT:** Since rules aren't installed until Session 1, this skill must contain the full UI assets inline. Do not reference `rules/ui-standards.md` — use the assets below.
 
-### Border Characters (Double-Line)
+### Shell Format
+
+Use the ALIVE Shell — one rounded box, three zones (header / content / footer):
+
+- `╭╮╰╯` rounded corners — outer frame only
+- `│` vertical sides
+- `─` horizontal separators between zones
+- NO double-line borders (`╔╗╚╝═║`) — these are deprecated
+
+### Full Boot Screen
+
+Render this exactly on the first onboarding screen. The elephant and ROMAN wordmark sit OUTSIDE the shell — they are the splash, not boxed content.
 
 ```
-╔  Top-left corner
-═  Horizontal line
-╗  Top-right corner
-║  Vertical line
-╚  Bottom-left corner
-╝  Bottom-right corner
+                     .. ..oooo.....ooo...
+               .odSS4PYYYSSOOXXXXXXXXXOodbgooo.
+              /SSYod$$SSOIIPXXXXXXXXXYYP.oo.*b.
+             ($Yd$$SSSOII:XXXXXXXX:IIoSSS$$b.Y,
+              \Yd$$SSSOII:XXXXXXXXXX:IIOOSSS$$b\
+               d$$SSSOOI:XP"YXXXXXXXX:IIOOSSSS$$\
+               Y$$SSSOOII:XbdXXXXXP"YX:IIOOOSS$$)
+               'Y$$SSSOI:XXXXXXXXXbodX:IIOOSS$$$/
+                "Y$$SSSOI(PoTXXXXXTo)XXIIOOOSS$$*'
+                  ""*Y$S(((PXXXXXXXY))dIIOSSS$dP'
+                     "*'()P;XXXXXXXXY)IIOSSS$P".oS,
+                     (S'(P;XXXXXXXP;Y)XXYOP".oSSSSb
+                    (S'(P;'XXXXXXX';Y).ooooSSSSSSSS)
+                    (S'(P;'XXXXXXP';Y).oSSSSSSSSSSSP
+                    (SS'Y);YXXXXX';(Y.oSSSSSSSSSSSSP
+                     YSS'Y)'YXXX".(Y.oSSP.SSSSSSSSY
+                      YSS'"" XXX""oooSSP.SSSSSSSSY
+                      SSSSSS YXXX:SSSSP.SSSSSSSSY
+                      SSSSSP  YXb:SSSP.S"SSSSSSP
+                      S(OO)S   YXb:SY    )SSSSS
+                      SSSSO    )YXb.I    ISSSSP
+                      YSSSY    I."YXXb   Y(SS)I
+                      )SSS(    dSSo.""*b  YSSSY
+                      OooSb   dSSSSP      )SSS(
+                              dSSSY       OooSS
+                              OooSP
+
+      .o.       ooooo        ooooo oooooo     oooo oooooooooooo
+     .888.      `888'        `888'  `888.     .8'  `888'     `8
+    .8"888.      888          888    `888.   .8'    888
+   .8' `888.     888          888     `888. .8'     888oooo8
+  .88ooo8888.    888          888      `888.8'      888    "
+ .8'     `888.   888       o  888       `888'       888       o
+o88o     o8888o o888ooooood8 o888o       `8'       o888ooooood8
+──────────────────────────────────────────────────────────────────
+                    O p e r a t o r   S y s t e m
+──────────────────────────────────────────────────────────────────
 ```
 
-**Standard width: 90 characters**
+After the splash, content goes in the shell:
 
-### Full Logo (Tier 1)
-
-Use this exact logo for all onboarding screens:
+### Screen Template
 
 ```
-                          ▒▒▒                              ▒▒
-                                    ▒▒            ▒
-                             ▒▒     ▒▒     ▒▒    ▒▒      ▒
-       ▒▒▒                    ▒▒     ▒▒    ▒▒    ▒▒     ▒▒                    ▒▒▒
-        ▒                      ▒▒    ▒▒   ▒▒▒   ▒▒     ▒▒                     ▒▒
-           ▒▒▒         ▒▒         ▒▒  ▒ ▒▒▒▒▒▒▒ ▒▒  ▒▒        ▒▒          ▒▒▒
-                         ▒▒      ▒▒▒    ▒▒▒  ▒▒     ▒▒▒      ▒▒
-                ▒▒▒       ▒▒▒  ▒▒▒ ▒▒▒▒▒▒ ▒▒▒  ▒▒▒▒▒  ▒▒▒  ▒▒        ▒▒
-                ▒▒▒            ▒▒▒▒▒    ▒▒▒▒▒▒▒    ▒▒▒▒▒▒            ▒▒
-                     ▒▒   ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒   ▒▒▒
-                     ▒▒  ▒▒▒▒▒▒ ▒ ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒ ▒▒▒▒▒▒ ▒  ▒▒
-                        ▒▒▒    ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒    ▒▒▒
-                          ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-
-      ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-      ▒▒▒▒▒▒▒▒▒▒     ▒▒▒▒▒▒       ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-      ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒     ▒▒▒▒     ▒▒▒▒▒     ▒▒▒▒     ▒▒▒▒▒▒▒
-      ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒   ▒▒▒▒▒  ▒▒▒▒▒
-      ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒   ▒▒▒▒▒  ▒▒▒▒▒
-      ▒▒▒▒▒▒▒          ▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒  ▒▒▒▒▒  ▒▒▒▒          ▒▒▒▒▒
-      ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒▒▒▒     ▒▒▒▒▒▒   ▒▒▒▒▒▒▒▒▒▒▒▒
-      ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒          ▒▒▒▒        ▒▒▒▒▒▒▒   ▒▒▒▒▒▒▒▒         ▒▒▒▒▒
-      ▒▒▒▒▒▒▒   ▒▒▒▒   ▒▒▒▒          ▒▒▒▒        ▒▒▒▒▒▒▒   ▒▒▒▒▒▒▒▒▒        ▒▒▒▒▒
-      ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+╭──────────────────────────────────────────────────────────────────────╮
+│                                                                       │
+│    onboarding — [session name]                                        │
+│  ──────────────────────────────────────────────────────────────────── │
+│                                                                       │
+│  [CONTENT HERE]                                                       │
+│                                                                       │
+│  ──────────────────────────────────────────────────────────────────── │
+│  Free: Join the ALIVE community → skool.com/aliveoperators            │
+╰──────────────────────────────────────────────────────────────────────╯
 ```
 
-### Community Footer (Tier 1)
-
-```
-║  ──────────────────────────────────────────────────────────────────────────────────  ║
-║  Free: Join the ALIVE community → skool.com/aliveoperators                           ║
-║                                                                                      ║
-╚══════════════════════════════════════════════════════════════════════════════════════╝
-```
-
-### Full Screen Template
-
-Every onboarding screen should follow this structure:
-
-```
-╔══════════════════════════════════════════════════════════════════════════════════════╗
-║                                                                                      ║
-║  [FULL LOGO FROM ABOVE]                                                              ║
-║                                                                                      ║
-║    onboarding                                                                        ║
-║  ════════════════════════════════════════════════════════════════════════════════    ║
-║                                                                                      ║
-║  [CONTENT HERE]                                                                      ║
-║                                                                                      ║
-║  ──────────────────────────────────────────────────────────────────────────────────  ║
-║  Free: Join the ALIVE community → skool.com/aliveoperators                           ║
-║                                                                                      ║
-╚══════════════════════════════════════════════════════════════════════════════════════╝
-```
+**Key rule:** The elephant + ROMAN wordmark render as raw text ABOVE the shell on the boot screen only. On subsequent screens, just use the shell with the `onboarding` label. Do NOT put the elephant or wordmark inside `│` borders.
 
 ---
 
@@ -152,12 +151,21 @@ Then immediately return to the current onboarding step.
 
 ## Onboarding Principles
 
-1. **Assume zero knowledge** — User has never heard of ALIVE
-2. **Explain before asking** — Tell them WHY before asking WHAT
-3. **Life is the foundation** — Set it up properly in Session 2
-4. **Interactive > passive** — Options to select, not freeform dumps
-5. **Show the value** — Every step should feel worth doing
-6. **Don't overwhelm** — One concept at a time, digestible chunks
+**Discovery-based. Experience before explanation.**
+
+### Philosophy
+1. **Experience before explanation** — They feel it work before they understand how
+2. **Create the impasse** — "Will it remember?" is the question they carry into Session 2
+3. **Socratic, not didactic** — Ask about their life, don't lecture about ALIVE
+4. **Build alongside them** — Their real venture or experiment, populated from their real words
+5. **Let them discover readability** — When they see _brain/ files, the structure clicks
+6. **The save-and-return proof** — Session 2 opens by proving persistence
+7. **Explain mechanism AFTER experience** — How it works comes after they've felt it work
+
+### Guardrails
+- **Assume zero knowledge** — User may have never heard of ALIVE
+- **Interactive > passive** — Use AskUserQuestion for choices, not freeform dumps
+- **Don't overwhelm** — One concept at a time, digestible chunks
 
 ## Template Locations
 
@@ -207,34 +215,29 @@ Other skills check `onboarding_complete` to know if the system is set up.
 
 ## Full Flow (Overview)
 
+**The arc: Question → Build → Save → Proof → Mechanism → Expand**
+
 ```
-SESSION 1: System Setup (this session)
+SESSION 1: THE EXPERIENCE
 ────────────────────────────────────────
-1.  Welcome + What is ALIVE?
-2.  How ALIVE Works (the mental model)
-3.  The Five Domains (explained)
-4.  Directory Location (where to create ALIVE)
-5.  User Preferences (timezone, theme, working style)
-6.  Create Base Structure (domain folders + .claude/)
-7.  Create alive.local.yaml (with all config)
-8.  Install Rules & CLAUDE.md
-9.  Configure Statusline
+1.  Boot Screen (manifesto + elephant — the emotional setup)
+2.  The Question ("What takes up the most mental space?")
+3.  The Build (create their first venture or experiment live from their words)
+4.  Quick Config (location, timezone, theme, yaml)
+5.  System Install (rules, CLAUDE.md, statusline)
+6.  The Challenge ("Close terminal. Come back. Ask what you're working on.")
 →   EXIT (Claude must restart to load new rules)
 
-SESSION 2: Content Setup (after restart)
+SESSION 2: THE PROOF + EXPANSION
 ────────────────────────────────────────
-10. Welcome Back (detect Session 1 complete)
-11. Life Setup (areas, people, goals)
-12. Ventures Setup (name, type, goal, phase)
-13. Experiments Setup
-14. Create Entity Structure (from templates)
-15. Quick Tour of Key Concepts
-16. First Capture Exercise
-17. The Aha Moment
-18. Verify Installation
-19. Import Existing Content (migrate prompt)
-20. Import AI Conversation History (context import plugin)
-21. Complete + What's Next
+7.  The Proof (read _brain/, show them everything back)
+8.  The Mechanism (NOW explain how it works — domains, _brain/, the loop)
+9.  Life Setup (areas, people, goals — the foundation)
+10. More Ventures + Experiments
+11. Create Remaining Structure (from templates)
+12. Verify Installation
+13. Import (existing content + AI conversation history)
+14. Complete + What's Next
 ```
 
 ---
@@ -245,10 +248,11 @@ Claude operates with its loaded rules. When you install rules and CLAUDE.md in S
 
 Only a fresh session loads the new rules from `{alive-root}/.claude/rules/` and the CLAUDE.md identity.
 
-**Session 1** installs the system files (rules, CLAUDE.md, statusline, base folders).
-**Session 2** uses the loaded ALIVE knowledge to properly create entities with correct structure, conventions, and behaviours.
+**Session 1** creates the experience — their first venture or experiment built from a real conversation, plus system files installed. The user leaves with an open question: "Will it remember?"
 
-Without the restart, Claude would create entities without understanding ALIVE conventions — leading to incorrect folder structures, missing files, and broken patterns.
+**Session 2** opens with the proof — Claude reads their _brain/ files and recites back everything they shared. THEN explains how it works. Then expands their world with Life, more ventures and experiments, and the full system.
+
+Without the restart, Claude would create ventures and experiments without understanding ALIVE conventions — leading to incorrect folder structures, missing files, and broken patterns.
 
 ---
 
@@ -269,28 +273,46 @@ When onboarding is invoked, determine which part to run:
 3. If alive.local.yaml EXISTS:
    a. Read the file
    b. If onboarding_complete: true → "Already onboarded" (see Returning Users)
-   c. If onboarding_part: 1 → Session 1 done. Run Session 2 from Step 10.
+   c. If onboarding_part: 1 → Session 1 done. Run Session 2 from Step 7.
    d. If file exists but no onboarding fields → Treat as new user, Session 1.
 ```
 
 ---
 
-## Session 1: System Setup
+## Session 1: THE EXPERIENCE
 
-### Step 1: Welcome + What is ALIVE?
+### Step 1: Boot Screen
 
-Use the full UI template from the "UI Treatment" section above. Display the full logo, double-line border, and community footer.
+Display the full boot screen. This is the user's first impression — make it count.
 
-**Then use AskUserQuestion for the choice:**
+Show the manifesto box, then the full elephant + wordmark inside the double-line border:
 
+```
+  ┌──────────────────────────────────────────────────────────────────────────────┐
+  │                                                                              │
+  │            Everything on every screen was built from a terminal.             │
+  │               For decades, that power belonged to programmers.               │
+  │          AI just opened the door — and all you have to do is talk.           │
+  │          But AI has no memory. Every conversation starts from zero.          │
+  │                                                                              │
+  │                             ALIVE changes that.                              │
+  │          Your files. Your machine. Context that compounds forever.           │
+  │                                                                              │
+  └──────────────────────────────────────────────────────────────────────────────┘
+```
+
+Then immediately display the full Tier 1 logo (elephant + wordmark from UI Treatment section above) inside the double-line border.
+
+**Do NOT explain what ALIVE is. Do NOT describe the system. The manifesto speaks for itself.** Let it breathe for a moment, then move to The Question.
+
+Use AskUserQuestion:
 ```
 AskUserQuestion({
   questions: [{
-    question: "Ready to set up ALIVE?",
+    question: "Ready?",
     header: "Setup",
     options: [
-      { label: "Let's do this", description: "Start the full setup (~10 minutes across 2 sessions)" },
-      { label: "Tell me more first", description: "I want to understand before committing" },
+      { label: "Let's go", description: "Start setup (~10 minutes across 2 sessions)" },
       { label: "I've used ALIVE before", description: "Skip to quick setup" }
     ],
     multiSelect: false
@@ -298,251 +320,62 @@ AskUserQuestion({
 })
 ```
 
-**Content to display inside the border:**
+---
+
+### Step 2: The Question
+
+**This is the most important step. Don't rush it.**
+
+Instead of explaining ALIVE, ask about THEM:
 
 ```
-Welcome to ALIVE.
+Before I set anything up, I want to understand your world.
 
-Here's the problem: Every time you start a new conversation with an AI,
-it forgets everything. You explain the same context over and over.
-Decisions get lost. Tasks fall through the cracks.
+What's the one thing taking up the most mental space right now?
 
-ALIVE fixes that.
+This could be:
+  - A business you're building
+  - A project that keeps you up at night
+  - Something in your personal life you're navigating
+  - A side project or idea that won't leave your head
 
-It's a file-based system that gives me (Claude) persistent memory.
-What you tell me today, I remember tomorrow. Across sessions. Across
-projects. Across your whole life.
-
-Think of it as a second brain that I can actually read.
-
-──────────────────────────────────────────────────────────────────────────
-This setup happens in two quick sessions:
-  Session 1: System setup (~5 min) — install rules, pick preferences
-  Session 2: Content setup (~5 min) — set up your life, ventures, projects
-
-Worth it.
+Just tell me about it. What is it, and where are you with it?
 ```
 
-**If "Tell me more first":**
+**Wait for their response. Listen.**
+
+Then follow up conversationally — draw out the context that will populate their first venture or experiment:
 
 ```
-THE CORE IDEA
-─────────────────────────────────────────────────────────────────────────
-
-Most people use AI like this:
-  → Start conversation
-  → Explain everything from scratch
-  → Get help
-  → Close conversation
-  → (Next time: repeat from scratch)
-
-With ALIVE, it works like this:
-  → Start conversation
-  → I read your context files automatically
-  → I already know your projects, priorities, and history
-  → We pick up exactly where we left off
-
-The magic: a simple folder structure that I understand.
-
-You organise your world into domains (Life, Ventures, Experiments).
-Each one has a "_brain" folder where context lives.
-I read it. I update it. Context compounds over time.
+Tell me more:
+  - What's the current status? What phase are you in?
+  - What needs doing right now? What's urgent?
+  - Any blockers or things keeping you stuck?
+  - What have you learned so far that's worth remembering?
 ```
 
-Then use AskUserQuestion:
-```
-AskUserQuestion({
-  questions: [{
-    question: "Want to see a real example, or start setup?",
-    header: "Next",
-    options: [
-      { label: "Start setup", description: "I get it — let's go" },
-      { label: "Show me an example", description: "I want to see what a day looks like" }
-    ],
-    multiSelect: false
-  }]
-})
-```
+**You're not just collecting information — you're having a conversation.** The user should feel heard, not interrogated. Use their language back to them. Ask follow-up questions that show you understand.
 
-**If "Show me an example":**
+**Capture mentally (or in working memory) the following from their responses:**
+- **Name** (ask if not clear: "What do you call this?")
+- **Status/phase** → will populate `status.md`
+- **Tasks/to-dos** → will populate `tasks.md`
+- **Insights/learnings** → will populate `insights.md`
+- **Whether this is a venture (revenue intent) or experiment (exploring)**
 
-```
-EXAMPLE: A DAY WITH ALIVE
-─────────────────────────────────────────────────────────────────────────
-
-Morning:
-  You: "What should I work on today?"
-  Me:  I check your tasks across all projects.
-       "You have 2 urgent items: the Acme proposal is due today,
-       and you mentioned wanting to call your mum this week."
-
-Working:
-  You: "I just had a call with the Globex team. They want to move
-       forward but need a lower price point."
-  Me:  I log that to the Globex project. Decision recorded.
-       Next time you ask about Globex, I'll remember.
-
-Evening:
-  You: "Wrap up"
-  Me:  I save everything that happened today to your context files.
-       Tomorrow, we pick up exactly here.
-
-No re-explaining. No lost context. AI that actually remembers.
-```
+**Once you have a clear picture (2-4 exchanges), move to The Build.**
 
 ---
 
-### Step 2: How ALIVE Works (The Mental Model)
+### Step 3: The Build
+
+**Now show them the magic. Build their first venture or experiment live while they watch.**
 
 ```
-HOW ALIVE WORKS
-─────────────────────────────────────────────────────────────────────────
-
-ALIVE uses a simple folder structure that I read and write.
-
-Every project (we call them "entities") has a special folder called
-"_brain" — this is where memory lives:
-
-  your-project/
-  └── _brain/
-      ├── status.md     ← Where are we? What's the current focus?
-      ├── tasks.md      ← What needs doing?
-      ├── insights.md   ← What have we learned?
-      └── changelog.md  ← What happened? (session history)
-
-When you start a conversation, I read the _brain/ folder.
-When you finish, we save changes back.
-
-That's it. Simple files. No database. No cloud sync.
-You own your context. It's just markdown.
+Watch this.
 ```
 
-Use AskUserQuestion:
-```
-AskUserQuestion({
-  questions: [{
-    question: "Makes sense?",
-    header: "Continue",
-    options: [
-      { label: "Makes sense", description: "Continue to the five domains" },
-      { label: "Why files?", description: "Why not a database or cloud service?" }
-    ],
-    multiSelect: false
-  }]
-})
-```
-
-**If "Why files?":**
-
-```
-WHY FILES?
-─────────────────────────────────────────────────────────────────────────
-
-Three reasons:
-
-1. PORTABILITY
-   Your context isn't locked in a proprietary system.
-   It's markdown files you can read, edit, move, or backup.
-
-2. TRANSPARENCY
-   You can see exactly what I "remember" about you.
-   No black box. Open the file, read the context.
-
-3. SIMPLICITY
-   No servers. No accounts. No sync issues.
-   Works offline. Works forever.
-
-The tradeoff: you need to organise a bit. But that's what this
-setup is for — I'll create the structure, you just tell me about
-your world.
-```
-
----
-
-### Step 3: The Five Domains (Explained)
-
-```
-THE FIVE DOMAINS
-─────────────────────────────────────────────────────────────────────────
-
-ALIVE organises everything into five areas. Each has a specific purpose:
-
-┌─────────────────────────────────────────────────────────────────────┐
-│                                                                     │
-│  01_Archive      Where completed things rest                        │
-│                  (Out of sight, but preserved)                      │
-│                                                                     │
-│  02_Life         YOUR FOUNDATION — personal areas                   │
-│                  (Health, finance, relationships, home...)          │
-│                                                                     │
-│  03_Inputs       The inbox — stuff to process                       │
-│                  (Meeting notes, ideas, links to sort)              │
-│                                                                     │
-│  04_Ventures     Revenue-generating projects                        │
-│                  (Businesses, freelance, products)                  │
-│                                                                     │
-│  05_Experiments  Ideas you're testing                               │
-│                  (No business model yet, just exploring)            │
-│                                                                     │
-└─────────────────────────────────────────────────────────────────────┘
-
-The numbers (01, 02...) keep them sorted. Life comes early because
-it's the foundation — your personal context that spans everything.
-```
-
-Use AskUserQuestion:
-```
-AskUserQuestion({
-  questions: [{
-    question: "Ready to continue, or want to dive deeper into each domain?",
-    header: "Domains",
-    options: [
-      { label: "Continue", description: "I get it — let's set things up" },
-      { label: "Tell me more", description: "Explain each domain in detail" }
-    ],
-    multiSelect: false
-  }]
-})
-```
-
-**If "Tell me more":**
-
-```
-DOMAIN DEEP DIVE
-─────────────────────────────────────────────────────────────────────────
-
-01_ARCHIVE
-  Things that are done. Completed projects, old experiments, closed
-  chapters. We move things here instead of deleting — nothing is lost.
-
-02_LIFE (Most Important)
-  This is YOU. Not your work — your actual life. Health tracking,
-  finances, relationships, personal goals. Most productivity systems
-  ignore this. ALIVE doesn't.
-
-  Life includes a special folder: people/
-  Everyone you know lives here — linked across all your projects.
-  Your cofounder? They're in people/, referenced from ventures.
-
-03_INPUTS
-  A universal inbox. Dump anything here: meeting transcripts, ideas,
-  screenshots, voice notes. Later, we process and route them to the
-  right place. Nothing gets lost, nothing needs immediate filing.
-
-04_VENTURES
-  Work that makes (or will make) money. Each venture gets its own
-  _brain/ folder, its own context, its own history.
-
-05_EXPERIMENTS
-  Ideas you're testing. No pressure to monetise. No commitment.
-  If they work, they graduate to Ventures. If not, they archive.
-```
-
----
-
-### Step 4: Directory Location
-
-**Ask where to create the ALIVE system.**
+#### 3a: Choose Directory
 
 Use AskUserQuestion:
 ```
@@ -561,47 +394,159 @@ AskUserQuestion({
 })
 ```
 
-**If Custom:**
-Ask in conversation: "What's the full path where you want to create ALIVE?"
+**If Custom:** Ask in conversation: "What's the full path?"
 
-**Validate the location:**
-- Check the parent directory exists
-- Check we have write permissions
-- Warn if there's already an `alive/` folder there
+**Validate:** Check parent exists, write permissions, warn if `alive/` already there.
 
-**Store the path** — all subsequent steps use this as the ALIVE root.
+#### 3b: Create Structure
+
+Create the full ALIVE structure AND their first venture or experiment in one go:
+
+```bash
+ALIVE_ROOT="{user-chosen-location}"
+
+# Create domain folders
+mkdir -p "$ALIVE_ROOT/01_Archive"
+mkdir -p "$ALIVE_ROOT/02_Life"
+mkdir -p "$ALIVE_ROOT/03_Inputs"
+mkdir -p "$ALIVE_ROOT/04_Ventures"
+mkdir -p "$ALIVE_ROOT/05_Experiments"
+mkdir -p "$ALIVE_ROOT/.claude/rules"
+mkdir -p "$ALIVE_ROOT/.claude/state"
+
+# Create their first venture or experiment
+DOMAIN="04_Ventures"  # or 05_Experiments based on Step 2
+NAME="{kebab-case-name}"
+mkdir -p "$ALIVE_ROOT/$DOMAIN/$NAME/.claude"
+mkdir -p "$ALIVE_ROOT/$DOMAIN/$NAME/_brain"
+mkdir -p "$ALIVE_ROOT/$DOMAIN/$NAME/_working"
+mkdir -p "$ALIVE_ROOT/$DOMAIN/$NAME/_references"
+
+# Open in Finder
+open "$ALIVE_ROOT"
+```
+
+**Platform detection:**
+- macOS: `open "$ALIVE_ROOT"`
+- Linux: `xdg-open "$ALIVE_ROOT"`
+- Windows/WSL: `explorer.exe "$ALIVE_ROOT"`
+
+**IMPORTANT:** Open the folder so the user sees it being built in real time. This is intentional for the "wow" effect.
+
+#### 3c: Populate _brain/ from their words
+
+**This is the key moment.** Create _brain/ files using templates but populated with REAL content from Step 2.
+
+**Use templates from:** `~/.claude/plugins/cache/aliveskills/alive/*/templates/brain/`
+
+Write `status.md`:
+```markdown
+# Status
+
+**Phase:** [extracted from conversation — Starting/Building/Launching/Growing]
+**Updated:** [today's date]
+
+## Current Focus
+[Their words about what they're working on RIGHT NOW — use their language]
+
+## Blockers
+[What they said is keeping them stuck, or "None" if clear]
+
+## Next Milestone
+[What they described as the next goal]
+```
+
+Write `tasks.md`:
+```markdown
+# Tasks
+
+## Urgent
+[Any tasks they flagged as urgent]
+
+## Active
+[Tasks they mentioned are in progress]
+
+## To Do
+[Tasks they mentioned but haven't started]
+
+## Done (Recent)
+[Anything they mentioned completing recently]
+```
+
+Write `insights.md`:
+```markdown
+# Insights
+
+## [today's date] — Initial Context
+
+**Category:** [market/product/process/people/technical]
+**Learning:** [Any insights or learnings they shared]
+**Evidence:** Shared during onboarding setup
+**Applies to:** [venture/experiment name]
+```
+
+Write `changelog.md`:
+```markdown
+# Changelog
+
+## [today's date] — Created (Onboarding)
+**Session:** [session-id]
+
+### Context
+- Created during ALIVE onboarding
+- [1-2 sentences summarizing what user shared]
+
+### Next
+- [The immediate next step they described]
+```
+
+Write `manifest.json` from template, customized with venture/experiment details.
+
+Write `.claude/CLAUDE.md` (unit identity):
+```markdown
+# [Name]
+
+[One-sentence description based on what user shared]
+
+**Goal:** [extracted from conversation]
+```
+
+#### 3d: Show them what you built
 
 ```
-▸ ALIVE will be created at: ~/Desktop/alive/
+▸ creating your ALIVE system...
 
-Confirm this location?
+ALIVE/
+├── 01_Archive/
+├── 02_Life/              ← We'll set this up in Session 2
+├── 03_Inputs/
+├── 04_Ventures/
+│   └── [name]/
+│       ├── .claude/CLAUDE.md   ← "[goal sentence]"
+│       ├── _brain/
+│       │   ├── status.md       ← Phase: [phase]. Focus: [their words]
+│       │   ├── tasks.md        ← [N] tasks captured from our conversation
+│       │   ├── insights.md     ← [insight they shared]
+│       │   └── changelog.md    ← This session logged
+│       ├── _working/
+│       └── _references/
+├── 05_Experiments/
+└── .claude/
+
+▸ opening folder — check your file manager.
+
+✓ Your first venture is live.
+  Everything you just told me is now in files I can read.
 ```
 
-Use AskUserQuestion to confirm:
-```
-AskUserQuestion({
-  questions: [{
-    question: "Confirm ALIVE location?",
-    header: "Confirm",
-    options: [
-      { label: "Confirm", description: "Create ALIVE at this location" },
-      { label: "Change", description: "Pick a different location" }
-    ],
-    multiSelect: false
-  }]
-})
-```
+**Let this land.** Don't immediately rush to the next step. If the user reacts, engage with it. They just watched their words become structured files.
 
 ---
 
-### Step 5: User Preferences
+### Step 4: Quick Config
 
 ```
-QUICK PREFERENCES
-─────────────────────────────────────────────────────────────────────────
-
-Before we build your system, a few quick preferences.
-These get saved to your config file and apply to every session.
+A few quick preferences before I install the system files.
 ```
 
 **Timezone** (use AskUserQuestion):
@@ -655,72 +600,7 @@ AskUserQuestion({
 })
 ```
 
-```
-✓ Preferences saved. These will be written to your config file shortly.
-```
-
----
-
-### Step 6: Create Base Structure
-
-Create the five domain folders and the `.claude/` system directory.
-
-**Implementation:**
-```bash
-ALIVE_ROOT="{user-chosen-location}"
-
-# Create domain folders
-mkdir -p "$ALIVE_ROOT/01_Archive"
-mkdir -p "$ALIVE_ROOT/02_Life"
-mkdir -p "$ALIVE_ROOT/03_Inputs"
-mkdir -p "$ALIVE_ROOT/04_Ventures"
-mkdir -p "$ALIVE_ROOT/05_Experiments"
-
-# Create .claude system directories
-mkdir -p "$ALIVE_ROOT/.claude/rules"
-mkdir -p "$ALIVE_ROOT/.claude/state"
-
-# Open the folder in Finder so the user can see it
-open "$ALIVE_ROOT"
-```
-
-**IMPORTANT:** After creating the directory, open it in Finder (macOS) or the system file manager. This gives the user a visual confirmation — they can see the folder structure being built in real time. This is intentional for the "wow" effect.
-
-**Platform detection:**
-- macOS: `open "$ALIVE_ROOT"`
-- Linux: `xdg-open "$ALIVE_ROOT"`
-- Windows/WSL: `explorer.exe "$ALIVE_ROOT"`
-
-**Display to user:**
-
-```
-▸ creating base structure...
-
-ALIVE/
-├── 01_Archive/           ← Completed items rest here
-├── 02_Life/              ← Your foundation (set up in Session 2)
-├── 03_Inputs/            ← Your inbox (dump stuff here)
-├── 04_Ventures/          ← Revenue-generating projects (Session 2)
-├── 05_Experiments/       ← Ideas you're testing (Session 2)
-└── .claude/              ← System files (installing next)
-    ├── rules/
-    └── state/
-
-▸ opening folder...
-  └─ Check your file manager — you should see your new ALIVE system
-
-✓ Base structure created
-```
-
----
-
-### Step 7: Create alive.local.yaml
-
-**Create the system configuration file at `{alive-root}/.claude/alive.local.yaml`.**
-
-This file is the source of truth for ALIVE system configuration. It tracks onboarding progress, version info, and user preferences.
-
-**Write this file:**
+**Create `{alive-root}/.claude/alive.local.yaml`:**
 
 ```yaml
 # ALIVE System Configuration
@@ -728,7 +608,7 @@ This file is the source of truth for ALIVE system configuration. It tracks onboa
 # Location: {alive-root}/.claude/alive.local.yaml
 
 version: 2
-system_version: "2.1.1"
+system_version: "3.0.1"
 onboarding_part: 1
 created: "[today's date]"
 
@@ -736,153 +616,59 @@ created: "[today's date]"
 alive_root: "{absolute-path-to-alive-root}"
 
 # User preferences
-timezone: "[from Step 5]"
-theme: "[from Step 5]"
-working_style: "[from Step 5]"
+timezone: "[selection]"
+theme: "[selection]"
+working_style: "[selection]"
 ```
 
-**Example with real values:**
-
-```yaml
-# ALIVE System Configuration
-# Created by /alive:onboarding — Session 1
-# Location: ~/Desktop/alive/.claude/alive.local.yaml
-
-version: 2
-system_version: "2.1.1"
-onboarding_part: 1
-created: "2026-02-10"
-
-# System paths
-alive_root: "/Users/will/Desktop/alive"
-
-# User preferences
-timezone: "Australia/Sydney"
-theme: "vibrant"
-working_style: "solo"
 ```
-
-**Display to user:**
-
-```
-▸ creating system config...
-  └─ .claude/alive.local.yaml
-
-  version: 2
-  system_version: 2.1.1
-  timezone: [selection]
-  theme: [selection]
-  working_style: [selection]
-
-✓ Config created
+✓ Config saved
 ```
 
 ---
 
-### Step 8: Install Rules & CLAUDE.md (CRITICAL)
+### Step 5: System Install (CRITICAL)
 
-**This step is MANDATORY. ALIVE will not work without it.**
+**Install rules and CLAUDE.md. This is MANDATORY — ALIVE will not work without it.**
 
-**IMPORTANT:** These files are installed INSIDE the ALIVE directory (the location chosen in Step 4), NOT in the user's home `~/.claude/` folder.
+**IMPORTANT:** Files install INSIDE the ALIVE directory (location from Step 3a), NOT in the user's home `~/.claude/` folder.
 
-Example: If user chose `~/Desktop/alive/` as their ALIVE location:
+Example: If user chose `~/Desktop/alive/`:
 - Rules go to: `~/Desktop/alive/.claude/rules/`
 - CLAUDE.md goes to: `~/Desktop/alive/.claude/CLAUDE.md`
 
-#### 1. Rules (behaviour files)
+#### Rules
 
 ```bash
-# Source: Plugin rules directory
-~/.claude/plugins/cache/aliveskills/alive/*/rules/
-
-# Destination: INSIDE the ALIVE installation directory
-{alive-root}/.claude/rules/
+# Copy rules from plugin to ALIVE directory
+cp -r ~/.claude/plugins/cache/aliveskills/alive/*/rules/* "$ALIVE_ROOT/.claude/rules/"
 ```
 
-**Files to copy:**
-- `behaviors.md` — How Claude reads and updates context
-- `conventions.md` — File naming, folder structure
-- `intent.md` — Understanding user commands
-- `learning-loop.md` — The daily/do/save rhythm
-- `ui-standards.md` — Visual formatting
-- `voice.md` — How Claude communicates
-- `working-folder-evolution.md` — When drafts become projects
+Files copied: `behaviors.md`, `conventions.md`, `intent.md`, `learning-loop.md`, `ui-standards.md`, `voice.md`, `working-folder-evolution.md`, `anti-patterns.md`
 
-#### 2. CLAUDE.md (system identity + user preferences)
+#### CLAUDE.md
 
-Create `{alive-root}/.claude/CLAUDE.md` with the ALIVE system identity.
+```bash
+# Copy CLAUDE.md from plugin to ALIVE directory
+cp ~/.claude/plugins/cache/aliveskills/alive/*/CLAUDE.md "$ALIVE_ROOT/.claude/CLAUDE.md"
+```
 
-**Template location:** `~/.claude/plugins/cache/aliveskills/alive/*/CLAUDE.md` (the plugin's root CLAUDE.md)
-
-**After copying, add the User Preferences section:**
+Then use Edit to add User Preferences section:
 ```markdown
 ## User Preferences
 
-**Timezone:** [from Step 5]
-**Theme:** [from Step 5]
-**Working Style:** [from Step 5]
+**Timezone:** [selection]
+**Theme:** [selection]
+**Working Style:** [selection]
 ```
 
-This ensures Claude reads user preferences automatically every session.
+#### Statusline
 
-#### Implementation
+**The statusline is essential for ALIVE.** Configure it automatically — do NOT offer to skip.
 
-```bash
-ALIVE_ROOT="{user-chosen-location}"
-
-# Copy rules from plugin to ALIVE directory
-cp -r ~/.claude/plugins/cache/aliveskills/alive/*/rules/* "$ALIVE_ROOT/.claude/rules/"
-
-# Copy CLAUDE.md from plugin to ALIVE directory
-cp ~/.claude/plugins/cache/aliveskills/alive/*/CLAUDE.md "$ALIVE_ROOT/.claude/CLAUDE.md"
-
-# Then use Edit tool to add User Preferences section to CLAUDE.md
-```
-
-#### Display to user
-
-```
-▸ installing ALIVE system files...
-
-  └─ .claude/CLAUDE.md        (System identity + your preferences)
-  └─ .claude/rules/           (7 behaviour files)
-
-✓ System files installed
-
-These enable Claude to understand your ALIVE system automatically.
-When you cd into this directory, Claude reads these files.
-```
-
-**Do NOT skip this step. Without these files, ALIVE skills will not function correctly.**
-
----
-
-### Step 9: Configure Statusline (MANDATORY)
-
-**The statusline is essential for ALIVE.** It shows critical system info at a glance.
-
-```
-STATUSLINE SETUP
-─────────────────────────────────────────────────────────────────────────
-
-ALIVE customises your Claude Code status bar to show:
-
-  session:abc123 | ctx:32% | $1.24 | 🔥 2 urgent | 📥 5 inputs
-
-This gives you at-a-glance awareness of:
-  • Current session ID (for finding past conversations)
-  • Context usage (how much of my memory you're using)
-  • Conversation cost
-  • Urgent tasks count (so you never miss priorities)
-  • Unprocessed inputs count (so nothing slips through)
-
-This is one of the most useful features of ALIVE. Setting it up now.
-```
-
-**Do NOT offer to skip this step.** Configure it automatically.
+It shows: `session:abc123 | ctx:32% | $1.24 | 🔥 2 urgent | 📥 5 inputs`
 
 **If user asks "What's a statusline?":**
-
 ```
 The statusline is the small text bar at the bottom of Claude Code.
 By default it shows basic info. With ALIVE, it shows your system
@@ -900,29 +686,86 @@ status so you always know what needs attention.
    }
    ```
 
+**After installing, display this directly to the user as visible conversation output.** This is a critical explanation moment — do NOT skip or abbreviate it. Output the installation confirmation, then the explanation below it:
+
 ```
-✓ Statusline configured
+▸ installing system files...
+  └─ .claude/CLAUDE.md     ✓
+  └─ .claude/rules/        ✓ (8 files)
+  └─ Statusline             ✓
+
+✓ System installed
 ```
+
+Then explain what just happened and how ALIVE works. **This must be output as regular text the user can read, not hidden in implementation details:**
+
+```
+HOW THIS WORKS
+─────────────────────────────────────────────────────────────────────────
+
+Those files I just installed? They're what makes ALIVE work.
+
+Every time you start a Claude Code session in this folder, Claude
+automatically reads those files before you say anything. They teach
+Claude how to use ALIVE — how to read your venture/experiment state, show you
+what it's looking at, flag when things are stale, offer to capture
+decisions. You don't need to update them. You don't need to think
+about them. They just work.
+
+WHAT ARE _brain/ FILES?
+─────────────────────────────────────────────────────────────────────────
+
+Every venture, experiment, or life area you create in ALIVE gets a
+_brain/ folder. That's where everything about it lives:
+
+  status.md    → Where you're at right now (phase, focus, blockers)
+  tasks.md     → What needs doing
+  insights.md  → What you've learned
+  changelog.md → History of every session
+  manifest.json → Map of everything in the venture/experiment
+
+When you say "work on [name]", Claude reads those files and knows
+exactly where you left off. That's the whole trick — no database, no
+app, no subscription. Just files.
+
+WHY MARKDOWN?
+─────────────────────────────────────────────────────────────────────────
+
+You're going to see a lot of .md files. Markdown is just plain text
+with simple formatting — headings, bullet points, bold text. Nothing
+fancy.
+
+The reason ALIVE uses markdown for everything:
+  • YOU can read it. Open any file and it makes sense immediately.
+  • AI can read it. Claude understands markdown perfectly.
+  • It's just files. They live on your computer (or iCloud, Dropbox,
+    wherever you put this folder). No vendor lock-in. No proprietary
+    format. No app that might shut down next year.
+  • It's searchable. Spotlight, grep, whatever you use — it just works.
+
+Your entire system is files you own, on hardware you control, readable
+by any text editor or AI. That's the point.
+```
+
+**Important:** This explanation is the first time the user understands what ALIVE actually is. Do NOT condense it. Do NOT skip sections. Output all of it. If the user seems engaged, pause briefly to let it land before continuing to the next step.
 
 ---
 
-### Session 1 Exit (MANDATORY)
+### Step 6: The Challenge
 
-**After completing Steps 1-9, force the user to close and restart.**
+**This is the exit. Make it feel like a cliffhanger, not a chore.**
 
 ```
-╭─ RESTART REQUIRED ─────────────────────────────────────────────────────╮
+╭─ NOW FOR THE REAL TEST ───────────────────────────────────────────────╮
 │                                                                        │
-│  Session 1 is complete. The system files are installed.                │
+│  Everything you told me about [name] is saved to files.       │
+│  But right now, I'm running from the plugin — I haven't loaded       │
+│  the rules I just installed. I need a restart to become the           │
+│  full ALIVE system.                                                   │
 │                                                                        │
-│  Claude must RESTART to load the new ALIVE rules and identity.        │
+│  Here's the challenge:                                                │
 │                                                                        │
-│  Without restarting, I can't properly create your entities —          │
-│  I need to load the rules I just installed.                           │
-│                                                                        │
-│  HERE'S WHAT TO DO:                                                   │
-│                                                                        │
-│  1. Exit this session (Ctrl+C or close terminal)                      │
+│  1. Close this terminal (Ctrl+C or just close it)                    │
 │  2. Open a NEW terminal                                               │
 │  3. cd into your ALIVE folder:                                        │
 │                                                                        │
@@ -934,50 +777,291 @@ status so you always know what needs attention.
 │  4. Start Claude Code (type: claude)                                  │
 │  5. Run /alive:onboarding                                              │
 │                                                                        │
-│  I'll detect Session 1 is done and jump straight to                   │
-│  setting up your Life, ventures, and experiments.                     │
+│  When you come back, the first thing I'll do is tell you              │
+│  everything you just told me — without you saying a word.             │
+│                                                                        │
+│  Let's see if it works.                                                │
 │                                                                        │
 ╰────────────────────────────────────────────────────────────────────────╯
 ```
 
 **STOP. Do not proceed to Session 2 steps. The user MUST restart Claude.**
 
-**Session 2 `cd` check:** When Session 2 starts (Step 10), verify the user is in the correct directory by checking if `.claude/alive.local.yaml` exists in the current working directory. If not, instruct them to `cd {alive-root}` first.
+**Session 2 `cd` check:** When Session 2 starts (Step 7), verify the user is in the correct directory by checking if `.claude/alive.local.yaml` exists in the current working directory. If not, instruct them to `cd {alive-root}` first.
 
 ---
 
-## Session 2: Content Setup
+## Session 2: THE PROOF + EXPANSION
 
 **Only reached when `alive.local.yaml` has `onboarding_part: 1`.**
 
-### Step 10: Welcome Back
+### Step 7: The Proof
 
-Read `{alive-root}/.claude/alive.local.yaml` and confirm Session 1 was completed.
+**This is the aha moment. Don't blow it.**
+
+**First: Verify Session 1 actually completed.** Read `{alive-root}/.claude/alive.local.yaml` and check for `onboarding_part: 1`. Then scan for the venture or experiment that should have been created in Session 1.
+
+**Guard check — find the venture/experiment:** Scan `04_Ventures/` and `05_Experiments/` for any folder with a `_brain/` directory.
+
+**If NO venture or experiment with `_brain/` is found:**
+```
+Hmm — it looks like Session 1 didn't finish creating your first venture.
+
+That's fine. Let me pick up where we left off.
+```
+Then jump back to the creation step from Session 1 (Step 4). Do NOT show the "You're back" proof screen — there's nothing to prove yet.
+
+**If a venture or experiment IS found:** Read its `status.md`, `tasks.md`, `insights.md`. Then proceed with the proof display below.
+
+**Display inside the full Tier 1 border with elephant + wordmark:**
 
 ```
-╔══════════════════════════════════════════════════════════════════════════════════════╗
-║                                                                                      ║
-║  [FULL LOGO]                                                                         ║
-║                                                                                      ║
-║    onboarding — session 2                                                            ║
-║  ════════════════════════════════════════════════════════════════════════════════    ║
-║                                                                                      ║
-║  Welcome back. Session 1 is complete.                                                ║
-║                                                                                      ║
-║  ✓ Rules installed                                                                   ║
-║  ✓ CLAUDE.md configured                                                              ║
-║  ✓ Statusline set up                                                                 ║
-║  ✓ Base folders created                                                              ║
-║  ✓ Preferences saved                                                                 ║
-║                                                                                      ║
-║  Now let's set up your world — Life, Ventures, and Experiments.                      ║
-║                                                                                      ║
-╚══════════════════════════════════════════════════════════════════════════════════════╝
+╭──────────────────────────────────────────────────────────────────────────────────────╮
+│                                                                                      │
+│  [FULL LOGO]                                                                         │
+│                                                                                      │
+│    onboarding — session 2                                                            │
+│  ──────────────────────────────────────────────────────────────────────────────────  │
+│                                                                                      │
+│  You're back. Let me show you something.                                             │
+│                                                                                      │
+│  ▸ reading [name]/_brain/status.md                                                   │
+│    └─ Phase: [phase]. Focus: [their words from Session 1]                            │
+│                                                                                      │
+│  ▸ reading [name]/_brain/tasks.md                                                    │
+│    └─ [N] tasks: [list the urgent/active ones by name]                               │
+│                                                                                      │
+│  ▸ reading [name]/_brain/insights.md                                                 │
+│    └─ "[the insight they shared]"                                                    │
+│                                                                                      │
+│  I remember everything. You didn't have to re-explain a thing.                       │
+│                                                                                      │
+╰──────────────────────────────────────────────────────────────────────────────────────╯
+```
+
+**Pause. Let this land.** This is the moment the user understands what ALIVE does — not because you explained it, but because they FELT it.
+
+Then:
+```
+That's ALIVE. You talk. I save. You come back. I remember.
+
+No re-explaining. No lost context. No starting from scratch.
+
+Now let me show you how it works — and set up the rest of your world.
 ```
 
 ---
 
-### Step 11: Life Setup (THE FOUNDATION)
+### Step 8: The Mechanism
+
+**NOW explain how ALIVE works. Experience first, explanation second.**
+
+```
+HOW IT WORKS
+─────────────────────────────────────────────────────────────────────────
+
+What just happened:
+
+1. In Session 1, you told me about [name]
+2. I wrote your words into files — structured markdown in _brain/
+3. You closed the terminal. I "forgot" everything.
+4. You came back. I read the files. Context restored.
+
+The key: your context lives in FILES, not in my memory.
+Files persist. My memory doesn't.
+
+  [name]/
+  └── _brain/
+      ├── status.md     ← Where are we? What's the current focus?
+      ├── tasks.md      ← What needs doing?
+      ├── insights.md   ← What have we learned?
+      └── changelog.md  ← What happened? (session history)
+
+That's it. Simple markdown. No database. No cloud sync.
+You own your context. You can read, edit, move, or back up
+these files any time. Nothing is locked in a black box.
+```
+
+Use AskUserQuestion:
+```
+AskUserQuestion({
+  questions: [{
+    question: "Makes sense?",
+    header: "Continue",
+    options: [
+      { label: "Makes sense", description: "Continue to the five domains" },
+      { label: "Why files?", description: "Why not a database or cloud service?" }
+    ],
+    multiSelect: false
+  }]
+})
+```
+
+**If "Why files?":**
+
+```
+WHY FILES?
+─────────────────────────────────────────────────────────────────────────
+
+Three reasons:
+
+1. PORTABILITY
+   Your context isn't locked in a proprietary system.
+   It's markdown files you can read, edit, move, or backup.
+
+2. TRANSPARENCY
+   You can see exactly what I "remember" about you.
+   No black box. Open the file, read the context.
+
+3. SIMPLICITY
+   No servers. No accounts. No sync issues.
+   Works offline. Works forever.
+```
+
+#### The Five Domains
+
+```
+THE FIVE DOMAINS
+─────────────────────────────────────────────────────────────────────────
+
+Your [name] lives in [04_Ventures or 05_Experiments].
+But ALIVE organizes ALL of your context into five areas:
+
+┌─────────────────────────────────────────────────────────────────────┐
+│                                                                     │
+│  01_Archive      Where completed things rest                        │
+│                  (Out of sight, but preserved)                      │
+│                                                                     │
+│  02_Life         YOUR FOUNDATION — personal areas                   │
+│                  (Health, finance, relationships, home...)          │
+│                                                                     │
+│  03_Inputs       The inbox — stuff to process                       │
+│                  (Meeting notes, ideas, links to sort)              │
+│                                                                     │
+│  04_Ventures     Revenue-generating ventures                        │
+│                  (Businesses, freelance, products)                  │
+│                                                                     │
+│  05_Experiments  Ideas you're testing                               │
+│                  (No business model yet, just exploring)            │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+
+Life comes early because it's the foundation — your personal
+context that spans everything else.
+```
+
+Use AskUserQuestion:
+```
+AskUserQuestion({
+  questions: [{
+    question: "Want the deep dive on each domain, or continue setting up?",
+    header: "Domains",
+    options: [
+      { label: "Continue", description: "I get it — let's set things up" },
+      { label: "Tell me more", description: "Explain each domain in detail" }
+    ],
+    multiSelect: false
+  }]
+})
+```
+
+**If "Tell me more":**
+
+```
+DOMAIN DEEP DIVE
+─────────────────────────────────────────────────────────────────────────
+
+01_ARCHIVE
+  Things that are done. Completed ventures, old experiments, closed
+  chapters. We move things here instead of deleting — nothing is lost.
+
+02_LIFE (Most Important)
+  This is YOU. Not your work — your actual life. Health tracking,
+  finances, relationships, personal goals. Most productivity systems
+  ignore this. ALIVE doesn't.
+
+  Life includes a special folder: people/
+  Everyone you know lives here — linked across all your ventures and experiments.
+  Your cofounder? They're in people/, referenced from ventures.
+
+03_INPUTS
+  A universal inbox. Dump anything here: meeting transcripts, ideas,
+  screenshots, voice notes. Later, we process and route them to the
+  right place. Nothing gets lost, nothing needs immediate filing.
+
+04_VENTURES
+  Work that makes (or will make) money. Each venture gets its own
+  _brain/ folder, its own context, its own history.
+
+05_EXPERIMENTS
+  Ideas you're testing. No pressure to monetize. No commitment.
+  If they work, they graduate to Ventures. If not, they archive.
+```
+
+#### The Loop
+
+```
+THE LEARNING LOOP
+─────────────────────────────────────────────────────────────────────────
+
+ALIVE works best with a daily rhythm:
+
+  /alive:daily  → Start your day. See everything across all ventures,
+                  experiments, and life areas. Urgent tasks, inputs to
+                  process, what needs attention.
+
+  /alive:work   → Focus on ONE venture, experiment, or life area. Load
+                  its context, start working. "work on [name]" or
+                  "focus on health"
+
+  /alive:save   → End your session. Log what happened, update context.
+                  This is how memory persists.
+
+That's the core loop: DAILY → WORK → SAVE → REPEAT
+
+Context compounds each cycle. Skip the save, lose the context.
+```
+
+Use AskUserQuestion:
+```
+AskUserQuestion({
+  questions: [{
+    question: "Ready to set up the rest of your world?",
+    header: "Continue",
+    options: [
+      { label: "Let's go", description: "Set up Life, add more ventures and experiments" },
+      { label: "Other commands", description: "What else can ALIVE do?" }
+    ],
+    multiSelect: false
+  }]
+})
+```
+
+**If "Other commands":**
+
+```
+OTHER USEFUL COMMANDS
+─────────────────────────────────────────────────────────────────────────
+
+/alive:capture  Capture context. Dump in anything — a decision,
+                transcript, email, article — I'll extract what
+                matters and route it to the right place.
+
+/alive:recall   Search your history. "What did we decide about
+                pricing?" — I'll find it.
+
+/alive:new      Create a new venture, experiment, or life area.
+
+/alive:archive  Move something to the archive when it's done.
+
+/alive:sweep    Clean up. Find stale content, abandoned drafts.
+
+/alive:help     Quick reference for all commands.
+```
+
+---
+
+### Step 9: Life Setup (THE FOUNDATION)
 
 ```
 ╭─ LIFE SETUP ───────────────────────────────────────────────────────────╮
@@ -1020,7 +1104,7 @@ Are you sure?
 Without Life setup, ALIVE becomes just another project tracker.
 You'll miss:
   - Personal context that compounds over time
-  - Relationship tracking across projects
+  - Relationship tracking across ventures and experiments
   - Health/energy patterns that affect productivity
   - The foundation that makes everything else work
 ```
@@ -1040,7 +1124,7 @@ AskUserQuestion({
 })
 ```
 
-#### Step 11a: Life Areas
+#### Step 9a: Life Areas
 
 **Life areas come from `templates/domains/life.md`.**
 
@@ -1096,7 +1180,7 @@ Then ask in conversation: "Any current health goals? (Optional — press Enter t
 
 *(Repeat brief config for each selected area)*
 
-#### Step 11b: Key People
+#### Step 9b: Key People
 
 ```
 KEY PEOPLE
@@ -1105,7 +1189,7 @@ KEY PEOPLE
 ALIVE has a central place for all the people in your life: people/
 
 This is powerful because:
-  - One file per person, linked across all projects
+  - One file per person, linked across all your ventures and experiments
   - I remember context about relationships over time
   - Your cofounder appears in Ventures AND in People
   - Family members have their own context that compounds
@@ -1139,10 +1223,10 @@ Each person gets a simple file. Over time, as you mention them in
 conversations, their context builds. Meeting notes, decisions,
 relationship history — all linked.
 
-✓ 4 people created in 02_Life/people/
+✓ [N] people created in 02_Life/people/
 ```
 
-#### Step 11c: Life Goals (Optional)
+#### Step 9c: Life Goals (Optional)
 
 ```
 LIFE GOALS
@@ -1166,20 +1250,24 @@ Enter any goals, or skip:
 **Implementation:**
 Create `02_Life/_brain/` with status.md, tasks.md, insights.md, changelog.md, manifest.json from templates.
 Create `02_Life/people/` folder and individual person files.
-Create each life area entity with _brain/, _working/, _references/, .claude/CLAUDE.md.
+Create each life area with _brain/, _working/, _references/, .claude/CLAUDE.md.
 
 ---
 
-### Step 12: Ventures Setup
+### Step 10: More Ventures + Experiments
 
 ```
-╭─ VENTURES ─────────────────────────────────────────────────────────────╮
+╭─ MORE VENTURES + EXPERIMENTS ─────────────────────────────────────────╮
 │                                                                        │
-│  Now let's set up your work.                                           │
+│  You already have [name]. Let's add more.                             │
 │                                                                        │
 ╰────────────────────────────────────────────────────────────────────────╯
+```
 
-VENTURES are projects with revenue intent.
+#### Ventures
+
+```
+VENTURES are work with revenue intent.
 
 This could be:
   - A business you run
@@ -1187,18 +1275,18 @@ This could be:
   - A product you're building to sell
   - A side project that could make money
 
-Do you have any active ventures?
+Do you have any OTHER active ventures? (Besides [name])
 ```
 
 Use AskUserQuestion:
 ```
 AskUserQuestion({
   questions: [{
-    question: "Do you have any active ventures?",
+    question: "Any other ventures to add?",
     header: "Ventures",
     options: [
-      { label: "Yes", description: "I have ventures to set up" },
-      { label: "No", description: "No revenue-generating projects right now" },
+      { label: "Yes", description: "I have more ventures to set up" },
+      { label: "No", description: "Just [name] for now" },
       { label: "Not sure", description: "Help me figure out what counts" }
     ],
     multiSelect: false
@@ -1229,33 +1317,9 @@ NOT ventures (these are experiments):
 Experiments are for testing. Ventures are for building.
 ```
 
-Then use AskUserQuestion:
-```
-AskUserQuestion({
-  questions: [{
-    question: "So — any ventures?",
-    header: "Ventures",
-    options: [
-      { label: "Yes", description: "I have ventures to set up" },
-      { label: "No", description: "I'll start with experiments" },
-      { label: "Skip both", description: "Just the core structure for now" }
-    ],
-    multiSelect: false
-  }]
-})
-```
+**If "Yes" — For each additional venture, collect: name, TYPE, goal, phase**
 
-#### Step 12a: Per-Venture Setup
-
-**For each venture, collect: name, TYPE, goal, phase**
-
-The venture TYPE determines the folder structure (from `templates/domains/ventures.md`).
-
-**Name** (conversational):
-```
-What's the name of your venture?
-> ___
-```
+**Name** (conversational): "What's the name of your venture?"
 
 **Type** (use AskUserQuestion):
 ```
@@ -1274,14 +1338,7 @@ AskUserQuestion({
 })
 ```
 
-(User can select "Other" for custom/generic starting point)
-
-**Goal** (conversational):
-```
-What's the one-sentence goal?
-(What does success look like?)
-> ___
-```
+**Goal** (conversational): "What's the one-sentence goal?"
 
 **Phase** (use AskUserQuestion):
 ```
@@ -1311,38 +1368,17 @@ AskUserQuestion({
 ✓ [Venture name] configured as [Type]
 ```
 
-Use AskUserQuestion:
-```
-AskUserQuestion({
-  questions: [{
-    question: "Add another venture?",
-    header: "More",
-    options: [
-      { label: "Yes", description: "I have more ventures" },
-      { label: "No", description: "Continue to experiments" }
-    ],
-    multiSelect: false
-  }]
-})
-```
+Use AskUserQuestion to ask about more ventures, then continue.
 
----
-
-### Step 13: Experiments Setup
+#### Experiments
 
 ```
-╭─ EXPERIMENTS ──────────────────────────────────────────────────────────╮
-│                                                                        │
-│  Ideas you're testing — no commitment yet.                             │
-│                                                                        │
-╰────────────────────────────────────────────────────────────────────────╯
-
 EXPERIMENTS are for exploration.
 
-This is where ideas live before they become ventures:
+Ideas you're testing before they become ventures:
   - A newsletter you might start
   - A product concept you're validating
-  - A skill you're learning to potentially monetise
+  - A skill you're learning to potentially monetize
   - Anything with uncertainty
 
 The pressure is off. Experiments can fail. That's the point.
@@ -1366,61 +1402,38 @@ AskUserQuestion({
 
 **If "Yes" or "Maybe":**
 
+For each experiment, ask conversationally:
+- What are you calling this experiment?
+- What's the hypothesis or question you're testing?
+- What would "success" look like?
+
 ```
-EXPERIMENT
-─────────────────────────────────────────────────────────────────────────
-
-What are you calling this experiment?
-> ___
-
-What's the hypothesis or question you're testing?
-(What are you trying to learn?)
-> ___
-
-What would "success" look like?
-(How will you know if this works?)
-> ___
-
-─────────────────────────────────────────────────────────────────────────
 ✓ [Experiment name] configured
 ```
 
-Use AskUserQuestion:
-```
-AskUserQuestion({
-  questions: [{
-    question: "Add another experiment?",
-    header: "More",
-    options: [
-      { label: "Yes", description: "I have more ideas" },
-      { label: "No", description: "Continue" }
-    ],
-    multiSelect: false
-  }]
-})
-```
+Use AskUserQuestion to ask about more experiments, then continue.
 
 ---
 
-### Step 14: Create Entity Structure
+### Step 11: Create Remaining Structure
 
-Create all entities configured in Steps 11-13.
+Create all ventures, experiments, and life areas configured in Steps 9-10. (The first venture or experiment from Session 1 already exists.)
 
 ```
-╭─ CREATING YOUR ENTITIES ──────────────────────────────────────────────╮
+╭─ CREATING YOUR WORLD ────────────────────────────────────────────────╮
 │                                                                        │
 │  Building your personal context infrastructure...                      │
 │                                                                        │
 ╰────────────────────────────────────────────────────────────────────────╯
 ```
 
-**For each entity (life area, venture, experiment), create:**
-- `.claude/CLAUDE.md` (entity identity from template)
-- `_brain/status.md` (from template, customised with user input)
+**For each NEW venture, experiment, or life area, create:**
+- `.claude/CLAUDE.md` (unit identity from template)
+- `_brain/status.md` (from template, customized with user input)
 - `_brain/tasks.md` (from template)
 - `_brain/insights.md` (from template)
 - `_brain/changelog.md` (from template)
-- `_brain/manifest.json` (from template, customised)
+- `_brain/manifest.json` (from template, customized)
 - `_working/` (empty)
 - `_references/` (empty)
 
@@ -1432,7 +1445,7 @@ Create all entities configured in Steps 11-13.
 **Display the tree:**
 
 ```
-▸ creating entities...
+▸ creating structure...
 
 02_Life/
 ├── _brain/              (Life focus + goals)
@@ -1440,7 +1453,7 @@ Create all entities configured in Steps 11-13.
 │   ├── _brain/
 │   ├── _working/
 │   └── _references/
-├── finance/             (Your money stuff)
+├── finance/
 │   ├── _brain/
 │   ├── _working/
 │   └── _references/
@@ -1449,206 +1462,27 @@ Create all entities configured in Steps 11-13.
     └── ben.md
 
 04_Ventures/
-└── acme-agency/
-    ├── .claude/CLAUDE.md  (Project identity)
-    ├── _brain/            (Project memory)
-    ├── _working/          (Drafts & WIP)
-    ├── _references/       (Reference materials)
-    └── clients/           (Agency-specific)
+├── [first-venture]/     ← Already created in Session 1
+└── [new-venture]/
+    ├── .claude/CLAUDE.md
+    ├── _brain/
+    ├── _working/
+    ├── _references/
+    └── clients/         (Agency-specific)
 
 05_Experiments/
-└── newsletter-idea/
+└── [experiment]/
     ├── .claude/CLAUDE.md
     ├── _brain/
     ├── _working/
     └── _references/
 
-✓ All entities created
-```
-
-Use AskUserQuestion:
-```
-AskUserQuestion({
-  questions: [{
-    question: "Want to see what's inside the _brain/ files?",
-    header: "Details",
-    options: [
-      { label: "Continue", description: "I'm good — keep going" },
-      { label: "Show me", description: "I want to understand the _brain/ files" }
-    ],
-    multiSelect: false
-  }]
-})
-```
-
-**If "Show me":**
-
-```
-INSIDE _BRAIN/
-─────────────────────────────────────────────────────────────────────────
-
-Each entity's _brain/ folder contains:
-
-STATUS.MD — "Where are we?"
-  Current phase, focus, blockers, next milestone.
-  I read this first to understand the project state.
-
-TASKS.MD — "What needs doing?"
-  Your to-do list. Urgent items, active work, backlog.
-  I check this to know priorities.
-
-INSIGHTS.MD — "What have we learned?"
-  Key learnings, discoveries, things worth remembering.
-  Compounds over time into institutional knowledge.
-
-CHANGELOG.MD — "What happened?"
-  Session-by-session history. Decisions made, work completed.
-  The audit trail of your project's evolution.
-
-Together, these give me complete context about any project
-without you having to explain anything.
+✓ All ventures, experiments, and life areas created
 ```
 
 ---
 
-### Step 15: Quick Tour
-
-```
-╭─ QUICK TOUR ───────────────────────────────────────────────────────────╮
-│                                                                        │
-│  The key concepts you need to know.                                    │
-│                                                                        │
-╰────────────────────────────────────────────────────────────────────────╯
-
-THE LEARNING LOOP
-
-ALIVE works best with a daily rhythm:
-
-  /alive:daily  → Start your day. See everything across all projects.
-                  Urgent tasks, inputs to process, what needs attention.
-
-  /alive:do     → Focus on ONE entity. Load its context, start working.
-                  "work on acme" or "focus on health"
-
-  /alive:save   → End your session. Log what happened, update context.
-                  This is how memory persists.
-
-That's the core loop: DAILY → DO → SAVE → REPEAT
-
-Context compounds each cycle. Skip the save, lose the context.
-```
-
-Use AskUserQuestion:
-```
-AskUserQuestion({
-  questions: [{
-    question: "Continue or see other commands?",
-    header: "Tour",
-    options: [
-      { label: "Continue", description: "I'll learn as I go" },
-      { label: "Other commands", description: "What else can ALIVE do?" }
-    ],
-    multiSelect: false
-  }]
-})
-```
-
-**If "Other commands":**
-
-```
-OTHER USEFUL COMMANDS
-─────────────────────────────────────────────────────────────────────────
-
-/alive:capture-context  Capture context. Dump in anything — a decision,
-                        transcript, email, article — I'll extract what
-                        matters and route it to the right place.
-
-/alive:recall   Search your history. "What did we decide about
-                pricing?" — I'll find it.
-
-/alive:new      Create a new entity (venture, experiment, life area).
-
-/alive:archive  Move something to the archive when it's done.
-
-/alive:sweep    Clean up. Find stale content, abandoned drafts.
-
-/alive:help     Quick reference for all commands.
-```
-
----
-
-### Step 16: First Capture Exercise
-
-```
-╭─ YOUR FIRST CAPTURE ───────────────────────────────────────────────────╮
-│                                                                        │
-│  Let's make this real.                                                 │
-│                                                                        │
-╰────────────────────────────────────────────────────────────────────────╯
-
-Tell me: What's the most important thing on your mind right now?
-
-This could be:
-  - Something you're working on
-  - A decision you need to make
-  - A task you keep forgetting
-  - Anything occupying mental space
-
-Just describe it:
-> ___
-```
-
-**After user input:**
-
-```
-▸ processing capture...
-
-This sounds like it belongs in [detected entity].
-
-▸ adding to [entity]/_brain/status.md
-  Focus: [extracted focus]
-
-▸ adding to [entity]/_brain/tasks.md
-  - [ ] [extracted task] @active
-
-✓ Captured
-
-That context is now saved. Tomorrow, when you ask "what am I working on?"
-I'll know.
-```
-
----
-
-### Step 17: The Aha Moment
-
-```
-╭─ THE MAGIC ────────────────────────────────────────────────────────────╮
-│                                                                        │
-│  This is why ALIVE exists.                                             │
-│                                                                        │
-╰────────────────────────────────────────────────────────────────────────╯
-
-Close this conversation.
-Open a new one.
-Ask me: "What am I working on?"
-
-I'll read your _brain/ files and tell you exactly where you left off.
-
-No re-explaining. No lost context. No starting from scratch.
-
-This works because:
-  - Your context lives in files (not my memory)
-  - Files persist across sessions
-  - I read them at the start of every conversation
-  - Context compounds over time
-
-The more you use ALIVE, the more I know.
-The more I know, the more useful I become.
-```
-
----
-
-### Step 18: Verify Installation
+### Step 12: Verify Installation
 
 ```
 ▸ verifying installation...
@@ -1667,16 +1501,17 @@ LIFE STRUCTURE
 
 SYSTEM FILES
   ✓ .claude/CLAUDE.md exists
-  ✓ .claude/rules/ exists (7 files)
+  ✓ .claude/rules/ exists (8 files)
   ✓ .claude/state/ exists
   ✓ .claude/alive.local.yaml exists
 
-ENTITIES
-  ✓ [venture]/_brain/ initialised
-  ✓ [experiment]/_brain/ initialised
+VENTURES / EXPERIMENTS
+  ✓ [first-venture]/_brain/ initialized
+  ✓ [venture]/_brain/ initialized
+  ✓ [experiment]/_brain/ initialized
 
 CONFIG
-  ✓ system_version: 2.1.1
+  ✓ system_version: 3.0.1
   ✓ alive_root: [path]
   ✓ timezone: [value]
   ✓ theme: [value]
@@ -1713,10 +1548,12 @@ AskUserQuestion({
 
 ---
 
-### Step 19: Import Existing Content (Migrate Prompt)
+### Step 13: Import
+
+#### Existing Content
 
 ```
-╭─ IMPORT EXISTING CONTENT ──────────────────────────────────────────────╮
+╭─ IMPORT EXISTING CONTENT ────────────────────────────────────────────╮
 │                                                                        │
 │  One more thing before we finish.                                      │
 │                                                                        │
@@ -1730,7 +1567,7 @@ This could be:
   - Existing project folders
   - Old notes you want to preserve
 
-ALIVE can import and organise this for you.
+ALIVE can import and organize this for you.
 ```
 
 Use AskUserQuestion:
@@ -1750,7 +1587,6 @@ AskUserQuestion({
 ```
 
 **If "Yes":**
-
 ```
 After this setup finishes, run:
 
@@ -1761,7 +1597,6 @@ I'll extract the relevant context and file it in the right places.
 ```
 
 **If "Maybe later":**
-
 ```
 No problem. Whenever you're ready, just say:
 
@@ -1776,14 +1611,12 @@ I'll help you import from:
 Your existing knowledge doesn't have to start from zero.
 ```
 
----
-
-### Step 20: Import AI Conversation History
+#### AI Conversation History
 
 ```
-╭─ AI CONVERSATION HISTORY ─────────────────────────────────────────────╮
+╭─ AI CONVERSATION HISTORY ────────────────────────────────────────────╮
 │                                                                        │
-│  One more thing — this one's optional but powerful.                    │
+│  One more — this one's optional but powerful.                         │
 │                                                                        │
 ╰────────────────────────────────────────────────────────────────────────╯
 
@@ -1828,7 +1661,7 @@ ALIVE Context Import plugin:
 This is a separate plugin (not bundled with ALIVE) that handles:
   • Exporting your data from AI assistants
   • Extracting decisions, insights, and action items
-  • Routing imported context into your ALIVE entities
+  • Routing imported context into your ALIVE ventures, experiments, and life areas
   • Building your _references/ and _brain/ files from history
 
 I've added a task to your Life tasks so you don't forget.
@@ -1850,7 +1683,6 @@ Add this task to `{alive-root}/02_Life/_brain/tasks.md` under the "To Do" sectio
 ```
 
 **If "No thanks":**
-
 ```
 No worries. If you change your mind later, the plugin is:
 
@@ -1861,67 +1693,70 @@ You can install it any time.
 
 ---
 
-### Step 21: Complete + What's Next
+### Step 14: Complete + What's Next
 
-**Update `alive.local.yaml`** — remove `onboarding_part`, add `onboarding_complete`:
+**First: Verify `alive.local.yaml` has all required fields.** Read `{alive-root}/.claude/alive.local.yaml` and check:
 
-Use the Edit tool to modify `{alive-root}/.claude/alive.local.yaml`:
+| Field | Required | Fix if missing |
+|-------|----------|----------------|
+| `version` | Yes | Add `version: 2` |
+| `system_version` | Yes | Add `system_version: "3.0.1"` |
+| `alive_root` | Yes | Add with the current working directory path |
+| `timezone` | Yes | Ask the user |
+| `theme` | Yes | Default to `vibrant` |
+| `working_style` | Yes | Default to `solo` |
+| `created` | Yes | Add with today's date |
+
+If any fields are missing, add them silently (don't interrupt the flow — just fix it). Then update the file:
 - Remove the line `onboarding_part: 1`
 - Add `onboarding_complete: true`
-
-**Final alive.local.yaml should look like:**
-
-```yaml
-# ALIVE System Configuration
-# Created by /alive:onboarding
-# Location: {alive-root}/.claude/alive.local.yaml
-
-version: 2
-system_version: "2.1.1"
-onboarding_complete: true
-created: "2026-02-10"
-
-# System paths
-alive_root: "/Users/will/Desktop/alive"
-
-# User preferences
-timezone: "Australia/Sydney"
-theme: "vibrant"
-working_style: "solo"
-```
 
 **Display:**
 
 ```
-╔══════════════════════════════════════════════════════════════════════════════════════╗
-║                                                                                      ║
-║  [FULL LOGO]                                                                         ║
-║                                                                                      ║
-║    ✓ SETUP COMPLETE                                                                  ║
-║  ════════════════════════════════════════════════════════════════════════════════    ║
-║                                                                                      ║
-║  WHAT YOU HAVE NOW:                                                                  ║
-║    • 02_Life/ with [X] areas + [Y] people configured                                ║
-║    • [N] ventures ready to track                                                     ║
-║    • [N] experiments ready to explore                                                ║
-║    • All rules and system files installed                                             ║
-║    • System version: 2.1.1                                                           ║
-║                                                                                      ║
-║  THE LEARNING LOOP:                                                                  ║
-║    /alive:daily   → See everything, start your day                                   ║
-║    /alive:do      → Focus on one entity                                              ║
-║    /alive:save    → End session, preserve context                                    ║
-║                                                                                      ║
-║  REMEMBER:                                                                           ║
-║    • Save before closing (or context is lost)                                        ║
-║    • Dump stuff in 03_Inputs/ when unsure where it goes                              ║
-║    • Context compounds — the more you use it, the better it gets                     ║
-║                                                                                      ║
-║  ──────────────────────────────────────────────────────────────────────────────────  ║
-║  Free: Join the ALIVE community → skool.com/aliveoperators                           ║
-║  (Templates, guides, Q&A with other operators)                                       ║
-║                                                                                      ║
-╚══════════════════════════════════════════════════════════════════════════════════════╝
+╭──────────────────────────────────────────────────────────────────────────────────────╮
+│                                                                                      │
+│  [FULL LOGO]                                                                         │
+│                                                                                      │
+│    ✓ SETUP COMPLETE                                                                  │
+│  ──────────────────────────────────────────────────────────────────────────────────  │
+│                                                                                      │
+│  WHAT YOU HAVE NOW:                                                                  │
+│    • [name] with full context from our conversation                                  │
+│    • 02_Life/ with [X] areas + [Y] people configured                                 │
+│    • [N] ventures ready to track                                                     │
+│    • [N] experiments ready to explore                                                │
+│    • All rules and system files installed                                             │
+│    • System version: 3.0.1                                                           │
+│                                                                                      │
+│  SKILLS — HOW YOU TALK TO ALIVE:                                                     │
+│                                                                                      │
+│    Skills are slash commands. Type them in the chat to tell ALIVE                     │
+│    what you want to do. You've already used one: /alive:onboarding                   │
+│                                                                                      │
+│    The three you'll use most:                                                        │
+│      /alive:daily   → See everything, start your day                                 │
+│      /alive:work    → Focus on one venture, experiment, or life area                 │
+│      /alive:save    → End session, preserve context                                  │
+│                                                                                      │
+│    Other useful ones:                                                                │
+│      /alive:capture  → Save a decision, note, or email                               │
+│      /alive:digest   → Process your 03_Inputs/ inbox                                 │
+│      /alive:help     → See all available skills                                      │
+│                                                                                      │
+│    You can also just talk naturally — "work on acme", "what's in                     │
+│    my inbox", "save" — and ALIVE will figure out which skill to use.                 │
+│                                                                                      │
+│  REMEMBER:                                                                           │
+│    • Save before closing (or context is lost)                                        │
+│    • Dump stuff in 03_Inputs/ when unsure where it goes                              │
+│    • Context compounds — the more you use it, the better it gets                     │
+│                                                                                      │
+│  ──────────────────────────────────────────────────────────────────────────────────  │
+│  Free: Join the ALIVE community → skool.com/aliveoperators                           │
+│  (Templates, guides, Q&A with other operators)                                       │
+│                                                                                      │
+╰──────────────────────────────────────────────────────────────────────────────────────╯
 ```
 
 Use AskUserQuestion:
@@ -1932,7 +1767,7 @@ AskUserQuestion({
     header: "Next",
     options: [
       { label: "/alive:daily", description: "See my full dashboard" },
-      { label: "Work on a venture", description: "Start with my main project" },
+      { label: "Work on a venture", description: "Start with my main venture" },
       { label: "/alive:migrate", description: "Import my existing content" },
       { label: "Explore", description: "Let me look around first" }
     ],
@@ -1976,7 +1811,7 @@ At any point during setup, if the user says "skip" or wants to jump ahead:
 Create minimal structure (domain folders + .claude/ system files) and mark complete.
 
 For Session 1: Create folders, install rules, create alive.local.yaml with `onboarding_complete: true` (skip Session 2).
-For Session 2: Create minimal entities with default _brain/ files and mark complete.
+For Session 2: Create minimal ventures/experiments with default _brain/ files and mark complete.
 
 ---
 
@@ -2030,6 +1865,9 @@ Treat as new user. Run Session 1 from Step 1 but preserve existing yaml fields.
 **User runs onboarding while already in Session 2 location (cd'd into alive root):**
 The rules are already loaded. Detect `onboarding_part: 1` and proceed to Session 2.
 
+**First venture was actually an Experiment (user described it as a Venture in Session 1):**
+In Session 2, after the Proof, offer to move it: "Should [name] be in Ventures or Experiments?"
+
 ---
 
 ## alive.local.yaml Schema (Complete Reference)
@@ -2042,7 +1880,7 @@ The rules are already loaded. Detect `onboarding_part: 1` and proceed to Session
 # Location: {alive-root}/.claude/alive.local.yaml
 
 version: 2
-system_version: "2.1.1"
+system_version: "3.0.1"
 onboarding_part: 1
 created: "2026-02-10"
 
@@ -2063,7 +1901,7 @@ working_style: "solo"
 # Location: {alive-root}/.claude/alive.local.yaml
 
 version: 2
-system_version: "2.1.1"
+system_version: "3.0.1"
 onboarding_complete: true
 created: "2026-02-10"
 
@@ -2129,7 +1967,7 @@ See people/ for all contacts.
 ## Related Skills
 
 - `/alive:daily` — Morning entry point (most common next step)
-- `/alive:do` — Focus on one entity
+- `/alive:work` — Focus on one venture, experiment, or life area
 - `/alive:help` — Quick reference
 - `/alive:upgrade` — For v1 → v2 migration (not fresh setup). Also handles version bumps.
 - `/alive:migrate` — Import existing content

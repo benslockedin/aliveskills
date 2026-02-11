@@ -1,66 +1,88 @@
 ---
 user-invocable: true
-description: This skill should be used when the user says "create X", "new venture", "new experiment", "new project", "set up X", "start something new", or wants to scaffold a new entity with full structure.
-plugin_version: "2.1.1"
+description: Scaffold a new venture, experiment, life area, project, or area with full structure — _brain/, _working/, CLAUDE.md, and all required files. Use when the user says "create X", "new venture", "new experiment", "new project", "set up X", or "start something new".
+plugin_version: "3.0.1"
 ---
 
 # alive:new
 
-Create a new entity or area. Scaffold the v2 structure with proper templates.
+Create a new venture, experiment, life area, project, or area. Scaffold the v2 structure with proper templates.
 
 ## UI Treatment
 
-This skill uses **Tier 3: Utility** formatting.
+Uses the **ALIVE Shell** — one rounded box, three zones.
 
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Version footer: `ALIVE v2.0` (right-aligned)
+```
+╭──────────────────────────────────────────────────────────╮
+│  ALIVE · new                             [date]          │
+│  ──────────────────────────────────────────────────────  │
+│  [Type selection prompt]                                 │
+│  [Summary after creation]                                │
+│  ──────────────────────────────────────────────────────  │
+│  [ACTIONS]                                               │
+│  [✓ file creation confirmations]                         │
+╰──────────────────────────────────────────────────────────╯
+```
 
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+See `rules/ui-standards.md` for shell format, logo assets, and tier specifications.
 
 ---
 
 ## When to Use
 
 Invoke when the user wants to:
-- Create a new venture, experiment, or life area (entity)
-- Create an organizational folder within an entity (area)
-- Set up project structure from scratch
+- Create a new venture, experiment, or life area (top-level unit)
+- Create a project nested within an existing venture, experiment, or life area
+- Create an area folder within an existing unit
+- Set up structure from scratch
 
-## Entity vs Area
+## Venture / Experiment / Life Area vs Project vs Area
 
-| Type | Has _brain/ | Has .claude/ | Has _working/ | Has _references/ | Identity |
-|------|-------------|--------------|---------------|------------------|----------|
-| **Entity** | Yes | Yes | Yes | Yes | `.claude/CLAUDE.md` |
-| **Area** | No | No | No | No | `README.md` |
+| Type | Has _brain/ | Has .claude/ | Has _working/ | Has _references/ | Identity | Location |
+|------|-------------|--------------|---------------|------------------|----------|----------|
+| **Venture** | Yes | Yes | Yes | Yes | `.claude/CLAUDE.md` | Top-level in `04_Ventures/` |
+| **Experiment** | Yes | Yes | Yes | Yes | `.claude/CLAUDE.md` | Top-level in `05_Experiments/` |
+| **Life Area** | Yes | Yes | Yes | Yes | `.claude/CLAUDE.md` | Top-level in `02_Life/` |
+| **Project** | Yes | No | Yes | Yes | `README.md` | Nested within a venture, experiment, or life area |
+| **Area** | No | No | No | No | `README.md` | Organizational folder within any unit |
 
-**Entities** are projects with their own state.
-**Areas** are organizational folders within entities.
+**Ventures, experiments, and life areas** are top-level units with their own state and identity.
+**Projects** are nested containers within a venture, experiment, or life area that have their own lifecycle and `_brain/`.
+**Areas** are organizational folders within any unit.
 
 ## Flow
 
 ```
-1. Ask: Entity or Area?
-2. If Entity: Ask for type (venture/experiment/life) and name
-3. If Area: Ask which entity and area name
-4. If Entity: Offer ICP template (if applicable)
-5. Create structure
-6. Initialize files
-7. Confirm creation
+1. Ask: What type? (venture / experiment / life area / project / area)
+2. If venture/experiment/life area: Ask for name and details
+3. If project: Ask which parent unit and name
+4. If area: Ask which parent unit and area name
+5. If venture: Offer ICP template
+6. Create structure
+7. Initialize files
+8. Confirm creation
 ```
 
-## Creating a Entity
+## Creating a Venture, Experiment, or Life Area
 
 ### Step 1: Gather Information
 
 ```
-Creating a new entity.
-
-What type?
-[1] Venture (business with revenue intent)
-[2] Experiment (testing grounds, no model yet)
-[3] Life area (personal responsibility)
+╭──────────────────────────────────────────────────────────╮
+│                                                          │
+│  ALIVE · new                              2026-02-09     │
+│                                                          │
+│  ──────────────────────────────────────────────────────  │
+│                                                          │
+│  What are you creating?                                  │
+│                                                          │
+│   1) Venture         Revenue intent, business model      │
+│   2) Experiment      Testing ground, no model yet        │
+│   3) Life area       Personal domain                     │
+│   4) Project         Nested within existing unit         │
+│   5) Area folder     Organizational only                 │
+│                                                          │
+╰──────────────────────────────────────────────────────────╯
 ```
 
 Then:
@@ -75,16 +97,16 @@ For ventures, offer relevant templates:
 
 ```
 What type of venture?
-[1] Agency — Client work, deliverables
-[2] E-commerce — Products, inventory
-[3] Creator — Content, courses, community
-[4] Job — Employment, bringing work into ALIVE
-[5] Custom — Start with generic template
+ 1) Agency — Client work, deliverables
+ 2) E-commerce — Products, inventory
+ 3) Creator — Content, courses, community
+ 4) Job — Employment, bringing work into ALIVE
+ 5) Custom — Start with generic template
 ```
 
 ### Step 3: Create Structure
 
-**Entity structure:**
+**Venture/experiment/life area structure:**
 ```
 04_Ventures/acme-corp/
 ├── .claude/
@@ -175,7 +197,7 @@ None yet.
 - [ ] Identify key stakeholders
 
 ## Done (Recent)
-- [x] Created entity ([DATE])
+- [x] Created venture ([DATE])
 ```
 
 **manifest.json:**
@@ -199,30 +221,38 @@ None yet.
 ### Step 5: Confirm Creation
 
 ```
-✓ Created 04_Ventures/acme-corp/
-
-Structure:
-├── .claude/CLAUDE.md
-├── _brain/
-│   ├── status.md
-│   ├── tasks.md
-│   ├── insights.md
-│   ├── changelog.md
-│   └── manifest.json
-├── _working/
-└── _references/           # Summary .md files + raw/ subfolders per type
-
-Next: /alive:do acme-corp to start working.
+╭──────────────────────────────────────────────────────────╮
+│                                                          │
+│  ALIVE · new                              2026-02-09     │
+│                                                          │
+│  ──────────────────────────────────────────────────────  │
+│                                                          │
+│  acme-corp                                               │
+│  Client services agency for digital transformation       │
+│                                                          │
+│  type    Venture (Agency)                                │
+│  phase   Starting                                        │
+│  goal    Ship client portal by end of quarter            │
+│  path    04_Ventures/acme-corp/                          │
+│                                                          │
+│  ──────────────────────────────────────────────────────  │
+│                                                          │
+│  1) start working on it    2) add initial context        │
+│  3) add initial tasks                                    │
+│                                                          │
+│  ✓ _brain/ · _working/ · CLAUDE.md · manifest            │
+│                                                          │
+╰──────────────────────────────────────────────────────────╯
 ```
 
 ## Creating an Area
 
-### Step 1: Identify Entity
+### Step 1: Identify Parent
 
 ```
-Creating an area (organizational folder).
+Creating an area (folder).
 
-Which entity?
+Where?
 [1] 04_Ventures/acme-corp
 [2] 04_Ventures/beta
 [3] Other (specify)
@@ -275,7 +305,7 @@ Add to `04_Ventures/acme-corp/_brain/manifest.json`:
     {
       "path": "clients/",
       "description": "Active client projects",
-      "has_entities": false
+      "has_projects": false
     }
   ]
 }
@@ -335,7 +365,7 @@ When creating ventures, offer relevant templates:
 ```
 ✗ 04_Ventures/acme already exists
 
-[1] Open existing entity
+[1] Open existing venture
 [2] Choose different name
 ```
 
@@ -351,14 +381,14 @@ Names must be:
 Try again:
 ```
 
-## Creating a Sub-Entity
+## Creating a Project
 
-Sub-entities are containers WITHIN an entity that have their own lifecycle (and therefore their own `_brain/`).
+Projects are containers within a venture, experiment, or life area (or within another project) that have their own lifecycle (and therefore their own `_brain/`).
 
-### When to Create a Sub-Entity
+### When to Create a Project
 
-| Parent Type | Sub-Entity Examples |
-|-------------|---------------------|
+| Parent Type | Project Examples |
+|-------------|-----------------|
 | Agency venture | Clients, retainers |
 | E-commerce venture | Campaigns, product lines |
 | Creator venture | Courses, launches |
@@ -369,14 +399,14 @@ Sub-entities are containers WITHIN an entity that have their own lifecycle (and 
 ### Step 1: Identify Context
 
 ```
-Creating a sub-entity.
+Creating a project.
 
 You're working in: 04_Ventures/acme-agency/
 
 What are you creating?
 [1] Client (for agency ventures)
 [2] Campaign (for ecommerce/marketing)
-[3] Project (generic sub-entity)
+[3] Project (generic)
 [4] Custom
 ```
 
@@ -392,7 +422,7 @@ One-line description?
 
 ### Step 3: Create Structure
 
-**Sub-entity structure:**
+**Project structure:**
 ```
 04_Ventures/acme-agency/clients/bigco/
 ├── _brain/
@@ -401,18 +431,18 @@ One-line description?
 │   ├── insights.md
 │   ├── changelog.md
 │   └── manifest.json
-├── _working/         ← Sub-entity gets its OWN _working/
-├── _references/      ← Sub-entity gets its OWN _references/
+├── _working/         ← Project gets its OWN _working/
+├── _references/      ← Project gets its OWN _references/
 └── README.md
 ```
 
-**IMPORTANT:** Each sub-entity gets its own `_working/` and `_references/` folders. Working files for this sub-entity go here, NOT in the parent's folders.
+**IMPORTANT:** Each project gets its own `_working/` and `_references/` folders. Working files for this project go here, NOT in the parent's folders.
 
 ```
 # WRONG - using parent's _working/
 04_Ventures/acme-agency/_working/clients/bigco/proposal.md
 
-# RIGHT - sub-entity has its own _working/
+# RIGHT - project has its own _working/
 04_Ventures/acme-agency/clients/bigco/_working/proposal.md
 ```
 
@@ -446,7 +476,7 @@ None yet.
 - [ ] Identify key contacts
 
 ## Done (Recent)
-- [x] Created sub-entity ([DATE])
+- [x] Created project ([DATE])
 ```
 
 **changelog.md:**
@@ -455,7 +485,7 @@ None yet.
 
 ## [DATE] — Created
 
-Sub-entity created within 04_Ventures/acme-agency/clients/.
+Project created within 04_Ventures/acme-agency/clients/.
 
 **Type:** Client
 **Description:** Enterprise client, $10k/mo retainer
@@ -489,8 +519,8 @@ Add to `04_Ventures/acme-agency/_brain/manifest.json`:
   "areas": [
     {
       "path": "clients/",
-      "has_entities": true,
-      "entities": ["bigco"]
+      "has_projects": true,
+      "projects": ["bigco"]
     }
   ]
 }
@@ -500,7 +530,7 @@ Add to `04_Ventures/acme-agency/_brain/changelog.md`:
 ```markdown
 ## [DATE] — Created client: bigco
 
-Added new client sub-entity: bigco (Enterprise client, $10k/mo retainer)
+Added new client project: bigco (Enterprise client, $10k/mo retainer)
 ```
 
 ### Step 6: Confirm
@@ -522,13 +552,13 @@ Structure:
 Parent changelog updated.
 Parent manifest updated.
 
-Next: /alive:do bigco to start working.
+Next: /alive:work bigco to start working.
 ```
 
-## Sub-Entity vs Area
+## Project vs Area
 
-| Question | Sub-Entity | Area |
-|----------|-------------|------|
+| Question | Project | Area |
+|----------|---------|------|
 | Has its own lifecycle? | Yes | No |
 | Can be "done"? | Yes | No |
 | Needs status tracking? | Yes | No |
@@ -537,13 +567,13 @@ Next: /alive:do bigco to start working.
 | Gets `_references/`? | Yes | No |
 
 **Examples:**
-- `clients/bigco/` → Sub-entity (has lifecycle)
+- `clients/bigco/` → Project (has lifecycle)
 - `templates/` → Area (organizational only)
-- `campaigns/summer-sale/` → Sub-entity (has lifecycle)
+- `campaigns/summer-sale/` → Project (has lifecycle)
 - `brand/` → Area (organizational only)
 
 ## Related Skills
 
-- `/alive:do` — Start working on the new entity
-- `/alive:onboarding` — Full system setup (not just one entity)
-- `/alive:daily` — See all entities after creating
+- `/alive:work` — Start working on the new venture, experiment, life area, or project
+- `/alive:onboarding` — Full system setup (not just one unit)
+- `/alive:daily` — See all ventures and experiments after creating

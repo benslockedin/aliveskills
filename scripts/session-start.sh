@@ -1,6 +1,6 @@
 #!/bin/bash
 # ALIVE v2 - Session Start Hook
-# Logs session start, enumerates entities, provides context
+# Logs session start, enumerates units, provides context
 
 set -euo pipefail
 
@@ -34,25 +34,25 @@ if [ -n "${CLAUDE_ENV_FILE:-}" ]; then
   echo "export ALIVE_ROOT=\"$ALIVE_ROOT\"" >> "$CLAUDE_ENV_FILE"
 fi
 
-# Function to find entities (folders with _brain/)
-find_entities() {
+# Function to find units (folders with _brain/)
+find_units() {
   local domain="$1"
   local domain_path="$ALIVE_ROOT/$domain"
 
   if [ -d "$domain_path" ]; then
     # Find directories that contain _brain/
     find "$domain_path" -maxdepth 2 -type d -name "_brain" 2>/dev/null | while read -r brain_dir; do
-      entity_dir=$(dirname "$brain_dir")
-      entity_name=$(basename "$entity_dir")
+      unit_dir=$(dirname "$brain_dir")
+      unit_name=$(basename "$unit_dir")
 
       # Check for status.md to get current state
       status_file="$brain_dir/status.md"
       if [ -f "$status_file" ]; then
         # Extract phase from status.md (look for **Phase:** line)
         phase=$(grep -m1 "^\*\*Phase:\*\*" "$status_file" 2>/dev/null | sed 's/\*\*Phase:\*\* *//' || echo "Unknown")
-        echo "- $entity_name ($phase)"
+        echo "- $unit_name ($phase)"
       else
-        echo "- $entity_name (no status)"
+        echo "- $unit_name (no status)"
       fi
     done
   fi
@@ -62,19 +62,19 @@ find_entities() {
 output="ALIVE session initialized. Session ID: ${SESSION_ID:0:8}\n\n"
 
 # Enumerate ventures
-ventures=$(find_entities "ventures")
+ventures=$(find_units "ventures")
 if [ -n "$ventures" ]; then
   output+="## Ventures\n$ventures\n\n"
 fi
 
 # Enumerate experiments
-experiments=$(find_entities "experiments")
+experiments=$(find_units "experiments")
 if [ -n "$experiments" ]; then
   output+="## Experiments\n$experiments\n\n"
 fi
 
 # Enumerate life areas
-life_areas=$(find_entities "life")
+life_areas=$(find_units "life")
 if [ -n "$life_areas" ]; then
   output+="## Life\n$life_areas\n\n"
 fi

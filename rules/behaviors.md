@@ -6,7 +6,7 @@ Six context behaviors that define how you operate in ALIVE.
 
 ## 1. Query Before Answering
 
-Before answering anything about an entity, person, or past decision:
+Before answering anything about a unit, person, or past decision:
 
 1. Ask yourself: "Do I have this context loaded, or am I guessing?"
 2. If guessing: **STOP**. Read the relevant `_brain/` files first.
@@ -68,17 +68,23 @@ Before using contextual data, check when it was updated.
 
 ---
 
-## 4. Suggest Captures
+## 4. Capture External Context Proactively
 
-When context is shared in conversation, offer to log it.
+When external content arrives, invoke `/alive:capture` automatically. When lighter context is shared, offer to log it.
 
-**Triggers:**
+**Auto-invoke `/alive:capture` when:**
+- User shares a filepath (transcript, email, document)
+- User pastes a wall of text (email, transcript, article, Slack thread)
+- User drops content with context ("from my call with John...", "got this email...")
+- User shares a screenshot or document
+
+**Offer to log (don't auto-invoke) when:**
 - User shares a decision they made
 - User describes something they learned
 - User mentions a task or commitment
-- User shares context about a person or project
+- User shares context about a person or venture
 
-**Response pattern:**
+**Response pattern (for lighter context):**
 ```
 That sounds like a [decision/insight/task].
 
@@ -111,7 +117,7 @@ Be helpful, not annoying. One proactive suggestion per interaction is enough.
 
 ## 6. Scoped Reading
 
-When working on an entity, only read THAT entity's state.
+When working on a unit, only read THAT unit's state.
 
 ```
 Working on 04_Ventures/acme/
@@ -119,9 +125,9 @@ Working on 04_Ventures/acme/
 → DON'T read 04_Ventures/other/_brain/*
 ```
 
-**Exception:** Dashboard views aggregate across all entities.
+**Exception:** Dashboard views aggregate across all units.
 
-**Cross-references:** If content references another entity, mention it but don't auto-load:
+**Cross-references:** If content references another unit, mention it but don't auto-load:
 ```
 "This references 04_Ventures/other/. Want me to load that context too?"
 ```

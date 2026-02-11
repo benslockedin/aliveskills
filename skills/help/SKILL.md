@@ -1,7 +1,7 @@
 ---
 user-invocable: true
-description: Quick reference for ALIVE commands and capabilities. Use when the user says "help", "show commands", "what can you do", "how does X work", "how do I X", or "I'm confused".
-plugin_version: "2.1.1"
+description: Quick reference for ALIVE commands, skills, and system concepts. Use when the user says "help", "show commands", "what can you do", "how does X work", or "how do I X".
+plugin_version: "3.0.1"
 ---
 
 # alive:help
@@ -10,14 +10,20 @@ Quick reference for ALIVE. Show available skills, explain concepts, guide usage.
 
 ## UI Treatment
 
-This skill uses **Tier 2: Core Workflow** formatting.
+Uses the **ALIVE Shell** — Tier 2: Core Workflow.
 
-**Visual elements:**
-- Compact logo (4-line ASCII art header)
-- Double-line border wrap (entire response)
-- Community footer: `Free: Join the ALIVE community → skool.com/aliveoperators`
+```
+╭──────────────────────────────────────────────────────────╮
+│  ALIVE · help                                             │
+│  ──────────────────────────────────────────────────────── │
+│  [Skills reference / specific help content]               │
+│  ──────────────────────────────────────────────────────── │
+│  [Tip or suggestion]                                      │
+│  Free: Join the ALIVE community → skool.com/aliveoperators│
+╰──────────────────────────────────────────────────────────╯
+```
 
-See `rules/ui-standards.md` for exact border characters, logo assets, and formatting specifications.
+See `rules/ui-standards.md` for shell format, logo assets, and tier specifications.
 
 ---
 
@@ -40,21 +46,34 @@ Invoke when the user:
 ## Quick Reference
 
 ```
-╭─ ALIVE ────────────────────────────────────────────────────────────────╮
-│  help                                                                  │
-╰────────────────────────────────────────────────────────────────────────╯
+╭──────────────────────────────────────────────────────────────────────────────────────────╮
+│                                                                                          │
+│  {\{\       ,                                             /}/}                            │
+│  { \ \.--.  \\                                 ,         / / }                            │
+│  {  /` , "\_//                                 \\   .-=.( (   }                           │
+│  {  \__\ ,--'                                   \'--"   `\\_.---,='                       │
+│   {_/   _ ;-.                                    '-,  \__/       \___                     │
+│    /  '.___/       _  _ ___ _    ___              .-'.-.'      \___.'                     │
+│    |  __ /        | || | __| |  | _ \            / // /-..___,-`--'                       │
+│  `=\    \`\       | __ | _|| |__|  _/           `" `"                                    │
+│     `/  / /       |_||_|___|____|_|                                                      │
+│      '././                                                                               │
+│                   aliveOS [Unlimited Elephant 3.0.1]                                     │
+│                                                                                          │
+│  ──────────────────────────────────────────────────────────────────────────────────────  │
+│                                                                                          │
 
 ALIVE — The operating system for your context.
 
 CORE SKILLS
 ─────────────────────────────────────────────────────────────────────────
-/alive:do        Start work, load context from a subdomain
+/alive:work        Start work, load context from a unit
 /alive:save      End session, log to changelog
-/alive:new       Create subdomain or area
+/alive:new       Create venture, experiment, life area, project, or area
 
 CAPTURE & FIND
 ─────────────────────────────────────────────────────────────────────────
-/alive:capture-context   Capture context into ALIVE
+/alive:capture   Capture context into ALIVE
 /alive:recall    Search past context, decisions, sessions
 /alive:migrate   Bulk import content into ALIVE
 
@@ -95,23 +114,24 @@ E — 05_Experiments  Testing grounds, no model yet
 Life first, always.
 ```
 
-### Subdomains vs Areas
+### Ventures, Experiments, Life Areas vs Areas
 
 ```
-User: "What's the difference between subdomain and area?"
+User: "What's the difference between a venture and an area?"
 
-SUBDOMAIN vs AREA
+VENTURE / EXPERIMENT / LIFE AREA vs AREA
 ─────────────────────────────────────────────────────────────────────────
-                    Subdomain           Area
-Has _brain/         Yes                 No
-Has .claude/        Yes                 No
-Has _working/       Yes                 No
-Has _references/    Yes                 No
-Identity file       .claude/CLAUDE.md   README.md
-Example             04_Ventures/acme/      04_Ventures/acme/clients/
+                    Venture/Experiment/   Area
+                    Life Area
+Has _brain/         Yes                   No
+Has .claude/        Yes                   No
+Has _working/       Yes                   No
+Has _references/    Yes                   No
+Identity file       .claude/CLAUDE.md     README.md
+Example             04_Ventures/acme/     04_Ventures/acme/clients/
 
-Subdomains are projects with their own state.
-Areas are organizational folders within subdomains.
+Ventures, experiments, and life areas have their own state.
+Areas are organizational folders within ventures, experiments, or life areas.
 ```
 
 ### _brain/ Files
@@ -127,7 +147,7 @@ insights.md     Learnings worth remembering
 changelog.md    Session history + decisions
 manifest.json   Structure map with file summaries
 
-This is the subdomain's "brain" — its persistent memory.
+This is the unit's "brain" — its persistent memory.
 ```
 
 ### Themes
@@ -174,7 +194,7 @@ Say things like:
 - "Find decisions about AWS"
 - "When did we discuss the launch?"
 
-I'll search across all subdomains and show what I find.
+I'll search across all ventures, experiments, and life areas and show what I find.
 ```
 
 ## Skill Details
@@ -212,7 +232,7 @@ New to ALIVE? Run /alive:onboarding for the setup wizard.
 
 Or start with:
 1. /alive:new — Create your first venture
-2. /alive:do — Load it and start working
+2. /alive:work — Load it and start working
 3. /alive:save — Log your progress when done
 ```
 
@@ -235,7 +255,7 @@ People info         →  02_Life/people/
 CAPTURE METHODS
 ─────────────────────────────────────────────────────────────────────────
 Quick:    "FYI we decided X" → I'll offer to capture
-Direct:   /alive:capture-context → Analyses and routes content
+Direct:   /alive:capture → Analyses and routes content
 Inline:   "capture: [content]" → Captures immediately
 Session:  /alive:save → Logs whole session
 ```
@@ -245,11 +265,11 @@ Session:  /alive:save → Logs whole session
 When something goes wrong:
 
 ```
-User: "It says subdomain not found"
+User: "It says not found"
 
-TROUBLESHOOTING: Subdomain not found
+TROUBLESHOOTING: Not found
 ─────────────────────────────────────────────────────────────────────────
-The subdomain you referenced doesn't exist.
+The venture, experiment, or life area you referenced doesn't exist.
 
 Check:
 1. Spelling — Names are lowercase with hyphens
@@ -260,7 +280,7 @@ List available:
   04_Ventures/acme, 04_Ventures/beta
   05_Experiments/test-idea
 
-Create new subdomain with /alive:new
+Create new one with /alive:new
 ```
 
 ## Related Resources
@@ -279,5 +299,5 @@ Rules: Check .claude/rules/ for detailed behaviors
 ## Related Skills
 
 - `/alive:onboarding` — First-time setup
-- `/alive:do` — Start working (most common next step)
+- `/alive:work` — Start working (most common next step)
 
