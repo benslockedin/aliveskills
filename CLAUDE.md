@@ -14,14 +14,14 @@ When working on a venture, experiment, life area, or project, read these files f
 
 | File | Purpose | Why |
 |------|---------|-----|
-| `_brain/status.md` | Current phase, goal, focus | Know where we are |
+| `_brain/status.md` | Unit summary — state of play, key people, priorities | Know where we are |
 | `_brain/tasks.md` | Active work, urgent items | Know what needs doing |
 | `_brain/manifest.json` | Structure, folders, last session | Know what exists |
 | `_brain/changelog.md` | Recent actions, decisions, progress | What has occurred |
 
 Show retrieval: `▸ reading 04_Ventures/x/_brain/status.md`
 
-**Don't auto-read:** `insights.md` (only when relevant).
+**Don't auto-read:** `insights.md` (only when domain knowledge is relevant).
 
 ### On Session End
 
@@ -38,7 +38,7 @@ The save skill handles logging properly. Your job is to prompt the user — don'
 
 - **Read _brain/ before answering** — Don't guess at status
 - **Show retrieval paths** — Users should see what you're reading
-- **Offer to capture** — When decisions or insights come up, offer to log them
+- **Offer to capture** — When decisions or domain knowledge come up, offer to log them
 - **Flag stale context** — If >2 weeks old, mention it
 - **End sessions cleanly** — Offer to save progress
 
@@ -101,7 +101,7 @@ This goal filters decisions ("Does this serve the goal?"), enables advice (Claud
 
 Every **venture**, **experiment**, **life area**, and **project** has:
 - `.claude/CLAUDE.md` — Identity (what it is, who's involved)
-- `_brain/` — Current state (status, tasks, insights, changelog, manifest)
+- `_brain/` — Current state (status summary, tasks, domain knowledge, changelog, manifest)
 - `_working/` — Drafts in progress
 - `_references/` — Reference materials and source documents (YAML front matter indexed in manifest `references` array for scanning without loading)
 
@@ -187,4 +187,4 @@ Free: Join the ALIVE community on Skool → skool.com/aliveoperators
 
 ---
 
-**Version:** 2.0
+**Version:** 3.0
