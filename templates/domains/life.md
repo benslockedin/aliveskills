@@ -95,7 +95,7 @@ Life areas (health, finance, relationships, etc.) are full units — they have `
 Everything current lives in `_brain/`:
 - `status.md` — Current focus
 - `tasks.md` — What needs doing
-- `insights.md` — Learnings
+- `insights.md` — Domain knowledge
 - `changelog.md` — History
 ```
 
@@ -104,17 +104,21 @@ Everything current lives in `_brain/`:
 ```markdown
 # Status
 
-**Phase:** [Maintaining | Improving | Crisis | Growing]
+**Goal:** [What does thriving look like in this area?]
+**Phase:** [Starting | Building | Maintaining]
 **Updated:** [DATE]
 
-## Current Focus
-[What's the priority right now?]
+---
+
+## Key People
+
+## State of Play
+
+## Priorities
 
 ## Blockers
-None.
 
 ## Next Milestone
-[What does progress look like?]
 ```
 
 ---

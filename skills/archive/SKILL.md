@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Move completed or inactive items to the archive. Use when the user says "archive X", "shelve X", "close X", "deactivate X", "done with X", "X is complete", or "finished with X".
-plugin_version: "3.0.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:archive
@@ -195,11 +195,11 @@ Archive with learnings?
 [3] Just delete (not recommended)
 ```
 
-If extracting insights:
+If extracting insights (domain knowledge):
 ```
 Found in 05_Experiments/failed-idea/_brain/insights.md:
-- "Target market too small for subscription model"
-- "Customer acquisition cost exceeded LTV"
+- "Target market too small for subscription model" [market]
+- "Customer acquisition cost exceeded LTV" [strategy]
 
 Copy these to another project before archiving?
 [1] Yes, copy to 04_Ventures/main/_brain/insights.md

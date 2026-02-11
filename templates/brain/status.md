@@ -1,19 +1,17 @@
 # Status
 
-**Goal:** [Single sentence. What are you building toward?]
-
-**Phase:** [Starting / Building / Launching / Growing / Maintaining]
-
-**Updated:** [DATE]
+**Goal:**
+**Phase:**
+**Updated:**
 
 ---
 
-## Current Focus
+## Key People
 
-[One paragraph: where you are right now, what's the priority]
+## State of Play
 
----
+## Priorities
 
 ## Blockers
 
-[None / List any blockers]
+## Next Milestone

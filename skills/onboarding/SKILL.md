@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: First-time setup wizard for new ALIVE users. Creates the full system from scratch — folders, rules, configuration, and first ventures, experiments, and life areas. Use when the user says "set up ALIVE", "get started", "initialize", or when no ALIVE structure exists.
-plugin_version: "3.0.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:onboarding
@@ -351,7 +351,7 @@ Tell me more:
   - What's the current status? What phase are you in?
   - What needs doing right now? What's urgent?
   - Any blockers or things keeping you stuck?
-  - What have you learned so far that's worth remembering?
+  - What important knowledge or insights have you gained so far?
 ```
 
 **You're not just collecting information — you're having a conversation.** The user should feel heard, not interrogated. Use their language back to them. Ask follow-up questions that show you understand.
@@ -360,7 +360,7 @@ Tell me more:
 - **Name** (ask if not clear: "What do you call this?")
 - **Status/phase** → will populate `status.md`
 - **Tasks/to-dos** → will populate `tasks.md`
-- **Insights/learnings** → will populate `insights.md`
+- **Insights/domain knowledge** → will populate `insights.md`
 - **Whether this is a venture (revenue intent) or experiment (exploring)**
 
 **Once you have a clear picture (2-4 exchanges), move to The Build.**
@@ -443,16 +443,30 @@ Write `status.md`:
 ```markdown
 # Status
 
+**Goal:** [extracted from conversation — what they want to achieve]
 **Phase:** [extracted from conversation — Starting/Building/Launching/Growing]
 **Updated:** [today's date]
 
-## Current Focus
+---
+
+## Key People
+
+[Anyone they mentioned working with, or "None yet"]
+
+## State of Play
+
 [Their words about what they're working on RIGHT NOW — use their language]
 
+## Priorities
+
+[What they said is most important right now]
+
 ## Blockers
+
 [What they said is keeping them stuck, or "None" if clear]
 
 ## Next Milestone
+
 [What they described as the next goal]
 ```
 
@@ -479,8 +493,8 @@ Write `insights.md`:
 
 ## [today's date] — Initial Context
 
-**Category:** [market/product/process/people/technical]
-**Learning:** [Any insights or learnings they shared]
+**Category:** [strategy | product | process | market]
+**Domain knowledge:** [Any insights or domain knowledge they shared]
 **Evidence:** Shared during onboarding setup
 **Applies to:** [venture/experiment name]
 ```
@@ -718,9 +732,9 @@ WHAT ARE _brain/ FILES?
 Every venture, experiment, or life area you create in ALIVE gets a
 _brain/ folder. That's where everything about it lives:
 
-  status.md    → Where you're at right now (phase, focus, blockers)
+  status.md    → Unit summary and state of play (goal, phase, people, priorities)
   tasks.md     → What needs doing
-  insights.md  → What you've learned
+  insights.md  → Unit-scoped domain knowledge
   changelog.md → History of every session
   manifest.json → Map of everything in the venture/experiment
 
@@ -872,9 +886,9 @@ Files persist. My memory doesn't.
 
   [name]/
   └── _brain/
-      ├── status.md     ← Where are we? What's the current focus?
+      ├── status.md     ← Unit summary and state of play
       ├── tasks.md      ← What needs doing?
-      ├── insights.md   ← What have we learned?
+      ├── insights.md   ← Unit-scoped domain knowledge
       └── changelog.md  ← What happened? (session history)
 
 That's it. Simple markdown. No database. No cloud sync.
@@ -1936,16 +1950,31 @@ working_style: "solo"
 ```markdown
 # Life Status
 
+**Goal:** [From life goals input, or "Set your life goals"]
+**Phase:** [Current life phase]
 **Updated:** [DATE]
 
-## Current Focus
-[From life goals input, or "Set your life focus"]
+---
 
-## Active Areas
-[List of selected life areas]
+## Key People
 
-## People
 See people/ for all contacts.
+
+## State of Play
+
+[Current life situation and focus]
+
+## Priorities
+
+[Most important life priorities right now]
+
+## Blockers
+
+[What's getting in the way, if anything]
+
+## Next Milestone
+
+[Next major life milestone or goal]
 ```
 
 **Person file template (e.g., 02_Life/people/sarah.md):**

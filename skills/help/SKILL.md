@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Quick reference for ALIVE commands, skills, and system concepts. Use when the user says "help", "show commands", "what can you do", "how does X work", or "how do I X".
-plugin_version: "3.0.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:help
@@ -141,9 +141,9 @@ User: "What goes in _brain/?"
 
 _brain/ FILES
 ─────────────────────────────────────────────────────────────────────────
-status.md       Current phase and focus
+status.md       Unit summary and state of play
 tasks.md        Work queue (urgent, to do, done)
-insights.md     Learnings worth remembering
+insights.md     Unit-scoped domain knowledge
 changelog.md    Session history + decisions
 manifest.json   Structure map with file summaries
 

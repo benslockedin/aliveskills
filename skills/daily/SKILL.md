@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Morning dashboard showing all ventures, experiments, life areas — goals, urgent tasks, ongoing threads, and pending inputs. Use when the user says "daily", "dashboard", "morning", "what's happening", "what should I work on", "start my day", or "show me everything".
-plugin_version: "3.0.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:daily
@@ -200,9 +200,8 @@ When user picks:
 ## Section: Goals
 
 Extract from each `_brain/status.md`:
-- Look for `**Goal:**` line
-- Or `**Focus:**` line
-- Or first sentence after `## Current Focus`
+- Look for `**Goal:**` line (primary — this is the dashboard label per unit)
+- Fallback: first sentence after `## State of Play`
 
 Show name + goal. Max 5, sorted by recency.
 

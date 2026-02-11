@@ -125,7 +125,7 @@ Generic starting point.
 Everything current lives in `_brain/`:
 - `status.md` — Phase and focus
 - `tasks.md` — Work queue
-- `insights.md` — Learnings
+- `insights.md` — Domain knowledge
 - `changelog.md` — History
 - `manifest.json` — Structure map
 
@@ -139,17 +139,21 @@ Drafts live in `_working/`.
 ```markdown
 # Status
 
+**Goal:** [What are you building toward?]
 **Phase:** Starting
 **Updated:** [DATE]
 
-## Current Focus
-[What are we working on RIGHT NOW?]
+---
+
+## Key People
+
+## State of Play
+
+## Priorities
 
 ## Blockers
-None yet.
 
 ## Next Milestone
-[What does "done" look like for this phase?]
 ```
 
 ---

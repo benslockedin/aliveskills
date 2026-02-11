@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Resume a past session with full context extraction from the raw transcript. Dispatches agents to recover decisions, quotes, tasks, and continuation points. Use when the user says "revive", "pick up where I left off", "resume session", or selects an ongoing thread.
-plugin_version: "3.0.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:revive
@@ -92,7 +92,8 @@ Extract:
 1. DECISIONS — What was decided and why (verbatim rationale)
 2. KEY QUOTES — Important statements worth preserving exactly
 3. TASKS — Action items identified
-4. INSIGHTS — Learnings or realizations
+4. INSIGHTS — Domain knowledge (strategy, product, process, market)
+   For technical patterns, offer auto-memory rather than insights.md
 5. CONTINUATION — Where work left off, what's next
 
 Be thorough. Include verbatim quotes. This is for full context restoration.
@@ -221,7 +222,7 @@ Can only load from _brain/ files (no full extraction).
 | Decisions | Transcript | Yes — include rationale |
 | Key quotes | Transcript | Yes — exact words |
 | Tasks | Transcript + tasks.md | Merged |
-| Insights | Transcript | Yes — preserve phrasing |
+| Insights (domain knowledge) | Transcript | Yes — preserve phrasing |
 | Continuation point | End of transcript | Summary |
 | What's next | User's stated intentions | Yes |
 

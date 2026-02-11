@@ -1,7 +1,7 @@
 ---
 user-invocable: false
 description: Search past context, decisions, and sessions across ALIVE. Use when the user says "find X", "search for X", "recall X", "when did we X", "what did we decide about X", or "remember when we X".
-plugin_version: "3.0.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:recall
@@ -46,7 +46,7 @@ Within the unit, check these locations in order:
 | 1 | `_brain/manifest.json` | File index, reference summaries, structure |
 | 2 | `_brain/changelog.md` | Decisions, session history, what happened |
 | 3 | `_references/**/*.md` | Summaries of emails, calls, articles (read YAML front matter, skip raw/) |
-| 4 | `_brain/insights.md` | Learnings and patterns |
+| 4 | `_brain/insights.md` | Domain knowledge |
 
 **Stop as soon as you find what they're looking for.** Don't search everything just because you can.
 

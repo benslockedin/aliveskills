@@ -79,7 +79,7 @@ Experiments are:
 Everything current lives in `_brain/`:
 - `status.md` — Current phase
 - `tasks.md` — What to do next
-- `insights.md` — What we're learning
+- `insights.md` — Domain knowledge
 - `changelog.md` — History
 ```
 
@@ -90,23 +90,27 @@ Everything current lives in `_brain/`:
 ```markdown
 # Status
 
-**Phase:** Exploring
+**Goal:** [What are you testing?]
+**Phase:** Starting
 **Updated:** [DATE]
 
-## Hypothesis
-[What are we testing?]
+---
 
-## Current Focus
-[What experiment are we running right now?]
+## Key People
+
+## State of Play
+
+## Priorities
+
+## Blockers
+
+## Next Milestone
+
+## Hypothesis
 
 ## Evidence Gathered
-- [What have we learned so far?]
-
-## Next Step
-[What's the next test?]
 
 ## Decision Point
-[When do we decide to continue/pivot/stop?]
 ```
 
 ---
@@ -117,9 +121,9 @@ Everything current lives in `_brain/`:
 |-------|---------|
 | **Exploring** | Initial research, ideation |
 | **Validating** | Testing hypothesis with real data |
-| **Pivoting** | Changing direction based on learnings |
+| **Pivoting** | Changing direction based on evidence |
 | **Graduating** | Success! Moving to 04_Ventures/ |
-| **Abandoned** | Didn't work, archive learnings |
+| **Abandoned** | Didn't work, archive insights |
 
 ---
 
@@ -140,7 +144,7 @@ When an experiment succeeds:
 
 Graduated from 05_Experiments/[name]/.
 Original hypothesis: [what we tested]
-Key learnings: [what we learned]
+Key insights: [what we learned]
 ```
 
 ---
@@ -174,5 +178,5 @@ When an experiment doesn't work:
 
 - Keep experiments lightweight
 - Time-box experiments (set deadlines)
-- Document learnings religiously
+- Document domain knowledge religiously
 - Failed experiments are valuable (if you capture insights)

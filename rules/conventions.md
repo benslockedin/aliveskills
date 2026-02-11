@@ -95,9 +95,9 @@ Every venture, experiment, life area, and project has `_brain/` with these files
 
 | File | Purpose | Update frequency |
 |------|---------|------------------|
-| `status.md` | Current phase and focus | When phase changes |
+| `status.md` | Unit summary and state of play | Refined incrementally |
 | `tasks.md` | Work queue | Frequently |
-| `insights.md` | Learnings worth remembering | When learned |
+| `insights.md` | Unit-scoped domain knowledge | When domain knowledge is gained |
 | `changelog.md` | Session history + decisions | Every session |
 | `manifest.json` | Structure map with file summaries | On file changes |
 
@@ -106,18 +106,24 @@ Every venture, experiment, life area, and project has `_brain/` with these files
 ```markdown
 # Status
 
+**Goal:** [What are you building toward?]
 **Phase:** [Starting | Building | Launching | Growing | Maintaining]
 **Updated:** [DATE]
 
-## Current Focus
-[What are we working on RIGHT NOW? Be specific.]
+---
+
+## Key People
+
+## State of Play
+
+## Priorities
 
 ## Blockers
-[What's stopping progress? "None" if clear.]
 
 ## Next Milestone
-[What does "done" look like for this phase?]
 ```
+
+Status is a living summary of the unit. If someone reads only this file, they understand the whole picture. It gets refined incrementally — new information replaces outdated information, not stacks on top of it. If the file is growing session over session, you're appending when you should be refining.
 
 ### tasks.md
 
@@ -148,15 +154,25 @@ Every venture, experiment, life area, and project has `_brain/` with these files
 ```markdown
 # Insights
 
-## 2026-01-23 — Insight Title
+Unit-scoped domain knowledge. Facts, principles, and learnings
+that should influence future work on this unit.
 
-**Category:** [market | product | process | people | technical]
-**Learning:** The insight itself
+NOT for: decisions (changelog), Claude patterns (auto-memory),
+identity/rules (CLAUDE.md), people (status.md + 02_Life/people/).
+
+---
+
+## [DATE] — [Title]
+
+**Category:** [strategy | product | process | market]
+**Learning:** What was learned
 **Evidence:** How we know this
 **Applies to:** Where this matters
 
 ---
 ```
+
+If the insight is about how Claude operates, an API quirk, or a technical workflow pattern — it belongs in auto-memory, not insights.md. Offer to save it to `~/.claude/projects/*/memory/MEMORY.md` instead.
 
 ### changelog.md
 

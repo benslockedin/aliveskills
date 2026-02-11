@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Audit the system for stale content, orphan files, and cleanup opportunities. Use when the user says "sweep", "clean up", "audit", "check for stale", "maintenance", or "spring cleaning".
-plugin_version: "3.0.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:sweep
@@ -189,7 +189,29 @@ Check that these exist:
 
 For each missing item, report: MISSING: {path} — {what it should contain}
 
-## B. Manifest Reconciliation (Safety Net for Missed Saves)
+## B. Status.md Structure Validation
+
+Read _brain/status.md and check for the 7-section structure:
+
+Required sections (in order):
+1. **Goal:** — One sentence defining the unit's purpose
+2. **Phase:** — [Starting | Building | Launching | Growing | Maintaining | Paused]
+3. **Updated:** — ISO date (YYYY-MM-DD)
+4. **Key People:** — People involved (with links to `02_Life/people/` where applicable)
+5. **State of Play:** — Current situation and what's happening now
+6. **Priorities:** — What matters most right now
+7. **Blockers:** — What's stopping progress ("None" if clear)
+8. **Next Milestone:** — What "done" looks like for this phase
+
+Check for:
+- Missing sections → MISSING_STATUS_SECTION: {section name}
+- Old format using "Current Focus" instead of "State of Play" → LEGACY_STATUS_FORMAT: Uses "Current Focus" (should be "State of Play")
+- Missing **Goal:** field → MISSING_GOAL: status.md has no Goal statement
+- Key People section with full person details instead of links → PEOPLE_IN_STATUS: Person details should be in `02_Life/people/`, status.md should only link
+
+Report: STATUS_STRUCTURE: {finding}
+
+## C. Manifest Reconciliation (Safety Net for Missed Saves)
 
 **This is critical.** If a save was forgotten or interrupted, files may exist on disk but not in the manifest. The manifest must reflect reality.
 
@@ -230,7 +252,7 @@ Read _brain/manifest.json and do a FULL reconciliation against what actually exi
    - Report: LEGACY_FIELD: manifest root has `session_id` (singular) — should be `session_ids` (array)
    - Report: MISSING_GOAL: manifest root is missing `goal` field
 
-## C. _brain/ Freshness
+## D. _brain/ Freshness
 
 For each _brain/ file, check the last updated date:
 
@@ -248,7 +270,7 @@ Check:
 
 Report: {file}: {age} days — {OK|STALE|VERY_STALE}
 
-## D. Tasks Health
+## E. Tasks Health
 
 Read _brain/tasks.md and check:
 - Tasks marked [~] (in-progress) for more than 7 days → STUCK
@@ -256,7 +278,23 @@ Read _brain/tasks.md and check:
 - Empty urgent section with items in To Do → OK
 - Extremely long task list (>30 items) → BLOATED
 
-## E. _working/ Folder Audit
+## F. Insights Boundary Check
+
+Read _brain/insights.md and scan entries for misplaced content:
+
+| Pattern | Flag | Suggestion |
+|---------|------|------------|
+| Entries with `technical` category | "Auto-memory territory" | Archive entry, offer to save pattern to `~/.claude/projects/*/memory/MEMORY.md` |
+| Entries with `people` category | "People belong in status.md Key People or `02_Life/people/`" | Re-categorise the domain knowledge under strategy/product/process/market with person as Evidence source |
+| Entries that read like decisions (rationale, alternatives rejected) | "Decision territory" | Should be in changelog, not insights |
+| Entries older than 6 months with no `Applies to` reference | "Potentially stale insight" | Ask user if still relevant |
+
+Valid categories for insights are: `[strategy | product | process | market]`
+
+Report format:
+- INSIGHT_BOUNDARY: {entry title} — {flag} — {suggestion}
+
+## G. _working/ Folder Audit
 
 List all files in _working/ and check:
 
@@ -274,7 +312,7 @@ List all files in _working/ and check:
    - Any file here that is NOT referenced in manifest.handoffs[] is orphaned
    - Report: ORPHAN_HANDOFF: {filename}
 
-## F. Orphaned & Misplaced Files
+## H. Orphaned & Misplaced Files
 
 Check for files that shouldn't be where they are:
 
@@ -296,13 +334,13 @@ Check for files that shouldn't be where they are:
    - Every folder should have a README.md
    - Report: NO_README: {area_path}
 
-## G. Nested Project Check
+## I. Nested Project Check
 
 For any area with has_projects: true in manifest:
 - Check that each nested project has its own _brain/, _working/, and _references/
 - Check that nested projects DON'T use the parent's _working/
 
-## H. _references/ Folder Audit
+## J. _references/ Folder Audit
 
 Each type subfolder (emails/, calls/, meeting-transcripts/, etc.) should have summary `.md` files at root and a `raw/` subfolder for originals.
 
@@ -335,7 +373,7 @@ Each type subfolder (emails/, calls/, meeting-transcripts/, etc.) should have su
 7. **Raw files at wrong level:** Raw content files (.txt, .pdf, .png) sitting at type folder root instead of in `raw/`
    - Report: MISPLACED_RAW: {filename} should be in raw/ subfolder
 
-## I. Archive References
+## K. Archive References
 
 Check if any files reference archived paths that no longer exist.
 
@@ -477,6 +515,10 @@ What to address?
 | **MISSING_METADATA** | Add missing `date_created`, `date_modified`, `session_ids` fields to manifest file entries |
 | **LEGACY_FIELD** | Convert manifest root `session_id` (singular) to `session_ids` (array) |
 | **MISSING_GOAL** | Prompt user for unit goal, add `goal` field to manifest root |
+| **STATUS_STRUCTURE** | Update status.md to use 7-section format (Goal, Phase, Updated, Key People, State of Play, Priorities, Blockers, Next Milestone) |
+| **LEGACY_STATUS_FORMAT** | Replace "Current Focus" section with "State of Play" |
+| **PEOPLE_IN_STATUS** | Move person details to `02_Life/people/`, replace with link in status.md Key People |
+| **INSIGHT_BOUNDARY** | Archive insight entry / Move to appropriate location (changelog, auto-memory, etc.) / Re-categorise |
 | **STALE _brain/** | Open unit with `/alive:work` to refresh |
 | **STUCK task** | Mark done / Reset to To Do / Update |
 | **STALE_DRAFT** | Archive / Promote / Keep |

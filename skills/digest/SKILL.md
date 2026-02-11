@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Process and route items from the 03_Inputs/ buffer to their correct locations across ALIVE. Use when the user says "process inputs", "digest", "triage", "handle inbox", "sort these", "what's in my inbox", or "anything to process".
-plugin_version: "3.0.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:digest
@@ -264,7 +264,7 @@ Route transcript to: 04_Ventures/acme/_references/calls/2026-01-22-partner-sync.
 |------------|-------------|
 | Decision | `_brain/changelog.md` |
 | Task | `_brain/tasks.md` |
-| Insight | `_brain/insights.md` |
+| Insight (domain knowledge) | `_brain/insights.md` |
 | Person info | `02_Life/people/[name].md` |
 
 ### Source File Routing
@@ -396,7 +396,7 @@ Extracts:
 - People mentioned (with roles)
 - Decisions made
 - Action items
-- Insights/learnings
+- Insights (domain knowledge)
 - Key topics discussed
 
 ### Email Agent

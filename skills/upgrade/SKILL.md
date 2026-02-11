@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Update ALIVE system files to the latest plugin version — rules, CLAUDE.md, and configuration. Use when the user says "upgrade", "update system", or when a version mismatch is detected.
-plugin_version: "3.0.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:upgrade
@@ -821,6 +821,175 @@ No structural changes. Plugin auto-update delivers the new skill files. Users ju
 | **Rules** | New `anti-patterns.md` (9 rules). `capture` skill now proactively invokes on external content. All rules updated for terminology changes. |
 | **UI** | Elephant mascot (Beate Schwichtenberg large, jrei small). Roman FIGlet "ALIVE" wordmark. Boot screen with manifesto. |
 | **Config** | Update `system_version: "3.0.1"` in alive.local.yaml. |
+
+### 3.0.1 → 3.1.0
+
+**What changed:** Insights redesigned (4 domain knowledge categories) and status redesigned (7-section unit summary).
+
+| Category | Changes |
+|----------|---------|
+| **Status** | Restructure all `_brain/status.md` files to new 7-section template (Goal, Phase, Key People, State of Play, Priorities, Blockers, Next Milestone). Use subagent to migrate content from old format. |
+| **Insights** | Update all `_brain/insights.md` to new definition (unit-scoped domain knowledge). Use subagent to re-categorise entries, archive technical insights, handle people category, add header note. |
+| **Rules** | Sync conventions.md, learning-loop.md, anti-patterns.md from plugin cache (new definitions, templates, condensing principle, auto-memory boundary, rule #10). |
+| **Templates** | Updated status.md (7 sections), insights.md (4 categories + header note). Copy from plugin cache templates. |
+| **Config** | Update `system_version` in alive.local.yaml to `3.1.0`. |
+
+**Session 2 additional steps:**
+
+After Step F (Terminology Migration), run these additional migration steps:
+
+**Step G: Status Restructure (Subagent)**
+
+Launch a Task subagent with this prompt:
+
+```
+You are migrating all status.md files to the new 7-section template. The new template focuses on unit-scoped summary, not session-level updates.
+
+ALIVE ROOT: {alive-root}
+NEW TEMPLATE: ~/.claude/plugins/cache/aliveskills/templates/brain/status.md
+
+FIND ALL UNITS:
+Search for _brain/ folders in:
+- {alive-root}/04_Ventures/*/
+- {alive-root}/04_Ventures/*/*/
+- {alive-root}/05_Experiments/*/
+- {alive-root}/05_Experiments/*/*/
+- {alive-root}/02_Life/*/
+
+FOR EACH _brain/status.md file:
+
+1. Read the current file
+2. Read the new template for reference
+3. Show the user what's currently there (especially any custom sections)
+4. Map content to new 7-section structure:
+
+   NEW SECTION: **Goal:**
+   - Extract from current file if exists, or leave blank for user to fill
+
+   KEEP: **Phase:**
+   - Preserve existing phase value
+
+   NEW SECTION: ## Key People
+   - Extract from unit's .claude/CLAUDE.md if exists (look for team, collaborators, contacts)
+   - Or leave blank for user to fill
+
+   MIGRATE: ## Current Focus → ## State of Play
+   - Rewrite "Current Focus" as a narrative paragraph
+   - This should describe what's happening NOW, not a task list
+
+   NEW SECTION: ## Priorities
+   - Extract from "Current Focus" if it has priority language
+   - Or leave blank for user to fill
+
+   KEEP: ## Blockers
+   - Preserve existing blockers
+
+   KEEP: ## Next Milestone
+   - Preserve existing milestone
+
+   REMOVE: **Recent work:** section
+   - This belongs in changelog, not status
+   - Archive content to _working/status-archive-[date].md if user wants to keep it
+
+5. Ask user to confirm the migration for this unit before writing
+6. Use Edit tool to update the file (not Write)
+
+Report format per unit:
+- Unit: [path]
+- Sections migrated: [list]
+- Content archived: [yes/no, where]
+- User confirmation: [pending/approved]
+
+IMPORTANT:
+- Do NOT proceed to next unit until user confirms current unit
+- Preserve all user content — archive rather than delete
+- Show before/after for each unit
+```
+
+Show results:
+```
+▸ restructuring status.md files...
+  └─ 04_Ventures/acme — Goal added, Current Focus → State of Play, Recent work archived
+  └─ 04_Ventures/beta — already matches new template ✓
+  └─ 05_Experiments/test — 4 sections migrated, user confirmation pending
+
+✓ Status files restructured (2 migrated, 1 current)
+```
+
+**Step H: Insights Cleanup (Subagent)**
+
+Launch a Task subagent with this prompt:
+
+```
+You are migrating all insights.md files to the new definition: unit-scoped domain knowledge only (not technical learnings, not people profiles).
+
+ALIVE ROOT: {alive-root}
+NEW TEMPLATE: ~/.claude/plugins/cache/aliveskills/templates/brain/status.md
+NEW CATEGORIES: strategy, product, process, market
+
+FIND ALL UNITS:
+Search for _brain/insights.md files in same unit paths as status migration.
+
+FOR EACH _brain/insights.md file:
+
+1. Read the current file
+2. Add header note at top (from template):
+   "Domain knowledge specific to this unit. Technical learnings → auto-memory. People context → 02_Life/people/."
+
+3. For EACH insight entry, categorise it:
+
+   CATEGORY: strategy/product/process/market
+   - Keep in insights.md
+   - Update header to new format if needed
+   - Ensure all required fields present: Category, Learning, Evidence, Applies to
+
+   CATEGORY: technical
+   - This is auto-memory territory now
+   - Ask user: "This technical insight should move to auto-memory. Archive it?"
+   - If yes → move to _working/insights-pruned-[date].md
+   - If no → keep but warn it's outside new scope
+
+   CATEGORY: people
+   - This is person context, not domain knowledge
+   - Ask user: "This is about [person]. Re-categorise the domain knowledge they shared?"
+   - Show the insight, ask which new category (strategy/product/process/market)
+   - Update category, add person to Evidence field: "Source: [person name], [context]"
+   - Check if {alive-root}/02_Life/people/[person-name].md exists
+   - If not → ask "Create person file for [person]?" → create basic person file if yes
+
+4. Archive all pruned entries to _working/insights-pruned-[date].md with note about why
+
+5. Ask user to confirm changes for this unit before writing
+
+6. Use Edit tool to update insights.md (not Write)
+
+Report format per unit:
+- Unit: [path]
+- Header note added: [yes/no]
+- Entries kept: [count by category]
+- Technical entries archived: [count]
+- People entries re-categorised: [count]
+- Person files created: [list]
+- User confirmation: [pending/approved]
+
+IMPORTANT:
+- Do NOT proceed to next unit until user confirms
+- Show each entry being re-categorised/archived
+- Create person files with basic template (name, role, contact if known)
+- Preserve all content — archive, don't delete
+```
+
+Show results:
+```
+▸ cleaning up insights.md files...
+  └─ 04_Ventures/acme — 2 technical archived, 1 people re-categorised (John Smith)
+  └─ 04_Ventures/beta — header note added, all entries valid ✓
+  └─ 05_Experiments/test — 3 entries re-categorised, person file created
+
+✓ Insights cleaned (2 units updated, 1 current, 1 person file created)
+```
+
+**Then continue to original Step G (Config Update) and rename it to Step I.**
 
 ---
 

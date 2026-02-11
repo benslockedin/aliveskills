@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Load one venture, experiment, life area, or project's full context and start working — reads _brain/, surfaces tasks, and picks up where you left off. Use when the user says "work on X", "focus on X", "open X", "status of X", "continue", "resume", or "pick up where I left off".
-plugin_version: "3.0.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:work
@@ -158,7 +158,7 @@ cd ~/Desktop/alive/04_Ventures/acme-agency/
 **You MUST read all 4 files. Do not skip any.**
 
 Read in order:
-1. `{unit}/_brain/status.md` — Phase and focus
+1. `{unit}/_brain/status.md` — Unit summary and state of play
 2. `{unit}/_brain/tasks.md` — Work queue
 3. `{unit}/_brain/manifest.json` — Structure map
 4. `{unit}/_brain/changelog.md` — **First 200 lines** (recent session history)

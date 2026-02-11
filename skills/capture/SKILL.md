@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Capture any context into ALIVE — notes, emails, transcripts, decisions, filepaths, or anything worth preserving. Auto-invoke when the user shares a filepath, pastes external content (emails, transcripts, articles), or says "capture this", "note this", "remember this", "FYI", "here's some context", "I decided", "I learned". If the user drops content without explicitly asking to capture, invoke this skill proactively.
-plugin_version: "3.0.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:capture
@@ -55,7 +55,7 @@ The user has context they want in the system. It might be a quick thought, a pas
 |-------|-----|
 | Active unit (from `/alive:work`) | Default routing destination |
 | `{unit}/_brain/manifest.json` | Know what areas exist, existing references |
-| `{unit}/_brain/status.md` | Current focus — informs relevance |
+| `{unit}/_brain/status.md` | Unit summary — informs relevance |
 | `02_Life/people/` listing | Check for existing person files before creating |
 
 ```
@@ -420,11 +420,13 @@ Email from Sarah Chen (Globex) → _references/emails/2026-02-06-globex-pilot-pr
 ```markdown
 ## 2026-02-06 — [Insight Title]
 
-**Category:** [market / product / process / technical / people]
+**Category:** [strategy | product | process | market]
 **Learning:** The insight itself
 **Evidence:** How we know this
 **Applies to:** Where this matters
 ```
+
+**Note:** If the insight is about how Claude operates or a technical pattern, offer to save to auto-memory instead of insights.md.
 
 ---
 
