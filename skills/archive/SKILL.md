@@ -195,11 +195,11 @@ Archive with learnings?
 [3] Just delete (not recommended)
 ```
 
-If extracting insights:
+If extracting insights (domain knowledge):
 ```
 Found in 05_Experiments/failed-idea/_brain/insights.md:
-- "Target market too small for subscription model"
-- "Customer acquisition cost exceeded LTV"
+- "Target market too small for subscription model" [market]
+- "Customer acquisition cost exceeded LTV" [strategy]
 
 Copy these to another project before archiving?
 [1] Yes, copy to 04_Ventures/main/_brain/insights.md

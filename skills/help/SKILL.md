@@ -141,9 +141,9 @@ User: "What goes in _brain/?"
 
 _brain/ FILES
 ─────────────────────────────────────────────────────────────────────────
-status.md       Current phase and focus
+status.md       Unit summary and state of play
 tasks.md        Work queue (urgent, to do, done)
-insights.md     Learnings worth remembering
+insights.md     Unit-scoped domain knowledge
 changelog.md    Session history + decisions
 manifest.json   Structure map with file summaries
 

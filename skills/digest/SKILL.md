@@ -264,7 +264,7 @@ Route transcript to: 04_Ventures/acme/_references/calls/2026-01-22-partner-sync.
 |------------|-------------|
 | Decision | `_brain/changelog.md` |
 | Task | `_brain/tasks.md` |
-| Insight | `_brain/insights.md` |
+| Insight (domain knowledge) | `_brain/insights.md` |
 | Person info | `02_Life/people/[name].md` |
 
 ### Source File Routing
@@ -396,7 +396,7 @@ Extracts:
 - People mentioned (with roles)
 - Decisions made
 - Action items
-- Insights/learnings
+- Insights (domain knowledge)
 - Key topics discussed
 
 ### Email Agent

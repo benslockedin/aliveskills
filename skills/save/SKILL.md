@@ -48,7 +48,7 @@ Save touches ALL state files, not just changelog:
 1. Update what happened (changelog)
 2. Update where we are (status)
 3. Update what's done/next (tasks)
-4. Capture any insights
+4. Capture domain knowledge (insights) — not Claude operational patterns (auto-memory handles those)
 5. Handle working files (promote or keep)
 6. Document new files with descriptions
 7. Update structure map (manifest)
@@ -214,36 +214,30 @@ Prepend to `_brain/changelog.md` (most recent first):
 
 **Re-read `_brain/status.md` before writing.** Get the current version, not the one loaded at session start. Another session may have updated it — respect their changes.
 
-**Use the Edit tool, not Write.** Only modify fields that actually changed this session.
+**Use the Edit tool, not Write.** Only modify sections that actually changed this session.
 
-### Field Rules
+### Section Rules
 
-| Field | Rule |
-|-------|------|
-| **Goal, Phase, Next Milestone** | Protected — only update if user explicitly discussed changing it |
-| **Updated** | Always set to today's date |
+| Section | Rule |
+|---------|------|
+| **Goal** | Protected — only update if user explicitly discussed changing it |
+| **Phase** | Protected — only update if user explicitly discussed changing it |
+| **Updated** | Always set to today's date (if any other section was edited) |
+| **Key People** | Add if new person was introduced this session. Include pointer to `02_Life/people/` if the person file exists. |
+| **State of Play** | Re-read current narrative. If session materially changed the picture, rewrite affected sentences. If routine session, leave it alone. This is an EDIT, not an APPEND — the section should always read as a coherent narrative. |
+| **Priorities** | Add/remove/reword if strategic focus shifted. Otherwise untouched. |
 | **Blockers** | Merge — add new blockers, remove resolved ones, leave others untouched |
-| **Current Focus** | Quality-gated — see below |
+| **Next Milestone** | Protected — only update if user explicitly discussed changing it |
 
-### Current Focus — Quality Gates
+### Condensing Principle
 
-Before updating, evaluate what's already there. If the existing focus reflects a bigger strategic priority than this session's work, preserve it.
+When editing status.md, every addition is also an opportunity to condense. If something is still relevant, it stays. But new information should replace outdated information, not stack on top of it. If the file is growing session over session, you're appending when you should be refining.
 
-| Session Quality | Action |
-|----------------|--------|
-| **Routine / Productive** | **Append only.** Add a line to "Recent work:" about what this session did. Never replace existing focus. |
-| **Important / Breakthrough** | **May replace.** If the session meaningfully shifted direction, replace Current Focus entirely. Ask user first for Important. |
+### Key Principle
 
-**Append format:**
-```
-## Current Focus
+Don't gate status updates on session quality (routine/productive/important/breakthrough). Gate them on whether the state of play actually changed. A routine session that surfaces a game-changing blocker should update status. A breakthrough implementation session that doesn't change the strategic picture shouldn't.
 
-Landing page launch by Friday
-
-**Recent work:**
-- Fixed webhook bug (2026-02-09)
-- Refactored payment flow (2026-02-09)
-```
+Before updating, ask: "Does the State of Play still accurately describe this unit?" If yes — update the date and move on. If no — edit the specific sentences or sections that no longer reflect reality. Never regenerate the whole file. Status.md is a living document that gets refined, not a log that gets appended to.
 
 ## Tasks Update
 
@@ -266,12 +260,12 @@ In `_brain/tasks.md`:
 
 ## Insights Entry (Important+ Only)
 
-For Important or Breakthrough saves, append to `_brain/insights.md`:
+For Important or Breakthrough saves, consider domain knowledge worth preserving in `_brain/insights.md`:
 
 ```markdown
 ## 2026-01-30 — [Insight Title]
 
-**Category:** [market / product / process / technical / people]
+**Category:** [strategy | product | process | market]
 **Learning:** The insight itself
 **Evidence:** How we know this
 **Applies to:** Where this matters going forward
@@ -279,9 +273,9 @@ For Important or Breakthrough saves, append to `_brain/insights.md`:
 ---
 ```
 
-Ask: "Any insights from this session?"
+Ask: "Any domain knowledge worth capturing from this session?"
 
----
+**Boundary:** If the insight is about how Claude operates, an API quirk, or a technical workflow pattern — do NOT write to insights.md. Instead, offer to save it to the user's auto-memory (`~/.claude/projects/*/memory/MEMORY.md`). Say: "That's a useful technical pattern. Want me to save it to auto-memory so it persists across all sessions?"
 
 ## Working File Handling (Productive+ Only)
 

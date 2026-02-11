@@ -158,7 +158,7 @@ cd ~/Desktop/alive/04_Ventures/acme-agency/
 **You MUST read all 4 files. Do not skip any.**
 
 Read in order:
-1. `{unit}/_brain/status.md` — Phase and focus
+1. `{unit}/_brain/status.md` — Unit summary and state of play
 2. `{unit}/_brain/tasks.md` — Work queue
 3. `{unit}/_brain/manifest.json` — Structure map
 4. `{unit}/_brain/changelog.md` — **First 200 lines** (recent session history)

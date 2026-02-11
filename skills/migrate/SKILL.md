@@ -148,7 +148,7 @@ Add to tasks.md?
 [2] Select which to add
 ```
 
-**Insights:**
+**Insights (domain knowledge):**
 ```
 Found insights:
 - "Client prefers weekly updates over daily"
@@ -172,7 +172,7 @@ Decisions:
 Tasks:
   → 04_Ventures/acme/_brain/tasks.md (5 items)
 
-Insights:
+Insights (domain knowledge):
   → 04_Ventures/acme/_brain/insights.md (2 entries)
 
 Source (reference):
@@ -226,7 +226,7 @@ For call/meeting transcripts:
 1. Identify speakers
 2. Extract action items
 3. Extract decisions
-4. Extract insights
+4. Extract insights (domain knowledge: strategy, product, process, market)
 5. Update person files with "last contact"
 6. Store source as reference in `_references/` with YAML front matter
 7. Add to `manifest.json` `references` array

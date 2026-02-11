@@ -200,9 +200,8 @@ When user picks:
 ## Section: Goals
 
 Extract from each `_brain/status.md`:
-- Look for `**Goal:**` line
-- Or `**Focus:**` line
-- Or first sentence after `## Current Focus`
+- Look for `**Goal:**` line (primary — this is the dashboard label per unit)
+- Fallback: first sentence after `## State of Play`
 
 Show name + goal. Max 5, sorted by recency.
 

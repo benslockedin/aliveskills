@@ -114,7 +114,7 @@ What type of venture?
 ├── _brain/
 │   ├── status.md          # Current phase
 │   ├── tasks.md           # Work queue
-│   ├── insights.md        # Learnings
+│   ├── insights.md        # Domain knowledge
 │   ├── changelog.md       # History
 │   └── manifest.json      # Structure map
 ├── _working/              # Drafts
@@ -159,7 +159,7 @@ Use templates from `.claude/templates/brain/` as the starting point for _brain/ 
 Everything current lives in `_brain/`:
 - `status.md` — Phase and focus
 - `tasks.md` — Work queue
-- `insights.md` — Learnings
+- `insights.md` — Domain knowledge
 - `changelog.md` — History
 - `manifest.json` — Structure map
 
@@ -171,17 +171,21 @@ Reference material lives in `_references/` (summary .md files with raw originals
 ```markdown
 # Status
 
+**Goal:** [Single-sentence goal for this venture]
 **Phase:** Starting
 **Updated:** [DATE]
 
-## Current Focus
-[To be defined]
+---
+
+## Key People
+
+## State of Play
+
+## Priorities
 
 ## Blockers
-None yet.
 
 ## Next Milestone
-[First milestone to achieve]
 ```
 
 **tasks.md:**
@@ -452,15 +456,21 @@ One-line description?
 ```markdown
 # Status
 
+**Goal:** [Single-sentence goal for this project]
 **Phase:** Starting
-**Goal:** [To be defined]
 **Updated:** [DATE]
 
-## Current Focus
-[Initial setup]
+---
+
+## Key People
+
+## State of Play
+
+## Priorities
 
 ## Blockers
-None yet.
+
+## Next Milestone
 ```
 
 **tasks.md:**
