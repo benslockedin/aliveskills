@@ -91,12 +91,12 @@ After detecting a version mismatch, check the Migration Registry (at the bottom 
 **Fast path example (skill-only update):**
 ```
 ▸ checking versions...
-  └─ Plugin: 3.0.1 | System: 2.1.1
+  └─ Plugin: 2.1.2 | System: 2.1.1
 
 ▸ checking migration registry...
-  └─ No structural migrations for 2.1.1 → 3.0.1
+  └─ No structural migrations for 2.1.1 → 2.1.2
 
-✓ System version synced to 3.0.1. No migration needed.
+✓ System version synced to 2.1.2. No migration needed.
 ```
 
 **Structural migration example:**
