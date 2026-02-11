@@ -1,6 +1,6 @@
 # Anti-Patterns
 
-9 rules. Don't break them.
+10 rules. Don't break them.
 
 ---
 
@@ -53,4 +53,24 @@ Anyone reading the filename should know where it belongs without opening it.
 ## 9. Update Status on Phase Change
 
 Don't leave "Starting" when you're "Building." Don't leave "Building" when you've launched. `_brain/status.md` reflects reality, not history.
+
+## 10. Confirm Before External Actions
+
+Any action that modifies state outside ALIVE requires explicit user confirmation before executing. This includes MCP tools, APIs, integrations — anything that sends, posts, creates, or deletes in an external service.
+
+**Always ask:** "Do you confirm you want to [action]?"
+
+```
+# Wrong — auto-fires
+mcp__slack__slack_post_message(channel, text)
+
+# Right — confirm first
+"Ready to post this to #general on Slack. Confirm?"
+→ User: yes
+→ Then send
+```
+
+**Applies to:** Sending emails, posting to Slack/Discord, creating GitHub issues/PRs, publishing content, making API calls that write data, any MCP tool that affects the outside world.
+
+**Does NOT apply to:** Reading/fetching data, local file operations within ALIVE, search queries.
 
