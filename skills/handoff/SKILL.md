@@ -40,41 +40,29 @@ Called by `/alive:save` when save reason is:
 ```dot
 digraph handoff_flow {
     "Save skill calls handoff" -> "Identify unit";
-    "Identify unit" -> "Check _working/sessions/";
-    "Check _working/sessions/" -> "Create if missing";
-    "Create if missing" -> "Dispatch deep-dive subagent";
-    "Dispatch deep-dive subagent" -> "Write handoff document";
-    "Write handoff document" -> "Update manifest";
-    "Update manifest" -> "Return to save skill";
+    "Identify unit" -> "Ensure _working/sessions/";
+    "Ensure _working/sessions/" -> "Check for existing handoff";
+    "Check for existing handoff" -> "Dispatch subagent (UPDATE)" [label="found"];
+    "Check for existing handoff" -> "Dispatch subagent (NEW)" [label="not found"];
+    "Dispatch subagent (UPDATE)" -> "Write handoff document";
+    "Dispatch subagent (NEW)" -> "Write handoff document";
+    "Write handoff document" -> "Update manifest + return to save";
 }
 ```
 
 ## Step 1: Identify Unit
 
-Determine which unit this handoff belongs to based on:
-- Current working directory
-- What was being worked on in the session
+Determine which unit this handoff belongs to from the current working directory and session context.
 
 ```
 ▸ creating handoff for 04_Ventures/acme/
 ```
 
-## Step 2: Ensure Sessions Folder Exists
+## Step 2: Ensure Sessions Folder
 
-Check for `{unit}/_working/sessions/` folder:
+Ensure `{unit}/_working/sessions/` exists. Create with `mkdir -p` if missing.
 
-```bash
-# If missing, create it
-mkdir -p {unit}/_working/sessions/
-```
-
-```
-▸ checking _working/sessions/
-  └─ [exists] ready
-  └─ OR [created] _working/sessions/
-```
-
-## Step 2.5: Check for Existing Handoff (Same Session)
+## Step 3: Check for Existing Handoff (Same Session)
 
 **Before creating a new handoff, check if one already exists for this session ID.**
 
@@ -83,421 +71,200 @@ Check TWO locations (since handoffs are archived immediately on resume):
 1. `manifest.handoffs[]` — for pending handoffs not yet resumed
 2. `01_Archive/{unit-path}/sessions/` — for previously resumed handoffs
 
-```
-▸ checking for existing handoff...
-  └─ Session ID: {current_session_id}
-  └─ Checking manifest.handoffs[]...
-  └─ Checking archive...
-```
-
 **If handoff found (either location):**
+
+1. Read the existing handoff content
+2. If found in archive, copy back to `_working/sessions/`
+3. Dispatch subagent with **UPDATE** instructions (Step 4)
+4. Update `updated` timestamp and increment `update_count` in frontmatter
+5. Ensure entry exists in `manifest.handoffs[]`
+
+This creates a **cumulative handoff** — each compaction appends to the same document rather than creating a new one.
+
+**If no existing handoff:** Continue to Step 4 for a new handoff.
+
+## Step 4: Extract Raw Material (Main Context)
+
+**You are running in the main context with full conversation access.** This is the only place that can see what happened. Your job: extract structured raw material that a subagent will compose into the handoff document.
+
+Go through the ENTIRE conversation and extract the following. Be exhaustive and specific — everything you miss is lost forever.
+
 ```
-[!] Found existing handoff for this session:
-    └─ {existing_handoff_path}
-    └─ Created: {timestamp}
-    └─ Source: [manifest | archive]
-
-Retrieving and updating existing handoff...
-```
-
-**If found in archive:**
-1. Read the archived handoff content
-2. Copy back to `_working/sessions/` for updating
-3. Dispatch subagent with UPDATE instructions
-4. Save updated version to `_working/sessions/`
-5. Add back to `manifest.handoffs[]`
-
-This creates a **cumulative handoff** — each compaction appends to the same document.
-
-→ Skip to Step 3, but **UPDATE** the existing file instead of creating new:
-- Read the existing handoff (from archive or manifest location)
-- Dispatch subagent with instruction to UPDATE/APPEND
-- Preserve original context, add new progress
-- Update the `updated` timestamp in frontmatter
-- Increment `update_count` in frontmatter
-
-**If no existing handoff for this session:**
-```
-▸ checking for existing handoff...
-  └─ None found for session {session_id}
-  └─ Creating new handoff
+▸ analysing conversation...
+  └─ Extracting what happened, why, and what comes next
 ```
 
-→ Continue to Step 3 normally.
+### 1. What Happened
 
-## Step 3: Dispatch Deep-Dive Subagent (MANDATORY)
+Extract a complete account of the session:
 
-**This is the critical step.** Dispatch a subagent to analyse the ENTIRE conversation and extract everything needed for continuity.
+- **Session narrative** — What was the goal? What was attempted, in what order? Tell the chronological story from start to current state.
+- **Problems solved** — Every problem encountered during the session. For each: what went wrong, what was tried, what ultimately fixed it. Include exact error messages, stack traces, or failure modes.
+- **Files modified** — Every file created, edited, or deleted. For each:
+  - Full absolute file path
+  - What specifically changed (sections added/removed, functions modified, lines changed)
+  - Why it changed (what drove the modification)
+  - Before/after if the change is non-obvious
+- **Code and working patterns** — Any significant code written, architectural patterns established, templates created, or conventions adopted. Include critical snippets verbatim if they'd be hard to reconstruct.
+- **Dead ends** — Things that were tried and did NOT work. For each: what was attempted, why it failed, and why the next session should NOT try it again. These prevent wasted effort.
 
-### Subagent Prompt Template
+### 2. Why
 
-**For NEW handoff:**
+Extract every piece of reasoning and decision-making:
+
+- **Decisions made** — Every decision, no matter how small. For each:
+  - What was decided
+  - The full rationale (why this approach, not another)
+  - What alternatives were considered and explicitly rejected
+  - Who drove the decision (user direction vs agent recommendation)
+  - Any conditions or caveats attached
+- **Constraints discovered** — Technical limitations, API quirks, permission issues, system behaviours, performance boundaries — anything that constrains future work.
+- **User preferences expressed** — Any time the user indicated how they want things done: workflow preferences, naming conventions, communication style, tool choices, priorities. These are gold for the next session.
+- **Pivots and direction changes** — Moments where the plan changed mid-session. What was the original plan? What triggered the change? What's the new direction?
+- **Principles established** — Rules, conventions, or agreements made during the session that should carry forward. "We decided to always X" or "Never do Y because Z."
+
+### 3. What Comes Next
+
+Extract everything needed for seamless continuation:
+
+- **Exact next steps** — Numbered, specific, actionable, in priority order. Not "finish the feature" but "implement the validation logic in `/path/to/file.ts` starting at the `handleSubmit` function, following the pattern established in `handleCreate`." Each step should be doable without further clarification.
+- **Breadcrumbs** — Documents created or significantly modified this session that the next session MUST read before doing anything. For each:
+  - Full absolute file path
+  - What the document is and why it matters
+  - What to look for when reading it
+  - Reading order (which file first, second, etc.)
+- **Unfinished work** — Anything partially done. Exactly where it was left off. What remains. How far along it is (20%? 80%?).
+- **Gotchas and warnings** — Edge cases discovered, things that look right but aren't, traps the next session might fall into, assumptions that seem obvious but aren't.
+- **Dependencies** — What depends on what. What must happen before other things can start. Cross-references to other files, systems, people, or external services.
+- **Context that exists nowhere else** — Important information that isn't captured in any file. Verbal agreements from the user, implicit understandings, "oh by the way" moments, context from the user's tone or intent that wouldn't be obvious from reading files alone.
+
+## Step 5: Dispatch Subagent to Compose Document
+
+**Pass all extracted raw material to a foreground subagent** (Task tool, NOT `run_in_background`) to compose and write the final handoff document. This keeps the main context lean while producing a thorough document.
+
+### Subagent Prompt
+
 ```
-You are creating a handoff document for session continuity.
+You are composing a handoff document from pre-extracted session data.
 
 CONTEXT:
 - Session ID: {session_id}
 - Unit: {unit_path}
-- Reason for handoff: {compact/resuming later}
+- Reason: {continuing/coming_back_later}
+
+RAW MATERIAL (extracted by main context from full conversation):
+
+## What Happened
+{paste extracted section 1}
+
+## Why
+{paste extracted section 2}
+
+## What Comes Next
+{paste extracted section 3}
+
+{IF CUMULATIVE: "EXISTING HANDOFF CONTENT:\n{existing content}\n\nThis is update #{update_count + 1}. Preserve ALL existing content. Append new material as '## Update {N}' at the end. Do not duplicate or condense previous content."}
 
 YOUR TASK:
-Analyse this entire conversation and create a comprehensive handoff document.
-```
+Compose a handoff document using the template below. The raw material above contains everything — your job is to organise it clearly, not to invent or summarise. Every detail from the raw material must appear in the final document. **be exhaustive - include as much as possible**
 
-**For UPDATING existing handoff (cumulative):**
-```
-You are UPDATING an existing handoff document for session continuity.
+QUALITY GATE: Before finishing, verify — "If a fresh Claude instance read ONLY this document, would it know EXACTLY what to do?" If no, add more detail.
 
-This is a CUMULATIVE handoff — the session has compacted multiple times.
-Each update builds on previous context. The goal is ONE comprehensive document.
+DOCUMENT TEMPLATE: **ensure that every field of this template is followed and filled out**
+Filename format: {description}-{session_id}-{date}.md
+Write to: {unit}/_working/sessions/{filename}.md
 
-CONTEXT:
-- Session ID: {session_id}
-- Unit: {unit_path}
-- Reason for handoff: {compact/resuming later}
-- Update number: {update_count + 1}
-- Retrieved from: {archive | manifest}
-
-EXISTING HANDOFF CONTENT:
-{paste existing handoff content here}
-
-YOUR TASK:
-Update the existing handoff with progress made since the last save.
-
-DO:
-- Preserve ALL original context and decisions (don't summarize away detail)
-- Update "Current State" section with new completions
-- Add any new decisions to the Decisions section
-- Add any new files to "Files Modified"
-- Update "Next Steps" to reflect current priorities
-- Add new "## Update {N}: {timestamp}" section at the end
-
-DON'T:
-- Duplicate information already in the handoff
-- Remove or condense previous updates
-- Lose any detail from earlier in the session
-
-The next reader should see the FULL session history in one document.
-```
-
-**Common context for both:
-
-THE NEXT CLAUDE INSTANCE:
-- Has ZERO memory of this conversation
-- Has ZERO context about what we discussed
-- Will read ONLY this handoff document to understand everything
-- Must be able to continue exactly where we left off
-
-EXTRACT AND DOCUMENT:
-
-1. **CONTEXT & GOAL**
-   - What is the overall objective?
-   - What specific task/feature/fix are we working on?
-   - Why does this matter?
-
-2. **CURRENT STATE**
-   - What has been completed?
-   - What is partially done?
-   - What hasn't been started?
-   - Include specific file paths, line numbers, function names
-
-3. **KEY DECISIONS MADE**
-   - Every decision with full rationale
-   - Why we chose X over Y
-   - Constraints we discovered
-   - Things we tried that didn't work (and why)
-
-4. **FILES MODIFIED THIS SESSION**
-   - List every file touched
-   - Summarise what changed in each
-   - Include relevant code snippets if critical
-
-5. **CRITICAL DETAILS**
-   - Anything that would be lost without this document
-   - Edge cases discovered
-   - Gotchas and warnings
-   - Dependencies between pieces
-
-6. **EXACT NEXT STEPS**
-   - Numbered, specific, actionable
-   - "Continue implementing X in file Y starting at line Z"
-   - Not vague ("finish the feature")
-
-7. **FILES TO READ ON RESUME**
-   - Which files the next session should read first
-   - In what order
-   - What to look for in each
-
-BE EXHAUSTIVE. Length is a feature, not a bug.
-If in doubt, include it. Lost context is worse than verbose documentation.
-
-OUTPUT FORMAT:
-Return the complete handoff document content in markdown format.
-```
-
-### Subagent Dispatch
-
-```
-▸ dispatching deep-dive subagent...
-  └─ Analysing full conversation
-  └─ Extracting decisions, state, next steps
-  └─ This may take a moment...
-```
-
-## Step 4: Write Handoff Document
-
-**Filename format:** `{description}-{session_id}-{timestamp}.md`
-
-Example: `alive-plugin-feedback-abc12345-2026-02-02-1530.md`
-
-**Location:** `{unit}/_working/sessions/`
-
-### Document Structure
-
-```markdown
 ---
-created: 2026-02-02T15:30:00
-updated: 2026-02-02T16:45:00    # Added on updates
-session_id: abc12345
+created: {date}
+session_id: {session_id}
+unit: {unit_path}
 status: pending
-unit: 04_Ventures/acme
-reason: context_compact
-update_count: 0                  # Incremented on each update
+reason: {continuing/coming_back_later}
+update_count: 0
 ---
+
+> **ARCHIVE IMMEDIATELY AFTER READING.**
+> Move this file to `01_Archive/{unit-path}/sessions/` and remove from
+> `manifest.handoffs[]`. Do not proceed with any work until archived.
+
+> **BREADCRUMBS — Read these before proceeding:**
+> 1. `path/to/key-file.md` — What it is and why to read it
+> 2. `path/to/created-doc.md` — What to look for
+>
+> *(Key documents from this session. Read in order before starting work.)*
 
 # Session Handoff: {Brief Description}
 
-**Session ID:** abc12345
-**Created:** 2026-02-02 15:30
-**Updated:** 2026-02-02 16:45 (if updated)
-**Unit:** 04_Ventures/acme
-**Reason:** Context compaction
+## What You Need to Know
+
+[1-2 paragraph summary — the essential context for someone with zero memory]
 
 ---
 
-## Context & Goal
+## What Happened
 
-[Overall objective and specific task]
+[Session narrative, problems solved, files modified with full paths and what changed, code patterns, dead ends that should not be repeated]
 
-## Current State
+## Why
 
-### Completed
-- [x] Thing 1
-- [x] Thing 2
+[Every decision with rationale and rejected alternatives, constraints discovered, user preferences expressed, pivots and what triggered them, principles established]
 
-### In Progress
-- [~] Thing 3 (details on state)
+## What Comes Next
 
-### Not Started
-- [ ] Thing 4
-
-## Key Decisions Made
-
-| Decision | Rationale | Alternatives Rejected |
-|----------|-----------|----------------------|
-| Chose X | Because Y | Considered A, B |
-
-## Files Modified This Session
-
-| File | Changes |
-|------|---------|
-| `path/to/file.md` | Added section X, updated Y |
-
-### Critical Code Snippets
-
-```language
-// Include any code critical to understanding state
-```
-
-## Critical Details
-
-- Important gotcha 1
-- Edge case discovered
-- Warning about X
-
-## Next Steps (Exact)
-
-1. [ ] First thing to do — specific file, specific location
-2. [ ] Second thing — details
-3. [ ] Third thing — details
-
-## Files to Read on Resume
-
-Read these files in order when resuming:
-
-1. `path/to/file1.md` — Look for X
-2. `path/to/file2.md` — Contains Y
+[Exact numbered next steps, unfinished work and its state, gotchas and warnings, dependencies, context that exists nowhere else]
 
 ---
 
-## Updates (if any)
+## Updates (if cumulative)
 
-### Update 1: 2026-02-02 16:45
+### Update {N}: {date}
 
-**Progress since last save:**
-- Completed X
-- Started Y
+**Progress since last compaction:**
+- What was completed
+- What changed
 
 **New decisions:**
-- Chose Z because...
+- Decision and rationale
 
 **Updated next steps:**
-1. [ ] New first priority
-2. [ ] Then this
+1. New priorities reflecting current state
 
----
+MANIFEST UPDATE (BATCH — one Read, one Write):
+After writing the document, update {unit}/_brain/manifest.json in a SINGLE operation:
 
-## Auto-Archive Note
+1. Read the ENTIRE manifest.json with the Read tool
+2. Make ALL of the following changes in the JSON before writing:
+   - Set root "updated" to today's date (YYYY-MM-DD)
+   - Append {session_id} to root "session_ids" array (if not already present — append, never overwrite)
+   - Add or update handoff entry in the "handoffs" array (see below)
+3. Write the COMPLETE modified JSON back with one Write call
 
-**This handoff will be automatically archived when resumed.**
+Do NOT use multiple Edit calls. One Read → modify everything → one Write.
 
-When you run `/alive:work` and select "Yes" to resume:
-1. The content is loaded into the session
-2. This file is immediately moved to `01_Archive/`
-3. No manual cleanup needed
-
-You don't need to remember to archive — it happens automatically.
-```
-
-### Write the File
-
-```
-▸ writing handoff document...
-  └─ alive-plugin-feedback-abc12345-2026-02-02-1530.md
-  └─ Location: _working/sessions/
-
-✓ Handoff document created
-```
-
-## Step 5: Update Manifest
-
-Add handoff to unit's manifest.json so `/alive:work` can find it:
-
-```json
+Handoff entry for NEW handoffs:
 {
-  "handoffs": [
-    {
-      "path": "_working/sessions/alive-plugin-feedback-abc12345-2026-02-02-1530.md",
-      "created": "2026-02-02T15:30:00",
-      "session_id": "abc12345",
-      "status": "pending",
-      "description": "ALIVE plugin feedback session"
-    }
-  ]
+  "path": "_working/sessions/{filename}.md",
+  "created": "YYYY-MM-DD",
+  "session_id": "{session_id}",
+  "status": "pending",
+  "description": "One-line summary of what was in progress"
 }
+
+For CUMULATIVE handoffs (updating existing), find the entry matching this session_id and update:
+- "description" — refresh to reflect current state
+- Do NOT change "created" or "session_id"
 ```
 
 ```
-▸ updating manifest...
-  └─ Added handoff to manifest.handoffs[]
-
-✓ Manifest updated
+▸ dispatching subagent to compose handoff...
+  └─ Writing to _working/sessions/
+  └─ This may take a moment...
 ```
 
-## Step 6: Return to Save Skill
+## Step 6: Return to Save
 
-Handoff is complete. Return control to save skill to continue with:
-- Changelog update
-- Status update
-- Other save operations
+The subagent handles the document write, manifest update, and session_ids — all instructions are in its prompt. Once it completes, **return control to the save skill immediately.**
 
 ```
 ✓ Handoff complete — returning to save flow
 ```
-
-## Integration with Other Skills
-
-### /alive:work Integration
-
-When `work` skill loads a unit, it checks manifest for pending handoffs:
-
-```
-▸ checking for pending handoffs...
-  └─ Found: alive-plugin-feedback-abc12345-2026-02-02-1530.md
-
-[!] Unfinished session from 2026-02-02
-
-Resume this session?
-[1] Yes, load handoff
-[2] No, start fresh
-```
-
-If yes → Read handoff document, present context to user.
-
-### /alive:save Integration
-
-Save skill checks reason and calls handoff:
-
-```python
-if reason in ["compact", "context full", "coming back", "resume later"]:
-    invoke("/alive:handoff")
-    # Then continue with normal save flow
-```
-
-## Handoff Lifecycle
-
-```
-Created (pending) → Resumed (ARCHIVED IMMEDIATELY) → Work continues
-```
-
-**Archiving happens ON RESUME, not later.** When `/alive:work` loads a handoff:
-
-1. Read handoff content into memory
-2. **Archive immediately** (move to `01_Archive/`)
-3. Remove from `manifest.handoffs[]`
-4. Present context to user
-
-```
-▸ loading handoff...
-  └─ Reading content
-
-▸ archiving handoff (already read)...
-  └─ Moving to 01_Archive/{unit-path}/sessions/
-  └─ Removing from manifest.handoffs[]
-
-✓ Handoff archived — context loaded
-```
-
-**Why immediate archive?**
-- The handoff's job is done once read
-- "Archive later" gets forgotten 100% of the time
-- Archive on read = 100% adherence
-
-## Quality Standards
-
-### The Zero-Context Test
-
-Before completing handoff, ask:
-
-> "If I started a fresh session and read ONLY this document, would I know EXACTLY what to do?"
-
-If no → Add more detail.
-
-### Err on Verbosity
-
-- Too much context: Minor inconvenience (skim it)
-- Too little context: Lost work, repeated effort, frustration
-
-**Always choose verbosity.**
-
-### Include Code When Critical
-
-If specific code patterns, implementations, or snippets are essential:
-- Include them inline in the handoff
-- Don't assume the next session will read the files correctly
-
-## Common Mistakes
-
-| Mistake | Fix |
-|---------|-----|
-| Vague next steps | Be specific: file, location, action |
-| Missing rationale | Include WHY for every decision |
-| Assuming context | Document as if reader knows nothing |
-| Skipping files list | Always list files to read on resume |
-| Forgetting to update manifest | Handoff is useless if `work` can't find it |
-
-## Related Skills
-
-- `/alive:save` — Calls this skill when appropriate
-- `/alive:work` — Checks for pending handoffs on load
-

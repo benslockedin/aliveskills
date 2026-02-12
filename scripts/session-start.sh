@@ -1,5 +1,5 @@
 #!/bin/bash
-# ALIVE v2 - Session Start Hook
+# ALIVE v3 - Session Start Hook
 # Logs session start, enumerates units, provides context
 
 set -euo pipefail

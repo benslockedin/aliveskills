@@ -35,7 +35,7 @@ Compare your `plugin_version` (from frontmatter above) against the user's system
 1. Read `{alive-root}/.claude/alive.local.yaml` → get `system_version`
 2. If `system_version` is missing or different from your `plugin_version`:
    ```
-   [!] System update available (plugin: 3.0.1, system: X.X.X)
+   [!] System update available (plugin: 3.1.0, system: X.X.X)
        └─ Run /alive:upgrade to sync before importing content
    ```
 3. Continue with skill — this is non-blocking, just a notice

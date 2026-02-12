@@ -13,7 +13,7 @@ End session. Preserve context. Complete the loop by updating ALL state files.
 This skill uses **Tier 2: Core Workflow** formatting.
 
 **Header:** Small elephant + FIGlet `small` SAVE + version + unit path.
-**Border:** Double-line wrap (entire response).
+**Border:** Rounded shell (single rounded box, three zones).
 **Footer:** Community footer.
 
 See `rules/ui-standards.md` for the Tier 2/3 header layout, pre-rendered skill names, and border characters.
@@ -33,7 +33,7 @@ Compare your `plugin_version` (from frontmatter above) against the user's system
 1. Read `{alive-root}/.claude/alive.local.yaml` → get `system_version`
 2. If `system_version` is missing or different from your `plugin_version`:
    ```
-   [!] System update available (plugin: 2.1.0, system: X.X.X)
+   [!] System update available (plugin: 3.1.0, system: X.X.X)
        └─ Run /alive:upgrade to sync
    ```
 3. Continue with skill — this is non-blocking, just a notice
@@ -50,75 +50,90 @@ Save touches ALL state files, not just changelog:
 3. Update what's done/next (tasks)
 4. Capture domain knowledge (insights) — not Claude operational patterns (auto-memory handles those)
 5. Handle working files (promote or keep)
-6. Document new files with descriptions
-7. Update structure map (manifest)
-8. Log to session-index
-9. VERIFY with checklist before confirming
+6. Update structure map (manifest) — every file touched this session must be recorded
+7. Log to session-index
+8. VERIFY with checklist before confirming
 
 ---
 
-## The 3-2-1 Flow
+## BRB Mode (Quick Save)
 
-Three questions first. Then complete the loop.
-
-```
-WHY ──► WHAT'S NEXT ──► HOW ──► [Complete the Loop]
-```
-
-Use `AskUserQuestion` for each step — clickable choices, not typed responses.
-
-### Step 1: WHY
+If user says "brb", "stepping away", or clearly wants a quick checkpoint — **skip the questions.** Auto-select: What's happening = Checkpoint, Quality = Routine. Jump straight to saving changelog + tasks + status + manifest + session-index.
 
 ```
-Why are you saving?
+▸ quick checkpoint
 
-[1] Ending session — done for now
-[2] Pre-compact — about to hit context limit
-[3] Checkpoint — mid-session save, continuing after
+✓ Saved to [unit]/_brain/changelog.md
+  └─ "Work in progress: [summary]"
+
+Resume with /alive:work
 ```
 
-### Step 2: WHAT'S NEXT
+---
+
+## The Save Flow
+
+Two questions asked together, with a conditional follow-up. Use `AskUserQuestion` to batch them.
 
 ```
-What's next for this thread?
-
-[1] Ongoing — I'll be back
-[2] Paused — parking it, low priority
-[3] Closed — work is done
+Q1 + Q2 together ──► [If "Coming back later" → Q3] ──► [Handoff if needed] ──► [Complete the Loop]
 ```
 
-### Handoff Check (MANDATORY — After Steps 1-2)
+### Ask Q1 + Q2 Together
 
-**If user selected EITHER of these:**
-- WHY = "Pre-compact" (context limit), OR
-- WHAT'S NEXT = "Ongoing" (coming back)
+Use `AskUserQuestion` with both questions in a single call:
 
-**You MUST invoke `/alive:handoff` using the Skill tool. Do NOT attempt to create a handoff document yourself — the skill has specific logic you cannot replicate inline.**
+**Question 1 — What's happening?**
+- **Checkpoint** — Mid-session save, still going
+- **Done** — Work is complete, closing this thread
+- **Continuing** — Hit the token limit, need to pick up in a new session
+- **Coming back later** — Switching context, will return to this
 
-**Action:** Call the Skill tool with `skill: "alive:handoff"` NOW, then proceed to Step 3.
-
-After the handoff skill completes, show:
-```
-✓ Handoff created
-  └─ Next session will be prompted to resume
-
-Continuing with save...
-```
-
-**If NEITHER condition is met** (ending + closed/paused), skip handoff and proceed to Step 3.
-
-### Step 3: HOW (Quality)
-
-```
-How was this session?
-
-[1] Routine — just working
-[2] Productive — got stuff done
-[3] Important — worth remembering
-[4] Breakthrough — this changes things
-```
+**Question 2 — How was the session?**
+- **Routine** — just working
+- **Productive** — got stuff done
+- **Important** — worth remembering
+- **Breakthrough** — this changes things
 
 Quality drives escalating behavior (see Escalating Actions).
+
+### Conditional Q3: Handoff for "Coming Back Later"
+
+**Only ask this if Q1 = "Coming back later".** Use `AskUserQuestion` with one question:
+
+**Do you want a handoff?**
+- **Yes, create a handoff** — "The work is complex or in-flight. I'll need full context to pick up where I left off without re-reading everything."
+- **No, just save** — "The normal save is enough. I can get back up to speed from the changelog and status next time."
+
+### What Happens Based on Answers
+
+| Q1 | Handoff? | One-liner shown | Thread status |
+|----|----------|-----------------|---------------|
+| **Checkpoint** | No | "Quick save — you're still in the flow." | ongoing |
+| **Done** | No | "Wrapping up this thread." | closed |
+| **Continuing** | Always | "Creating a handoff so you can drop straight back in without losing anything." | ongoing |
+| **Coming back later + Yes** | Yes | "Creating a handoff — it'll surface next time you work on this." | ongoing |
+| **Coming back later + No** | No | "Saved. This will surface next time you run /alive:work or /alive:daily." | paused |
+
+### Handoff Execution
+
+**If handoff is triggered (Continuing or Coming back later + Yes):**
+
+Invoke `/alive:handoff` using the Skill tool. The handoff skill runs in the main context (it has full conversation access) and writes the document directly — no subagent needed.
+
+**Action:** Call the Skill tool with `skill: "alive:handoff"` NOW, then proceed to completing the loop.
+
+**If "Continuing" — after handoff completes, output the resume prompt:**
+
+```
+✓ Handoff created — ready for new session
+
+Start your new session with:
+────────────────────────────────────
+/alive:work [unit-name]
+────────────────────────────────────
+The handoff will load automatically.
+```
 
 ---
 
@@ -142,7 +157,7 @@ Quality drives escalating behavior (see Escalating Actions).
 **Examples:**
 - Edited `04_Ventures/agency/clients/acme/proposal.md` → Save to `acme/_brain/`
 - Edited `04_Ventures/agency/templates/invoice.md` → Save to `agency/_brain/`
-- Edited files in both → Save to BOTH (see Multi-Domain Sessions)
+- Edited files in both → Save to BOTH (see Multi-Unit Sessions)
 
 ## Cascade Logic
 
@@ -166,7 +181,7 @@ Does parent (agency) need to know?
 | Quality | Actions |
 |---------|---------|
 | **Routine** | Changelog, tasks, status, manifest, session-index |
-| **Productive** | + Check `_working/` files, + Check session-modified files |
+| **Productive** | + Check `_working/` files, + Ensure all session-modified files are in manifest |
 | **Important** | + Extract insights → `insights.md` |
 | **Breakthrough** | + Create capture in `_brain/memories/`, can update `CLAUDE.md` |
 
@@ -212,32 +227,24 @@ Prepend to `_brain/changelog.md` (most recent first):
 
 ## Status Update (Surgical — Not Full Overwrite)
 
-**Re-read `_brain/status.md` before writing.** Get the current version, not the one loaded at session start. Another session may have updated it — respect their changes.
-
-**Use the Edit tool, not Write.** Only modify sections that actually changed this session.
+**Re-read `_brain/status.md` before writing.** Get the current version, not the one loaded at session start. Use the Edit tool, not Write — only modify sections that actually changed.
 
 ### Section Rules
 
 | Section | Rule |
 |---------|------|
 | **Goal** | Protected — only update if user explicitly discussed changing it |
-| **Phase** | Protected — only update if user explicitly discussed changing it |
+| **Phase** | Update if user explicitly discussed changing it OR if work this session clearly moved the unit to a new phase (e.g. shipped a launch = "Building" → "Launching") |
 | **Updated** | Always set to today's date (if any other section was edited) |
 | **Key People** | Add if new person was introduced this session. Include pointer to `02_Life/people/` if the person file exists. |
-| **State of Play** | Re-read current narrative. If session materially changed the picture, rewrite affected sentences. If routine session, leave it alone. This is an EDIT, not an APPEND — the section should always read as a coherent narrative. |
+| **State of Play** | Re-read current narrative. If session materially changed the picture, rewrite affected sentences. If routine, leave it alone. This is an EDIT, not an APPEND. |
 | **Priorities** | Add/remove/reword if strategic focus shifted. Otherwise untouched. |
 | **Blockers** | Merge — add new blockers, remove resolved ones, leave others untouched |
 | **Next Milestone** | Protected — only update if user explicitly discussed changing it |
 
-### Condensing Principle
+### Guiding Principle
 
-When editing status.md, every addition is also an opportunity to condense. If something is still relevant, it stays. But new information should replace outdated information, not stack on top of it. If the file is growing session over session, you're appending when you should be refining.
-
-### Key Principle
-
-Don't gate status updates on session quality (routine/productive/important/breakthrough). Gate them on whether the state of play actually changed. A routine session that surfaces a game-changing blocker should update status. A breakthrough implementation session that doesn't change the strategic picture shouldn't.
-
-Before updating, ask: "Does the State of Play still accurately describe this unit?" If yes — update the date and move on. If no — edit the specific sentences or sections that no longer reflect reality. Never regenerate the whole file. Status.md is a living document that gets refined, not a log that gets appended to.
+Don't gate status updates on session quality — gate them on whether the picture actually changed. A routine session that surfaces a blocker should update status; a breakthrough that doesn't change the strategic picture shouldn't. Ask: "Does State of Play still accurately describe this unit?" If yes, update the date and move on. If no, edit the specific sentences that no longer reflect reality. Every addition is an opportunity to condense — new information replaces outdated information, not stacks on top of it.
 
 ## Tasks Update
 
@@ -279,151 +286,23 @@ Ask: "Any domain knowledge worth capturing from this session?"
 
 ## Working File Handling (Productive+ Only)
 
-Check `_working/` for files that need decisions. Use a systematic checklist approach.
+Check `_working/` for files that need decisions:
 
-**Versioning:**
-- `v0.x` = Work in progress → lives in `_working/`
-- `v1-draft` = Complete draft → lives in destination area
-- `v1` = Final, approved → lives in destination area
+1. **List all files** in `_working/` with last-modified dates
+2. **For each file**, ask: **[K]eep** (still WIP) / **[P]romote** (move to permanent location) / **[A]rchive** (move to `01_Archive/`)
+3. **For promotions**, ask: destination folder, new name (optional), manifest description
+4. **Execute all moves** after collecting all decisions
+5. **Update manifest** — remove promoted files from `working_files`, add to appropriate area's `files[]`
 
-### Step 1: List All Working Files
+**NEVER DELETE. ALWAYS ARCHIVE.** Files move to `01_Archive/`, never removed.
 
-```
-▸ checking _working/ folder...
-
-WORKING FILES REVIEW
-────────────────────────────────────────────────────────────────────────
-
-[1] _working/v2-feedback-session-2026-02-02.md
-    └─ Last modified: this session
-    └─ Status: ?
-
-[2] _working/proposal-v0.3.md
-    └─ Last modified: 2 days ago
-    └─ Status: ?
-
-[3] _working/old-notes.md
-    └─ Last modified: 3 weeks ago
-    └─ Status: ?
-
-────────────────────────────────────────────────────────────────────────
-For each file, choose: [K]eep  [P]romote  [A]rchive
-```
-
-**NEVER DELETE. ALWAYS ARCHIVE.** Files are moved to `01_Archive/`, never removed.
-
-### Step 2: Process Each File (Chinese Menu Style)
-
-Go through each file systematically:
-
-```
-[1] _working/v2-feedback-session-2026-02-02.md
-
-What should happen to this file?
-[K] Keep in _working/ — still in progress
-[P] Promote — move to permanent location
-[A] Archive — no longer needed (move to 01_Archive/)
-```
-
-**Collect all decisions first, then execute.**
-
-### Step 3: Handle Promotions
-
-For each file marked [P]romote:
-
-```
-PROMOTING: v2-feedback-session-2026-02-02.md
-
-1. New name (or keep current):
-   > v2-feedback-session-2026-02-02.md
-
-2. Destination:
-   [1] docs/           → documentation
-   [2] decisions/      → decision records
-   [3] marketing/      → marketing assets
-   [4] Keep in root    → key file
-   [5] Other (specify)
-
-3. Description for manifest:
-   > "Feedback session tracking for v2 plugin development"
-```
-
-### Step 4: Execute All Moves
-
-```
-▸ processing working files...
-
-KEEPING:
-  └─ _working/proposal-v0.3.md (still WIP)
-
-PROMOTING:
-  └─ _working/v2-feedback-session.md → docs/v2-feedback-session.md
-     └─ Added to manifest: docs/files[]
-
-ARCHIVING:
-  └─ _working/old-notes.md → 01_Archive/_working/old-notes.md
-
-✓ Working folder cleaned
-```
-
-### Step 5: Update Manifest
-
-For each promoted file:
-1. Remove from `working_files`
-2. Add to appropriate area's `files[]` array with `description`, `date_created`, `date_modified`, and `session_ids`
-3. Append current session ID to the file entry's `session_ids` array for traceability
-
-**Key principle:** `_working/` is temporary. Finished files MUST move.
+**Versioning:** `v0.x` = WIP in `_working/`, `v1-draft` = complete draft in destination, `v1` = final in destination.
 
 ---
 
-## Session-Modified Files (Productive+ Only)
+## Manifest Update (MANDATORY — Every Save)
 
-**After handling `_working/` files, check for OTHER files modified this session.**
-
-Files in `_brain/` are automatically tracked. But you may have modified:
-- Key files (feedback docs, tracking files)
-- Files in areas (docs/, decisions/, etc.)
-- New files created outside `_working/`
-
-```
-▸ checking for session-modified files...
-
-Files modified this session (outside _brain/):
-  └─ _working/v2-feedback-session-2026-02-02.md (already in working_files)
-  └─ docs/new-guide.md (NOT in manifest)
-  └─ testing-feedback-all.md (in key_files, may need update)
-```
-
-**For each file not in manifest:**
-```
-Found file not in manifest:
-  └─ docs/new-guide.md
-
-Add to manifest?
-[1] Yes — add to appropriate area
-[2] No — temporary file, don't track
-```
-
-**For key_files modified this session:**
-```
-Key file updated this session:
-  └─ testing-feedback-all.md
-
-Update description in manifest?
-[1] Yes — update description
-[2] No — description still accurate
-```
-
-**Implementation hint:** Compare files touched in conversation against manifest entries. Flag any gaps.
-
-**Key principle:** If you created or significantly modified a file, it should be in the manifest.
-
----
-
-## The Manifest Rule
-
-**Every file needs a manifest entry with description. No exceptions.**
+**Every file touched this session must be recorded in the manifest. No exceptions.**
 
 In `_brain/manifest.json`:
 
@@ -446,13 +325,6 @@ In `_brain/manifest.json`:
           "date_created": "2026-01-20",
           "date_modified": "2026-01-30",
           "session_ids": ["abc123"]
-        },
-        {
-          "path": "architecture.md",
-          "description": "System architecture",
-          "date_created": "2026-01-22",
-          "date_modified": "2026-01-28",
-          "session_ids": ["def456"]
         }
       ]
     }
@@ -478,12 +350,14 @@ In `_brain/manifest.json`:
 }
 ```
 
-**For each new file this session:**
-1. Identify which area it belongs to
-2. Add to that area's `files` array with `description`, `date_created`, `date_modified`, and `session_ids`
-3. If promoted from `_working/`, remove from `working_files`
-
-**References:** If any files were added to `_references/` during the session, update the manifest's `references` array with entries following the three-tier pattern: index in manifest (path, type, description, date_created, date_modified, session_ids), YAML front matter in .md files (type, date, description, source, tags), and raw originals in `raw/` subfolders. See `rules/conventions.md` for the full `_references/` structure.
+**On every save:**
+1. Append current session ID to root `session_ids`
+2. Update `updated` date
+3. For each file created or modified this session:
+   - If already in manifest → update `date_modified` and append session ID
+   - If NOT in manifest → add with `description`, `date_created`, `date_modified`, `session_ids`
+   - If promoted from `_working/` → remove from `working_files`, add to appropriate area
+4. For `_references/` files added this session → update `references` array following the three-tier pattern (see `rules/conventions.md`)
 
 ---
 
@@ -551,70 +425,59 @@ Use `echo '...' >> file` (double `>>`) to append, NOT overwrite. Each entry is o
 
 ---
 
-## VERIFY Before Writing (Mandatory)
+## Batch Execution (MANDATORY)
 
-**Run through checklist before writing any files.**
+**After the 3-2-1 answers and any handoff, generate ALL proposed changes at once. Do NOT write files one at a time with processing between each.**
 
-```
-▸ verifying save completeness...
+### Step 1: Re-read current state
 
-Changelog:
-- [ ] Includes session ID
-- [ ] Lists specific changes (not vague)
-- [ ] Decisions include rationale
-- [ ] Next steps are actionable
-- [ ] Passes zero-context test
+Re-read `_brain/status.md`, `_brain/tasks.md`, and `_brain/manifest.json` to get current versions (another session may have updated them).
 
-Status:
-- [ ] Current Focus reflects NOW
-- [ ] Phase is accurate
-- [ ] Blockers updated
+### Step 2: Generate all changes
 
-Tasks:
-- [ ] Completed tasks marked [x]
-- [ ] New tasks added
+Prepare everything in one pass:
+- Changelog entry (draft the full entry)
+- Status edits (which sections need surgical updates)
+- Task updates (which tasks changed state, any new ones)
+- Manifest updates (session ID, file entries, working file changes)
+- Session-index entry
+- Working file decisions (Productive+ only — list files, propose K/P/A)
+- Insights extraction (Important+ only)
 
-Manifest:
-- [ ] session_ids updated (current session appended)
-- [ ] New files added with descriptions
-- [ ] working_files accurate
-- [ ] Saving to CLOSEST unit
+### Step 3: Present summary for approval
 
-Session Files (Productive+):
-- [ ] Checked _working/ for files to promote
-- [ ] Checked for session-modified files outside _brain/
-- [ ] All modified files in manifest or explicitly skipped
-
-Fix any failures before proceeding.
-```
-
-## Post-Write Verification (Mandatory)
-
-**After writing, verify each file was updated.**
+Show the user a single summary of ALL proposed changes:
 
 ```
-▸ verifying writes...
+▸ proposed save changes:
 
-- [ ] changelog.md — new entry exists
-- [ ] status.md — fields updated
-- [ ] tasks.md — changes reflected
-- [ ] manifest.json — session_ids includes current session
+  changelog  · 4 changes, 2 decisions logged
+  status     · State of Play updated (1 sentence edited)
+  tasks      · 3 marked done, 1 new added
+  manifest   · session ID appended, 2 files updated
+  session-idx · entry appended
 
-If ANY file wasn't updated, fix now.
+  Approve all? [y] yes  [e] edit something first
 ```
+
+### Step 4: Execute all writes
+
+On approval, write all files using parallel tool calls — changelog, tasks, status, manifest, and session-index have no dependencies on each other. Send them all in one response.
+
+**If user wants to edit:** Let them specify which item to change, adjust, then re-present.
 
 ---
 
-## Zero-Context Standard
+## Pre-Write Checklist (Internal)
 
-Before saving, verify:
+**Verify internally before presenting the summary. Do not show this to the user — it's your quality check.**
 
-> "If I came to this with no memory, would this entry tell me what happened and why?"
-
-**Check:**
-- Decisions include rationale
-- Changes are specific
-- Next steps are actionable
+- Changelog includes session ID and specific changes
+- Status edits are surgical (Edit tool, not Write)
+- Tasks reflect actual state changes
+- Every file touched this session is in the manifest
+- Saving to CLOSEST unit
+- Working files checked (Productive+)
 
 ---
 
@@ -634,23 +497,6 @@ Write separate entries. Cross-reference if related.
 
 ---
 
-## BRB Mode
-
-For quick save ("brb", "stepping away"):
-
-Auto-select: Why = Checkpoint, Status = Ongoing, Quality = Routine
-
-```
-▸ quick checkpoint
-
-✓ Saved to [unit]/_brain/changelog.md
-  └─ "Work in progress: [summary]"
-
-Resume with /alive:work
-```
-
----
-
 ## Edge Cases
 
 **No active unit:**
@@ -661,14 +507,3 @@ Offer to log checkpoint anyway.
 
 **Infrastructure work:**
 Write to `.claude/state/changelog.md` for system-level changes.
-
----
-
-## Related Skills
-
-- `/alive:work` — Load venture, experiment, or life area to work
-- `/alive:daily` — Morning dashboard
-- `/alive:revive` — Resume past session
-- `/alive:capture` — Capture context mid-session
-- `/alive:handoff` — Session continuity (called automatically when pre-compact or ongoing)
-

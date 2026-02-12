@@ -62,7 +62,7 @@ When they match → system is current.
 ```
 ▸ checking versions...
 
-Plugin version: 3.0.1 (from skill frontmatter)
+Plugin version: 3.1.0 (from skill frontmatter)
 System version: [read from alive.local.yaml]
 ```
 
@@ -76,52 +76,60 @@ System version: [read from alive.local.yaml]
 
 ```
 ▸ versions detected
-  └─ Plugin: 3.0.1 | System: unknown
-  └─ Migrations needed: pre-2.1.1 → 3.0.1
+  └─ Plugin: 3.1.0 | System: unknown
+  └─ Migrations needed: pre-2.1.1 → 3.1.0
 ```
 
 ---
 
-## Step 1.5: Check Migration Registry (Fast Path)
+## Step 1.5: Check Migration Registry (Standard vs Structural)
 
 After detecting a version mismatch, check the Migration Registry (at the bottom of this skill) for entries covering the version gap.
 
-**If NO structural migration entry exists for the version gap** (e.g. the gap is a skill-only update), take the fast path:
-
-**Fast path example (skill-only update):**
-```
-▸ checking versions...
-  └─ Plugin: 2.1.2 | System: 2.1.1
-
-▸ checking migration registry...
-  └─ No structural migrations for 2.1.1 → 2.1.2
-
-✓ System version synced to 2.1.2. No migration needed.
-```
-
-**Structural migration example:**
-```
-▸ checking versions...
-  └─ Plugin: 3.0.1 | System: 2.1.1
-
-▸ checking migration registry...
-  └─ Structural migrations needed for 2.1.1 → 3.0.1
-  └─ See migration plan below
-```
+**Every release updates version references in rules and CLAUDE.md.** So every upgrade needs at minimum a standard sync (rules + CLAUDE.md + config). Structural releases additionally need user file migrations (manifests, folders, etc.).
 
 **Implementation:**
 1. Read the Migration Registry section of this skill
 2. Look for an entry covering the user's current `system_version` → `plugin_version` gap
-3. If an entry exists with `type: skill-only` → fast path: just update `system_version` in alive.local.yaml and exit
-4. If an entry exists with structural changes → proceed to Step 2 (full migration)
-5. If no entry exists at all and `system_version` is `"unknown"` → proceed to Step 2 (full migration for fresh/unknown systems)
+3. Check which categories the entry includes:
+   - **Only** Skills, Rules, CLAUDE.md, Config → **standard path** (no restart needed)
+   - **Additional** categories (Manifests, Folders, References, Terminology, Status, Insights) → **structural path** (proceed to Step 2)
+4. If no entry exists at all and `system_version` is `"unknown"` → proceed to Step 2 (full migration for fresh/unknown systems)
 
-**Fast path actions:**
-- Update `system_version` in `{alive-root}/.claude/alive.local.yaml` to match `plugin_version`
-- Show the user what changed (from the registry entry's description)
-- Exit — no restart needed, no structural changes
+### Standard Path (Rules + CLAUDE.md + Config)
 
-**STOP here if fast path was taken. Do not proceed to Step 2.**
+For releases where the only changes are skills (auto-delivered) plus version references in rules and CLAUDE.md. No restart needed — these are cosmetic version string updates, not behavioural changes.
+
+**Standard path actions:**
+
+1. **Sync rules from plugin cache to user's rules directory:**
+   - Plugin rules: `~/.claude/plugins/cache/aliveskills/alive/{plugin_version}/rules/`
+   - User rules: `{alive-root}/.claude/rules/`
+   - For each rule file in plugin: overwrite user's copy (these are system files, not user content)
+
+2. **Sync CLAUDE.md version reference:**
+   - Read `{alive-root}/.claude/CLAUDE.md`
+   - Find the `**Version:**` line and update to match `plugin_version`
+   - Use Edit tool — do NOT overwrite the file (user may have custom content)
+
+3. **Update config:**
+   - Set `system_version` in `{alive-root}/.claude/alive.local.yaml` to match `plugin_version`
+
+4. **Show summary:**
+```
+▸ standard upgrade: {old} → {new}
+  └─ Rules synced (version references updated)
+  └─ CLAUDE.md version updated
+  └─ system_version set to {new}
+
+✓ Upgrade complete. No restart needed.
+```
+
+**STOP here if standard path was taken. Do not proceed to Step 2.**
+
+### Structural Path
+
+If the migration registry entry has categories beyond Skills/Rules/CLAUDE.md/Config, proceed to Step 2 for the full migration plan.
 
 ---
 
@@ -173,7 +181,7 @@ Claude operates with its loaded rules. If you sync rules mid-session, Claude sti
 ```
 You are upgrading ALIVE rules files. Compare the plugin's rules against the user's installed rules and sync them.
 
-PLUGIN RULES: ~/.claude/plugins/cache/aliveskills/alive/3.0.1/rules/
+PLUGIN RULES: ~/.claude/plugins/cache/aliveos/aliveos/3.1.0/rules/
 USER RULES: {alive-root}/.claude/rules/
 
 For EACH rule file in the plugin directory:
@@ -215,7 +223,7 @@ Expected rule files: behaviors.md, conventions.md, intent.md, learning-loop.md, 
 ```
 You are assimilating changes from the plugin's CLAUDE.md into the user's installed CLAUDE.md. The user may have added custom content to their CLAUDE.md — you MUST preserve it.
 
-PLUGIN CLAUDE.MD: ~/.claude/plugins/cache/aliveskills/alive/3.0.1/CLAUDE.md
+PLUGIN CLAUDE.MD: ~/.claude/plugins/cache/aliveos/aliveos/3.1.0/CLAUDE.md
 USER CLAUDE.MD: {alive-root}/.claude/CLAUDE.md
 
 Instructions:
@@ -700,14 +708,14 @@ Read the current file. Add or update `system_version` field:
 ```yaml
 theme: vibrant
 onboarding_complete: true
-system_version: "3.0.1"
+system_version: "3.1.0"
 ```
 
 Use Edit if the file exists (preserve other fields). Use Write only if the file doesn't exist.
 
 ```
 ▸ updating config...
-  └─ alive.local.yaml — set system_version: "3.0.1"
+  └─ alive.local.yaml — set system_version: "3.1.0"
 
 ✓ Config updated
 ```
@@ -738,7 +746,7 @@ The sweep will catch any issues the subagents missed. If sweep finds problems, f
 │                                                                        │
 │  UPGRADE SUMMARY                                                       │
 │  ──────────────────────────────────────────────────────────────────    │
-│  Plugin: 3.0.1 → System: 3.0.1 ✓                                      │
+│  Plugin: 3.1.0 → System: 3.1.0 ✓                                      │
 │                                                                        │
 │  [A] Rules: X updated, Y current                                       │
 │  [B] CLAUDE.md: X sections added, Y updated                            │
@@ -746,11 +754,11 @@ The sweep will catch any issues the subagents missed. If sweep finds problems, f
 │  [D] Manifests: X updated, Y current                                   │
 │  [E] References: X issues fixed, Y projects clean                      │
 │  [F] Terminology: X files updated, Y current                           │
-│  [G] Config: system_version set to 3.0.1                               │
+│  [G] Config: system_version set to 3.1.0                               │
 │  [H] Sweep: ✓ passed                                                   │
 │                                                                        │
 │  ──────────────────────────────────────────────────────────────────    │
-│                                                            ALIVE v3.0.1│
+│                                                            ALIVE v3.1.0│
 ╰──────────────────────────────────────────────────────────────────────────╯
 ```
 
@@ -760,7 +768,7 @@ The sweep will catch any issues the subagents missed. If sweep finds problems, f
 
 **Already up to date:**
 ```
-✓ System is current (3.0.1)
+✓ System is current (3.1.0)
   └─ No upgrade needed.
 ```
 
@@ -770,7 +778,7 @@ The sweep will catch any issues the subagents missed. If sweep finds problems, f
 
 This file tracks your system version. Creating it now.
 ```
-Create the file with `system_version: "3.0.1"` and `onboarding_complete: true`.
+Create the file with `system_version: "3.1.0"` and `onboarding_complete: true`.
 
 **Single unit upgrade (from /alive:work):**
 ```
@@ -800,16 +808,14 @@ Skip directly to Session 2 steps.
 
 ### 2.1.0 → 2.1.1
 
-**Type: skill-only** (no structural migration needed — fast path)
-
 | Category | Changes |
 |----------|---------|
-| **Skills** | Onboarding rewritten as two-session flow (system setup → restart → content setup). Upgrade skill gains fast path for skill-only updates. All 16 skills bumped to 2.1.1. |
+| **Skills** | Onboarding rewritten as two-session flow (system setup → restart → content setup). Upgrade skill gains standard path for version syncing. All 16 skills bumped to 2.1.1. |
 | **Onboarding** | `alive.local.yaml` now comprehensive: includes `alive_root`, `timezone`, `theme`, `working_style`, `onboarding_part` tracking. Two-session flow with forced restart between system and content setup. Added AI conversation history import prompt (Step 20). |
-| **Versioning** | `alive.local.yaml` now always includes `system_version` from initial onboarding. Migration Registry supports `type: skill-only` entries for fast-path upgrades. |
+| **Versioning** | `alive.local.yaml` now always includes `system_version` from initial onboarding. Migration Registry categorises releases as standard (rules+CLAUDE.md+config) or structural (additional user file changes). |
+| **Rules** | Sync rules from plugin (version references updated). |
+| **CLAUDE.md** | Sync CLAUDE.md from plugin (version reference updated). |
 | **Config** | Update `system_version: "2.1.1"` in alive.local.yaml. |
-
-No structural changes. Plugin auto-update delivers the new skill files. Users just need `system_version` bumped.
 
 ### 2.1.1 → 3.0.1
 

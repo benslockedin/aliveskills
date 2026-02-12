@@ -97,7 +97,7 @@ Show the ALIVE UI wrapper, the breadcrumb trail of where you looked, and the res
 │  [#] View full entry    [w] Search wider    [d] /alive:work                              │
 │                                                                                          │
 │  ──────────────────────────────────────────────────────────────────────────────────────  │
-│                                                                              ALIVE v3.0.1│
+│                                                                              ALIVE v3.1.0│
 ╰──────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 

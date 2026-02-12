@@ -622,7 +622,7 @@ AskUserQuestion({
 # Location: {alive-root}/.claude/alive.local.yaml
 
 version: 2
-system_version: "3.0.1"
+system_version: "3.1.0"
 onboarding_part: 1
 created: "[today's date]"
 
@@ -1525,7 +1525,7 @@ VENTURES / EXPERIMENTS
   ✓ [experiment]/_brain/ initialized
 
 CONFIG
-  ✓ system_version: 3.0.1
+  ✓ system_version: 3.1.0
   ✓ alive_root: [path]
   ✓ timezone: [value]
   ✓ theme: [value]
@@ -1670,7 +1670,7 @@ CONTEXT IMPORT PLUGIN
 To import AI conversation history, you'll need to install the
 ALIVE Context Import plugin:
 
-  aliveskills/alive-context-import
+  aliveos/alive-context-import
 
 This is a separate plugin (not bundled with ALIVE) that handles:
   • Exporting your data from AI assistants
@@ -1686,7 +1686,7 @@ I've added a task to your Life tasks so you don't forget.
 Add this task to `{alive-root}/02_Life/_brain/tasks.md` under the "To Do" section:
 
 ```markdown
-- [ ] **Install alive-context-import plugin** — Import previous AI conversation history into ALIVE. Plugin: `aliveskills/alive-context-import`. Install via Claude Code plugin system, then run its import skill to extract context from your old conversations.
+- [ ] **Install alive-context-import plugin** — Import previous AI conversation history into ALIVE. Plugin: `aliveos/alive-context-import`. Install via Claude Code plugin system, then run its import skill to extract context from your old conversations.
 ```
 
 ```
@@ -1700,7 +1700,7 @@ Add this task to `{alive-root}/02_Life/_brain/tasks.md` under the "To Do" sectio
 ```
 No worries. If you change your mind later, the plugin is:
 
-  aliveskills/alive-context-import
+  aliveos/alive-context-import
 
 You can install it any time.
 ```
@@ -1714,7 +1714,7 @@ You can install it any time.
 | Field | Required | Fix if missing |
 |-------|----------|----------------|
 | `version` | Yes | Add `version: 2` |
-| `system_version` | Yes | Add `system_version: "3.0.1"` |
+| `system_version` | Yes | Add `system_version: "3.1.0"` |
 | `alive_root` | Yes | Add with the current working directory path |
 | `timezone` | Yes | Ask the user |
 | `theme` | Yes | Default to `vibrant` |
@@ -1741,7 +1741,7 @@ If any fields are missing, add them silently (don't interrupt the flow — just 
 │    • [N] ventures ready to track                                                     │
 │    • [N] experiments ready to explore                                                │
 │    • All rules and system files installed                                             │
-│    • System version: 3.0.1                                                           │
+│    • System version: 3.1.0                                                           │
 │                                                                                      │
 │  SKILLS — HOW YOU TALK TO ALIVE:                                                     │
 │                                                                                      │
@@ -1894,7 +1894,7 @@ In Session 2, after the Proof, offer to move it: "Should [name] be in Ventures o
 # Location: {alive-root}/.claude/alive.local.yaml
 
 version: 2
-system_version: "3.0.1"
+system_version: "3.1.0"
 onboarding_part: 1
 created: "2026-02-10"
 
@@ -1915,7 +1915,7 @@ working_style: "solo"
 # Location: {alive-root}/.claude/alive.local.yaml
 
 version: 2
-system_version: "3.0.1"
+system_version: "3.1.0"
 onboarding_complete: true
 created: "2026-02-10"
 
