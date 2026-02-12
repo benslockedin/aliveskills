@@ -622,7 +622,7 @@ AskUserQuestion({
 # Location: {alive-root}/.claude/alive.local.yaml
 
 version: 2
-system_version: "3.0.1"
+system_version: "3.1.1"
 onboarding_part: 1
 created: "[today's date]"
 
@@ -1525,7 +1525,7 @@ VENTURES / EXPERIMENTS
   ✓ [experiment]/_brain/ initialized
 
 CONFIG
-  ✓ system_version: 3.0.1
+  ✓ system_version: 3.1.1
   ✓ alive_root: [path]
   ✓ timezone: [value]
   ✓ theme: [value]
@@ -1714,7 +1714,7 @@ You can install it any time.
 | Field | Required | Fix if missing |
 |-------|----------|----------------|
 | `version` | Yes | Add `version: 2` |
-| `system_version` | Yes | Add `system_version: "3.0.1"` |
+| `system_version` | Yes | Add `system_version: "3.1.1"` |
 | `alive_root` | Yes | Add with the current working directory path |
 | `timezone` | Yes | Ask the user |
 | `theme` | Yes | Default to `vibrant` |
