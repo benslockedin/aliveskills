@@ -1,6 +1,6 @@
 ---
 name: alive
-version: 3.1.0
+version: 3.1.1
 description: The operating system for your context. Persistent memory for Claude across sessions.
 author: Ben Flint
 homepage: https://skool.com/aliveoperators

@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Process and route items from the 03_Inputs/ buffer to their correct locations across ALIVE. Use when the user says "process inputs", "digest", "triage", "handle inbox", "sort these", "what's in my inbox", or "anything to process".
-plugin_version: "3.1.0"
+plugin_version: "3.1.1"
 ---
 
 # alive:digest

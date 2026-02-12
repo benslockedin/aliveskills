@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Update ALIVE system files to the latest plugin version — rules, CLAUDE.md, and configuration. Use when the user says "upgrade", "update system", or when a version mismatch is detected.
-plugin_version: "3.1.0"
+plugin_version: "3.1.1"
 ---
 
 # alive:upgrade
@@ -990,6 +990,17 @@ Show results:
 ```
 
 **Then continue to original Step G (Config Update) and rename it to Step I.**
+
+### 3.1.0 → 3.1.1
+
+**Type: skill-only** (no structural migration needed — fast path)
+
+| Category | Changes |
+|----------|---------|
+| **Skills** | Handoff skill: subagent prompt now self-contained — document template and manifest update instructions inlined (subagents can't see surrounding skill steps). Old Step 6 (Document Structure) removed, Step 7 simplified to Step 6 (Return to Save). Manifest update explicitly batched (one Read, one Write). Save skill: redesigned with 2-question flow (What's happening + Quality), conditional handoff for "Coming back later", mandatory handoff for "Continuing". |
+| **Config** | Update `system_version` in alive.local.yaml to `3.1.1`. |
+
+No structural changes. Plugin auto-update delivers the new skill files. Users just need `system_version` bumped.
 
 ---
 

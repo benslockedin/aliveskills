@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Load one venture, experiment, life area, or project's full context and start working — reads _brain/, surfaces tasks, and picks up where you left off. Use when the user says "work on X", "focus on X", "open X", "status of X", "continue", "resume", or "pick up where I left off".
-plugin_version: "3.1.0"
+plugin_version: "3.1.1"
 ---
 
 # alive:work

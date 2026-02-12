@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Quick reference for ALIVE commands, skills, and system concepts. Use when the user says "help", "show commands", "what can you do", "how does X work", or "how do I X".
-plugin_version: "3.1.0"
+plugin_version: "3.1.1"
 ---
 
 # alive:help

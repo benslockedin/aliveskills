@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: First-time setup wizard for new ALIVE users. Creates the full system from scratch — folders, rules, configuration, and first ventures, experiments, and life areas. Use when the user says "set up ALIVE", "get started", "initialize", or when no ALIVE structure exists.
-plugin_version: "3.1.0"
+plugin_version: "3.1.1"
 ---
 
 # alive:onboarding
