@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Capture any context into ALIVE — notes, emails, transcripts, decisions, filepaths, or anything worth preserving. Auto-invoke when the user shares a filepath, pastes external content (emails, transcripts, articles), or says "capture this", "note this", "remember this", "FYI", "here's some context", "I decided", "I learned". If the user drops content without explicitly asking to capture, invoke this skill proactively.
-plugin_version: "3.1.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:capture

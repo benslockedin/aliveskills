@@ -1,5 +1,5 @@
 #!/bin/bash
-# ALIVE v2 - Post File Change Hook
+# ALIVE v3 - Post File Change Hook
 # Logs all file edits/writes to audit trail
 
 set -euo pipefail

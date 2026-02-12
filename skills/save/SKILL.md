@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: End a work session and preserve all context — changelog, status, tasks, insights, and manifest. Use when the user says "save", "wrap up", "end session", "done for now", "brb", "stepping away", or "checkpoint".
-plugin_version: "3.1.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:save
@@ -33,7 +33,7 @@ Compare your `plugin_version` (from frontmatter above) against the user's system
 1. Read `{alive-root}/.claude/alive.local.yaml` → get `system_version`
 2. If `system_version` is missing or different from your `plugin_version`:
    ```
-   [!] System update available (plugin: 3.1.1, system: X.X.X)
+   [!] System update available (plugin: 3.1.0, system: X.X.X)
        └─ Run /alive:upgrade to sync
    ```
 3. Continue with skill — this is non-blocking, just a notice

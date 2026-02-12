@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Load one venture, experiment, life area, or project's full context and start working — reads _brain/, surfaces tasks, and picks up where you left off. Use when the user says "work on X", "focus on X", "open X", "status of X", "continue", "resume", or "pick up where I left off".
-plugin_version: "3.1.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:work
@@ -37,7 +37,7 @@ Compare your `plugin_version` (from frontmatter above) against the user's system
 1. Read `{alive-root}/.claude/alive.local.yaml` → get `system_version`
 2. If `system_version` is missing or different from your `plugin_version`:
    ```
-   [!] System update available (plugin: 3.1.1, system: X.X.X)
+   [!] System update available (plugin: 3.1.0, system: X.X.X)
        └─ Run /alive:upgrade to sync
    ```
 3. Continue with skill — this is non-blocking, just a notice

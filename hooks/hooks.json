@@ -1,5 +1,5 @@
 {
-  "description": "ALIVE v2 hooks for session logging and file change tracking",
+  "description": "ALIVE v3 hooks for session logging and file change tracking",
   "hooks": {
     "SessionStart": [
       {

@@ -56,7 +56,7 @@ Every skill output is wrapped in a single rounded box with three zones:
 ### Release: Unlimited Elephant
 
 **Codename:** Unlimited Elephant — "Elephants never forget"
-**Version:** 3.0.1
+**Version:** 3.1.0
 
 ### Large Elephant (Tier 1 — Onboarding, Boot Screen, First Daily)
 
@@ -253,7 +253,7 @@ Elephant (4 lines) sits left. FIGlet skill name (4 lines) sits right. Version an
 │ .-/     (    o\_//     \ \    / / _ \| _ \ |/ /              │
 │  |  ___  \_/\---'       \ \/\/ / (_) |   / ' <              │
 │  |_||  |_||              \_/\_/ \___/|_|_\_|\_\              │
-│                          aliveOS [Unlimited Elephant 3.0.1]   │
+│                          aliveOS [Unlimited Elephant 3.1.0]   │
 │                          ventures/acme-agency                 │
 ```
 
@@ -286,7 +286,7 @@ Used by: All other skills
 
 ```
 │  ──────────────────────────────────────────────────────────────────── │
-│                                                        ALIVE v3.0.1   │
+│                                                        ALIVE v3.1.0   │
 ╰──────────────────────────────────────────────────────────────────────╯
 ```
 
@@ -372,7 +372,7 @@ o88o     o8888o o888ooooood8 o888o       `8'       o888ooooood8
 │ .-/     (    o\_//     \ \    / / _ \| _ \ |/ /                       │
 │  |  ___  \_/\---'       \ \/\/ / (_) |   / ' <                       │
 │  |_||  |_||              \_/\_/ \___/|_|_\_|\_\                       │
-│                          aliveOS [Unlimited Elephant 3.0.1]            │
+│                          aliveOS [Unlimited Elephant 3.1.0]            │
 │                          ventures/acme-agency                          │
 │  ──────────────────────────────────────────────────────────────────── │
 │                                                                       │
@@ -405,7 +405,7 @@ o88o     o8888o o888ooooood8 o888o       `8'       o888ooooood8
 │ .-/     (    o\_//      / __| /_\ | _ \_   _| | | | _ \ __|           │
 │  |  ___  \_/\---'      | (__ / _ \|  _/ | | | |_| |   / _|           │
 │  |_||  |_||             \___/_/ \_\_|   |_|  \___/|_|_\___|           │
-│                         aliveOS [Unlimited Elephant 3.0.1]             │
+│                         aliveOS [Unlimited Elephant 3.1.0]             │
 │                         ventures/acme-agency                           │
 │  ──────────────────────────────────────────────────────────────────── │
 │                                                                       │
@@ -414,7 +414,7 @@ o88o     o8888o o888ooooood8 o888o       `8'       o888ooooood8
 │  ✓ Captured: "Decided to use rounded borders for all skill outputs"   │
 │                                                                       │
 │  ──────────────────────────────────────────────────────────────────── │
-│                                                        ALIVE v3.0.1   │
+│                                                        ALIVE v3.1.0   │
 ╰──────────────────────────────────────────────────────────────────────╯
 ```
 
@@ -450,7 +450,7 @@ Full visual experience. ASCII art, box drawing, retrieval paths.
 
 Clean output. No ASCII art, shorter lines. Saves context window.
 
-**Dashboard header:** Simple `ALIVE v3.0.1`
+**Dashboard header:** Simple `ALIVE v3.1.0`
 **Skill headers:** Markdown `## Ventures`
 **Retrieval paths:** Hidden unless error
 **Separators:** Short `---`

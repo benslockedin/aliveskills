@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# ALIVE v2 Status Line
+# ALIVE v3 Status Line
 # Minimal by default, information appears when relevant
 #
 # Shows: session:ID | Model | ctx% | $cost | [ALIVE/subdomain] | [🔥urgent] | [📥inputs]
