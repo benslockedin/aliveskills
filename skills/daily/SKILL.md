@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Morning dashboard showing all ventures, experiments, life areas — goals, urgent tasks, ongoing threads, and pending inputs. Use when the user says "daily", "dashboard", "morning", "what's happening", "what should I work on", "start my day", or "show me everything".
-plugin_version: "3.1.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:daily
@@ -36,7 +36,7 @@ Compare your `plugin_version` (from frontmatter above) against the user's system
 1. Read `{alive-root}/.claude/alive.local.yaml` → get `system_version`
 2. If `system_version` is missing or different from your `plugin_version`:
    ```
-   [!] System update available (plugin: 3.1.1, system: X.X.X)
+   [!] System update available (plugin: 3.1.0, system: X.X.X)
        └─ Run /alive:upgrade to sync
    ```
 3. Continue with skill — this is non-blocking, just a notice

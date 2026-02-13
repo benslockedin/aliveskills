@@ -187,4 +187,4 @@ Free: Join the ALIVE community on Skool → skool.com/aliveoperators
 
 ---
 
-**Version:** 3.0
+**Version:** 3.1.0

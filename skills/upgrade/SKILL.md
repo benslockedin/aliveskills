@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Update ALIVE system files to the latest plugin version — rules, CLAUDE.md, and configuration. Use when the user says "upgrade", "update system", or when a version mismatch is detected.
-plugin_version: "3.1.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:upgrade
@@ -62,7 +62,7 @@ When they match → system is current.
 ```
 ▸ checking versions...
 
-Plugin version: 3.1.1 (from skill frontmatter)
+Plugin version: 3.1.0 (from skill frontmatter)
 System version: [read from alive.local.yaml]
 ```
 
@@ -76,8 +76,8 @@ System version: [read from alive.local.yaml]
 
 ```
 ▸ versions detected
-  └─ Plugin: 3.1.1 | System: unknown
-  └─ Migrations needed: pre-2.1.1 → 3.1.1
+  └─ Plugin: 3.1.0 | System: unknown
+  └─ Migrations needed: pre-2.1.1 → 3.1.0
 ```
 
 ---
@@ -181,7 +181,7 @@ Claude operates with its loaded rules. If you sync rules mid-session, Claude sti
 ```
 You are upgrading ALIVE rules files. Compare the plugin's rules against the user's installed rules and sync them.
 
-PLUGIN RULES: ~/.claude/plugins/cache/aliveskills/alive/3.0.1/rules/
+PLUGIN RULES: ~/.claude/plugins/cache/aliveskills/alive/3.1.0/rules/
 USER RULES: {alive-root}/.claude/rules/
 
 For EACH rule file in the plugin directory:
@@ -223,7 +223,7 @@ Expected rule files: behaviors.md, conventions.md, intent.md, learning-loop.md, 
 ```
 You are assimilating changes from the plugin's CLAUDE.md into the user's installed CLAUDE.md. The user may have added custom content to their CLAUDE.md — you MUST preserve it.
 
-PLUGIN CLAUDE.MD: ~/.claude/plugins/cache/aliveskills/alive/3.0.1/CLAUDE.md
+PLUGIN CLAUDE.MD: ~/.claude/plugins/cache/aliveskills/alive/3.1.0/CLAUDE.md
 USER CLAUDE.MD: {alive-root}/.claude/CLAUDE.md
 
 Instructions:
@@ -635,7 +635,7 @@ Fix loose files in test? [y/n]
 
 **Scan all user-created _brain/ files and CLAUDE.md files for outdated terminology and update them.**
 
-This step only applies when the Migration Registry entry includes terminology changes (e.g. 2.1.1 → 3.0.1: "entity" → context-specific term). Skip this step if the registry entry has no terminology changes.
+This step only applies when the Migration Registry entry includes terminology changes (e.g. 2.1.1 → 3.1.0: "entity" → context-specific term). Skip this step if the registry entry has no terminology changes.
 
 **Launch a Task subagent with this prompt:**
 
@@ -708,14 +708,14 @@ Read the current file. Add or update `system_version` field:
 ```yaml
 theme: vibrant
 onboarding_complete: true
-system_version: "3.0.1"
+system_version: "3.1.0"
 ```
 
 Use Edit if the file exists (preserve other fields). Use Write only if the file doesn't exist.
 
 ```
 ▸ updating config...
-  └─ alive.local.yaml — set system_version: "3.0.1"
+  └─ alive.local.yaml — set system_version: "3.1.0"
 
 ✓ Config updated
 ```
@@ -746,7 +746,7 @@ The sweep will catch any issues the subagents missed. If sweep finds problems, f
 │                                                                        │
 │  UPGRADE SUMMARY                                                       │
 │  ──────────────────────────────────────────────────────────────────    │
-│  Plugin: 3.0.1 → System: 3.0.1 ✓                                      │
+│  Plugin: 3.1.0 → System: 3.1.0 ✓                                      │
 │                                                                        │
 │  [A] Rules: X updated, Y current                                       │
 │  [B] CLAUDE.md: X sections added, Y updated                            │
@@ -754,11 +754,11 @@ The sweep will catch any issues the subagents missed. If sweep finds problems, f
 │  [D] Manifests: X updated, Y current                                   │
 │  [E] References: X issues fixed, Y projects clean                      │
 │  [F] Terminology: X files updated, Y current                           │
-│  [G] Config: system_version set to 3.0.1                               │
+│  [G] Config: system_version set to 3.1.0                               │
 │  [H] Sweep: ✓ passed                                                   │
 │                                                                        │
 │  ──────────────────────────────────────────────────────────────────    │
-│                                                            ALIVE v3.0.1│
+│                                                            ALIVE v3.1.0│
 ╰──────────────────────────────────────────────────────────────────────────╯
 ```
 
@@ -768,7 +768,7 @@ The sweep will catch any issues the subagents missed. If sweep finds problems, f
 
 **Already up to date:**
 ```
-✓ System is current (3.0.1)
+✓ System is current (3.1.0)
   └─ No upgrade needed.
 ```
 
@@ -778,7 +778,7 @@ The sweep will catch any issues the subagents missed. If sweep finds problems, f
 
 This file tracks your system version. Creating it now.
 ```
-Create the file with `system_version: "3.0.1"` and `onboarding_complete: true`.
+Create the file with `system_version: "3.1.0"` and `onboarding_complete: true`.
 
 **Single unit upgrade (from /alive:work):**
 ```
@@ -996,17 +996,6 @@ Show results:
 ```
 
 **Then continue to original Step G (Config Update) and rename it to Step I.**
-
-### 3.1.0 → 3.1.1
-
-| Category | Changes |
-|----------|---------|
-| **Skills** | Handoff skill: subagent prompt now self-contained — document template and manifest update instructions inlined (subagents can't see surrounding skill steps). Old Step 6 (Document Structure) removed, Step 7 simplified to Step 6 (Return to Save). Manifest update explicitly batched (one Read, one Write). Save skill: redesigned with 2-question flow (What's happening + Quality), conditional handoff for "Coming back later", mandatory handoff for "Continuing". |
-| **Rules** | Sync rules from plugin (version references updated in ui-standards.md). |
-| **CLAUDE.md** | Sync CLAUDE.md from plugin (version reference updated). |
-| **Config** | Update `system_version` in alive.local.yaml to `3.1.1`. |
-
----
 
 **Future migrations will be added as new sections here.**
 

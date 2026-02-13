@@ -1,7 +1,7 @@
 ---
 user-invocable: false
 description: Scan Claude Code session history to extract patterns, preferences, and past ventures/experiments for personalized ALIVE setup. Called by onboarding when user opts in to session analysis.
-plugin_version: "3.1.1"
+plugin_version: "3.1.0"
 ---
 
 # Power User Install

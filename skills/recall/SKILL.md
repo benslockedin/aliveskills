@@ -1,7 +1,7 @@
 ---
 user-invocable: false
 description: Search past context, decisions, and sessions across ALIVE. Use when the user says "find X", "search for X", "recall X", "when did we X", "what did we decide about X", or "remember when we X".
-plugin_version: "3.1.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:recall
@@ -97,7 +97,7 @@ Show the ALIVE UI wrapper, the breadcrumb trail of where you looked, and the res
 │  [#] View full entry    [w] Search wider    [d] /alive:work                              │
 │                                                                                          │
 │  ──────────────────────────────────────────────────────────────────────────────────────  │
-│                                                                              ALIVE v3.1.1│
+│                                                                              ALIVE v3.1.0│
 ╰──────────────────────────────────────────────────────────────────────────────────────────╯
 ```
 

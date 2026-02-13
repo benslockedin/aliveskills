@@ -1,6 +1,6 @@
 ---
 description: Create a comprehensive handoff document for zero-context session continuity. Used during saves when context is compacting or work will resume later. Called by the save skill, not directly by user.
-plugin_version: "3.1.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:handoff

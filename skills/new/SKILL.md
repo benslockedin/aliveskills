@@ -1,7 +1,7 @@
 ---
 user-invocable: true
 description: Scaffold a new venture, experiment, life area, project, or area with full structure — _brain/, _working/, CLAUDE.md, and all required files. Use when the user says "create X", "new venture", "new experiment", "new project", "set up X", or "start something new".
-plugin_version: "3.1.1"
+plugin_version: "3.1.0"
 ---
 
 # alive:new
