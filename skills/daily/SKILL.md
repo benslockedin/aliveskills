@@ -199,60 +199,61 @@ When user picks:
 
 ## Section: Goals
 
-Extract from each `_brain/status.md`:
-- Look for `**Goal:**` line (primary — this is the dashboard label per unit)
-- Fallback: first sentence after `## State of Play`
+Extract from each _brain/status.md:
+- Look for the **Goal:** line (primary — this is the dashboard label per unit)
+- Fallback: first sentence after the "State of Play" heading
 
 Show name + goal. Max 5, sorted by recency.
 
-Goals appear as part of each row in the grid — extracted from `status.md` goal line. The Answer zone surfaces the most urgent one as the AI-recommended focus.
+Goals appear as part of each row in the grid — extracted from status.md goal line. The Answer zone surfaces the most urgent one as the AI-recommended focus.
 
 ## Section: Ongoing Threads
 
-Read `.claude/state/session-index.jsonl`:
-- Filter: `status: "ongoing"` only
+Read .claude/state/session-index.jsonl:
+- Filter: status "ongoing" only
 - Sort: Most recent first
 - Show: Name, summary, quality tag, relative time
 - Max 5
 
-Quality tags: `[routine]` `[productive]` `[important]` `[breakthrough]`
+Quality tags: [routine] [productive] [important] [breakthrough]
 
 Ongoing threads inform the AI-recommended focus in The Answer zone. If a thread is ongoing from yesterday, it becomes the suggested focus. If no ongoing threads, the recommendation falls back to the unit with the most urgent tasks or open work.
 
 ## Section: Urgent Tasks
 
-Scan all `_brain/tasks.md` files:
-- Filter: Lines containing `@urgent`
+Use the Glob tool to find all _brain/tasks.md files across 02_Life, 04_Ventures, and 05_Experiments. Then use the Read tool on each one.
+
+- Filter: Lines containing @urgent
 - Prefix with unit name
 - Max 5
 
-Urgent tasks trigger the `!` attention indicator on their row in the grid. The most urgent surfaces in The Answer zone.
+Urgent tasks trigger the **!** attention indicator on their row in the grid. The most urgent surfaces in The Answer zone.
 
 ## Section: Working Files
 
-Scan all `_brain/manifest.json` files:
-- Look for `working_files` array
+Use the Glob tool to find all _brain/manifest.json files. Then use the Read tool to extract the working_files array from each.
+
 - Show path + age
 - Max 5
 
-Working files count appears in the fine print stats. Individual working files are surfaced in `/alive:work` when focused on a single venture, experiment, or life area.
+Working files count appears in the fine print stats. Individual working files are surfaced in /alive:work when focused on a single unit.
 
 ## Section: Inputs
 
-Check `03_Inputs/` folder:
+Use Glob to check the 03_Inputs/ folder:
 - Count files/folders (not counting .DS_Store)
 - Flag if count > 0
 - Flag if no captures in 3+ days
 
-Input count appears in the action bar: `d) digest 3 inputs`. If zero inputs, the `d)` action line disappears.
+Input count appears in the action bar as the **d)** digest option. If zero inputs, that action line disappears.
 
 ## Section: Stale Units
 
-Check each unit's `_brain/manifest.json` for `updated` date:
+Check each unit's _brain/manifest.json for the "updated" date:
 - Flag if > 7 days (configurable)
 - Show as numbered option
 
-Stale units get the `!` attention indicator in the grid. Count appears in the action bar: `s) sweep 2 stale`. If zero stale, the `s)` action line disappears.
+Stale units get the **!** attention indicator in the grid. Count appears in the action bar as the **s)** sweep option. If zero stale, that action line disappears.
 
 ## Freshness Flags
 

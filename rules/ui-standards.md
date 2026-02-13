@@ -46,7 +46,7 @@ Every skill output is wrapped in a single rounded box with three zones:
 - `)` on every selectable option (e.g. `1)`, `a)`)
 - `·` as delimiter in stats
 - `●○` five-day activity dots
-- `!` attention indicator
+- **!** attention indicator
 - Lowercase section labels
 
 ---
